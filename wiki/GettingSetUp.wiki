@@ -61,7 +61,7 @@ DEVKITPRO = /c/devkitPro
     * If you don't have a "Path" variable, then add a new one to the “User variables” that contains this string.
     * If you already have a “Path” variable but it's missing this string, then add the following string at the beginning `c:\devkitPro\msys\bin;` - note the semicolon at the end to separate your new string from the old Path contents.
 
-== VisualBoy Advance ==
+== !VisualBoy Advance ==
 
 VBA is the most popular GBA emulator. An emulator is a program that runs on a computer and pretends to be another device. This will allow us to test out our GBA/NDS programs on our development computer.
 
@@ -69,12 +69,12 @@ Homepage: http://vba.ngemu.com/
 
 Download page: http://sourceforge.net/project/showfiles.php?group_id=63889 (Direct link (http://prdownloads.sourceforge.net/vba/VisualBoyAdvance-1.7.2.zip Win32])
 
-Installing VisualBoy Advance:
+Installing !VisualBoy Advance:
 
   * Create a `c:\gamedev` folder on your drive.
-  * Go to the download page listed above and download the “VisualBoyAdvance-1.7.2.zip” file to your computer. Save the file in the `c:\gamedev` folder you created.
+  * Go to the download page listed above and download the “!VisualBoyAdvance-1.7.2.zip” file to your computer. Save the file in the `c:\gamedev` folder you created.
   * Extract the contents of the zip file by right-clicking on the file and selecting “Extract all...”
-  * You will now have a “VisualBoyAdvance-1.7.2” folder in your `c:\gamedev` folder.
+  * You will now have a “!VisualBoyAdvance-1.7.2” folder in your `c:\gamedev` folder.
 
 You can run VBA by launching `c:\gamedev\VisualBoyAdvance-1.7.2\VisualBoyAdvance.exe`
 
