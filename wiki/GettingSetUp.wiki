@@ -11,7 +11,7 @@ But Spritely requires a few additional tools to be installed:
 
 *devkitPro* is a toolchain (compiler, linker, libraries and other tools) that takes the source code from Spritely and builds a working “ROM file” that can then be run in an emulator or on real hardware.
 
-*VisualBoyAdvance* is GBA emulator that allows you to run your newly created ROM file on your computer.
+*!VisualBoyAdvance* is GBA emulator that allows you to run your newly created ROM file on your computer.
 
 == General System Requirements ==
 
