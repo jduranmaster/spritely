@@ -1,8 +1,0 @@
-#summary List of Spritely tutorials
-#labels Featured
-
-= Tutorials =
-
-The following tutorials are available for using Spritely. For most of these tutorials, the target audience is middle-school (grade 6-8) students. Lower grade students may likely require adult assistance for basic computer tasks, while higher grade students should be able to use these instructions without assistance.
-
-|| Tutorial 1 || [CreateASimpleSprite How to create a simple sprite using Spritely] ||
