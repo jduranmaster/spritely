@@ -1,4 +1,4 @@
-== Creating a simple sprite ==
+= Creating a simple sprite =
 
 This tutorial will introduce you to Spritely and show how to create your own sprites.
 
