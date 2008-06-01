@@ -1,5 +1,5 @@
 #summary List of Spritely tutorials
-#labels Featured
+#labels Featured,Tutorial
 
 = Tutorials =
 
@@ -7,8 +7,11 @@ The following tutorials are available for using Spritely.
 
 For most of these tutorials, the target audience is middle-school (grade 6-8) students. Lower grade students in this range may likely require adult assistance for basic computer tasks, while higher grade students should be able to use these tutorials without assistance.
 
+Note that many of these tutorials are still under construction.
+
 || || _Category_ || _Description_ ||
 || Tutorial 1 || Getting Started || *[CreatingASimpleSprite How to create a simple sprite using Spritely]* ||
 || Tutorial 2 || Getting Started || *[BuildingAROMFile How to build a ROM file from your Spritely project]* ||
 || Tutorial 3 || Getting Started || *[RunningYourROM Running your GBA ROM in VisualBoy Advance]* ||
 || Tutorial 4 || Optional Tools || *[UsingProgrammersNotepad Using Programmer's Notepad]* ||
+|| Tutorial 5 || Basic Game Tasks || *[AddingASecondObject Adding a second object]* || 
