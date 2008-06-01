@@ -1,5 +1,5 @@
 #summary Getting your machine set up to use Spritely for GBA/NDS development
-#labels Featured
+#labels Tutorial
 
 = Setting up Spritely/devkitPro for GBA/NDS programming =
 
