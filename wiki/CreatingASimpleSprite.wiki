@@ -1,0 +1,85 @@
+== Creating a simple sprite ==
+
+This tutorial will introduce you to Spritely and show how to create your own sprites.
+
+Go to the `c:\gamedev\Spritely` directory.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_01.png
+
+Launch Spritely by double-clicking the `Sprite.exe` icon.
+
+This will bring up the main Spritely window.
+
+[http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_02.png http://spritely.googlecode.com/svn/trunk/tutorials/img_sm/spritely_02.png]
+
+The list of sprites (initially empty) is on the left, the sprite editing area is on the right, and the drawing tools are in the middle. The color palette is on the bottom.
+
+Use the pencil tool (selected by default) to draw a simple sprite.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_03.png
+
+Don't worry about making it perfect — you can come back and make adjustments later.
+
+Before moving on, now is a good time to save your progress so far.
+
+Have you thought about where you're going to save your work? If not, the `c:\gamedev\projects` directory is a good location.
+
+Think of a good name for your project and create a new sub-directory here.
+
+Feel free to choose whatever name you like for your project, but make sure that you don't put any spaces or punctuation marks. For example, "mygame" is an acceptable name, but "my game!" is not because it contains a space and exclamation mark.
+
+In this tutorial we will use the uninspired name of `mygame`.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/save_01.png
+
+To save your data in Spritely, select "Save" from the "File" menu and choose the directory that you just created: `c:\gamedev\projects\mygame`.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_04.png
+
+If you chose `mygame` as the name of your file, your data will be saved in file called `mygame.xml`.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/save_02.png
+
+Make sure you save your progress often as you work.
+
+Now that you've saved your work, you can use Spritely to export your sprites as a complete Gameboy Advance project.
+
+Select "Export..." from the "File" menu.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_05.png
+
+That will bring up the "Export" dialog.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_06.png
+
+Change "Export as..." to "Complete project".
+
+Leave the "System" as "Gameboy Advance".
+
+For the "Directory Path", press the "Browse..." button...
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_07.png
+
+...and select the `c:\gamedev\projects\mygame` directory that you created earlier for your project.
+
+When you're done, press the "OK" button.
+
+Now that you've selected a project directory, the "Export" dialog should look like this.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_08.png
+
+Press the "Export" button.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/spritely_09.png
+
+Success! You have exported you sprites as a GBA project.
+
+If you look at your `c:\gamedev\projects\mygame` directory, you will see the newly-created files.
+
+   `Makefile` — This file contains the instructions for building the GBA ROM file.
+
+   `source/` — This directory contains all of the source files for the game.
+
+http://spritely.googlecode.com/svn/trunk/tutorials/images/save_03.png
+
+We will be using these files in the next tutorial where we will build a ROM file that we can run in an emulator (or on real GBA hardware).
