@@ -1,0 +1,57 @@
+#summary Running your GBA ROM in VisualBoy Advance.
+
+= Running your GBA ROM in !VisualBoy Advance =
+
+After you've created a ROM file from your project, you can now run your ROM in !VisualBoy Advance.
+
+----
+
+First, let's find your project.
+
+Use the "Run" command (as described in the BuildingAROMFile tutorial), and enter the path to your project:
+
+{{{
+   c:\gamedev\projects\mygame
+}}}
+
+Note the “c:” at the beginning of the line.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_00.png
+
+This will open up a window that shows the files in your project directory.
+
+Since you just built your project in the previous tutorial, your project directory should look like the one shown here.
+
+Find the `mygame.gba` file icon and double-click it.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_01.png
+
+The very first time you double-click on the .gba file, Windows will complain that it does not know how to open a file of that type.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_02.png
+
+Choose "Select the program from a list" and press "OK".
+
+You'll be shown a long list of applications to choose from.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_03.png
+
+Unfortunately, !VisualBoyAdvance is not listed there, so you'll need to press the "Browse..." button and find it.
+
+The !VisualBoyAdvance.exe file is located in the:
+
+{{{
+   c:\gamedev\VisualBoyAdvance-1.7.2
+}}}
+
+directory.
+
+After you select !VisualBoyAdvance, press "OK" on the "Open With" dialog.
+
+!VisualBoyAdvance will run and launch the ROM file that you created.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_04.png
+
+You can use the arrow keys on your computer to move the sprite around the screen.
+
+The next time you double-click on a .gba file, you won't have to go through the steps of selecting an application — !VisualBoyAdvance will launch directly.
