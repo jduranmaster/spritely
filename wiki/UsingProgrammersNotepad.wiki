@@ -1,0 +1,131 @@
+#summary Using Programmer's Notepad
+
+= Using Programmer's Notepad =
+
+"Programmer's Notepad" is a text editor that is packaged with the devkitPro installer. We will use it to view and edit the source code to our GBA game.
+
+While "Programmer's Notepad" is convenient because it is already installed for as part of the devkitPro installation, you should feel free to use whatever text editor you prefer.
+
+----
+
+First, find the "Programmer's Notepad" application.
+
+It's located in:
+
+{{{
+   c:\devkitpro\Programmers Notepad
+}}}
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_00.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_00.png]
+
+Find the `pn.exe` icon and double-click it.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_01.png
+
+When "Programmer's Notepad" first opens, it will look something like this.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_02.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_02.png]
+
+Note the "<new>" window in the middle and the extra windows along the left, right and bottom of the workspace.
+
+Let's clean up the workspace a bit by closing all of these extra windows.
+
+Close all of the sub-windows by clicking on their close box. Each close box has been marked with a circle in the following image.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_03.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_03.png]
+
+Be careful not to click the close box for "Programmer's Notepad" or else you'll have to launch the application all over again.
+
+Ahh... That looks better.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_04.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_04.png]
+
+Now we're going to create a "project" for our project.
+
+Under the "File" menu, select "New" and then select "Project".
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_05.png
+
+This will pull up the "New Project..." dialog.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_06.png
+
+Enter the name of your project (`mygame`) into the "Name:" field.
+
+For the "Folder:", press the "..." button at the far right. This will bring up a dialog that allows you to select the project location.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_07.png
+
+Select your `c:\gamedev\projects\mygame` folder and press "OK".
+
+When you get back to the "New Project..." dialog, double-check to make sure that the information is correct and then press "OK".
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_08.png
+
+This creates a project window pane on the left side of the "Programmer's Notepad" workspace.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_09.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_09.png]
+
+However, the newly created project is empty — we now need to add our files to it.
+
+We can add our files to the project by right-clicking on the project name (`mygame`) and selecting "Add Files".
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_10.png
+
+In the "Add Files" dialog, navigate to the `c:\gamedev\projects\mygame\source` directory.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_11.png
+
+Select all of the files in this directory and press "Open".
+
+You will now see a whole bunch of source files in your project.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_12.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_12.png]
+
+These are the files that are used to build your GBA project. You'll be editing these files in later tutorials.
+
+To open a source file, just double-click on the icon next to the filename.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_13.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_13.png]
+
+To make the window so that it fills the entire workspace, press the "Maximize" button in the upper-right corner of the window.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_13b.png
+
+This will allow you to see more of the file at a time (which makes it easier to make changes to the code).
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_14.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_14.png]
+
+One nice feature of "Programmer's Notepad" is that you can build and run your GBA project easily without switching to another application.
+
+To build your project, select "make" from the "Tools" menu.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_15.png
+
+This will open up an "Output" window at the bottom of the workspace and automatically enter the make command for you.
+
+[http://spritely.googlecode.com/svn/trunk/images/pn/pn_16.png http://spritely.googlecode.com/svn/trunk/images/pn/sm/pn_16.png]
+
+The output of the `make` command will be displayed in this output window.
+
+If you see
+
+{{{
+   ROM fixed!
+}}}
+
+or
+
+{{{
+   ... is up to date.
+}}}
+
+at the end of the ouput, then your project was built successfully.
+
+To run your program after it's built, select "run" from the "Tools" menu.
+
+http://spritely.googlecode.com/svn/trunk/images/pn/pn_17.png
+
+If you've already made the file association (as shown in [RunningYourROM] tutorial), then this will automatically launch !VisualBoy Advance with your ROM.
+
+http://spritely.googlecode.com/svn/trunk/images/vba/vba_04.png
