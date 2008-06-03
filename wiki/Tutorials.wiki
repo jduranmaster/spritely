@@ -5,7 +5,7 @@
 
 The following tutorials are available for using Spritely.
 
-For most of these tutorials, the target audience is middle-school (grade 6-8) students. Lower grade students in this range may likely require adult assistance for basic computer tasks, while higher grade students should be able to use these tutorials without assistance.
+Except for the installation instructions, the target audience for most of these tutorials is middle-school (grade 6-8) students. Lower grade students in this range may likely require adult assistance for basic computer tasks, while higher grade students should be able to use these tutorials without assistance.
 
 Note that many of these tutorials are still under construction.
 
