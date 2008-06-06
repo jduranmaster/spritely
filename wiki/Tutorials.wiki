@@ -5,14 +5,26 @@
 
 The following tutorials are available for using Spritely.
 
-Except for the installation instructions, the target audience for most of these tutorials is middle-school (grade 6-8) students. Lower grade students in this range may likely require adult assistance for basic computer tasks, while higher grade students should be able to use these tutorials without assistance.
+Except for the installation instructions, the target audience for these tutorials is middle-school (grade 6-8) students working with an instructor. Familiarity with basic computer tasks (saving files, navigating folders, ...) is also assumed.
 
-Note that many of these tutorials are still under construction.
+Higher grade students should be able to use these tutorials for self-study.
+
+_Note that many of these tutorials are still under construction._
 
 || || _Category_ || _Description_ ||
 || || Setup/Installation || *[GettingSetUp Getting set up]* ||
+|| || || ||
 || Tutorial 1 || Getting Started || *[CreatingASimpleSprite How to create a simple sprite using Spritely]* ||
 || Tutorial 2 || Getting Started || *[BuildingAROMFile How to build a ROM file from your Spritely project]* ||
 || Tutorial 3 || Getting Started || *[RunningYourROM Running your GBA ROM in VisualBoy Advance]* ||
+|| || || ||
 || Tutorial 4 || Optional Tools || *[UsingProgrammersNotepad Using Programmer's Notepad]* ||
-|| Tutorial 5 || Basic Game Tasks || *[AddingASecondObject Adding a second object]* || 
+|| || || ||
+|| Tutorial 5 || Beginning Programming || How the project is organized ||
+|| Tutorial 6 || Gameboy Programming || Gameboy Advance : Tiles, Sprites and Objects ||
+|| Tutorial 7 || Basic Game Tasks || *[AddingASecondObject Adding a second object]* || 
+|| Tutorial 8 || Basic Game Tasks || Making objects move on their own ||
+|| Tutorial 9 || Basic Game Tasks || Animating objects ||
+|| Tutorial 10 || Basic Game Tasks || Adding a background ||
+|| Tutorial 11 || Game Sample || *[CreatingPong Creating Pong]* ||
+|| || || ||
