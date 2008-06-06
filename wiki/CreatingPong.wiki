@@ -1,0 +1,324 @@
+#summary Creating Pong from start to finish
+#labels Tutorial
+
+= Creating Pong =
+
+This tutorial show you how to create the game Pong from start to finish using Spritely.
+
+== Create your sprites ==
+
+For Pong, we need 2 different sprites: a paddle and a ball. The player's paddle and the opponent's paddle will both be displayed using the same paddle sprite.
+
+Launch Spritely and create 2 sprites:
+   * a 1x1 solid white square for the ball
+   * a 1x4 (tall) solid white rectangle for the paddle
+
+Select the paint bucket tool and fill each sprite with white paint.
+
+By default, Spritely creates a 2x2 empty sprite. It is not needed, so you can delete it.
+
+== Name your sprites ==
+
+We need to name the sprites so that we can refer to them (by name) in the code.
+
+Name the ball "Ball" and the paddle "Paddle". Pay attention to capitalization - begin your name with a capital letter and be consistent.
+
+== Create a background sprite ==
+
+By default, you should have a single 1x1 background sprite. Use the paint bucket and fill it with black paint.
+
+If you look at the Background Map, you'll see that the entire background is now black.
+
+== Save your progress ==
+
+Create a new directory: `c:\gamedev\projects\pong`
+
+Use File::Save to save your work so far as `pong.xml`.
+
+== Export project ==
+
+Export a complete GBA project into `c:\gamedev\projects\pong`.
+
+See the [CreatingASimpleSprite Creating a simple sprite] tutorial if you need more information about how this is done.
+
+== Create a project in Programmer's Notepad ==
+
+Launch Programmer's Notepad and create a new project using the New::Project menu item.
+
+Call the project "pong" and store it in the `c:\gamedev\projects\pong` directory that you created earlier.
+
+Right click on the "pong" project and "Add Files". Navigate to the `c:\gamedev\projects\pong\source` directory and add all of the files.
+
+See the [UsingProgrammersNotepad Using Programmer's Notepad] tutorial if you need more information about how this is done]
+
+== Build/Run your project ==
+
+Now that we're all set up, we can build and run the project.
+
+When you run the project, you'll see only the ball that you can move around. We need to start modifying the source code to display the other objects and turn this into a complete game.
+
+== Define the objects from the sprites ==
+
+We need to define 3 objects for pong: 2 paddles and 1 ball. Let's define these objects.
+
+In the GBA, we can have a maximum of 128 objects, numbered 0 through 127.
+
+Open `game_state.h` and look for the following line:
+
+{{{
+#define kObj_Player 0
+}}}
+
+This assigned the player object to object #0.
+
+Immediately after this line, add:
+
+{{{
+#define kObj_Opponent 1
+#define kObj_Ball 2
+}}}
+
+Pay attention to capitalization!
+
+This assigns the other 2 objects to object #2 (the opponent) and object #3 (the ball).
+
+== Add storage for the object locations ==
+
+We need to keep track of each object on the screen, so add the following to !GameState:
+
+Further down in `game_state.h`, look for:
+
+{{{
+int xPlayer, yPlayer;
+}}}
+
+and add the following 2 lines:
+
+{{{
+int xOpponent, yOpponent;
+int xBall, yBall;
+}}}
+
+Build your project after making these changes to make sure you don't have any compile errors.
+
+Don't bother running since we haven't changed anything important yet.
+
+== Initialize the object location == 
+
+Open `game_state.cpp` and look for the following lines:
+
+{{{
+_gs.xPlayer = 0;
+_gs.yPlayer = 0;
+}}}
+
+Change these lines to:
+
+{{{
+_gs.xPlayer = SCREEN_WIDTH - 16;
+_gs.yPlayer = 0;
+}}}
+
+And add the following lines immediately after:
+
+{{{
+_gs.xOpponent = 8;
+_gs.yOpponent = 0;
+_gs.xBall = SCREEN_WIDTH / 2;
+_gs.yBall = 0;
+}}}
+
+== Place the objects on the screen ==
+
+Futher down in `game_state.cpp`, change:
+
+{{{
+InitObject(kObj_Player, 0, _gs.xPlayer, _gs.yPlayer);
+}}}
+
+to
+
+{{{
+InitObject(kObj_Player, kSprite_Paddle, _gs.xPlayer, _gs.yPlayer);
+}}}
+
+and add the following immediately after:
+
+{{{
+InitObject(kObj_Opponent, kSprite_Paddle, _gs.xOpponent, _gs.yOpponent);
+InitObject(kObj_Ball, kSprite_Ball, _gs.xBall, _gs.yBall);
+}}}
+
+== Build/Run ==
+
+If you run now, you'll see 3 objects on the screen in their correct initial positions.
+
+Only the player paddle will move - and it can move all over the screen.
+
+Let's make it so that the paddle only goes up/down:
+
+== Restrict player paddle movement ==
+
+Still further down in `game_state.cpp`, remove the following lines:
+
+{{{
+if (keyHeld & KEY_LEFT)
+    dx = -1;
+if (keyHeld & KEY_RIGHT)
+    dx = 1;
+}}}
+
+== Build/Run ==
+
+Now if you build and run, the player's paddle only moves up and down.
+
+Let's make the ball move:
+
+== Make the ball move ==
+
+Add the following lines at the end of function.
+
+{{{
+_gs.xBall += 1;
+_gs.yBall += 1;
+MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+}}}
+
+== Build/Run ==
+
+Build and run. The ball moves, but it only goes down/right and it goes off the screen.
+It comes back after a while only to fly off again.
+
+We want the ball to move different directions and we want it to bounce when it gets to the
+edge of the screen.
+
+== Add storage for the ball direction ==
+
+Just like we need to keep track of the current ball position, we also need to keep
+track of its current direction.
+
+Let's make some room to save the balls current direction.
+Go back to `game_state.h` and add the following to the !GameState structure:
+
+{{{
+// The current direction that the ball is moving (-1 or 1)
+int dxBall, dyBall;
+}}}
+
+== Initialize the ball direction ==
+
+Now go back to `game_state.cpp` and initialize the direction.
+
+Look for where you added:
+
+{{{
+_gs.xBall = SCREEN_WIDTH / 2;
+_gs.yBall = 0;
+}}}
+
+and add the following immediately after:
+
+{{{
+_gs.dxBall = 1;
+_gs.dyBall = 1;
+}}}
+
+and change the ball update code at the end from:
+
+{{{
+_gs.xBall += 1;
+_gs.yBall += 1;
+}}}
+
+to:
+
+{{{
+_gs.xBall += _gs.dxBall;
+_gs.yBall += _gs.dyBall;
+}}}
+
+== Build/Run ==
+
+If you build/run now, it will act the same as before. but now that we're storing the
+direction in a variable, we can change it whenever we want.
+
+== Bounce off screen boundaries ==
+
+Let's make the ball respect the screen boundaries.
+
+Add the following immediately before the ball move code:
+
+{{{
+// Check where the ball is moving.
+int widthBall, heightBall;
+GetObjectSize(kObj_Ball, &widthBall, &heightBall);
+int x = _gs.xBall + _gs.dxBall;
+int y = _gs.yBall + _gs.dyBall;
+// Don't let the ball go off the screen.
+if (x < 0 || x > SCREEN_WIDTH - widthBall)
+    _gs.dxBall *= -1;
+if (y < 0 || y > SCREEN_HEIGHT - heightBall)
+    _gs.dyBall *= -1;
+}}}
+
+== Build/Run ==
+
+If you build/run now, the ball will bounce around the screen, but it will still ignore the paddles
+
+== Bounce off paddles ==
+
+Add the following code just after the code above.
+
+{{{
+// Does the ball collide with a paddle?
+if (CollideBBox(kObj_Player, kObj_Ball))
+    _gs.dxBall = -1;
+if (CollideBBox(kObj_Opponent, kObj_Ball))
+    _gs.dxBall = 1;
+}}}
+
+If we try to build now, we'll get an error - it doesn't know about !CollideBBox. We need to tell it where it is defined.
+
+We do this buy adding:
+
+{{{
+#include "collision.h"
+}}}
+
+at the top of the file. (Add it just after `#include "backgrounds.h"`)
+
+== Build/Run ==
+
+Now if you build and run, it will successfully compile and the ball will bounce off the paddles.
+
+== Opponent AI ==
+
+The opponent paddle is boring. Let's add some AI (_Artificial Intelligence_) to make it play pong.
+
+At the bottom of the routine, add the following:
+
+{{{
+// Handle opponent AI
+dy = 0;
+// If the ball is above the paddle
+if (_gs.yBall < _gs.yOpponent) {
+    // Move the paddle up
+    dy = -1;
+    // Unless that would move the paddle above the top of the screen
+    if (_gs.yOpponent < 0)
+        dy = 0;
+} else {
+    // Otherwise, move the paddle down
+    dy = 1;
+    // Unless that would move the padd below the bottom of the screen
+    if (_gs.yOpponent > SCREEN_HEIGHT - GetObjectHeight(kObj_Opponent))
+        dy = 0;
+}
+// Move the paddle.
+_gs.yOpponent += dy;
+MoveObjectTo(kObj_Opponent, _gs.xOpponent, _gs.yOpponent);
+}}}
+
+== Build/Run ==
+
+Build and run. The opponent's paddle will move up and down tracking the ball.
