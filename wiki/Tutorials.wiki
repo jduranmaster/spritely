@@ -21,12 +21,13 @@ _Note that many of these tutorials are still under construction._
 || Tutorial 4 || Optional Tools || *[UsingProgrammersNotepad Using Programmer's Notepad]* ||
 || || || ||
 || Tutorial 5 || Beginning Programming || How the project is organized ||
-|| Tutorial 6 || GBA Programming || Tiles, Sprites and Objects ||
-|| Tutorial 7 || Basic Game Tasks || *[AddingASecondObject Adding a second object]* || 
-|| Tutorial 8 || Basic Game Tasks || Making objects move on their own ||
-|| Tutorial 9 || Basic Game Tasks || Animating objects ||
-|| Tutorial 10 || GBA Programming || Background Tiles and Maps ||
-|| Tutorial 11 || Basic Game Tasks || Adding a background ||
-|| Tutorial 12 || Basic Game Tasks || Detecting collisions between objects ||
-|| Tutorial 13 || Game Sample || *[CreatingPong Creating Pong]* ||
+|| Tutorial 6 || Beginning Programming || Variables ||
+|| Tutorial 7 || GBA Programming || Tiles, Sprites and Objects ||
+|| Tutorial 8 || Basic Game Tasks || *[AddingASecondObject Adding a second object]* || 
+|| Tutorial 9 || Basic Game Tasks || Making objects move on their own ||
+|| Tutorial 10 || Basic Game Tasks || Animating objects ||
+|| Tutorial 11 || GBA Programming || Background Tiles and Maps ||
+|| Tutorial 12 || Basic Game Tasks || Adding a background ||
+|| Tutorial 13 || Basic Game Tasks || Detecting collisions between objects ||
+|| Tutorial 14 || Game Sample || *[CreatingPong Creating Pong]* ||
 || || || ||
