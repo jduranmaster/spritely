@@ -1,4 +1,5 @@
 #summary Running your GBA ROM in VisualBoy Advance.
+#labels Tutorial
 
 = Running your GBA ROM in !VisualBoy Advance =
 
