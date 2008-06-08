@@ -33,11 +33,12 @@ http://spritely.googlecode.com/svn/trunk/images/pong/name_paddle.png
 
 == Create a background sprite ==
 
+Click on the "Background Sprites" tab to look at the background sprites.
 By default, you should have a single 1x1 background sprite. Use the paint bucket and fill it with black paint.
 
 [http://spritely.googlecode.com/svn/trunk/images/pong/bg_sprites.png http://spritely.googlecode.com/svn/trunk/images/pong/sm/bg_sprites.png]
 
-If you look at the Background Map, you'll see that the entire background is now black.
+If you ckick on the "Background Map" tab to view the background map, you'll see that the entire background is now black.
 
 [http://spritely.googlecode.com/svn/trunk/images/pong/bg_map.png http://spritely.googlecode.com/svn/trunk/images/pong/sm/bg_map.png]
 
