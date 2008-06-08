@@ -1,0 +1,11 @@
+
+0.6.8
+Change InitObject() to no longer require starting x,y coords
+  Add MoveObjectTo() after InitObject() in generated code.
+  This allows us to call GetObjectWidth(), et al, when calculating the initial
+  position of the object.
+Add option in Export dialog to update the project. This updates all project
+  files except for game_state.(cpp|h) and makes it easier for previously
+  generated projects to be updated to the latest project code (without overwriting
+  the project-specific code in game_state.(cpp|h).
+Update About dialog to include reference to code.google.com/p/spritely location.
