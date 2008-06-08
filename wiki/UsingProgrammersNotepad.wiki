@@ -1,4 +1,5 @@
 #summary Using Programmer's Notepad
+#labels Tutorial
 
 = Using Programmer's Notepad =
 
