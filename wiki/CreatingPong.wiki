@@ -15,6 +15,8 @@ Launch Spritely and create 2 sprites:
 
 Select the paint bucket tool and fill each sprite with white paint.
 
+[http://spritely.googlecode.com/svn/trunk/images/pong/sprites.png http://spritely.googlecode.com/svn/trunk/images/pong/sm/sprites.png]
+
 By default, Spritely creates a 2x2 empty sprite. It is not needed, so you can delete it.
 
 == Name your sprites ==
@@ -25,11 +27,19 @@ You can change the name of a sprite by selecting the "Sprite::Properties..." men
 
 Name the ball "Ball" and the paddle "Paddle". Pay attention to capitalization - begin your name with a capital letter and be consistent.
 
+http://spritely.googlecode.com/svn/trunk/images/pong/name_ball.png
+
+http://spritely.googlecode.com/svn/trunk/images/pong/name_paddle.png
+
 == Create a background sprite ==
 
 By default, you should have a single 1x1 background sprite. Use the paint bucket and fill it with black paint.
 
+[http://spritely.googlecode.com/svn/trunk/images/pong/bg_sprites.png http://spritely.googlecode.com/svn/trunk/images/pong/sm/bg_sprites.png]
+
 If you look at the Background Map, you'll see that the entire background is now black.
+
+[http://spritely.googlecode.com/svn/trunk/images/pong/bg_map.png http://spritely.googlecode.com/svn/trunk/images/pong/sm/bg_map.png]
 
 == Save your progress ==
 
@@ -51,6 +61,8 @@ Call the project "pong" and store it in the `c:\gamedev\projects\pong` directory
 
 Right click on the "pong" project and "Add Files". Navigate to the `c:\gamedev\projects\pong\source` directory and add all of the files.
 
+http://spritely.googlecode.com/svn/trunk/images/pong/pnproj.png
+
 See the [UsingProgrammersNotepad Using Programmer's Notepad] tutorial if you need more information about how this is done]
 
 == Build/Run your project ==
@@ -58,6 +70,8 @@ See the [UsingProgrammersNotepad Using Programmer's Notepad] tutorial if you nee
 Now that we're all set up, we can build and run the project.
 
 When you run the project, you'll see only the ball that you can move around. We need to start modifying the source code to display the other objects and turn this into a complete game.
+
+http://spritely.googlecode.com/svn/trunk/images/pong/ss_01.png
 
 == Define the objects from the sprites ==
 
@@ -93,10 +107,10 @@ Further down in `game_state.h`, look for the following line inside the !GameStat
 int xPlayer, yPlayer;
 }}}
 
-and add the following 2 lines immediately after:
+and add the following lines immediately after:
 
 {{{
-// The (x,y) location of the opponent.
+// The (x,y) location of the opponent's paddle.
 int xOpponent, yOpponent;
 
 // The (x,y) location of the ball.
@@ -107,55 +121,60 @@ Build your project after making these changes to make sure you don't have any co
 
 Don't bother running since we haven't changed anything important yet.
 
+== Create the new objects ==
+
+Open `game_state.cpp` and look for the following line in the `InitGameState()` function:
+
+{{{
+InitObject(kObj_Player, 0);
+}}}
+
+Change this line to:
+
+{{{
+InitObject(kObj_Player, kSprite_Paddle);
+}}}
+
+This will make the player object user the "Paddle" sprite.
+
+Add the following lines immediately after:
+
+{{{
+InitObject(kObj_Opponent, kSprite_Paddle);
+InitObject(kObj_Ball, kSprite_Ball);
+}}}
+
+These lines create the other 2 objects that we need for the game: the _Opponent_, which also uses a "Paddle" sprite and the _Ball_, which uses a "Ball" sprite.
+
 == Initialize the object location == 
-
-Open `game_state.cpp` and look for the following lines in the `InitGameState()` function:
-
-{{{
-// Initialize the player location.
-// By default, we place the player at the upper-left corner (0,0).
-_gs.xPlayer = 0;
-_gs.yPlayer = 0;
-}}}
-
-Change these lines to:
-
-{{{
-// Initialize the player location on the right side of the screen.
-_gs.xPlayer = SCREEN_WIDTH - 16;
-_gs.yPlayer = 0;
-}}}
-
-And add the following lines immediately after:
-
-{{{
-// Initialize the opponent location on the left side of the screen.
-_gs.xOpponent = 8;
-_gs.yOpponent = 0;
-// Initialize the ball in the middle/top of the screen.
-_gs.xBall = SCREEN_WIDTH / 2;
-_gs.yBall = 0;
-}}}
-
-== Place the objects on the screen ==
 
 Further down in `InitGameState()`, change:
 
 {{{
-InitObject(kObj_Player, 0, _gs.xPlayer, _gs.yPlayer);
+// Set the initial location for each object.
+_gs.xPlayer = 0;
+_gs.yPlayer = 0;
+MoveObjectTo(kObj_Player, _gs.xPlayer, _gs.yPlayer);
 }}}
 
-to
+These lines move the player object to its initial position. Change the first line to:
 
 {{{
-InitObject(kObj_Player, kSprite_Paddle, _gs.xPlayer, _gs.yPlayer);
+_gs.xPlayer = SCREEN_WIDTH - GetObjectWidth(kObj_Player) - 8;
 }}}
 
-and add the following immediately after:
+This will put the player's paddle on the right side of the screen.
+
+To initialize the remaining objects (the opponent and the ball), add the following lines immediately after:
 
 {{{
-InitObject(kObj_Opponent, kSprite_Paddle, _gs.xOpponent, _gs.yOpponent);
-InitObject(kObj_Ball, kSprite_Ball, _gs.xBall, _gs.yBall);
+_gs.xOpponent = 8;
+_gs.yOpponent = 0;
+MoveObjectTo(kObj_Opponent, _gs.xOpponent, _gs.yOpponent);
+
+_gs.xBall = SCREEN_WIDTH / 2;
+_gs.yBall = 0;
+MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
 }}}
 
 == Build/Run ==
@@ -163,6 +182,8 @@ InitObject(kObj_Ball, kSprite_Ball, _gs.xBall, _gs.yBall);
 If you run now, you'll see 3 objects on the screen in their correct initial positions.
 
 Only the player paddle will move - and it can move all over the screen.
+
+http://spritely.googlecode.com/svn/trunk/images/pong/ss_02.png
 
 Let's make it so that the paddle only goes up/down:
 
@@ -175,6 +196,15 @@ if (keyHeld & KEY_LEFT)
     dx = -1;
 if (keyHeld & KEY_RIGHT)
     dx = 1;
+}}}
+
+or, if you prefer, you can simply comment out the lines instead of removing them:
+
+{{{
+//if (keyHeld & KEY_LEFT)
+//    dx = -1;
+//if (keyHeld & KEY_RIGHT)
+//    dx = 1;
 }}}
 
 Removing this code disables support for the Left and Right arrow keys.
@@ -207,6 +237,8 @@ MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
 Build and run. The ball moves, but it only goes down/right and it goes off the screen.
 It comes back after a while only to fly off again.
 
+http://spritely.googlecode.com/svn/trunk/images/pong/ss_03.png
+
 We want the ball to move different directions and we want it to bounce when it gets to the
 edge of the screen.
 
@@ -225,18 +257,20 @@ int dxBall, dyBall;
 
 == Initialize the ball direction ==
 
-Now go back to `game_state.cpp` and initialize the direction in `InitGameState()`.
+Now go back to `game_state.cpp` and initialize the ball direction.
 
-Look for where you added:
+Look for where you added (at the end of `InitGameState()`):
 
 {{{
 _gs.xBall = SCREEN_WIDTH / 2;
 _gs.yBall = 0;
+MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
 }}}
 
 and add the following immediately after:
 
 {{{
+// Initialize the ball direction.
 _gs.dxBall = 1;
 _gs.dyBall = 1;
 }}}
@@ -246,6 +280,7 @@ and change the ball update code at the end of `UpdateGameState()` from:
 {{{
 _gs.xBall += 1;
 _gs.yBall += 1;
+MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
 }}}
 
 to:
@@ -253,6 +288,7 @@ to:
 {{{
 _gs.xBall += _gs.dxBall;
 _gs.yBall += _gs.dyBall;
+MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
 }}}
 
 == Build/Run ==
@@ -268,17 +304,15 @@ Add the following immediately *before* the ball move code in `UpdateGameState()`
 
 {{{
 // Check where the ball is moving.
-int widthBall, heightBall;
-GetObjectSize(kObj_Ball, &widthBall, &heightBall);
 int x = _gs.xBall + _gs.dxBall;
 int y = _gs.yBall + _gs.dyBall;
 
 // Don't let the ball go off the left/right side of screen.
-if (x < 0 || x > SCREEN_WIDTH - widthBall)
+if (x < 0 || x > SCREEN_WIDTH - GetObjectWidth(kObj_Ball))
     _gs.dxBall *= -1;
 
 // Don't let the ball go off the top/bottom of screen.
-if (y < 0 || y > SCREEN_HEIGHT - heightBall)
+if (y < 0 || y > SCREEN_HEIGHT - GetObjectHeight(kObj_Ball))
     _gs.dyBall *= -1;
 }}}
 
@@ -290,9 +324,11 @@ The `_gs.dyBall *= -1;` does the same thing for the ball moving up/down.
 
 If you build/run now, the ball will bounce around the screen, but it will still ignore the paddles
 
+http://spritely.googlecode.com/svn/trunk/images/pong/ss_04.png
+
 == Bounce off paddles ==
 
-Add the following code just after the code above.
+Add the following code just after the code above (but before the `// Move the ball.` comment).
 
 {{{
 // Does the ball collide with a paddle?
@@ -302,7 +338,13 @@ if (CollideBBox(kObj_Opponent, kObj_Ball))
     _gs.dxBall = 1;
 }}}
 
-If we try to build now, we'll get an error - it doesn't know about !CollideBBox. We need to tell it where it is defined.
+If we try to build now, we'll get an error:
+
+{{{
+error: 'CollideBBox' was not declared in this scope
+}}}
+
+This means that it doesn't know about !CollideBBox. We need to tell it where it is defined.
 
 We do this by adding:
 
@@ -316,11 +358,13 @@ at the top of the file. (Add it between `#include "backgrounds.h"` and `#include
 
 Now if you build and run, it will successfully compile and the ball will bounce off the paddles.
 
+http://spritely.googlecode.com/svn/trunk/images/pong/ss_05.png
+
 == Opponent AI ==
 
 The opponent paddle is boring. Let's add some simple AI (_Artificial Intelligence_) to make it play pong.
 
-At the bottom of the `UpdateGameState()`, just after the ball update code, add the following:
+At the bottom of the `UpdateGameState()`, just after the code to move the ball, add the following:
 
 {{{
 // Handle opponent AI
