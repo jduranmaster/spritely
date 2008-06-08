@@ -566,7 +566,6 @@ namespace Spritely
 			//          files are written into the "project" directory.
 			//       A similar situation is where the user exports sprites/backgrounds directly into the
 			//       "project/source" directory.
-			//int nInDir = 0;
 			int nInSubdir = 0;
 
 			if (!fExportProject)
@@ -577,13 +576,6 @@ namespace Spritely
 					// This is a project-only file - ignore.
 					if (f.ProjectFile)
 						continue;
-
-					// Does the file already exist in the specified directory?
-					//StringBuilder sbDirPath = new StringBuilder(strProjectDir);
-					//sbDirPath.Append(Path.DirectorySeparatorChar);
-					//sbDirPath.Append(f.Filename);
-					//if (System.IO.File.Exists(sbDirPath.ToString()))
-					//	nInDir++;
 
 					// Does it already exist in the subdirectory?
 					if (f.SubDirectory != "")
