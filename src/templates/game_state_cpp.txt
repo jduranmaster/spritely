@@ -18,12 +18,10 @@ GameState _gs;
 // InitGameState
 // This is called once at the beginning of the game to set up all of the game objects.
 void InitGameState() {
-	// Place the objects on the screen.
-	// By default, we create a single object (kObj_Player) from the first sprite (0).
+	// Initialize the objects.
 	InitObject(kObj_Player, 0);
 
-	// Initialize the player location.
-	// By default, we place the player object at the upper-left corner (0,0).
+	// Set the initial location fo each object.
 	_gs.xPlayer = 0;
 	_gs.yPlayer = 0;
 	MoveObjectTo(kObj_Player, _gs.xPlayer, _gs.yPlayer);
