@@ -1,0 +1,39 @@
+// ToDo.txt
+
+General: Set GBA/NDS "mode" and have UI change appropriately: screen border, export, ...
+General: Improve when running under Mono (Mac/Linux)
+
+Undo: Record changing sprite size
+Undo: Record undo info for each tab instead of per document
+Undo: Record background map edits
+Undo: Redo deleted sprite doesn't place sprite in same location in list
+Undo: Deleting the default map sprite isn't restored
+
+Sprite List: disable sprite
+Sprite List: reorder sprites (up/down within size group)
+
+Sprite Edit: marquee select
+Sprite Edit: tools for line, rect, filled rect, oval filled oval
+Sprite Edit: set/manage origin, bounding box
+Sprite Edit: flip/rotate sprites
+Sprite Edit: cursors for each active tool
+
+Background Edit: flip, rotate tiles, sprites
+Background Edit: palette override
+Background Edit: show DS screen bounds
+Background Edit: collision editor to mark places on map
+
+Background: Allow import of 256-color images into background
+Background: splash screen
+
+Tests: Add unit test framework
+
+Palettes: Add better color editing options: RGB, HSV, large palette
+Palettes: Add support for a single 256-color palette
+
+Preferences: Record last save directory
+Preferences: Set default GBA/NDS project
+
+File: New document doesn't create default sprites
+
+Export: add manifest file for projects
