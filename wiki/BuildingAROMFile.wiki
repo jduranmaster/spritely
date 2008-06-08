@@ -1,4 +1,5 @@
 #summary How to build a GBA ROM file from you exported project
+#labels Tutorial
 
 = Building a GBA ROM File =
 
@@ -10,21 +11,21 @@ First, click on the "Start" menu in the lower left corner of your screen.
 
 This will pull up a menu that should look something like one of the examples shown here.
 
-http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_01.png
+http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_01.png
 or
-http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_02.png
+http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_02.png
 
 Find the "Run..." command near the bottom of this menu and click on it.
 
 This will bring up the "Run" dialog.
 
-http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_03.png
+http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_03.png
 
 Enter cmd into the edit field and press the "OK" button.
 
 This will bring up a "Command Prompt" that will allow you to enter the commands needed to build your GBA project.
 
-[http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_04.png http://spritely.googlecode.com/svn/trunk/tutorials/img_sm/build_rom_04.png]
+[http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_04.png http://spritely.googlecode.com/svn/trunk/images/build_rom/sm/build_rom_04.png]
 
 Unfortunately, it starts out in the wrong directory, so we'll need to go to the correct directory before we can build.
 
@@ -40,7 +41,7 @@ Also, you'll need to replace "mygame" with the name you chose earlier when expor
 
 Make sure to press the "Enter" key after you type in the command.
 
-[http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_05.png http://spritely.googlecode.com/svn/trunk/tutorials/img_sm/build_rom_05.png]
+[http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_05.png http://spritely.googlecode.com/svn/trunk/images/build_rom/sm/build_rom_05.png]
 
 Once you're in the correct directory, type:
 
@@ -50,11 +51,11 @@ Once you're in the correct directory, type:
 
 and press Enter.
 
-[http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_06.png http://spritely.googlecode.com/svn/trunk/tutorials/img_sm/build_rom_06.png]
+[http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_06.png http://spritely.googlecode.com/svn/trunk/images/build_rom/sm/build_rom_06.png]
 
 You'll see a bunch of messages printed out in the Command Prompt window that you can ignore (for now).
 
-[http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_07.png http://spritely.googlecode.com/svn/trunk/tutorials/img_sm/build_rom_07.png]
+[http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_07.png http://spritely.googlecode.com/svn/trunk/images/build_rom/sm/build_rom_07.png]
 
 The only important parts are the last 2 lines, which should say
 
@@ -68,7 +69,7 @@ if the build was successful.
 
 If you open your project directory, you'll see the new files that were created.
 
-http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_08.png
+http://spritely.googlecode.com/svn/trunk/images/build_rom/build_rom_08.png
 
    `build/` — This directory contains temporary files that the compiler used when building the ROM file.
 
@@ -77,4 +78,3 @@ http://spritely.googlecode.com/svn/trunk/tutorials/images/build_rom_08.png
    `mygame.gba` — This is the ROM file that contains your game!
 
 You're now ready to run your ROM and see how your sprite looks.
-
