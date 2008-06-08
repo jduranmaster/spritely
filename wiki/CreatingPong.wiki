@@ -339,7 +339,9 @@ if (CollideBBox(kObj_Opponent, kObj_Ball))
     _gs.dxBall = 1;
 }}}
 
-If we try to build now, we'll get an error:
+This code tells the ball to go left (`dxBall = -1`) if it collides with the player's paddle and to go right (`dxBall = 1`) if it collides with the opponent's paddle. Note that the y-direction is not affected - if the ball is going up when it hits a paddle, it will continue to go up after it bounces off.
+
+However, if we try to build now, we'll get an error:
 
 {{{
 error: 'CollideBBox' was not declared in this scope
@@ -392,3 +394,14 @@ MoveObjectTo(kObj_Opponent, _gs.xOpponent, _gs.yOpponent);
 == Build/Run ==
 
 Build and run. The opponent's paddle will move up and down tracking the ball.
+
+== Completed Project ==
+
+Here are links to the completed source files from this tutorial:
+
+   * [http://spritely.googlecode.com/svn/trunk/tutorials/pong/game_state.cpp game_state.cpp]
+   * [http://spritely.googlecode.com/svn/trunk/tutorials/pong/game_state.h game_state.h]
+
+And here is a link to the compiled ROM file:
+
+   * [http://spritely.googlecode.com/svn/trunk/tutorials/pong/pong.gba pong.gba]
