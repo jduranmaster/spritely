@@ -22,4 +22,7 @@ void GetObjectSize(int object, int *pwidth, int *pheight);
 int GetObjectWidth(int object);
 int GetObjectHeight(int object);
 
+void ShowObject(int object, bool show);
+void FlipObject(int object, bool horizontal, bool vertical);
+
 #endif	// _OBJECT_UTILS_H_

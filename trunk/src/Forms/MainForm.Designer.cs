@@ -73,6 +73,15 @@ namespace Spritely
 			this.menuSprite_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuSprite_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuSprite_Separator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuSprite_Rotate = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Rotate_Clockwise = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Rotate_Counterclockwise = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Rotate_180 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Flip = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Flip_Horizontal = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Flip_Vertical = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Flip_Both = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuSprite_Separator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuSprite_Properties = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuSprite_Arrange = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuSprite_Arrange_MoveUp = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,6 +151,8 @@ namespace Spritely
 			this.pbBM_SpriteList = new System.Windows.Forms.PictureBox();
 			this.sbBM_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbBM_EditBackgroundMap = new System.Windows.Forms.PictureBox();
+			this.menuFile_RecentFiles = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuFile_Separator3 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_SpriteList)).BeginInit();
 			this.menuBar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_EditSprite)).BeginInit();
@@ -210,6 +221,8 @@ namespace Spritely
             this.menuFile_SaveAs,
             this.menuFile_Export,
             this.menuFile_Separator2,
+            this.menuFile_RecentFiles,
+            this.menuFile_Separator3,
             this.menuFile_Exit});
 			this.menuFile.Name = "menuFile";
 			this.menuFile.Size = new System.Drawing.Size(35, 20);
@@ -344,6 +357,9 @@ namespace Spritely
             this.menuSprite_Clear,
             this.menuSprite_Delete,
             this.menuSprite_Separator2,
+            this.menuSprite_Rotate,
+            this.menuSprite_Flip,
+            this.menuSprite_Separator3,
             this.menuSprite_Properties,
             this.menuSprite_Arrange});
 			this.menuSprite.Name = "menuSprite";
@@ -560,12 +576,79 @@ namespace Spritely
 			this.menuSprite_Separator2.Name = "menuSprite_Separator2";
 			this.menuSprite_Separator2.Size = new System.Drawing.Size(184, 6);
 			// 
+			// menuSprite_Rotate
+			// 
+			this.menuSprite_Rotate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSprite_Rotate_Clockwise,
+            this.menuSprite_Rotate_Counterclockwise,
+            this.menuSprite_Rotate_180});
+			this.menuSprite_Rotate.Name = "menuSprite_Rotate";
+			this.menuSprite_Rotate.Size = new System.Drawing.Size(187, 22);
+			this.menuSprite_Rotate.Text = "R&otate";
+			// 
+			// menuSprite_Rotate_Clockwise
+			// 
+			this.menuSprite_Rotate_Clockwise.Name = "menuSprite_Rotate_Clockwise";
+			this.menuSprite_Rotate_Clockwise.Size = new System.Drawing.Size(246, 22);
+			this.menuSprite_Rotate_Clockwise.Text = "90° Clockwise (&Sunwise)";
+			this.menuSprite_Rotate_Clockwise.Click += new System.EventHandler(this.menuSprite_Rotate_Clockwise_Click);
+			// 
+			// menuSprite_Rotate_Counterclockwise
+			// 
+			this.menuSprite_Rotate_Counterclockwise.Name = "menuSprite_Rotate_Counterclockwise";
+			this.menuSprite_Rotate_Counterclockwise.Size = new System.Drawing.Size(246, 22);
+			this.menuSprite_Rotate_Counterclockwise.Text = "90° Counterclockwise (&Widdershins)";
+			this.menuSprite_Rotate_Counterclockwise.Click += new System.EventHandler(this.menuSprite_Rotate_Counterclockwise_Click);
+			// 
+			// menuSprite_Rotate_180
+			// 
+			this.menuSprite_Rotate_180.Name = "menuSprite_Rotate_180";
+			this.menuSprite_Rotate_180.Size = new System.Drawing.Size(246, 22);
+			this.menuSprite_Rotate_180.Text = "180°";
+			this.menuSprite_Rotate_180.Click += new System.EventHandler(this.menuSprite_Rotate_180_Click);
+			// 
+			// menuSprite_Flip
+			// 
+			this.menuSprite_Flip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSprite_Flip_Horizontal,
+            this.menuSprite_Flip_Vertical,
+            this.menuSprite_Flip_Both});
+			this.menuSprite_Flip.Name = "menuSprite_Flip";
+			this.menuSprite_Flip.Size = new System.Drawing.Size(187, 22);
+			this.menuSprite_Flip.Text = "&Flip";
+			// 
+			// menuSprite_Flip_Horizontal
+			// 
+			this.menuSprite_Flip_Horizontal.Name = "menuSprite_Flip_Horizontal";
+			this.menuSprite_Flip_Horizontal.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Horizontal.Text = "&Horizontal";
+			this.menuSprite_Flip_Horizontal.Click += new System.EventHandler(this.menuSprite_Flip_Horizontal_Click);
+			// 
+			// menuSprite_Flip_Vertical
+			// 
+			this.menuSprite_Flip_Vertical.Name = "menuSprite_Flip_Vertical";
+			this.menuSprite_Flip_Vertical.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Vertical.Text = "&Vertical";
+			this.menuSprite_Flip_Vertical.Click += new System.EventHandler(this.menuSprite_Flip_Vertical_Click);
+			// 
+			// menuSprite_Flip_Both
+			// 
+			this.menuSprite_Flip_Both.Name = "menuSprite_Flip_Both";
+			this.menuSprite_Flip_Both.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Both.Text = "&Both";
+			this.menuSprite_Flip_Both.Click += new System.EventHandler(this.menuSprite_Flip_Both_Click);
+			// 
+			// menuSprite_Separator3
+			// 
+			this.menuSprite_Separator3.Name = "menuSprite_Separator3";
+			this.menuSprite_Separator3.Size = new System.Drawing.Size(184, 6);
+			// 
 			// menuSprite_Properties
 			// 
 			this.menuSprite_Properties.Name = "menuSprite_Properties";
 			this.menuSprite_Properties.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
 			this.menuSprite_Properties.Size = new System.Drawing.Size(187, 22);
-			this.menuSprite_Properties.Text = "Properties...";
+			this.menuSprite_Properties.Text = "&Properties...";
 			this.menuSprite_Properties.Click += new System.EventHandler(this.menuSprite_Properties_Click);
 			// 
 			// menuSprite_Arrange
@@ -1320,6 +1403,17 @@ namespace Spritely
 			this.pbBM_EditBackgroundMap.Paint += new System.Windows.Forms.PaintEventHandler(this.EditBackgroundMap_Paint);
 			this.pbBM_EditBackgroundMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseUp);
 			// 
+			// menuFile_RecentFiles
+			// 
+			this.menuFile_RecentFiles.Name = "menuFile_RecentFiles";
+			this.menuFile_RecentFiles.Size = new System.Drawing.Size(152, 22);
+			this.menuFile_RecentFiles.Text = "Recent &Files";
+			// 
+			// menuFile_Separator3
+			// 
+			this.menuFile_Separator3.Name = "menuFile_Separator3";
+			this.menuFile_Separator3.Size = new System.Drawing.Size(149, 6);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1398,7 +1492,7 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_Duplicate;
 		private System.Windows.Forms.ToolStripSeparator menuSprite_Separator1;
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_Resize;
-		private System.Windows.Forms.ToolStripSeparator menuSprite_Separator2;
+		private System.Windows.Forms.ToolStripSeparator menuSprite_Separator3;
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_Delete;
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_New_1x1;
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_New_1x2;
@@ -1483,6 +1577,17 @@ namespace Spritely
 		private System.Windows.Forms.PictureBox pbBM_SpritePreview;
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_Properties;
 		private System.Windows.Forms.Label lS_SpriteInfo;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Rotate;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Rotate_Clockwise;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Rotate_Counterclockwise;
+		private System.Windows.Forms.ToolStripSeparator menuSprite_Separator2;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Flip;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Flip_Horizontal;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Flip_Vertical;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Rotate_180;
+		private System.Windows.Forms.ToolStripMenuItem menuSprite_Flip_Both;
+		private System.Windows.Forms.ToolStripMenuItem menuFile_RecentFiles;
+		private System.Windows.Forms.ToolStripSeparator menuFile_Separator3;
 	}
 }
 

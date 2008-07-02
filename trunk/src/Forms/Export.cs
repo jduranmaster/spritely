@@ -10,17 +10,31 @@ namespace Spritely
 {
 	public partial class Export : Form
 	{
+		static string m_strLastDocument = "";
 		static string m_strLastExportDirectory = "";
 
-		public Export()
+		public Export(string strDocName)
 		{
 			InitializeComponent();
 
 			this.DialogResult = DialogResult.Cancel;
 
+			// Reset the export directory if we've opened a new file.
+			if (m_strLastDocument != strDocName)
+				m_strLastExportDirectory = "";
+			m_strLastDocument = strDocName;
+
 			// Reset any invalid directories.
 			if (m_strLastExportDirectory != "" && !System.IO.Directory.Exists(m_strLastExportDirectory))
 				m_strLastExportDirectory = "";
+
+			// Default to save in document's directory.
+			if (m_strLastExportDirectory == "" && strDocName != "")
+			{
+				m_strLastExportDirectory = System.IO.Path.GetDirectoryName(strDocName);
+				if (!System.IO.Directory.Exists(m_strLastExportDirectory))
+					m_strLastExportDirectory = "";
+			}
 
 			// Set the default directory to be the same as the application's directory.
 			if (m_strLastExportDirectory == "")
@@ -36,7 +50,7 @@ namespace Spritely
 			FolderBrowserDialog SaveFolderDialog = new FolderBrowserDialog();
 			//SaveFolderDialog.Description = "Select the directory where you want to store the exported files:";
 			SaveFolderDialog.Description = ResourceMgr.GetString("SelectExportDir");
-			SaveFolderDialog.SelectedPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+			SaveFolderDialog.SelectedPath = m_strLastExportDirectory;
 			if (SaveFolderDialog.ShowDialog() != DialogResult.OK)
 				return;
 

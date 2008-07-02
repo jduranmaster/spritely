@@ -1,3 +1,15 @@
+0.7.1
+Merge VerticalFlipObject and HorizontalFlipObject into FlipObject
+Merge ShowObject and HideObject into ShowObject
+Automatically generate Programmer's Notepad project (pnproj) file when
+  exporting
+Add Rotate (90 clockwise, 90 counterclockwise, 180)
+Add Flip (horizontal, vertical, both)
+Add File::Recent Files menu
+Fix bug where sprites didn't get moved into correct spritelist group when
+  resized larger
+Fix bug where undoing a sprite resize (or rotate) would render the sprite in
+  the old group in the spritelist.
 
 0.6.8
 Change InitObject() to no longer require starting x,y coords
@@ -6,6 +18,7 @@ Change InitObject() to no longer require starting x,y coords
   position of the object.
 Add option in Export dialog to update the project. This updates all project
   files except for game_state.(cpp|h) and makes it easier for previously
-  generated projects to be updated to the latest project code (without overwriting
-  the project-specific code in game_state.(cpp|h).
-Update About dialog to include reference to code.google.com/p/spritely location.
+  generated projects to be updated to the latest project code (without
+  overwriting the project-specific code in game_state.(cpp|h).
+Update About dialog to include reference to http://code.google.com/p/spritely
+  location.

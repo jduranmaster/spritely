@@ -12,6 +12,7 @@ namespace Spritely
 		public string AppName = "Spritely";
 
 		private Document m_doc;
+		private RecentFiles m_recent;
 
 		private Toolbox m_SpriteToolbox;
 		private Toolbox m_BackgroundSpriteToolbox;
@@ -35,6 +36,9 @@ namespace Spritely
 			bool fNewDocument = true;
 
 			InitializeComponent();
+
+			// Init the list of recent files.
+			m_recent = new RecentFiles(this, menuFile_RecentFiles);
 
 			if (strFilename != "")
 			{

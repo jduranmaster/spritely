@@ -53,12 +53,14 @@ namespace Spritely
 		{
 			m_sprite.ApplyUndoData(m_before);
 			m_spritelist.CurrentSprite = m_sprite;
+			m_spritelist.MoveToCorrectSpriteType(m_sprite);
 		}
 
 		public override void ApplyRedo()
 		{
 			m_sprite.ApplyUndoData(m_after);
 			m_spritelist.CurrentSprite = m_sprite;
+			m_spritelist.MoveToCorrectSpriteType(m_sprite);
 		}
 	}
 }

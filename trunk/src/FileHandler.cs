@@ -495,6 +495,7 @@ namespace Spritely
 		{
 			// Makefile
 			new ExportFile("Makefile",			"makefile.txt",			true,	false,	""),
+			new ExportFile("%%_NAME_%%.pnproj",	"game_pnproj.txt",		true,	false,	""),
 			// Project files
 			new ExportFile("animation.cpp",		"animation_cpp.txt",	true,	false,	"source"),
 			new ExportFile("animation.h",		"animation_h.txt",		true,	false,	"source"),
@@ -520,13 +521,13 @@ namespace Spritely
 			Cancel,
 		}
 
-		public ExportResult Export(out string strProjectDir, out bool fNDS, out bool fExportProject)
+		public ExportResult Export(string strDocName, out string strProjectDir, out bool fNDS, out bool fExportProject)
 		{
 			strProjectDir = "";
 			fNDS = false;
 			fExportProject = false;
 
-			Export ex = new Export();
+			Export ex = new Export(strDocName);
 			DialogResult result = ex.ShowDialog();
 			if (result == DialogResult.Cancel)
 				return ExportResult.Cancel;
@@ -537,6 +538,10 @@ namespace Spritely
 			fNDS = ex.NDS;
 			fExportProject = ex.Project || ex.UpdateProject;
 			bool fSkipGameState = ex.UpdateProject;
+
+			// Since the strProjectDir doesn't end with a directory separator, this
+			// returns the directory name.
+			string strProjName = Path.GetFileName(strProjectDir);
 
 			// Figure out which directory we should use.
 			// In general, we use the directory selected by the user.
@@ -600,7 +605,7 @@ namespace Spritely
 
 			foreach (ExportFile f in ExportFiles)
 			{
-				// Only export projet files if we're exporting a project.
+				// Skip projet files unless we're exporting a project.
 				if (f.ProjectFile && !fExportProject)
 					continue;
 
@@ -620,19 +625,20 @@ namespace Spritely
 						System.IO.Directory.CreateDirectory(sb.ToString());
 				}
 				sb.Append(Path.DirectorySeparatorChar);
-				sb.Append(f.Filename);
+				string filename = f.Filename.Replace("%%_NAME_%%", strProjName);
+				sb.Append(filename);
 
 				// TODO: if this is a project file, and it already exists and it is different from the
 				// default (eg: changes made to main.cpp), then warn the user before overwriting.
 
-				if (!ExportFromTemplate(f.Template, sb.ToString(), fNDS))
+				if (!ExportFromTemplate(strProjName, f.Template, sb.ToString(), fNDS))
 					return ExportResult.Failed;
 			}
 
 			return ExportResult.OK;
 		}
 
-		private bool ExportFromTemplate(string strTemplateFilename, string strOutputFilename, bool fNDS)
+		private bool ExportFromTemplate(string strProjName, string strTemplateFilename, string strOutputFilename, bool fNDS)
 		{
 			TextReader tr;
 			TextWriter tw;
@@ -726,6 +732,7 @@ namespace Spritely
 					continue;
 				}
 
+				strLine = strLine.Replace("%%_NAME_%%", strProjName);
 				strLine = strLine.Replace("%%_VERSION_%%", ResourceMgr.GetString("Version"));
 				strLine = strLine.Replace("%%_PLATFORM_%%", fNDS ? "NDS" : "GBA");
 				strLine = strLine.Replace("%%_NUM_SPRITE_PALETTES_%%", palettes.NumPalettes.ToString());

@@ -126,3 +126,34 @@ int GetObjectHeight(int object) {
 		return 0;
 	return SpriteInfo[sprite].height;
 }
+
+void ShowObject(int object, bool show) {
+	if (object >= kMaxObjects)
+		return;
+
+	if (show)
+		oam_shadow[object].attribute[0] &= ~ATTR0_DISABLED;
+	else
+		oam_shadow[object].attribute[0] |= ATTR0_DISABLED;
+	s_UpdateScreen = true;
+}
+
+void FlipObject(int object, bool horizontal, bool vertical) {
+	if (object >= kMaxObjects)
+		return;
+
+	// Make sure that rotation/scale flag is off.
+	oam_shadow[object].attribute[0] &= ~ATTR0_ROTSCALE;
+	
+	if (horizontal)
+		oam_shadow[object].attribute[1] |= ATTR1_FLIP_X;
+	else
+		oam_shadow[object].attribute[1] &= ~ATTR1_FLIP_X;
+
+	if (vertical)
+		oam_shadow[object].attribute[1] |= ATTR1_FLIP_Y;
+	else
+		oam_shadow[object].attribute[1] &= ~ATTR1_FLIP_Y;
+	
+	s_UpdateScreen = true;
+}

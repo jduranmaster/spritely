@@ -34,7 +34,8 @@ namespace Spritely
 			}
 			else
 			{
-				toolbox.HandleMouse(e.X, e.Y);
+				if (toolbox.HandleMouse(e.X, e.Y))
+					pbToolbox.Invalidate();
 				m_fToolbox_Selecting = true;
 			}
 		}

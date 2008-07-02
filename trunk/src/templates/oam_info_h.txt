@@ -7,7 +7,7 @@
 // sprites.
 //
 // The entries are set up as follows, where the 8 bytes of rotation
-// data (PA-PD) is spread across the last 2 bytes of 4 sprite data blocks.
+// data (PA-PD) are spread across the last 2 bytes of 4 sprite data blocks.
 //
 //                 Sprite Attributes         Rotation Data
 //              +------------------------+  +--------------+
