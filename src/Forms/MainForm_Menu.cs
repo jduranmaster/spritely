@@ -34,6 +34,7 @@ namespace Spritely
 			menuFile_Save.Enabled = true;
 			menuFile_SaveAs.Enabled = true;
 			menuFile_Export.Enabled = true;
+			menuFile_RecentFiles.Enabled = (m_recent.Count != 0);
 			menuFile_Exit.Enabled = true;
 
 			menuEdit.Enabled = true;
@@ -70,6 +71,12 @@ namespace Spritely
 				bool fFirst, fLast;
 				m_doc.GetSprites(m_eCurrentTab).IsFirstLastSpriteOfType(s, out fFirst, out fLast);
 				menuSprite_Properties.Enabled = true;
+				menuSprite_Rotate.Enabled = true;
+				menuSprite_Rotate_Clockwise.Enabled = true;
+				menuSprite_Rotate_Counterclockwise.Enabled = true;
+				menuSprite_Flip.Enabled = true;
+				menuSprite_Flip_Horizontal.Enabled = true;
+				menuSprite_Flip_Vertical.Enabled = true;
 				menuSprite_Arrange.Enabled = false;
 				menuSprite_Arrange_MoveUp.Enabled = false;// !fFirst;
 				menuSprite_Arrange_MoveDown.Enabled = false;// !fLast;
@@ -86,6 +93,12 @@ namespace Spritely
 				menuSprite_Resize.Enabled = false;
 				menuSprite_Delete.Enabled = false;
 				menuSprite_Properties.Enabled = false;
+				menuSprite_Rotate.Enabled = false;
+				menuSprite_Rotate_Clockwise.Enabled = false;
+				menuSprite_Rotate_Counterclockwise.Enabled = false;
+				menuSprite_Flip.Enabled = false;
+				menuSprite_Flip_Horizontal.Enabled = false;
+				menuSprite_Flip_Vertical.Enabled = false;
 				menuSprite_Arrange.Enabled = false;
 				menuSprite_Arrange_MoveUp.Enabled = false;
 				menuSprite_Arrange_MoveDown.Enabled = false;
@@ -141,6 +154,8 @@ namespace Spritely
 			if (!m_doc.Open())
 				return;
 
+			m_recent.AddFile(m_doc.Name);
+
 			Handle_AllSpritesChanged();
 			SetTitleBar(m_doc.Name);
 		}
@@ -171,6 +186,29 @@ namespace Spritely
 			m_doc.Export();
 		}
 
+		public void menuFile_RecentFiles_Click(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
+			string strTag = mi.Tag as string;
+			if (strTag == null || strTag == "")
+				return;
+			int nIndex = Int32.Parse(strTag);
+			string strFilename = m_recent.GetNthRecentFile(nIndex);
+			if (strFilename == "")
+				return;
+
+			if (!m_doc.Close())
+				return;
+
+			if (!m_doc.Open(strFilename))
+				return;
+
+			m_recent.AddFile(m_doc.Name);
+
+			Handle_AllSpritesChanged();
+			SetTitleBar(m_doc.Name);
+		}
+
 		private void menuFile_Exit_Click(object sender, EventArgs e)
 		{
 			this.Close();
@@ -198,18 +236,16 @@ namespace Spritely
 
 		private void menuEdit_Cut_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void menuEdit_Copy_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void menuEdit_Paste_Click(object sender, EventArgs e)
 		{
-
 		}
+
 		private void menuSprite_New_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
@@ -228,7 +264,6 @@ namespace Spritely
 		private void menuSprite_Clear_Click(object sender, EventArgs e)
 		{
 			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
-
 			if (s == null)
 				return;
 
@@ -300,6 +335,108 @@ namespace Spritely
 
 			Handle_SpritesChanged(m_eCurrentTab);
 			m_doc.HasUnsavedChanges = true;
+		}
+
+		private void menuSprite_Rotate_Clockwise_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				SpriteList sl = m_doc.GetSprites(m_eCurrentTab);
+				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise90))
+				{
+					s.RecordUndoAction("rotatecw");
+					m_doc.HasUnsavedChanges = true;
+					Handle_SpritesChanged(m_eCurrentTab);
+				}
+			}
+		}
+
+		private void menuSprite_Rotate_Counterclockwise_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				SpriteList sl = m_doc.GetSprites(m_eCurrentTab);
+				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Counterclockwise90))
+				{
+					s.RecordUndoAction("rotateccw");
+					m_doc.HasUnsavedChanges = true;
+					Handle_SpritesChanged(m_eCurrentTab);
+				}
+			}
+		}
+
+		private void menuSprite_Rotate_180_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				SpriteList sl = m_doc.GetSprites(m_eCurrentTab);
+				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise180))
+				{
+					s.RecordUndoAction("rotate180");
+					m_doc.HasUnsavedChanges = true;
+					Handle_SpritesChanged(m_eCurrentTab);
+				}
+			}
+		}
+
+		private void menuSprite_Flip_Horizontal_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				s.Flip(true, false);
+				s.RecordUndoAction("fliph");
+				m_doc.HasUnsavedChanges = true;
+
+				Handle_SpritesChanged(m_eCurrentTab);
+			}
+		}
+
+		private void menuSprite_Flip_Vertical_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				s.Flip(false, true);
+				s.RecordUndoAction("flipv");
+				m_doc.HasUnsavedChanges = true;
+
+				Handle_SpritesChanged(m_eCurrentTab);
+			}
+		}
+
+		private void menuSprite_Flip_Both_Click(object sender, EventArgs e)
+		{
+			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
+			if (s == null)
+				return;
+
+			if (!s.IsEmpty())
+			{
+				s.Flip(true, true);
+				s.RecordUndoAction("flipboth");
+				m_doc.HasUnsavedChanges = true;
+
+				Handle_SpritesChanged(m_eCurrentTab);
+			}
 		}
 
 		private void menuSprite_Properties_Click(object sender, EventArgs e)

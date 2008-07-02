@@ -415,6 +415,179 @@ namespace Spritely
 			return true;
 		}
 
+		public enum RotateDirection
+		{
+			Clockwise90 = -1,
+			Counterclockwise90 = 1,
+			Clockwise180 = 2
+		}
+
+		/// <summary>
+		/// Rotate the sprite by the offset.
+		/// </summary>
+		/// <param name="dir">Direction to rotate.</param>
+		public bool Rotate(RotateDirection dir)
+		{
+			if (PixelWidth == PixelHeight)
+				return RotateSquareInPlace(dir);
+
+			if (dir == RotateDirection.Clockwise180)
+				return RotateRect180InPlace();
+
+			// Rotate rect sprite:
+			int newX = TileHeight;
+			int newY = TileWidth;
+			int num_tiles = newX * newY;
+
+			// Allocate the new tiles.
+			Tile[] newTiles = new Tile[num_tiles];
+			for (int i = 0; i < num_tiles; i++)
+				newTiles[i] = new Tile(this);
+
+			// Rotate/copy data into new tiles.
+			int pxOldWidth = PixelWidth;
+			int pxOldHeight = PixelHeight;
+			for (int ix = 0; ix < pxOldWidth; ix++)
+			{
+				for (int iy = 0; iy < pxOldHeight; iy++)
+				{
+					int y = iy;
+					if (dir == RotateDirection.Clockwise90)
+						y = pxOldHeight-1 - iy;
+
+					// Calc tile/pixel index for rotated sprite.
+					// Note that x,y are reversed for the rotated sprite.
+					int tileNewX = y / Tile.TileSize;
+					int pxNewX = y % Tile.TileSize;
+					int tileNewY = ix / Tile.TileSize;
+					int pxNewY = ix % Tile.TileSize;
+					int nTileIndex = (tileNewY * TileHeight) + tileNewX;
+
+					newTiles[nTileIndex].SetPixel(pxNewX, pxNewY, GetPixel(ix,iy));
+				}
+			}
+
+			// Switch over to the newly created tile data.
+			m_tileWidth = newX;
+			m_tileHeight = newY;
+			m_Tiles = newTiles;
+
+			return true;
+		}
+
+		// Rotate the square sprite in place (without reallocating new tiles).
+		private bool RotateSquareInPlace(RotateDirection dir)
+		{
+			int offset = (int)dir;
+
+			// Rotate the sprite from the outer ring of pixels to the inner ring.
+			// E.g.:   aaaaaaaa  First the 'a' ring is processed
+			//         abbbbbba  Then the 'b' ring
+			//         abccccba  Then 'c'
+			//         abcddcba  And finally 'd'
+			//         abcddcba
+			//         abccccba
+			//         abbbbbba
+			//         aaaaaaaa
+			//
+			// For each ring, we process as follows:
+			//     012340  First, we record the 4 orig pixels at '0' 
+			//     4    1  Then we rotate these pixels and write them to the
+			//     3    2    new location. E.g., for clockwise rotation, the
+			//     2    3    upper-left '0' is written to the upper-right '0',
+			//     1    4    upper-right '0' -> lower-right '0', and so on.
+			//     043210  This continues for the 4 '1's, the 4 '2's, ...
+			//
+			int[] vals = new int[4];
+			int pxSize = PixelWidth;
+			int rings = pxSize / 2;
+			for (int ring = 0; ring < rings; ring++)
+			{
+				int pxFirst = ring;
+				int pxLast = pxSize - ring - 1;
+				int pxCount = pxLast - pxFirst;
+				for (int px = 0; px < pxCount; px++)
+				{
+					// Record the original values of the pixels to be rotated.
+					vals[0] = GetPixel(pxFirst + px, pxFirst);
+					vals[1] = GetPixel(pxLast, pxFirst + px);
+					vals[2] = GetPixel(pxLast - px, pxLast);
+					vals[3] = GetPixel(pxFirst, pxLast - px);
+
+					// Rotate the pixels
+					SetPixel(pxFirst + px, pxFirst, vals[(4 + offset) % 4]);
+					SetPixel(pxLast, pxFirst + px, vals[(5 + offset) % 4]);
+					SetPixel(pxLast - px, pxLast, vals[(6 + offset) % 4]);
+					SetPixel(pxFirst, pxLast - px, vals[(7 + offset) % 4]);
+				}
+			}
+
+			return true;
+		}
+
+		// Rotate the non-square sprite in place by 180 degrees.
+		private bool RotateRect180InPlace()
+		{
+			// Rotate a row at a time, top <-> bottom:
+			//    aaaaaaaa  
+			//    bbbbbbbb
+			//    bbbbbbbb
+			//    aaaaaaaa
+			// For each row, we process as follows:
+			//    01234567
+			//    ...
+			//    76543210
+			//
+			int pxWidth = PixelWidth;
+			int pxHeight = PixelHeight;
+			int rows = PixelHeight / 2;
+			for (int row = 0; row < rows; row++)
+			{
+				int pxFirst = row;
+				int pxLast = pxHeight - row - 1;
+				for (int px = 0; px < pxWidth; px++)
+				{
+					// Record the original values of the pixels to be rotated.
+					int top = GetPixel(px, pxFirst);
+					int bottom = GetPixel(pxWidth-1 - px, pxLast);
+
+					// Rotate the pixels
+					SetPixel(px, pxFirst, bottom);
+					SetPixel(pxWidth-1 - px, pxLast, top);
+				}
+			}
+
+			return true;
+		}
+
+		public void Flip(bool fHorizontal, bool fVertical)
+		{
+			int pxWidth = PixelWidth;
+			int pxHeight = PixelHeight;
+
+			if (fHorizontal)
+			{
+				for (int pxY = 0; pxY < pxHeight; pxY++)
+					for (int pxX = 0; pxX < pxWidth / 2; pxX++)
+					{
+						int nColor = GetPixel(pxX, pxY);
+						SetPixel(pxX, pxY, GetPixel(pxWidth - 1 - pxX, pxY));
+						SetPixel(pxWidth - 1 - pxX, pxY, nColor);
+					}
+			}
+
+			if (fVertical)
+			{
+				for (int pxX = 0; pxX < pxWidth; pxX++)
+					for (int pxY = 0; pxY < pxHeight / 2; pxY++)
+					{
+						int nColor = GetPixel(pxX, pxY);
+						SetPixel(pxX, pxY, GetPixel(pxX, pxHeight - 1 - pxY));
+						SetPixel(pxX, pxHeight - 1 - pxY, nColor);
+					}
+			}
+		}
+
 		/// <summary>
 		/// Handle a click at the specified (x,y) pixel coords
 		/// </summary>

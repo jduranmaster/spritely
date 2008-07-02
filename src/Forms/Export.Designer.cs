@@ -31,6 +31,8 @@ namespace Spritely
 			this.bExport = new System.Windows.Forms.Button();
 			this.bCancel = new System.Windows.Forms.Button();
 			this.gbExportAs = new System.Windows.Forms.GroupBox();
+			this.lCompleteProject = new System.Windows.Forms.Label();
+			this.lSpritesBackgrounds = new System.Windows.Forms.Label();
 			this.lUpdateProject = new System.Windows.Forms.Label();
 			this.rbUpdateProject = new System.Windows.Forms.RadioButton();
 			this.rbProject = new System.Windows.Forms.RadioButton();
@@ -41,8 +43,6 @@ namespace Spritely
 			this.gbSystem = new System.Windows.Forms.GroupBox();
 			this.rbNDS = new System.Windows.Forms.RadioButton();
 			this.rbGBA = new System.Windows.Forms.RadioButton();
-			this.lSpritesBackgrounds = new System.Windows.Forms.Label();
-			this.lCompleteProject = new System.Windows.Forms.Label();
 			this.gbExportAs.SuspendLayout();
 			this.gbLocation.SuspendLayout();
 			this.gbSystem.SuspendLayout();
@@ -83,11 +83,31 @@ namespace Spritely
 			this.gbExportAs.TabStop = false;
 			this.gbExportAs.Text = "Export as...";
 			// 
+			// lCompleteProject
+			// 
+			this.lCompleteProject.AutoSize = true;
+			this.lCompleteProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lCompleteProject.Location = new System.Drawing.Point(29, 99);
+			this.lCompleteProject.Name = "lCompleteProject";
+			this.lCompleteProject.Size = new System.Drawing.Size(39, 13);
+			this.lCompleteProject.TabIndex = 5;
+			this.lCompleteProject.Text = "All files";
+			// 
+			// lSpritesBackgrounds
+			// 
+			this.lSpritesBackgrounds.AutoSize = true;
+			this.lSpritesBackgrounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lSpritesBackgrounds.Location = new System.Drawing.Point(29, 35);
+			this.lSpritesBackgrounds.Name = "lSpritesBackgrounds";
+			this.lSpritesBackgrounds.Size = new System.Drawing.Size(217, 13);
+			this.lSpritesBackgrounds.TabIndex = 4;
+			this.lSpritesBackgrounds.Text = "Only sprites.(cpp | h) && backgrounds.(cpp | h)";
+			// 
 			// lUpdateProject
 			// 
 			this.lUpdateProject.AutoSize = true;
 			this.lUpdateProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lUpdateProject.Location = new System.Drawing.Point(29, 99);
+			this.lUpdateProject.Location = new System.Drawing.Point(29, 67);
 			this.lUpdateProject.Name = "lUpdateProject";
 			this.lUpdateProject.Size = new System.Drawing.Size(173, 13);
 			this.lUpdateProject.TabIndex = 3;
@@ -96,7 +116,7 @@ namespace Spritely
 			// rbUpdateProject
 			// 
 			this.rbUpdateProject.AutoSize = true;
-			this.rbUpdateProject.Location = new System.Drawing.Point(12, 83);
+			this.rbUpdateProject.Location = new System.Drawing.Point(12, 51);
 			this.rbUpdateProject.Name = "rbUpdateProject";
 			this.rbUpdateProject.Size = new System.Drawing.Size(95, 17);
 			this.rbUpdateProject.TabIndex = 2;
@@ -107,7 +127,7 @@ namespace Spritely
 			// rbProject
 			// 
 			this.rbProject.AutoSize = true;
-			this.rbProject.Location = new System.Drawing.Point(12, 51);
+			this.rbProject.Location = new System.Drawing.Point(12, 83);
 			this.rbProject.Name = "rbProject";
 			this.rbProject.Size = new System.Drawing.Size(104, 17);
 			this.rbProject.TabIndex = 1;
@@ -187,26 +207,6 @@ namespace Spritely
 			this.rbGBA.TabStop = true;
 			this.rbGBA.Text = "Gameboy Advance";
 			this.rbGBA.UseVisualStyleBackColor = true;
-			// 
-			// lSpritesBackgrounds
-			// 
-			this.lSpritesBackgrounds.AutoSize = true;
-			this.lSpritesBackgrounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lSpritesBackgrounds.Location = new System.Drawing.Point(29, 35);
-			this.lSpritesBackgrounds.Name = "lSpritesBackgrounds";
-			this.lSpritesBackgrounds.Size = new System.Drawing.Size(217, 13);
-			this.lSpritesBackgrounds.TabIndex = 4;
-			this.lSpritesBackgrounds.Text = "Only sprites.(cpp | h) && backgrounds.(cpp | h)";
-			// 
-			// lCompleteProject
-			// 
-			this.lCompleteProject.AutoSize = true;
-			this.lCompleteProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lCompleteProject.Location = new System.Drawing.Point(29, 67);
-			this.lCompleteProject.Name = "lCompleteProject";
-			this.lCompleteProject.Size = new System.Drawing.Size(39, 13);
-			this.lCompleteProject.TabIndex = 5;
-			this.lCompleteProject.Text = "All files";
 			// 
 			// Export
 			// 

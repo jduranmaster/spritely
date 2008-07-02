@@ -63,6 +63,8 @@ namespace Spritely
 			RectFilled = 7,
 			Ellipse = 8,
 			EllipseFilled = 9,
+			RotateCCW = 10,
+			RotateCW = 11,
 			Blank,
 		};
 
@@ -72,31 +74,33 @@ namespace Spritely
 			public ToolType Type;
 			public int X;
 			public int Y;
+			public bool Show;
 			public bool Enabled;
 			public Bitmap ButtonBitmap;
 
-			public Tool(string strName, ToolType type, int x, int y, bool fEnable, Bitmap bm)
+			public Tool(string strName, ToolType type, int x, int y, bool fShow, bool fEnable, Bitmap bm)
 			{
 				Name = strName;
 				Type = type;
 				X = x;
 				Y = y;
+				Show = fShow;
 				Enabled = fEnable;
 				ButtonBitmap = bm;
 			}
 		};
 		private Tool[] Tools = new Tool[]
 		{
-			new Tool("Select",			ToolType.Select,		0,0,	false,	ResourceMgr.GetBitmap("tool_select")),
-			new Tool("Pencil",			ToolType.Pencil,		1,0,	true,	ResourceMgr.GetBitmap("tool_pencil")),
-			new Tool("Eyedropper",		ToolType.Eyedropper,	0,1,	true,	ResourceMgr.GetBitmap("tool_eyedropper")),
-			new Tool("FloodFill",		ToolType.FloodFill,		1,1,	true,	ResourceMgr.GetBitmap("tool_floodfill")),
-			new Tool("Eraser",			ToolType.Eraser,		0,2,	true,	ResourceMgr.GetBitmap("tool_eraser")),
-			//new Tool("Line",			ToolType.Line,			1,2,	false,	ResourceMgr.GetBitmap("tool_line")),
-			//new Tool("Rect",			ToolType.Rect,			0,3,	false,	ResourceMgr.GetBitmap("tool_rect")),
-			//new Tool("RectFilled",		ToolType.RectFilled,	1,3,	false,	ResourceMgr.GetBitmap("tool_rectfilled")),
-			//new Tool("Ellipse",			ToolType.Ellipse,		0,4,	false,	ResourceMgr.GetBitmap("tool_ellipse")),
-			//new Tool("EllipseFilled",	ToolType.EllipseFilled,	1,4,	false,	ResourceMgr.GetBitmap("tool_ellipsefilled")),
+			new Tool("Select",			ToolType.Select,		0,0,	true,	false,	ResourceMgr.GetBitmap("tool_select")),
+			new Tool("Pencil",			ToolType.Pencil,		1,0,	true,	true,	ResourceMgr.GetBitmap("tool_pencil")),
+			new Tool("Eyedropper",		ToolType.Eyedropper,	0,1,	true,	true,	ResourceMgr.GetBitmap("tool_eyedropper")),
+			new Tool("FloodFill",		ToolType.FloodFill,		1,1,	true,	true,	ResourceMgr.GetBitmap("tool_floodfill")),
+			new Tool("Eraser",			ToolType.Eraser,		0,2,	true,	true,	ResourceMgr.GetBitmap("tool_eraser")),
+			new Tool("Line",			ToolType.Line,			1,2,	false,	false,	ResourceMgr.GetBitmap("tool_line")),
+			new Tool("Rect",			ToolType.Rect,			0,3,	false,	false,	ResourceMgr.GetBitmap("tool_rect")),
+			new Tool("RectFilled",		ToolType.RectFilled,	1,3,	false,	false,	ResourceMgr.GetBitmap("tool_rectfilled")),
+			new Tool("Ellipse",			ToolType.Ellipse,		0,4,	false,	false,	ResourceMgr.GetBitmap("tool_ellipse")),
+			new Tool("EllipseFilled",	ToolType.EllipseFilled,	1,4,	false,	false,	ResourceMgr.GetBitmap("tool_ellipsefilled")),
 		};
 
 		private ToolType m_eSelectedTool = ToolType.Pencil;
@@ -195,7 +199,7 @@ namespace Spritely
 				if (nX != t.X || nY != t.Y)
 					continue;
 
-				if (!t.Enabled)
+				if (!t.Show || !t.Enabled)
 					return false;
 
 				// Same as the currently selected tool - nothing to do.
@@ -313,6 +317,9 @@ namespace Spritely
 
 			foreach (Tool t in Tools)
 			{
+				if (!t.Show)
+					continue;
+
 				int iColumn = t.X;
 				int iRow = t.Y;
 				int nToolIndex = iRow * k_nToolboxColumns + iColumn;

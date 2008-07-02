@@ -417,7 +417,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.6.8 beta.
+        ///   Looks up a localized string similar to 0.7.1 beta.
         /// </summary>
         internal static string Version {
             get {
@@ -426,7 +426,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 8 June 2008.
+        ///   Looks up a localized string similar to 1 July 2008.
         /// </summary>
         internal static string VersionDate {
             get {

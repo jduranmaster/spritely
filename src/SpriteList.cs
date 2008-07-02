@@ -301,6 +301,27 @@ namespace Spritely
 			}
 		}
 
+		// Remove from the old SpriteType and add it to the new one
+		public void MoveToCorrectSpriteType(Sprite sprite)
+		{
+			SpriteType stRemove = null;
+			SpriteType stAdd = null;
+			foreach (SpriteType st in SpriteTypes)
+			{
+				if (st.Sprites.Contains(sprite))
+					stRemove = st;
+				if (st.Width == sprite.TileWidth && st.Height == sprite.TileHeight)
+					stAdd = st;
+			}
+			if (stRemove != stAdd)
+			{
+				if (stRemove != null)
+					stRemove.Sprites.Remove(sprite);
+				if (stAdd != null)
+					stAdd.Sprites.Add(sprite);
+			}
+		}
+
 		public bool ResizeSelectedSprite(int tileNewWidth, int tileNewHeight)
 		{
 			Sprite sToResize = m_spriteSelected;
@@ -312,18 +333,29 @@ namespace Spritely
 			if (!sToResize.Resize(tileNewWidth, tileNewHeight))
 				return false;
 
-			// Remove from the old SpriteType and add it to the new one
-			foreach (SpriteType st in SpriteTypes)
-			{
-				if (st.Sprites.Contains(sToResize))
-					st.Sprites.Remove(sToResize);
-				if (st.Width == tileNewWidth && st.Height == tileNewHeight)
-					st.Sprites.Add(sToResize);
-			}
+			m_nTiles += sToResize.NumTiles - nOldTiles;
 
 			//TODO: adjust the background map
 
-			m_nTiles += sToResize.NumTiles - nOldTiles;
+			MoveToCorrectSpriteType(sToResize);
+			RecalcScrollHeights();
+			return true;
+		}
+
+		// Return true if successfully rotated.
+		public bool RotateSelectedSprite(Sprite.RotateDirection dir)
+		{
+			Sprite sToRotate = m_spriteSelected;
+			if (sToRotate == null)
+				return false;
+
+			int tileNewWidth = sToRotate.TileHeight;
+			int tileNewHeight = sToRotate.TileWidth;
+
+			if (!sToRotate.Rotate(dir))
+				return false;
+
+			MoveToCorrectSpriteType(sToRotate);
 			RecalcScrollHeights();
 			return true;
 		}

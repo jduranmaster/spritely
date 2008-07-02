@@ -99,6 +99,7 @@
     <Compile Include="Options.cs" />
     <Compile Include="Palette.cs" />
     <Compile Include="PaletteMgr.cs" />
+    <Compile Include="RecentFiles.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -209,6 +210,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\collision_h.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\game_pnproj.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\game_state_cpp.txt">

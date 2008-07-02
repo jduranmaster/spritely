@@ -207,7 +207,7 @@ namespace Spritely
 		{
 			string strProjectDir;
 			bool fNDS, fProject;
-			FileHandler.ExportResult result = m_data.Filer.Export(out strProjectDir, out fNDS, out fProject);
+			FileHandler.ExportResult result = m_data.Filer.Export(Name, out strProjectDir, out fNDS, out fProject);
 
 			if (result == FileHandler.ExportResult.Cancel)
 				return;
