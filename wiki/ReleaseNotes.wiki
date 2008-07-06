@@ -5,6 +5,18 @@
 
 For a complete list of release notes, see http://spritely.googlecode.com/svn/trunk/src/CHANGES
 
+== 0.7.6 ==
+
+  * Fix bug where DC_FlushRange wasn't being called for NDS projects. NDS projects worked in emulation, but not on real hardware.
+  * Fix compilation problem with NDS projects referring to GBA headers (in collision.cpp).
+  * Enable backgrounds in NDS.
+  * Add GBA/NDS tools to dispay screen outline on background map
+  * Fix bug where files in the "Recent Files" menu that no longer existed would still try to be opened.
+  * Keep track of current platform so that the export dialog doesn't need to be updated each time for NDS.
+  * Inherit platform from current state of GBA/NDS tools on BackgroundMap tab.
+  * Add option to enable/disable screen boundary and grid in Map edit.
+  * Add option to enable/disable sprite pixel and sprite tile grid
+
 == 0.7.1 ==
 
   * Merge VerticalFlipObject and HorizontalFlipObject into FlipObject
