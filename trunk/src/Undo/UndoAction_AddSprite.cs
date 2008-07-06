@@ -9,7 +9,6 @@ namespace Spritely
 		UndoMgr m_mgr;
 		SpriteList m_spritelist;
 		Sprite m_sprite;
-		//Sprite.UndoData m_after;
 		bool m_fAdd;
 
 		public UndoAction_AddSprite(UndoMgr mgr, SpriteList spritelist, Sprite sprite, bool fAdd)
@@ -17,7 +16,6 @@ namespace Spritely
 			m_mgr = mgr;
 			m_spritelist = spritelist;
 			m_sprite = sprite;
-			//m_after = new Sprite.UndoData(sprite.TileWidth, sprite.TileHeight);
 			m_fAdd = fAdd;
 
 			Description = (fAdd ? "AddSprite " : "RemoveSprite ") + sprite.Name;
@@ -34,6 +32,8 @@ namespace Spritely
 			{
 				m_spritelist.RemoveSprite(m_sprite, false);
 				m_spritelist.CurrentSprite = m_mgr.FindMostRecentSprite();
+				if (m_spritelist.CurrentSprite == null)
+					m_spritelist.SelectFirstSprite();
 			}
 			else
 			{
@@ -53,6 +53,8 @@ namespace Spritely
 			{
 				m_spritelist.RemoveSprite(m_sprite, false);
 				m_spritelist.CurrentSprite = m_mgr.FindMostRecentSprite();
+				if (m_spritelist.CurrentSprite == null)
+					m_spritelist.SelectFirstSprite();
 			}
 		}
 	}

@@ -14,8 +14,9 @@ namespace Spritely
 		private Document m_doc;
 		private RecentFiles m_recent;
 
-		private Toolbox m_SpriteToolbox;
-		private Toolbox m_BackgroundSpriteToolbox;
+		private Toolbox_Sprite m_SpriteToolbox;
+		private Toolbox_Sprite m_BackgroundSpriteToolbox;
+		private Toolbox_Map m_BackgroundMapToolbox;
 
 		public enum Tab
 		{
@@ -53,8 +54,9 @@ namespace Spritely
 			if (fNewDocument)
 				Handle_NewDocument();
 
-			m_SpriteToolbox = new Toolbox(this);
-			m_BackgroundSpriteToolbox = new Toolbox(this);
+			m_SpriteToolbox = new Toolbox_Sprite(this);
+			m_BackgroundSpriteToolbox = new Toolbox_Sprite(this);
+			m_BackgroundMapToolbox = new Toolbox_Map(this);
 
 			if (fNewDocument)
 			{
@@ -177,12 +179,16 @@ namespace Spritely
 		{
 			Handle_SpritesChanged(Tab.Sprites);
 			Handle_SpritesChanged(Tab.BackgroundSprites);
+			Handle_SpritesChanged(Tab.BackgroundMap);
 		}
 
 		private void Handle_SpritesChanged(Tab tab)
 		{
 			if (m_doc.GetCurrentSprite(tab) != null)
 				m_doc.GetSpritePalettes(tab).CurrentPaletteID = m_doc.GetCurrentSprite(tab).PaletteID;
+
+			// Updating the palette causes a cascade of updates that results in the sprites and
+			// bg maps being updated.
 			UpdatePaletteColor(tab);
 
 			UpdateSpriteInfo(tab);
@@ -369,6 +375,8 @@ namespace Spritely
 				return Tab.Sprites;
 			if (pbox == pbBS_Toolbox)
 				return Tab.BackgroundSprites;
+			if (pbox == pbBM_Toolbox)
+				return Tab.BackgroundMap;
 			return Tab.Unknown;
 		}
 
@@ -446,15 +454,26 @@ namespace Spritely
 				return pbS_EditSprite;
 			if (tab == Tab.BackgroundSprites)
 				return pbBS_EditSprite;
-  			return null;
+			// BackgroundMap doesn't have a sprite editor
+			return null;
 		}
 
-		private PictureBox GetToolboxWindow(Tab tab)
+		private PictureBox GetEditMapWindow(Tab tab)
+		{
+			// Sprites don't have maps.
+			if (tab == Tab.BackgroundMap)
+				return pbBM_EditBackgroundMap;
+			return null;
+		}
+
+		public PictureBox GetToolboxWindow(Tab tab)
 		{
 			if (tab == Tab.Sprites)
 				return pbS_Toolbox;
 			if (tab == Tab.BackgroundSprites)
 				return pbBS_Toolbox;
+			if (tab == Tab.BackgroundMap)
+				return pbBM_Toolbox;
 			return null;
 		}
 
@@ -495,6 +514,8 @@ namespace Spritely
 				return m_SpriteToolbox;
 			if (tab == Tab.BackgroundSprites)
 				return m_BackgroundSpriteToolbox;
+			if (tab == Tab.BackgroundMap)
+				return m_BackgroundMapToolbox;
 			return null;
 		}
 

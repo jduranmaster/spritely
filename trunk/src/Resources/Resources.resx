@@ -169,6 +169,9 @@ Fixing up sprite name - changing from '{0}' to '{1}'.</value>
     <value>Successfully exported {0} sprite data to "{1}".</value>
     <comment>{0} = 'GBA' or 'NDS'. {1} = directory path</comment>
   </data>
+  <data name="FileDoesntExist" xml:space="preserve">
+    <value>The requested file '{0}' doesn't exist.</value>
+  </data>
   <data name="InconsistentToolboxDef" xml:space="preserve">
     <value>The Tools array and the ToolType enum are not defined consistently.
 
@@ -217,11 +220,20 @@ Please select a path that does not contain any spaces.</value>
   <data name="tool_floodfill" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_floodfill.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tool_gba" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_gba.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="tool_hilite" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tool_hilite2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_hilite2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="tool_line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_line.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tool_nds" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_nds.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tool_pencil" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_pencil.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -263,10 +275,10 @@ Please select a path that does not contain any spaces.</value>
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.7.1 beta</value>
+    <value>0.7.6 beta</value>
   </data>
   <data name="VersionDate" xml:space="preserve">
-    <value>1 July 2008</value>
+    <value>6 July 2008</value>
   </data>
   <data name="WarnSpriteResizeClip" xml:space="preserve">
     <value>Resizing the sprite will cause some tiles to be clipped and the associated data will be lost.

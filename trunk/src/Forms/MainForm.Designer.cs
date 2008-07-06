@@ -39,6 +39,8 @@ namespace Spritely
 			this.menuFile_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuFile_Export = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuFile_Separator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuFile_RecentFiles = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuFile_Separator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEdit_Undo = new System.Windows.Forms.ToolStripMenuItem();
@@ -143,6 +145,7 @@ namespace Spritely
 			this.lBS_G = new System.Windows.Forms.Label();
 			this.pbBS_EditSprite = new System.Windows.Forms.PictureBox();
 			this.tabBackgroundMapEditor = new System.Windows.Forms.TabPage();
+			this.pbBM_Toolbox = new System.Windows.Forms.PictureBox();
 			this.pbBM_Orientation = new System.Windows.Forms.PictureBox();
 			this.pbBM_SpritePreview = new System.Windows.Forms.PictureBox();
 			this.gbBM_BackgroundPalettes = new System.Windows.Forms.GroupBox();
@@ -151,8 +154,7 @@ namespace Spritely
 			this.pbBM_SpriteList = new System.Windows.Forms.PictureBox();
 			this.sbBM_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbBM_EditBackgroundMap = new System.Windows.Forms.PictureBox();
-			this.menuFile_RecentFiles = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuFile_Separator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuOptions_Map = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_SpriteList)).BeginInit();
 			this.menuBar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_EditSprite)).BeginInit();
@@ -172,6 +174,7 @@ namespace Spritely
 			((System.ComponentModel.ISupportInitialize)(this.pbBS_Palette)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBS_EditSprite)).BeginInit();
 			this.tabBackgroundMapEditor.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pbBM_Toolbox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBM_Orientation)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBM_SpritePreview)).BeginInit();
 			this.gbBM_BackgroundPalettes.SuspendLayout();
@@ -281,6 +284,17 @@ namespace Spritely
 			// 
 			this.menuFile_Separator2.Name = "menuFile_Separator2";
 			this.menuFile_Separator2.Size = new System.Drawing.Size(149, 6);
+			// 
+			// menuFile_RecentFiles
+			// 
+			this.menuFile_RecentFiles.Name = "menuFile_RecentFiles";
+			this.menuFile_RecentFiles.Size = new System.Drawing.Size(152, 22);
+			this.menuFile_RecentFiles.Text = "Recent &Files";
+			// 
+			// menuFile_Separator3
+			// 
+			this.menuFile_Separator3.Name = "menuFile_Separator3";
+			this.menuFile_Separator3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// menuFile_Exit
 			// 
@@ -620,21 +634,21 @@ namespace Spritely
 			// menuSprite_Flip_Horizontal
 			// 
 			this.menuSprite_Flip_Horizontal.Name = "menuSprite_Flip_Horizontal";
-			this.menuSprite_Flip_Horizontal.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Horizontal.Size = new System.Drawing.Size(122, 22);
 			this.menuSprite_Flip_Horizontal.Text = "&Horizontal";
 			this.menuSprite_Flip_Horizontal.Click += new System.EventHandler(this.menuSprite_Flip_Horizontal_Click);
 			// 
 			// menuSprite_Flip_Vertical
 			// 
 			this.menuSprite_Flip_Vertical.Name = "menuSprite_Flip_Vertical";
-			this.menuSprite_Flip_Vertical.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Vertical.Size = new System.Drawing.Size(122, 22);
 			this.menuSprite_Flip_Vertical.Text = "&Vertical";
 			this.menuSprite_Flip_Vertical.Click += new System.EventHandler(this.menuSprite_Flip_Vertical_Click);
 			// 
 			// menuSprite_Flip_Both
 			// 
 			this.menuSprite_Flip_Both.Name = "menuSprite_Flip_Both";
-			this.menuSprite_Flip_Both.Size = new System.Drawing.Size(152, 22);
+			this.menuSprite_Flip_Both.Size = new System.Drawing.Size(122, 22);
 			this.menuSprite_Flip_Both.Text = "&Both";
 			this.menuSprite_Flip_Both.Click += new System.EventHandler(this.menuSprite_Flip_Both_Click);
 			// 
@@ -747,7 +761,8 @@ namespace Spritely
 			// 
 			this.menuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuOptions_Sprite,
-            this.menuOptions_Palette});
+            this.menuOptions_Palette,
+            this.menuOptions_Map});
 			this.menuOptions.Name = "menuOptions";
 			this.menuOptions.Size = new System.Drawing.Size(56, 20);
 			this.menuOptions.Text = "&Options";
@@ -1301,6 +1316,7 @@ namespace Spritely
 			// tabBackgroundMapEditor
 			// 
 			this.tabBackgroundMapEditor.BackColor = System.Drawing.Color.GhostWhite;
+			this.tabBackgroundMapEditor.Controls.Add(this.pbBM_Toolbox);
 			this.tabBackgroundMapEditor.Controls.Add(this.pbBM_Orientation);
 			this.tabBackgroundMapEditor.Controls.Add(this.pbBM_SpritePreview);
 			this.tabBackgroundMapEditor.Controls.Add(this.gbBM_BackgroundPalettes);
@@ -1313,6 +1329,19 @@ namespace Spritely
 			this.tabBackgroundMapEditor.TabIndex = 2;
 			this.tabBackgroundMapEditor.Text = "Background Map";
 			this.tabBackgroundMapEditor.UseVisualStyleBackColor = true;
+			// 
+			// pbBM_Toolbox
+			// 
+			this.pbBM_Toolbox.Location = new System.Drawing.Point(158, 5);
+			this.pbBM_Toolbox.Name = "pbBM_Toolbox";
+			this.pbBM_Toolbox.Size = new System.Drawing.Size(55, 231);
+			this.pbBM_Toolbox.TabIndex = 26;
+			this.pbBM_Toolbox.TabStop = false;
+			this.pbBM_Toolbox.MouseLeave += new System.EventHandler(this.Toolbox_MouseLeave);
+			this.pbBM_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseMove);
+			this.pbBM_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseDown);
+			this.pbBM_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.Toolbox_Paint);
+			this.pbBM_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseUp);
 			// 
 			// pbBM_Orientation
 			// 
@@ -1403,16 +1432,12 @@ namespace Spritely
 			this.pbBM_EditBackgroundMap.Paint += new System.Windows.Forms.PaintEventHandler(this.EditBackgroundMap_Paint);
 			this.pbBM_EditBackgroundMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseUp);
 			// 
-			// menuFile_RecentFiles
+			// menuOptions_Map
 			// 
-			this.menuFile_RecentFiles.Name = "menuFile_RecentFiles";
-			this.menuFile_RecentFiles.Size = new System.Drawing.Size(152, 22);
-			this.menuFile_RecentFiles.Text = "Recent &Files";
-			// 
-			// menuFile_Separator3
-			// 
-			this.menuFile_Separator3.Name = "menuFile_Separator3";
-			this.menuFile_Separator3.Size = new System.Drawing.Size(149, 6);
+			this.menuOptions_Map.Name = "menuOptions_Map";
+			this.menuOptions_Map.Size = new System.Drawing.Size(158, 22);
+			this.menuOptions_Map.Text = "&Map options...";
+			this.menuOptions_Map.Click += new System.EventHandler(this.menuOptions_Map_Click);
 			// 
 			// MainForm
 			// 
@@ -1449,6 +1474,7 @@ namespace Spritely
 			((System.ComponentModel.ISupportInitialize)(this.pbBS_Palette)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBS_EditSprite)).EndInit();
 			this.tabBackgroundMapEditor.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pbBM_Toolbox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBM_Orientation)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBM_SpritePreview)).EndInit();
 			this.gbBM_BackgroundPalettes.ResumeLayout(false);
@@ -1588,6 +1614,8 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuSprite_Flip_Both;
 		private System.Windows.Forms.ToolStripMenuItem menuFile_RecentFiles;
 		private System.Windows.Forms.ToolStripSeparator menuFile_Separator3;
+		private System.Windows.Forms.PictureBox pbBM_Toolbox;
+		private System.Windows.Forms.ToolStripMenuItem menuOptions_Map;
 	}
 }
 

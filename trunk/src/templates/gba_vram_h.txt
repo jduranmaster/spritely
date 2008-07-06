@@ -57,19 +57,19 @@
 // Memory for each of these modes is allocated as follows:
 //
 // Mode 0,1,2:
-//   0x06000000 - 0x0600ffff : Background tile data and tile map
-//   0x06010000 - 0x06017fff : Sprite tile data (1024 sprite entries)
+//   0x06000000 - 0x0600ffff (64K) : Background tile data and tile map
+//   0x06010000 - 0x06017fff (32K) : Sprite tile data (1024 sprite entries)
 // Mode 3:
-//   0x06000000 - 0x06012bff : Front Buffer - 240x160, 16bpp
-//   0x06014000 - 0x06017fff : Sprite tile data (Upper 512 sprite entries)
+//   0x06000000 - 0x06012bff (75K) Front Buffer - 240x160, 16bpp
+//   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
 // Mode 4:
-//   0x06000000 - 0x060095ff : Front Buffer - 240x160, 8bpp
-//   0x0600a000 - 0x060135ff : Back Buffer - 240x160, 8bpp
-//   0x06014000 - 0x06017fff : Sprite tile data (Upper 512 sprite entries)
+//   0x06000000 - 0x060095ff (37.5K) Front Buffer - 240x160, 8bpp
+//   0x0600a000 - 0x060135ff (37.5K) Back Buffer - 240x160, 8bpp
+//   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
 // Mode 5:
-//   0x06000000 - 0x0600a000 : Front Buffer - 160x128, 16bpp
-//   0x0600a000 - 0x06013fff : Back Buffer - 160x128, 16bpp
-//   0x06014000 - 0x06017fff : Sprite tile data (Upper 512 sprite entries)
+//   0x06000000 - 0x0600a000 (40K) Front Buffer - 160x128, 16bpp
+//   0x0600a000 - 0x06013fff (40K) Back Buffer - 160x128, 16bpp
+//   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
 //
 //                   0,1,2                  3                    4                    5
 // 0x06000000  +----------------+   +----------------+   +----------------+   +----------------+
@@ -126,8 +126,8 @@
 // tile map is stored. There are 32 2K blocks to choose from.
 //
 // Note that these Block ranges overlap in memory, so you need to choose
-// TDBs and TMBs that do not overlap or else your map and tile data will overwrite
-// each other. A safe default is to use TDB(0) and TMB(24).
+// TDBs and TMBs that do not overlap or else your map and tile data will
+// overwrite each other. A safe default is to use TDB(0) and TMB(24).
 //
 //                   Background               Background
 //                Tile Data Block           Tile Map Block

@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundMap.cs" />
+    <Compile Include="Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +149,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -163,6 +165,7 @@
     <Compile Include="Resources\ResourceMgr.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Toolbox.cs" />
+    <Compile Include="Toolbox_Sprite.cs" />
     <Compile Include="Undo\UndoAction.cs" />
     <Compile Include="Undo\UndoAction_AddSprite.cs" />
     <Compile Include="Undo\UndoAction_PaletteEdit.cs" />
@@ -194,6 +197,9 @@
     <None Include="Resources\images\tool_shift_up.png" />
     <None Include="Resources\images\tool_disabled.png" />
     <None Include="TODO" />
+    <None Include="Resources\images\tool_nds.png" />
+    <None Include="Resources\images\tool_gba.png" />
+    <None Include="Resources\images\tool_hilite2.png" />
     <Content Include="templates\animation_cpp.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -231,6 +237,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\Makefile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\nds_memmap_h.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\nds_vram_h.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\oam_info_h.txt">

@@ -197,6 +197,13 @@ namespace Spritely
 			if (strFilename == "")
 				return;
 
+			if (!System.IO.File.Exists(strFilename))
+			{
+				Warning(String.Format(ResourceMgr.GetString("FileDoesntExist"), strFilename));
+				m_recent.RemoveFile(strFilename);
+				return;
+			}
+
 			if (!m_doc.Close())
 				return;
 
@@ -256,7 +263,7 @@ namespace Spritely
 			int nWidth = Int32.Parse(aSize[0]);
 			int nHeight = Int32.Parse(aSize[1]);
 
-			m_doc.GetSprites(m_eCurrentTab).AddSprite(nWidth, nHeight, "", "");
+			m_doc.GetSprites(m_eCurrentTab).AddSprite(nWidth, nHeight, "", "", true);
 			Handle_SpritesChanged(m_eCurrentTab);
 			m_doc.HasUnsavedChanges = true;
 		}
@@ -479,6 +486,11 @@ namespace Spritely
 			menuOptions_XXX_Click(1);
 		}
 
+		private void menuOptions_Map_Click(object sender, EventArgs e)
+		{
+			menuOptions_XXX_Click(2);
+		}
+
 		private void menuOptions_XXX_Click(int nOptionPageIndex)
 		{
 			OptionsEdit opt = new OptionsEdit(nOptionPageIndex);
@@ -487,9 +499,19 @@ namespace Spritely
 			// If any of the options have changed...
 			if (result == DialogResult.Yes)
 			{
-				GetEditSpriteWindow(m_eCurrentTab).Invalidate();
-				GetPaletteWindow(m_eCurrentTab).Invalidate();
-				GetPaletteSwatchWindow(m_eCurrentTab).Invalidate();
+				PictureBox pb;
+				pb = GetEditSpriteWindow(m_eCurrentTab);
+				if (pb != null)
+					pb.Invalidate();
+				pb = GetEditMapWindow(m_eCurrentTab);
+				if (pb != null)
+					pb.Invalidate();
+				pb = GetPaletteWindow(m_eCurrentTab);
+				if  (pb != null)
+					pb.Invalidate();
+				pb = GetPaletteSwatchWindow(m_eCurrentTab);
+				if (pb != null)
+					pb.Invalidate();
 			}
 		}
 

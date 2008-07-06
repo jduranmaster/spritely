@@ -30,6 +30,4 @@ extern const SpriteInfoStruct SpriteInfo[];
 // Sprite IDs
 %%_SPRITE_IDS_%%
 
-void InitSprites();
-
 #endif	// _SPRITES_H_

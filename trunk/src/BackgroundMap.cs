@@ -38,8 +38,10 @@ namespace Spritely
 
 		private const int kMaxMapTilesX = 32;
 		private const int kMaxMapTilesY = 32;
-		private const int kMaxScreenTilesX = 30;
-		private const int kMaxScreenTilesY = 20;
+		private const int kGBAScreenTilesX = 30;
+		private const int kGBAScreenTilesY = 20;
+		private const int kNDSScreenTilesX = 32;
+		private const int kNDSScreenTilesY = 24;
 
 		/// <summary>
 		/// This 1x1 sprite is used as the default tile for the background map.
@@ -269,8 +271,16 @@ namespace Spritely
 
 			if (Options.BackgroundMap_ShowScreen)
 			{
-				pxWidth = pxTileSize * kMaxScreenTilesX;
-				pxHeight = pxTileSize * kMaxScreenTilesY;
+				if (Options.Platform == Options.PlatformType.GBA)
+				{
+					pxWidth = pxTileSize * kGBAScreenTilesX;
+					pxHeight = pxTileSize * kGBAScreenTilesY;
+				}
+				else
+				{
+					pxWidth = pxTileSize * kNDSScreenTilesX;
+					pxHeight = pxTileSize * kNDSScreenTilesY;
+				}
 				g.DrawRectangle(m_penHilight, pxX, pxY, pxWidth, pxHeight);
 				g.DrawRectangle(m_penHilight2, pxX, pxY, pxWidth, pxHeight);
 			}

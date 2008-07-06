@@ -8,6 +8,7 @@ Undo: Record undo info for each tab instead of per document
 Undo: Record background map edits
 Undo: Redo deleted sprite doesn't place sprite in same location in list
 Undo: Deleting the default map sprite isn't restored
+Undo: bug: duplicate sprite, edit, undo results in blank sprite
 
 Sprite List: disable sprite
 Sprite List: reorder sprites (up/down within size group)
@@ -35,5 +36,6 @@ Preferences: Record last save directory
 Preferences: Set default GBA/NDS project
 
 File: New document doesn't create default sprites
+File: catch exceptions when loading to ensure that file is closed properly
 
 Export: add manifest file for projects

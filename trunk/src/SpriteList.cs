@@ -132,7 +132,7 @@ namespace Spritely
 			}
 		}
 
-		public Sprite AddSprite(int nWidth, int nHeight, string strName, string strDescription)
+		public Sprite AddSprite(int nWidth, int nHeight, string strName, string strDescription, bool fAddUndo)
 		{
 			List<Sprite> slist = null;
 
@@ -148,7 +148,7 @@ namespace Spritely
 				return null;
 
 			Sprite s = new Sprite(m_doc, this, nWidth, nHeight, strName, strDescription);
-			return AddSprite(s, slist, true);
+			return AddSprite(s, slist, fAddUndo);
 		}
 
 		public Sprite AddSprite(Sprite s, bool fAddUndo)
@@ -219,7 +219,7 @@ namespace Spritely
 			while (HasNamedSprite(strNewName))
 				strNewName = String.Format("{0}{1}", strNewBaseName, ++nCopy);
 
-			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, sToCopy.Description);
+			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, sToCopy.Description, true);
 			sNew.Duplicate(sToCopy);
 			return true;
 		}
@@ -625,7 +625,7 @@ namespace Spritely
 			m_spriteSelected.FinishEdit(tool);
 		}
 
-		public void ShiftPixels(Toolbox.ShiftArrow shift)
+		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
 		{
 			if (m_spriteSelected == null)
 				return;
@@ -743,7 +743,7 @@ namespace Spritely
 			Pen penSpriteBorder = Pens.Gray;
 
 			// Draw border around each pixel.
-			if (Tile.BigBitmapPixelSize > 2)
+			if (Tile.BigBitmapPixelSize > 2 && Options.Sprite_ShowPixelGrid)
 			{
 				for (int i = pxX0 + pxPixelSize; i < pxX1; i += pxPixelSize)
 					g.DrawLine(penPixelBorder, i, pxY0, i, pxY1);
@@ -756,7 +756,7 @@ namespace Spritely
 			}
 
 			// Draw a border around each sprite.
-			if (Tile.BigBitmapPixelSize > 1)
+			if (Tile.BigBitmapPixelSize > 1 && Options.Sprite_ShowTileGrid)
 			{
 				for (int i = pxX0 + pxTileSize; i < pxX1; i += pxTileSize)
 					g.DrawLine(penSpriteBorder, i, pxY0, i, pxY1);

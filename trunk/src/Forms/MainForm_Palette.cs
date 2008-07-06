@@ -157,6 +157,7 @@ namespace Spritely
 		///   The current palette has changed (from S_AdjustPaletteScrollbars)
 		///   The current color in the palette has changed (from S_AdjustPaletteScrollbars)
 		///   The scrollbars are used to edit the current color (from the scrollbar event handler)
+		///   A new file has been loaded.
 		/// </summary>
 		private void UpdatePalette(Tab tab)
 		{
@@ -167,6 +168,9 @@ namespace Spritely
 			if (pbox != null)
 				pbox.Invalidate();
 			pbox = GetEditSpriteWindow(tab);
+			if (pbox != null)
+				pbox.Invalidate();
+			pbox = GetEditMapWindow(tab);
 			if (pbox != null)
 				pbox.Invalidate();
 			pbox = GetPaletteWindow(tab);

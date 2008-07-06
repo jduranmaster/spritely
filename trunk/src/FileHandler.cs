@@ -6,8 +6,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 
-// TODO: catch exceptions when loading to ensure that file is closed properly
-
 namespace Spritely
 {
 	class FileHandler
@@ -244,7 +242,7 @@ namespace Spritely
 			if (!m_fFoundBackgroundSprites)
 			{
 				//m_Owner.Error("Unable to load background sprites.");
-				m_doc.GetSprites(MainForm.Tab.BackgroundSprites).AddSprite(1, 1, "", "");
+				m_doc.GetSprites(MainForm.Tab.BackgroundSprites).AddSprite(1, 1, "", "", false);
 			}
 			if (!m_fFoundBackgroundMap)
 			{
@@ -362,7 +360,7 @@ namespace Spritely
 					int nWidth = ParseInteger(aSize[0]);
 					int nHeight = ParseInteger(aSize[1]);
 
-					Sprite s = m_doc.GetSprites(tab).AddSprite(nWidth, nHeight, strName, strDesc);
+					Sprite s = m_doc.GetSprites(tab).AddSprite(nWidth, nHeight, strName, strDesc, true);
 					if (s == null)
 					{
 						// Invalid sprite size

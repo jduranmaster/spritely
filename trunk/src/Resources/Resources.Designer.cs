@@ -199,6 +199,15 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The requested file &apos;{0}&apos; doesn&apos;t exist..
+        /// </summary>
+        internal static string FileDoesntExist {
+            get {
+                return ResourceManager.GetString("FileDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Tools array and the ToolType enum are not defined consistently.
         ///
         ///The drawing tools may not work as expected..
@@ -311,6 +320,13 @@ namespace Spritely.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap tool_gba {
+            get {
+                object obj = ResourceManager.GetObject("tool_gba", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tool_hilite {
             get {
                 object obj = ResourceManager.GetObject("tool_hilite", resourceCulture);
@@ -318,9 +334,23 @@ namespace Spritely.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap tool_hilite2 {
+            get {
+                object obj = ResourceManager.GetObject("tool_hilite2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tool_line {
             get {
                 object obj = ResourceManager.GetObject("tool_line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tool_nds {
+            get {
+                object obj = ResourceManager.GetObject("tool_nds", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -417,7 +447,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.7.1 beta.
+        ///   Looks up a localized string similar to 0.7.6 beta.
         /// </summary>
         internal static string Version {
             get {
@@ -426,7 +456,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 July 2008.
+        ///   Looks up a localized string similar to 6 July 2008.
         /// </summary>
         internal static string VersionDate {
             get {

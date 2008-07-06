@@ -29,6 +29,4 @@ extern const unsigned char BackgroundTiles[];
 #define	kBackgroundTileMap_Size (32 * 32 * 2)
 extern unsigned short int BackgroundTileMap[];
 
-void InitBackgrounds();
-
 #endif	// _BACKGROUNDS_H_

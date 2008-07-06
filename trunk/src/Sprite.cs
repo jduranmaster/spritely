@@ -689,15 +689,15 @@ namespace Spritely
 			}
 		}
 
-		public void ShiftPixels(Toolbox.ShiftArrow shift)
+		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
 		{
-			if (shift == Toolbox.ShiftArrow.Left)
+			if (shift == Toolbox_Sprite.ShiftArrow.Left)
 				ShiftPixels_Left();
-			if (shift == Toolbox.ShiftArrow.Right)
+			if (shift == Toolbox_Sprite.ShiftArrow.Right)
 				ShiftPixels_Right();
-			if (shift == Toolbox.ShiftArrow.Up)
+			if (shift == Toolbox_Sprite.ShiftArrow.Up)
 				ShiftPixels_Up();
-			if (shift == Toolbox.ShiftArrow.Down)
+			if (shift == Toolbox_Sprite.ShiftArrow.Down)
 				ShiftPixels_Down();
 			FlushBitmaps();
 		}

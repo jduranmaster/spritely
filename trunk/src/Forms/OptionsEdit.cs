@@ -15,10 +15,14 @@ namespace Spritely
 			InitializeComponent();
 
 			// Set the checkboxes as appropriate.
+			cbSprite_PixelGrid.Checked = Options.Sprite_ShowPixelGrid;
+			cbSprite_TileGrid.Checked = Options.Sprite_ShowTileGrid;
 			cbSprite_ShowRedXForTransparent.Checked = Options.Sprite_ShowRedXForTransparent;
 			cbSprite_ShowPaletteIndex.Checked = Options.Sprite_ShowPaletteIndex;
 			cbPalette_ShowRedXForTransparent.Checked = Options.Palette_ShowRedXForTransparent;
 			cbPalette_ShowPaletteIndex.Checked = Options.Palette_ShowPaletteIndex;
+			cbMap_ShowScreen.Checked = Options.BackgroundMap_ShowScreen;
+			cbMap_ShowGrid.Checked = Options.BackgroundMap_ShowGrid;
 
 			// Set default result to 'No'.
 			this.DialogResult = DialogResult.No;
@@ -31,6 +35,16 @@ namespace Spritely
 			bool fHasChange = false;
 
 			// Record the selected options.
+			if (cbSprite_PixelGrid.Checked != Options.Sprite_ShowPixelGrid)
+			{
+				Options.Sprite_ShowPixelGrid = cbSprite_PixelGrid.Checked;
+				fHasChange = true;
+			}
+			if (cbSprite_TileGrid.Checked != Options.Sprite_ShowTileGrid)
+			{
+				Options.Sprite_ShowTileGrid = cbSprite_TileGrid.Checked;
+				fHasChange = true;
+			}
 			if (cbSprite_ShowRedXForTransparent.Checked != Options.Sprite_ShowRedXForTransparent)
 			{
 				Options.Sprite_ShowRedXForTransparent = cbSprite_ShowRedXForTransparent.Checked;
@@ -50,6 +64,17 @@ namespace Spritely
 			if (cbPalette_ShowPaletteIndex.Checked != Options.Palette_ShowPaletteIndex)
 			{
 				Options.Palette_ShowPaletteIndex = cbPalette_ShowPaletteIndex.Checked;
+				fHasChange = true;
+			}
+
+			if (cbMap_ShowScreen.Checked != Options.BackgroundMap_ShowScreen)
+			{
+				Options.BackgroundMap_ShowScreen = cbMap_ShowScreen.Checked;
+				fHasChange = true;
+			}
+			if (cbMap_ShowGrid.Checked != Options.BackgroundMap_ShowGrid)
+			{
+				Options.BackgroundMap_ShowGrid = cbMap_ShowGrid.Checked;
 				fHasChange = true;
 			}
 
