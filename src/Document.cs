@@ -56,10 +56,10 @@ namespace Spritely
 		public void AddDefaultSprite()
 		{
 			// Add a single 2x2 sprite.
-			m_data.SpriteList.AddSprite(2, 2, "", "");
+			m_data.SpriteList.AddSprite(2, 2, "", "", false);
 
 			// Add a single blank background tile.
-			m_data.BackgroundSpriteList.AddSprite(1, 1, "", "");
+			m_data.BackgroundSpriteList.AddSprite(1, 1, "", "", false);
 		}
 
 		public MainForm Owner
@@ -230,6 +230,10 @@ namespace Spritely
 					sb.Append(String.Format(ResourceMgr.GetString("ExportSpritesSuccess"), strTarget, strProjectDir));
 				}
 				m_form.Info(sb.ToString());
+
+				// The platform may have changed, update the map toolbox to reflect the current platform.
+				if (m_form.CurrentTab == MainForm.Tab.BackgroundMap)
+					m_form.GetToolboxWindow(MainForm.Tab.BackgroundMap).Invalidate();
 			}
 			else
 				// "Unable to export!"

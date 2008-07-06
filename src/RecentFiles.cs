@@ -76,5 +76,21 @@ namespace Spritely
 			Properties.Settings.Default.RecentFiles = m_files;
 			Properties.Settings.Default.Save();
 		}
+
+		public void RemoveFile(string strFilename)
+		{
+			int nIndex = 0;
+			foreach (string s in m_files)
+			{
+				if (s == strFilename)
+				{
+					m_files.RemoveAt(nIndex);
+					BuildRecentMenu();
+					return;
+				}
+				nIndex++;
+			}
+		}
+
 	}
 }

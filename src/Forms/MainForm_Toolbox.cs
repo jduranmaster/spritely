@@ -21,23 +21,31 @@ namespace Spritely
 			PictureBox pbSpriteList = GetSpriteListWindow(tab);
 			PictureBox pbEditSprite = GetEditSpriteWindow(tab);
 
-			if (toolbox.HilightedShiftArrow() != Toolbox.ShiftArrow.None)
-			{
-				toolbox.SetMouseDownShiftArrow(true);
-				pbToolbox.Invalidate();
+			Toolbox_Sprite sprite_toolbox = toolbox as Toolbox_Sprite;
 
-				m_doc.GetSprites(tab).ShiftPixels(toolbox.HilightedShiftArrow());
-				m_doc.GetCurrentSprite(tab).RecordUndoAction("shift");
-				pbSpriteList.Invalidate();
-				pbEditSprite.Invalidate();
-				m_doc.HasUnsavedChanges = true;
-			}
-			else
+			if (sprite_toolbox != null)
 			{
-				if (toolbox.HandleMouse(e.X, e.Y))
+				if (sprite_toolbox.HilightedShiftArrow() != Toolbox_Sprite.ShiftArrow.None)
+				{
+					sprite_toolbox.SetMouseDownShiftArrow(true);
 					pbToolbox.Invalidate();
-				m_fToolbox_Selecting = true;
+
+					m_doc.GetSprites(tab).ShiftPixels(sprite_toolbox.HilightedShiftArrow());
+					m_doc.GetCurrentSprite(tab).RecordUndoAction("shift");
+					pbSpriteList.Invalidate();
+					pbEditSprite.Invalidate();
+					m_doc.HasUnsavedChanges = true;
+					return;
+				}
 			}
+
+			if (toolbox.HandleMouse(e.X, e.Y))
+			{
+				pbToolbox.Invalidate();
+				if (toolbox as Toolbox_Map != null)
+					pbBM_EditBackgroundMap.Invalidate();
+			}
+			m_fToolbox_Selecting = true;
 		}
 
 		private void Toolbox_MouseMove(object sender, MouseEventArgs e)
@@ -49,7 +57,11 @@ namespace Spritely
 			if (m_fToolbox_Selecting)
 			{
 				if (toolbox.HandleMouse(e.X, e.Y))
+				{
 					pbToolbox.Invalidate();
+					if (toolbox as Toolbox_Map != null)
+						pbBM_EditBackgroundMap.Invalidate();
+				}
 			}
 			else
 			{
@@ -64,9 +76,14 @@ namespace Spritely
 			Tab tab = GetTab_Toolbox(pbToolbox);
 			Toolbox toolbox = GetToolbox(tab);
 
-			toolbox.SetMouseDownShiftArrow(false);
+			Toolbox_Sprite sprite_toolbox = toolbox as Toolbox_Sprite;
+			if (sprite_toolbox != null)
+				sprite_toolbox.SetMouseDownShiftArrow(false);
+
 			m_fToolbox_Selecting = false;
 			pbToolbox.Invalidate();
+			if (toolbox as Toolbox_Map != null)
+				pbBM_EditBackgroundMap.Invalidate();
 		}
 
 		private void Toolbox_MouseLeave(object sender, EventArgs e)
@@ -75,9 +92,16 @@ namespace Spritely
 			Tab tab = GetTab_Toolbox(pbToolbox);
 			Toolbox toolbox = GetToolbox(tab);
 
-			toolbox.SetMouseDownShiftArrow(false);
+			Toolbox_Sprite sprite_toolbox = toolbox as Toolbox_Sprite;
+			if (sprite_toolbox != null)
+				sprite_toolbox.SetMouseDownShiftArrow(false);
+
 			if (toolbox.HandleMouseMove(-10, -10))
+			{
 				pbToolbox.Invalidate();
+				if (toolbox as Toolbox_Map != null)
+					pbBM_EditBackgroundMap.Invalidate();
+			}
 		}
 
 		private void Toolbox_Paint(object sender, PaintEventArgs e)

@@ -89,6 +89,7 @@ void UpdateScreen()
 {
 	if (s_UpdateScreen)
 	{
+%%NDS:%%		DC_FlushRange(oam_shadow, sizeof(oam_shadow));
 		dmaCopy((void*)&oam_shadow, OAM, sizeof(oam_shadow));
 		s_UpdateScreen = false;
 	}
