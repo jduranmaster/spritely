@@ -82,7 +82,7 @@ You can run VBA by launching `c:\gamedev\VisualBoyAdvance-1.7.2\VisualBoyAdvance
 
 Spritely is a program that allows you to create your own basic sprite and background graphics. It was designed to make it easy to create graphics for the GBA and DS and was created especially for this programming class.
 
-Download the latest version of Spritely from How to install Spritely from the CD:
+Download the latest version of Spritely:
 
   * Create a `c:\gamedev` folder on your drive if you don't already have one.
   * If you already have an earlier version of Spritely, remove it now by deleting the `c:\gamedev\Spritely` folder and all its contents.
