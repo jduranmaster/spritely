@@ -5,6 +5,8 @@
 
 This tutorial show you how to create the game Pong from start to finish using Spritely.
 
+|| *Note:* This tutorial assumes that you are using Spritely 0.8.7 or later. If you are using an earlier version, please upgrade to the latest version. ||
+
 == Create your sprites ==
 
 For Pong, we need 2 different sprites: a paddle and a ball. The player's paddle and the opponent's paddle will both be displayed using the same paddle sprite.
@@ -83,7 +85,7 @@ In the GBA, we can have a maximum of 128 objects, numbered 0 through 127. We're 
 Open `game_state.h` and look for the following line:
 
 {{{
-#define kObj_Player 0
+const int kObj_Player = 0;
 }}}
 
 This assigned the player object to object #0.
@@ -91,8 +93,8 @@ This assigned the player object to object #0.
 Immediately after this line, add:
 
 {{{
-#define kObj_Opponent 1
-#define kObj_Ball 2
+const int kObj_Opponent = 1;
+const int kObj_Ball = 2;
 }}}
 
 Pay attention to capitalization!
@@ -101,21 +103,21 @@ Pay attention to capitalization!
 
 We need to keep track of each object on the screen, so add the following to the !GameState structure:
 
-Further down in `game_state.h`, look for the following line inside the !GameState struct:
+Further down in `game_state.h`, look for the following line inside the !GameState class definition:
 
 {{{
 // The (x,y) location of the object representing the player.
-int xPlayer, yPlayer;
+int _xPlayer, _yPlayer;
 }}}
 
 and add the following lines immediately after:
 
 {{{
 // The (x,y) location of the opponent's paddle.
-int xOpponent, yOpponent;
+int _xOpponent, _yOpponent;
 
 // The (x,y) location of the ball.
-int xBall, yBall;
+int _xBall, _yBall;
 }}}
 
 Build your project after making these changes to make sure you don't have any compile errors.
@@ -124,7 +126,7 @@ Don't bother running since we haven't changed anything important yet.
 
 == Create the new objects ==
 
-Open `game_state.cpp` and look for the following line in the `InitGameState()` function:
+Open `game_state.cpp` and look for the following line in `GameState::GameState()`:
 
 {{{
 InitObject(kObj_Player, 0);
@@ -153,15 +155,15 @@ Further down in `InitGameState()`, change:
 
 {{{
 // Set the initial location for each object.
-_gs.xPlayer = 0;
-_gs.yPlayer = 0;
-MoveObjectTo(kObj_Player, _gs.xPlayer, _gs.yPlayer);
+_xPlayer = 0;
+_yPlayer = 0;
+MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
 }}}
 
 These lines move the player object to its initial position. Change the first line to:
 
 {{{
-_gs.xPlayer = SCREEN_WIDTH - GetObjectWidth(kObj_Player) - 8;
+_xPlayer = SCREEN_WIDTH - GetObjectWidth(kObj_Player) - 8;
 }}}
 
 This will put the player's paddle on the right side of the screen.
@@ -169,13 +171,13 @@ This will put the player's paddle on the right side of the screen.
 To initialize the remaining objects (the opponent and the ball), add the following lines immediately after:
 
 {{{
-_gs.xOpponent = 8;
-_gs.yOpponent = 0;
-MoveObjectTo(kObj_Opponent, _gs.xOpponent, _gs.yOpponent);
+_xOpponent = 8;
+_yOpponent = 0;
+MoveObjectTo(kObj_Opponent, _xOpponent, _yOpponent);
 
-_gs.xBall = SCREEN_WIDTH / 2;
-_gs.yBall = 0;
-MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+_xBall = SCREEN_WIDTH / 2;
+_yBall = 0;
+MoveObjectTo(kObj_Ball, _xBall, _yBall);
 }}}
 
 == Build/Run ==
@@ -190,7 +192,7 @@ Let's make it so that the paddle only goes up/down:
 
 == Restrict player paddle movement ==
 
-In `UpdateGameState()`, which is a bit further down in `game_state.cpp`, remove the following lines:
+In `GameState::Update()`, which is a bit further down in `game_state.cpp`, remove the following lines:
 
 {{{
 if (keyHeld & KEY_LEFT)
@@ -218,7 +220,7 @@ Let's make the ball move.
 
 == Make the ball move ==
 
-Go to the end of the `UpdateGameState()` routine (which is at the end of `game_state.cpp`) and look for:
+Go to the end of `GameState::Update()` (which is at the end of `game_state.cpp`) and look for:
 
 {{{
 // Add additional game state updates here.
@@ -228,9 +230,9 @@ And replace this comment with the following:
 
 {{{
 // Move the ball.
-_gs.xBall += 1;
-_gs.yBall += 1;
-MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+_xBall += 1;
+_yBall += 1;
+MoveObjectTo(kObj_Ball, _xBall, _yBall);
 }}}
 
 == Build/Run ==
@@ -253,43 +255,43 @@ Go back to `game_state.h` and add the following to the !GameState structure:
 
 {{{
 // The current direction that the ball is moving (-1 or 1)
-int dxBall, dyBall;
+int _dxBall, _dyBall;
 }}}
 
 == Initialize the ball direction ==
 
 Now go back to `game_state.cpp` and initialize the ball direction.
 
-Look for where you added (at the end of `InitGameState()`):
+Look for where you added (at the end of `GameState::GameState()`):
 
 {{{
-_gs.xBall = SCREEN_WIDTH / 2;
-_gs.yBall = 0;
-MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+_xBall = SCREEN_WIDTH / 2;
+_yBall = 0;
+MoveObjectTo(kObj_Ball, _xBall, _yBall);
 }}}
 
 and add the following immediately after:
 
 {{{
 // Initialize the ball direction.
-_gs.dxBall = 1;
-_gs.dyBall = 1;
+_dxBall = 1;
+_dyBall = 1;
 }}}
 
-and change the ball update code at the end of `UpdateGameState()` from:
+and change the ball update code at the end of `GameState::Update()` from:
 
 {{{
-_gs.xBall += 1;
-_gs.yBall += 1;
-MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+_xBall += 1;
+_yBall += 1;
+MoveObjectTo(kObj_Ball, _xBall, _yBall);
 }}}
 
 to:
 
 {{{
-_gs.xBall += _gs.dxBall;
-_gs.yBall += _gs.dyBall;
-MoveObjectTo(kObj_Ball, _gs.xBall, _gs.yBall);
+_xBall += _dxBall;
+_yBall += _dyBall;
+MoveObjectTo(kObj_Ball, _xBall, _yBall);
 }}}
 
 == Build/Run ==
@@ -301,25 +303,25 @@ direction in a variable, we can change it whenever we want.
 
 Let's make the ball respect the screen boundaries.
 
-Add the following immediately *before* the ball move code in `UpdateGameState()`:
+Add the following immediately *before* the ball move code in `GameState::Update()`:
 
 {{{
 // Check where the ball is moving.
-int x = _gs.xBall + _gs.dxBall;
-int y = _gs.yBall + _gs.dyBall;
+int x = _xBall + _dxBall;
+int y = _yBall + _dyBall;
 
 // Don't let the ball go off the left/right side of screen.
 if (x < 0 || x > SCREEN_WIDTH - GetObjectWidth(kObj_Ball))
-    _gs.dxBall *= -1;
+    _dxBall *= -1;
 
 // Don't let the ball go off the top/bottom of screen.
 if (y < 0 || y > SCREEN_HEIGHT - GetObjectHeight(kObj_Ball))
-    _gs.dyBall *= -1;
+    _dyBall *= -1;
 }}}
 
-The `_gs.dxBall *= -1;` line is interesting. What this does is change `1` to `-1` and `-1` to `1`. So if the ball is moving left (dxBall = -1), it is changed to move right (dxBall = 1). Similarly, a ball moving right (dxBall = 1) is changed to move left (dxBall = -1).
+The `_dxBall *= -1;` line is interesting. What this does is change `1` to `-1` and `-1` to `1`. So if the ball is moving left (_dxBall = -1), it is changed to move right (_dxBall = 1). Similarly, a ball moving right (_dxBall = 1) is changed to move left (_dxBall = -1).
 
-The `_gs.dyBall *= -1;` does the same thing for the ball moving up/down.
+The `_dyBall *= -1;` does the same thing for the ball moving up/down.
 
 == Build/Run ==
 
@@ -334,12 +336,12 @@ Add the following code just after the code above (but before the `// Move the ba
 {{{
 // Does the ball collide with a paddle?
 if (CollideBBox(kObj_Player, kObj_Ball))
-    _gs.dxBall = -1;
+    _dxBall = -1;
 if (CollideBBox(kObj_Opponent, kObj_Ball))
-    _gs.dxBall = 1;
+    _dxBall = 1;
 }}}
 
-This code tells the ball to go left (`dxBall = -1`) if it collides with the player's paddle and to go right (`dxBall = 1`) if it collides with the opponent's paddle. Note that the y-direction is not affected - if the ball is going up when it hits a paddle, it will continue to go up after it bounces off.
+This code tells the ball to go left (`_dxBall = -1`) if it collides with the player's paddle and to go right (`_dxBall = 1`) if it collides with the opponent's paddle. Note that the y-direction is not affected - if the ball is going up when it hits a paddle, it will continue to go up after it bounces off.
 
 However, if we try to build now, we'll get an error:
 
@@ -367,28 +369,28 @@ http://spritely.googlecode.com/svn/trunk/images/pong/ss_05.png
 
 The opponent paddle is boring. Let's add some simple AI (_Artificial Intelligence_) to make it play pong.
 
-At the bottom of the `UpdateGameState()`, just after the code to move the ball, add the following:
+At the bottom of the `GameState::Update()`, just after the code to move the ball, add the following:
 
 {{{
 // Handle opponent AI
 dy = 0;
 // If the ball is above the paddle
-if (_gs.yBall < _gs.yOpponent) {
+if (_yBall < _yOpponent) {
     // Move the paddle up
     dy = -1;
     // Unless that would move the paddle above the top of the screen
-    if (_gs.yOpponent < 0)
+    if (_yOpponent < 0)
         dy = 0;
 } else {
     // Otherwise, move the paddle down
     dy = 1;
     // Unless that would move the paddle below the bottom of the screen
-    if (_gs.yOpponent > SCREEN_HEIGHT - GetObjectHeight(kObj_Opponent))
+    if (_yOpponent > SCREEN_HEIGHT - GetObjectHeight(kObj_Opponent))
         dy = 0;
 }
 // Move the paddle.
-_gs.yOpponent += dy;
-MoveObjectTo(kObj_Opponent, _gs.xOpponent, _gs.yOpponent);
+_yOpponent += dy;
+MoveObjectTo(kObj_Opponent, _xOpponent, _yOpponent);
 }}}
 
 == Build/Run ==
