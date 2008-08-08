@@ -9,6 +9,9 @@ In order to make it interesting, you'll need to draw more sprites and (more impo
 
 This tutorial will show you how to put a second object on the screen.
 
+|| *Note:* This tutorial assumes that you are using Spritely 0.8.7 or later. If you are using an earlier version, please upgrade to the latest version. ||
+
+
 ----
 
 Let's start by opening up the project source code in "Programmer's Notepad".
@@ -42,23 +45,23 @@ You should see the following code at the top of the file:
 
 // The objects in our game.
 // Only 128 objects (0-127) can be defined at any time.
-#define kObj_Player 0
+const int kObj_Player = 0;
 }}}
 
 For this tutorial, the interesting part of this file is the last line shown above:
 
 {{{
-   #define kObj_Player 0
+const int kObj_Player = 0;
 }}}
 
 With the GBA, you can have up to 128 objects (numbered 0 through 127) on the screen at a time. This statement is saying that object #0 is the player object and we'll be using the name `kObj_Player` to refer to the player in our code.
 
 Let's add a definition for a second object.
 
-Add the following line after the `#define kObj_Player 0` line.
+Add the following line after the `const int kObj_Player = 0;` line.
 
 {{{
-#define kObj_New 1
+const int kObj_New = 1;
 }}}
 
 This says that object #1 will contain information about an object that we'll be referring to as `kObj_New` in the code.
@@ -70,7 +73,7 @@ You can also use a name other than `kObj_New` if you want. If you change the nam
 Now open up `game_state.cpp`. Scroll down until you find the following line:
 
 {{{
-InitObject(kObj_Player, 0, _gs.xPlayer, _gs.yPlayer);
+InitObject(kObj_Player, 0, _xPlayer, _yPlayer);
 }}}
 
 This is the line that places the player object on the screen.
@@ -86,7 +89,7 @@ InitObject(kObj_New, 0, 50, 50);
 Your code should now look like this:
 
 {{{
-InitObject(kObj_Player, 0, _gs.xPlayer, _gs.yPlayer);
+InitObject(kObj_Player, 0, _xPlayer, _yPlayer);
 InitObject(kObj_New, 0, 50, 50);
 }}}
 
@@ -116,8 +119,8 @@ Scroll down to the bottom of sprites.h. You should see the following code:
 
 {{{
 // Sprite IDs
-#define kSprite_Player 0
-#define kSprite_New 1
+const int kSprite_Player = 0;
+const int kSprite_New = 1;
 }}}
 
 These definitions We'll be using these names in the code to refer to the sprites that we created.
@@ -127,7 +130,7 @@ Now that we've given the sprites names, we can update the `InitObject()` calls t
 Go back to `game_state.cpp` and look at the code you edited earlier in this tutorial:
 
 {{{
-InitObject(kObj_Player, 0, _gs.xPlayer, _gs.yPlayer);
+InitObject(kObj_Player, 0, _xPlayer, _yPlayer);
 InitObject(kObj_New, 0, 50, 50);
 }}}
 
@@ -138,7 +141,7 @@ We're going to change this parameter to use a different sprite for each object.
 Change this code to the following:
 
 {{{
-InitObject(kObj_Player, kSprite_Player, _gs.xPlayer, _gs.yPlayer);
+InitObject(kObj_Player, kSprite_Player, _xPlayer, _yPlayer);
 InitObject(kObj_New, kSprite_New, 50, 50);
 }}}
 
