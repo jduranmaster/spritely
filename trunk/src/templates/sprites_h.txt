@@ -12,20 +12,25 @@ typedef struct {
 	int width;
 	int height;
 	int palette_id;
+	int mask_index;
 	int shape;
 	int size;
 } SpriteInfoStruct;
 
 // These sprite data arrays are defined in sprites.cpp
-#define kSpritePalette_Size (32 * %%_NUM_SPRITE_PALETTES_%%)
+const int kSpritePalette_Size = (32 * %%_NUM_SPRITE_PALETTES_%%);
 extern const unsigned short int SpritePalette[];
 
-#define kSpriteTiles_Size (32 * %%_NUM_SPRITE_TILES_%%)
+// Sprite tile data.
+const int kSpriteTiles_Size = (32 * %%_NUM_SPRITE_TILES_%%);
 extern const unsigned char SpriteTiles[];
+
+// Sprite bitmasks used for pixel-perfect collision detection.
+extern const unsigned long int SpriteMasks[];
 
 extern const SpriteInfoStruct SpriteInfo[];
 
-#define kNumSprites %%_NUM_SPRITES_%%
+const int kNumSprites = %%_NUM_SPRITES_%%;
 
 // Sprite IDs
 %%_SPRITE_IDS_%%

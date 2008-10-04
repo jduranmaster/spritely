@@ -275,10 +275,10 @@ Please select a path that does not contain any spaces.</value>
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.7.6 beta</value>
+    <value>0.8.7 beta</value>
   </data>
   <data name="VersionDate" xml:space="preserve">
-    <value>6 July 2008</value>
+    <value>7 August 2008</value>
   </data>
   <data name="WarnSpriteResizeClip" xml:space="preserve">
     <value>Resizing the sprite will cause some tiles to be clipped and the associated data will be lost.

@@ -56,6 +56,15 @@ void InitObject(int object, int sprite)
 	s_UpdateScreen = true;
 }
 
+// Get the sprite currently assigned to this object.
+int GetObjectSprite(int object)
+{
+	if (object >= kMaxObjects)
+		return -1;
+
+	return obj_info[object].sprite_id;
+}
+
 // Change the sprite associated with this object.
 void SetObjectSprite(int object, int sprite)
 {
@@ -137,6 +146,13 @@ void ShowObject(int object, bool show) {
 	else
 		oam_shadow[object].attribute[0] |= ATTR0_DISABLED;
 	s_UpdateScreen = true;
+}
+
+bool IsObjectVisible(int object) {
+	if (object >= kMaxObjects)
+		return false;
+
+	return !(oam_shadow[object].attribute[0] & ATTR0_DISABLED);
 }
 
 void FlipObject(int object, bool horizontal, bool vertical) {

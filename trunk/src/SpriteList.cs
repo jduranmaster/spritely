@@ -191,11 +191,10 @@ namespace Spritely
 			return s;
 		}
 
-		public bool DuplicateSelectedSprite()
+		public Sprite DuplicateSprite(Sprite sToCopy)
 		{
-			Sprite sToCopy = m_spriteSelected;
 			if (sToCopy == null)
-				return false;
+				return null;
 
 			// Calulate an appropriate name for the copy
 			string strNewBaseName;
@@ -221,7 +220,7 @@ namespace Spritely
 
 			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, sToCopy.Description, true);
 			sNew.Duplicate(sToCopy);
-			return true;
+			return sNew;
 		}
 
 		// Remove the currently selected sprite.
@@ -804,14 +803,16 @@ namespace Spritely
 		{
 			int nSpriteExportID = 0;
 			int nFirstTileID = 0;
+			int nMaskIndex = 0;
 
 			foreach (SpriteType st in SpriteTypes)
 			{
 				foreach (Sprite s in st.Sprites)
 				{
-					s.ExportGBASource_AssignIDs(nSpriteExportID, nFirstTileID);
+					s.ExportGBASource_AssignIDs(nSpriteExportID, nFirstTileID, nMaskIndex);
 					nSpriteExportID++;
 					nFirstTileID += st.Width * st.Height;
+					nMaskIndex += s.CalcMaskSize();
 				}
 			}
 		}
@@ -844,6 +845,15 @@ namespace Spritely
 			{
 				foreach (Sprite s in st.Sprites)
 					s.ExportGBASource_SpriteData(tw);
+			}
+		}
+
+		public void ExportGBA_SpriteMaskData(System.IO.TextWriter tw)
+		{
+			foreach (SpriteType st in SpriteTypes)
+			{
+				foreach (Sprite s in st.Sprites)
+					s.ExportGBASource_SpriteMaskData(tw);
 			}
 		}
 

@@ -1,3 +1,16 @@
+0.8.7
+Auto-generate collision bitmasks for each sprite.
+Add pixel-perfect collision routines to collision.cpp
+Add (debug only) CollisionTest dialog.
+Change generated code to use a class for GameState instead of a struct.
+Fix bug where undo after editing a duplicated sprite would result in an empty
+  sprite. Repro: duplicate sprite with some pixels set, edit the new sprite,
+  undo edit results in empty sprite.
+Fix bug where deleting multiple sprites in a row would result in no sprite
+  becoming the current selection after the delete.
+Fix bug where collision.(cpp|h) were not included in the auto-generated
+  Programmer's Notepad project.
+
 0.7.6
 Fix bug where DC_FlushRange wasn't being called for NDS projects
   NDS projects worked in emulation, but not on real hardware.

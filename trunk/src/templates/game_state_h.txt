@@ -11,18 +11,23 @@
 
 // The objects in our game.
 // Only 128 objects (0-127) can be defined at any time.
-#define	kObj_Player 0
+const int kObj_Player = 0;
 
 
-// The GameState structure holds all of the global game state information.
-typedef struct {
+// The GameState class holds all of the global game state information.
+class GameState {
+public:
+	// Constructor
+	// This method initializes the game state.
+	GameState();
+	
+	// Update
+	// This is called continuously to update the game to the next state.
+	void Update();
+	
+private:
 	// The (x,y) location of the object representing the player.
-	int xPlayer, yPlayer;
-} GameState;
-
-extern GameState _gs;
-
-void InitGameState();
-void UpdateGameState();
+	int _xPlayer, _yPlayer;
+};
 
 #endif	// _GAME_STATE_H_

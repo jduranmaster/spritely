@@ -70,7 +70,7 @@ int main() {
 	// appearing on the screen.
 	InitializeObjects();
 
-	InitGameState();
+	GameState gs;
 	UpdateScreen();
 
 	while (true) {
@@ -79,7 +79,7 @@ int main() {
 %%NDS:%%		swiWaitForVBlank();
 %%GBA:%%		VBlankIntrWait();
 
-		UpdateGameState();
+		gs.Update();
 		UpdateScreen();
 	}
 }

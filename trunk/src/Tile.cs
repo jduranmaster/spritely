@@ -89,6 +89,21 @@ namespace Spritely
 		/// Assumes that x,y are valid pixel coords.
 		/// </summary>
 		/// <returns>The value (palette id) of the specified pixel</returns>
+		public Color GetPixelColor(int pxX, int pxY)
+		{
+			Palette p = m_sprite.Palette;
+			int nIndex = m_data.pixels[pxX, pxY];
+			int cRed = p.Red(nIndex);
+			int cGreen = p.Green(nIndex);
+			int cBlue = p.Blue(nIndex);
+			return Color.FromArgb(cRed * 8, cGreen * 8, cBlue * 8);
+		}
+
+		/// <summary>
+		/// Get the pixel at the given (x,y) coord.
+		/// Assumes that x,y are valid pixel coords.
+		/// </summary>
+		/// <returns>The value (palette id) of the specified pixel</returns>
 		public int GetPixel(int pxX, int pxY)
 		{
 			return m_data.pixels[pxX, pxY];
@@ -143,6 +158,12 @@ namespace Spritely
 			m_bmSmall = bm;
 			m_fHasSmallBitmap = true;
 			return bm;
+		}
+
+		public void DrawTransparentTile(Graphics g, Color cTrans, int pxOriginX, int pxOriginY)
+		{
+			Rectangle dst = new Rectangle(pxOriginX, pxOriginY, Tile.SmallBitmapScreenSize, Tile.SmallBitmapScreenSize);
+			g.DrawImage(CreateTransparentBitmap(SmallBitmapPixelSize, cTrans), dst);
 		}
 
 		public void DrawSmallTile(Graphics g, int pxOriginX, int pxOriginY)
@@ -224,6 +245,27 @@ namespace Spritely
 				}
 			}
 
+			return bm;
+		}
+
+		// create a bitmap from this tile data
+		private Bitmap CreateTransparentBitmap(int pxSize, Color cTrans)
+		{
+			// create a new bitmap
+			Bitmap bm = new Bitmap(TileSize * pxSize, TileSize * pxSize);//, PixelFormat.Format32bppArgb);
+			Graphics g = Graphics.FromImage(bm);
+			Palette p = GetPalette();
+
+			g.FillRectangle(Brushes.White, 0, 0, TileSize * pxSize, TileSize * pxSize);
+			for (int iRow = 0; iRow < TileSize; iRow++)
+			{
+				for (int iColumn = 0; iColumn < TileSize; iColumn++)
+				{
+					g.FillRectangle(p.Brush(GetPixel(iColumn, iRow)), iColumn * pxSize, iRow * pxSize, pxSize, pxSize);
+				}
+			}
+
+			bm.MakeTransparent(cTrans);
 			return bm;
 		}
 
@@ -378,7 +420,7 @@ namespace Spritely
 
 			tw.WriteLine("\t// Tile #" + nIndex.ToString());
 
-			string str = "\t";
+			StringBuilder sb = new StringBuilder("\t");
 
 			for (int iRow = 0; iRow < TileSize; iRow++)
 			{
@@ -398,16 +440,17 @@ namespace Spritely
 					//   the right pixel value is stored in the upper nybble
 					//   the left pixel value is stored in the lower nybble 
 					byte b = (byte)((b2 << 4) + b1);
-					str += String.Format("0x{0:x2},", b);
+					sb.Append(String.Format("0x{0:x2},", b));
 				}
 				if ((iRow != TileSize-1)
 					&& ((iRow+1) % kExportByteGroup == 0))
 				{
-					tw.WriteLine(str);
-					str = "\t";
+					tw.WriteLine(sb.ToString());
+					sb.Length = 0;
+					sb.Append("\t");
 				}
 			}
-			tw.WriteLine(str);
+			tw.WriteLine(sb.ToString());
 			return true;
 		}
 		

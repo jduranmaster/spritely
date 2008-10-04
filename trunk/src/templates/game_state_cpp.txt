@@ -12,32 +12,28 @@
 #include "object_utils.h"
 #include "sprites.h"
 
-// The GameState structure holds all of the global game state information.
-GameState _gs;
-
-
-// InitGameState
+// Constructor
 // This is called once at the beginning of the game to set up all of the game objects.
-void InitGameState() {
+GameState::GameState() {
 	// Initialize the objects.
 	InitObject(kObj_Player, 0);
 
 	// Set the initial location fo each object.
-	_gs.xPlayer = 0;
-	_gs.yPlayer = 0;
-	MoveObjectTo(kObj_Player, _gs.xPlayer, _gs.yPlayer);
+	_xPlayer = 0;
+	_yPlayer = 0;
+	MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
 }
 
-// UpdateGameState
+// Update
 // This is called repeatedly, 60 times per second.
 // You check the buttons and update the game state.
-void UpdateGameState() {
-	// Get the current state of the buttons.
+void GameState::Update() {
+	// Get the current state of all of the buttons.
 	scanKeys();
 
 	// Get the buttons that have been newly pressed since the last time we
 	// called scanKeys().
-	//u16 keyDown = keysDown();
+	u16 keyPress = keysDown();
 	
 	// Get the buttons that are currently being pressed (regardless of
 	// whether or not we've already handled the button press).
@@ -57,11 +53,15 @@ void UpdateGameState() {
 	if (keyHeld & KEY_DOWN)
 		dy = 1;
 
+	if (keyPress & KEY_A) {
+		// Handle the player pressing the A button.
+	}
+	
 	// If we need to move the player.
 	if (dx != 0 || dy != 0) {
 		// Move the player to the new location.
-		int x = _gs.xPlayer + dx;
-		int y = _gs.yPlayer + dy;
+		int x = _xPlayer + dx;
+		int y = _yPlayer + dy;
 
 		// Get the width/height of the player.
 		int width, height;
@@ -74,11 +74,11 @@ void UpdateGameState() {
 			dy = 0;
 
 		// Record the player's new location.
-		_gs.xPlayer += dx;
-		_gs.yPlayer += dy;
+		_xPlayer += dx;
+		_yPlayer += dy;
 
 		// Move the player to the new location.
-		MoveObjectTo(kObj_Player, _gs.xPlayer, _gs.yPlayer);
+		MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
 	}
 	
 	// Add additional game state updates here.

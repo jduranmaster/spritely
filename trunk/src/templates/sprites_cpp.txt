@@ -13,6 +13,7 @@
 //   Width of sprite (in pixels)
 //   Height of sprite (in pixels)
 //   Palette index (0-15)
+//   Index of start of sprite bitmask
 //   Shape of sprite
 //   Size of sprite
 const SpriteInfoStruct SpriteInfo[] = {
@@ -27,4 +28,9 @@ const unsigned short int SpritePalette[] = {
 // Sprite Data
 const unsigned char SpriteTiles[] = {
 %%_SPRITE_TILES_%%
+};
+
+// Sprite collision masks
+const unsigned long int SpriteMasks[] = {
+%%_SPRITE_MASKS_%%
 };

@@ -100,11 +100,13 @@ namespace Spritely
 			this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuOptions_Sprite = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuOptions_Palette = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuOptions_Map = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_LoadImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.sbS_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbS_EditSprite = new System.Windows.Forms.PictureBox();
 			this.pbS_Palette = new System.Windows.Forms.PictureBox();
@@ -154,7 +156,6 @@ namespace Spritely
 			this.pbBM_SpriteList = new System.Windows.Forms.PictureBox();
 			this.sbBM_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbBM_EditBackgroundMap = new System.Windows.Forms.PictureBox();
-			this.menuOptions_Map = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_SpriteList)).BeginInit();
 			this.menuBar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_EditSprite)).BeginInit();
@@ -781,6 +782,13 @@ namespace Spritely
 			this.menuOptions_Palette.Text = "&Palette options...";
 			this.menuOptions_Palette.Click += new System.EventHandler(this.menuOptions_Palette_Click);
 			// 
+			// menuOptions_Map
+			// 
+			this.menuOptions_Map.Name = "menuOptions_Map";
+			this.menuOptions_Map.Size = new System.Drawing.Size(158, 22);
+			this.menuOptions_Map.Text = "&Map options...";
+			this.menuOptions_Map.Click += new System.EventHandler(this.menuOptions_Map_Click);
+			// 
 			// menuHelp
 			// 
 			this.menuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -800,7 +808,8 @@ namespace Spritely
 			// 
 			this.menuTest.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuTest_LoadImage,
-            this.menuTest_ShowUndoHistory});
+            this.menuTest_ShowUndoHistory,
+            this.menuTest_CollisionTest});
 			this.menuTest.Name = "menuTest";
 			this.menuTest.Size = new System.Drawing.Size(40, 20);
 			this.menuTest.Text = "Test";
@@ -818,6 +827,13 @@ namespace Spritely
 			this.menuTest_ShowUndoHistory.Size = new System.Drawing.Size(165, 22);
 			this.menuTest_ShowUndoHistory.Text = "Show Undo History";
 			this.menuTest_ShowUndoHistory.Click += new System.EventHandler(this.menuTest_ShowUndoHistory_Click);
+			// 
+			// menuTest_CollisionTest
+			// 
+			this.menuTest_CollisionTest.Name = "menuTest_CollisionTest";
+			this.menuTest_CollisionTest.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_CollisionTest.Text = "Collision Test";
+			this.menuTest_CollisionTest.Click += new System.EventHandler(this.menuTest_CollisionTest_Click);
 			// 
 			// sbS_SpriteList
 			// 
@@ -1432,13 +1448,6 @@ namespace Spritely
 			this.pbBM_EditBackgroundMap.Paint += new System.Windows.Forms.PaintEventHandler(this.EditBackgroundMap_Paint);
 			this.pbBM_EditBackgroundMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseUp);
 			// 
-			// menuOptions_Map
-			// 
-			this.menuOptions_Map.Name = "menuOptions_Map";
-			this.menuOptions_Map.Size = new System.Drawing.Size(158, 22);
-			this.menuOptions_Map.Text = "&Map options...";
-			this.menuOptions_Map.Click += new System.EventHandler(this.menuOptions_Map_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1616,6 +1625,7 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripSeparator menuFile_Separator3;
 		private System.Windows.Forms.PictureBox pbBM_Toolbox;
 		private System.Windows.Forms.ToolStripMenuItem menuOptions_Map;
+		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
 	}
 }
 
