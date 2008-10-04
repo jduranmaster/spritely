@@ -110,6 +110,11 @@ namespace Spritely
 		/// </summary>
 		private int m_nFirstTileID = 0;
 
+		/// <summary>
+		/// Index into sprite mask array of first entry for this sprite.
+		/// </summary>
+		private int m_nMaskIndex = 0;
+
 		//  SQUARE  00    SIZE_8   00    8 x 8              1
 		//  SQUARE  00    SIZE_16  01    16 x 16            4
 		//  SQUARE  00    SIZE_32  10    32 x 32            16
@@ -290,6 +295,19 @@ namespace Spritely
 			if (nTileIndex < 0 || nTileIndex >= NumTiles)
 				nTileIndex = 0;
 			return m_Tiles[nTileIndex];
+		}
+
+		public Color GetPixelColor(int pxSpriteX, int pxSpriteY)
+		{
+			// Convert sprite pixel coords (x,y) into tile index (x,y) and tile pixel coords (x,y).
+			int tileX = pxSpriteX / Tile.TileSize;
+			int pxX = pxSpriteX % Tile.TileSize;
+			int tileY = pxSpriteY / Tile.TileSize;
+			int pxY = pxSpriteY % Tile.TileSize;
+
+			int nTileIndex = (tileY * TileWidth) + tileX;
+
+			return m_Tiles[nTileIndex].GetPixelColor(pxX, pxY);
 		}
 
 		public int GetPixel(int pxSpriteX, int pxSpriteY)
@@ -565,6 +583,14 @@ namespace Spritely
 			int pxWidth = PixelWidth;
 			int pxHeight = PixelHeight;
 
+			if (fHorizontal && fVertical)
+			{
+				// Flipping along both axes is the same as rotating 180 degrees,
+				// so we use that routine since it loops through the pixels only once.
+				RotateRect180InPlace();
+				return;
+			}
+
 			if (fHorizontal)
 			{
 				for (int pxY = 0; pxY < pxHeight; pxY++)
@@ -802,6 +828,22 @@ namespace Spritely
 				m_Tiles[i].FlushBitmaps();
 		}
 
+		public void DrawTransparentSprite(Graphics g, int nX0, int nY0)
+		{
+			int nX, nY;
+
+			Color cTrans = this.GetPixelColor(0, 0);
+			for (int iRow = 0; iRow < TileHeight; iRow++)
+			{
+				for (int iColumn = 0; iColumn < TileWidth; iColumn++)
+				{
+					nX = (iColumn * Tile.SmallBitmapScreenSize);
+					nY = (iRow * Tile.SmallBitmapScreenSize);
+					m_Tiles[(iRow * TileWidth) + iColumn].DrawTransparentTile(g, cTrans, nX0 + nX, nY0 + nY);
+				}
+			}
+		}
+
 		public void DrawSmallSprite(Graphics g, int nX0, int nY0)
 		{
 			int nX, nY;
@@ -930,11 +972,12 @@ namespace Spritely
 			tw.WriteLine(String.Format("#define kSprite_{0} {1}", m_strName, m_nSpriteExportID));
 		}
 
-		public void ExportGBASource_AssignIDs(int nSpriteExportID, int nFirstTileID)
+		public void ExportGBASource_AssignIDs(int nSpriteExportID, int nFirstTileID, int nMaskIndex)
 		{
 			// Record the export ID and the first tile ID so that the other export routines can use it.
 			m_nSpriteExportID = nSpriteExportID;
 			m_nFirstTileID = nFirstTileID;
+			m_nMaskIndex = nMaskIndex;
 		}
 
 		public void ExportGBASource_SpriteInfo(System.IO.TextWriter tw, GBASize size, GBAShape shape)
@@ -959,9 +1002,10 @@ namespace Spritely
 				case GBASize.Size64: strSize = "ATTR1_SIZE_64"; break;
 			}
 
-			tw.WriteLine(String.Format("\t{{{0,4},{1,4},{2,4},{3,4},{4,4},{5,16},{6,16} }}, // Sprite_{7}",
+			tw.WriteLine(String.Format("\t{{{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,16},{7,16} }}, // Sprite_{8}",
 				m_nFirstTileID, NumTiles,
 				PixelWidth, PixelHeight, m_nPaletteID,
+				m_nMaskIndex,
 				strShape, strSize, m_strName));
 		}
 
@@ -978,6 +1022,47 @@ namespace Spritely
 			int nIndex = m_nFirstTileID;
 			foreach (Tile t in m_Tiles)
 				t.ExportGBA(tw, nIndex++);
+		}
+
+		const int MaskWordWidth = 32;
+
+		public int CalcMaskSize()
+		{
+			int xsize = ((PixelWidth + MaskWordWidth - 1) / MaskWordWidth);
+			int ysize = PixelHeight;
+			return xsize * ysize;
+		}
+
+		public void ExportGBASource_SpriteMaskData(System.IO.TextWriter tw)
+		{
+			if (m_nSpriteExportID != 0)
+				tw.WriteLine("");
+
+			tw.WriteLine("\t// Sprite : " + m_strName);
+
+			// Calc # of int32s required.
+			int xsize = ((PixelWidth + MaskWordWidth-1) / MaskWordWidth);
+			int ysize = PixelHeight;
+			int size = xsize * ysize;
+			int mask;
+
+			for (int y = 0; y < ysize; y++)
+			{
+				for (int x = 0; x < xsize; x++)
+				{
+					mask = 0;
+					for (int i = 0; i < MaskWordWidth; i++)
+					{
+						mask <<= 1;
+						if (x * MaskWordWidth + i < PixelWidth)
+						{
+							if (GetPixel(x * MaskWordWidth + i, y) != 0)
+								mask |= 1;
+						}
+					}
+					tw.WriteLine(String.Format("\t0x{0:x8},", mask));
+				}
+			}
 		}
 
 	}

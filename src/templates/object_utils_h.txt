@@ -7,11 +7,12 @@
 
 // The maximum number of allowed objects.
 // This is limited to 128 by the GBA/NDS hardware.
-#define kMaxObjects	128
+const int kMaxObjects = 128;
 
 void InitializeObjects();
 
 void InitObject(int object, int sprite);
+int GetObjectSprite(int object);
 void SetObjectSprite(int object, int sprite);
 void MoveObjectTo(int object, int x, int y);
 
@@ -23,6 +24,8 @@ int GetObjectWidth(int object);
 int GetObjectHeight(int object);
 
 void ShowObject(int object, bool show);
+bool IsObjectVisible(int object);
+
 void FlipObject(int object, bool horizontal, bool vertical);
 
 #endif	// _OBJECT_UTILS_H_

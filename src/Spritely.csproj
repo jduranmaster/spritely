@@ -37,6 +37,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundMap.cs" />
+    <Compile Include="Forms\CollisionTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CollisionTest.Designer.cs">
+      <DependentUpon>CollisionTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
@@ -111,6 +117,10 @@
     <EmbeddedResource Include="Forms\About.resx">
       <SubType>Designer</SubType>
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CollisionTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CollisionTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ColorEncodingView.resx">
       <SubType>Designer</SubType>

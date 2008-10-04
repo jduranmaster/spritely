@@ -289,12 +289,11 @@ namespace Spritely
 
 		private void menuSprite_Duplicate_Click(object sender, EventArgs e)
 		{
-			Sprite s = m_doc.GetCurrentSprite(m_eCurrentTab);
-			if (s == null)
-				return;
-
-			if (m_doc.GetSprites(m_eCurrentTab).DuplicateSelectedSprite())
+			Sprite sToCopy = m_doc.GetCurrentSprite(m_eCurrentTab);
+			Sprite sNew = m_doc.GetSprites(m_eCurrentTab).DuplicateSprite(sToCopy);
+			if (sNew != null)
 			{
+				sNew.RecordUndoAction("duplicate");
 				m_doc.HasUnsavedChanges = true;
 				Handle_SpritesChanged(m_eCurrentTab);
 			}
@@ -536,6 +535,12 @@ namespace Spritely
 		{
 			menuTest_ShowUndoHistory.Checked = !menuTest_ShowUndoHistory.Checked;
 			UndoMgr.ShowDebugWindow = menuTest_ShowUndoHistory.Checked;
+		}
+
+		private void menuTest_CollisionTest_Click(object sender, EventArgs e)
+		{
+			CollisionTest ct = new CollisionTest(m_doc);
+			ct.ShowDialog();
 		}
 
 	}

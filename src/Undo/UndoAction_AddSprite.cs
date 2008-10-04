@@ -26,6 +26,11 @@ namespace Spritely
 			get { return m_sprite; }
 		}
 
+		public bool Add
+		{
+			get { return m_fAdd; }
+		}
+
 		public override void ApplyUndo()
 		{
 			if (m_fAdd)

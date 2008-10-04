@@ -705,6 +705,11 @@ namespace Spritely
 					sprites.ExportGBA_SpriteData(tw);
 					continue;
 				}
+				if (strLine == "%%_SPRITE_MASKS_%%")
+				{
+					sprites.ExportGBA_SpriteMaskData(tw);
+					continue;
+				}
 				if (strLine == "%%_SPRITE_IDS_%%")
 				{
 					sprites.ExportGBA_SpriteIDs(tw);

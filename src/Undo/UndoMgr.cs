@@ -200,12 +200,14 @@ namespace Spritely
 		{
 			for (int i = m_nCurrent-1; i >= 0; i--)
 			{
+				// Use sprite from most recent edit.
 				UndoAction_SpriteEdit action_edit = m_history[i] as UndoAction_SpriteEdit;
 				if (action_edit != null)
 					return action_edit.GetSprite;
 
+				// Use sprite from most recent Add (not Delete, since the sprite doesn't exist anymore).
 				UndoAction_AddSprite action_add = m_history[i] as UndoAction_AddSprite;
-				if (action_add != null)
+				if (action_add != null && action_add.Add)
 					return action_add.GetSprite;
 			}
 			return null;
