@@ -15,11 +15,18 @@ These references show you how to create your own bitmap graphics.
  
 = Free Sprites =
 
+These are sprites that people have made freely available for you to use in your games. They are typically in the form of a single "sprite sheet", which is a single PNG or BMP file with all the sprites arranged on them. To use these with Spritely, you'll need to redraw them within Spritely.
+
 || [http://www.flyingyogi.com/fun/spritelib.html http://spritely.googlecode.com/svn/trunk/images/bm_gfx_rsrc/spritelib.png] || [http://www.flyingyogi.com/fun/spritelib.html SpriteLib] is a collection of spritesets created by Ari Feldman. ||
 
  
 = Commercial Sprites & Background Maps =
 
-If you're planning on releasing your game, you cannot make use of these sprite sets since most/all of them were extracted from commercial game releases (or involve copyrighted characters). However, they're a great source of inspiration and allow you to see how the professionals create their sprite sets.
+If you're planning on releasing your game, you cannot make use of these sprite sets since most/all of them were extracted from commercial game releases (or involve copyrighted characters). However, they're a great source of inspiration and allow you to see how the professionals create and animate their sprites.
  
+|| [http://tsgk.captainn.net/ http://spritely.googlecode.com/svn/trunk/images/bm_gfx_rsrc/shyguy_kingdom.png] || [http://tsgk.captainn.net/ The ShyGuy Kingdom] has lots of sprite sheets from various games. ||
 || [http://www.vgmaps.com/Atlas/DS/MarioVsDonkeyKong2-MarchOfTheMinis-Floor6-ToadstoolCastle-Room1.png http://spritely.googlecode.com/svn/trunk/images/bm_gfx_rsrc/vgmaps_mvdk2_6-1.png] || [http://www.vgmaps.com/ VGMaps.com] has a number of background maps extracted from different games. This is a great reference when you're creating your own background maps. ||
+|| [http://www.pokemonelite2000.com/sprites.html http://spritely.googlecode.com/svn/trunk/images/bm_gfx_rsrc/pokemonelite2000.png] || [http://www.pokemonelite2000.com/sprites.html PokemonElite2000] has a complete collection of individual Pokemon sprites. ||
+
+
+To find other resources on the web, search for "sprites", "sprite sheets", "game sprites", and variants.
