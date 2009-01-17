@@ -10,7 +10,7 @@ namespace Spritely
 {
 	public partial class ColorEncodingView : Form
 	{
-		Palette m_Palette;
+		Subpalette m_Palette;
 		bool m_fHasChanges = false;
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Spritely
 
 		int[] m_nRGBWordBits = new int[k_nRGBBits];
 
-		public ColorEncodingView(Palette p)
+		public ColorEncodingView(Subpalette p)
 		{
 			InitializeComponent();
 			this.DialogResult = DialogResult.No;

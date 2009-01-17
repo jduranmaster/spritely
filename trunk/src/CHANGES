@@ -1,3 +1,41 @@
+0.13.x
+Update generated code:
+  Add palettes.h to store palette types and definitions.
+    Select "Update project files" when exporting.
+  In sprite.h:
+    Add constant for number of palettes (currently 1)
+      'kNumPalettes'
+    Add constant for number of spritesets (currently 1)
+      'kNumSpritesets'
+    Add constant for each spriteset (currently only 1)
+      'kSpriteset_' + <spriteset-name>
+    Make sprite constants begin with spriteset name:
+      'k' + <spriteset-name> + '_' + <sprite-name>
+      Previously, is was 'kSprite_' + <sprite-name>
+  In backgrounds.h:
+    Add constant for number of bgpalettes (currently 1)
+      'kNumBgPalettes'
+    Add constant for number of bgtilesets (currently 1)
+      'kNumBgTilesets'
+    Add constant for number of bgmaps (currently 1)
+      'kNumBgMaps'
+    Add constant for each bgtileset (currently only 1)
+      'kBgTileset_' + <tileset-name>
+    Add constant for each bgmap (currently only 1)
+      'kBgMap_' + <map-name>
+    Add constants for each background tile:
+      1x1: 'k' + <tileset-name> + '_' + <bgsprite-name>
+      if multiple tiles, add '_' + <tile> at end
+Fix exception when clicking on edit-sprite pane when no sprite is selected.
+Change save file format to support/prepare for future enhancements:
+  multiple spritesets, palettes, bgtilesets, bgmaps
+  256-color palettes, bgimages, sounds
+  (note: none of these features are implemented yet, but are planned for
+    future releases)
+Create new classes to manage multiple palettes, spritesets and maps
+Add new project interface prototype (devel version only)
+Add unit tests for file load (old/new version)
+
 0.8.7
 Auto-generate collision bitmasks for each sprite.
 Add pixel-perfect collision routines to collision.cpp

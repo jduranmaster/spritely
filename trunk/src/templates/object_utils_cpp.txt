@@ -46,12 +46,12 @@ void InitializeObjects()
 // See gba_oam.h for more information about how the OAM entries are encoded.
 void InitObject(int object, int sprite)
 {
-	if (object >= kMaxObjects || sprite >= kNumSprites)
+	if (object >= kMaxObjects || sprite >= kTotalSprites)
 		return;
 		
 	oam_shadow[object].attribute[0] = SpriteInfo[sprite].shape | ATTR0_COLOR_16 | OBJ_Y(0);
 	oam_shadow[object].attribute[1] = SpriteInfo[sprite].size | OBJ_X(0);
-	oam_shadow[object].attribute[2] = ATTR2_PALETTE(SpriteInfo[sprite].palette_id) | SpriteInfo[sprite].first_tile;
+	oam_shadow[object].attribute[2] = ATTR2_PALETTE(SpriteInfo[sprite].subpalette_id) | SpriteInfo[sprite].first_tile;
 	obj_info[object].sprite_id = sprite;
 	s_UpdateScreen = true;
 }
@@ -68,14 +68,14 @@ int GetObjectSprite(int object)
 // Change the sprite associated with this object.
 void SetObjectSprite(int object, int sprite)
 {
-	if (object >= kMaxObjects || sprite >= kNumSprites)
+	if (object >= kMaxObjects || sprite >= kTotalSprites)
 		return;
 
 	oam_shadow[object].attribute[0] &= 0x3fff;
 	oam_shadow[object].attribute[0] |= SpriteInfo[sprite].shape;
 	oam_shadow[object].attribute[1] &= 0x3fff;
 	oam_shadow[object].attribute[1] |= SpriteInfo[sprite].size;
-	oam_shadow[object].attribute[2] = ATTR2_PALETTE(SpriteInfo[sprite].palette_id) | SpriteInfo[sprite].first_tile;
+	oam_shadow[object].attribute[2] = ATTR2_PALETTE(SpriteInfo[sprite].subpalette_id) | SpriteInfo[sprite].first_tile;
 	obj_info[object].sprite_id = sprite;
 	s_UpdateScreen = true;
 }
@@ -123,7 +123,7 @@ int GetObjectWidth(int object) {
 	if (object >= kMaxObjects)
 		return 0;
 	int sprite = obj_info[object].sprite_id;
-	if (sprite >= kNumSprites)
+	if (sprite >= kTotalSprites)
 		return 0;
 	return SpriteInfo[sprite].width;
 }
@@ -132,7 +132,7 @@ int GetObjectHeight(int object) {
 	if (object >= kMaxObjects)
 		return 0;
 	int sprite = obj_info[object].sprite_id;
-	if (sprite >= kNumSprites)
+	if (sprite >= kTotalSprites)
 		return 0;
 	return SpriteInfo[sprite].height;
 }

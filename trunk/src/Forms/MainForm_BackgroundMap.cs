@@ -23,9 +23,9 @@ namespace Spritely
 		// This is called when the user switches to the BackgroundMap tab.
 		public void UpdateBackgroundMapPalette()
 		{
-			PaletteMgr bgpal = m_doc.GetSpritePalettes(Tab.BackgroundSprites);
-			PaletteMgr bmpal = m_doc.GetSpritePalettes(Tab.BackgroundMap);
-			bmpal.CopyPalettes(bgpal);
+			Palette bgpal = m_doc.GetBackgroundPalette(Options.DefaultBgPaletteId);
+			Palette bmpal = m_doc.GetBackgroundMapPalette();
+			bmpal.CopySubpalettes(bgpal);
 		}
 
 		#region Edit Background Map
@@ -35,7 +35,7 @@ namespace Spritely
 		private void EditBackgroundMap_MouseDown(object sender, MouseEventArgs e)
 		{
 			m_fEditBackgroundMap_Selecting = true;
-			if (m_doc.GetSprites(Tab.BackgroundSprites).Map.HandleMouse_EditMap(e.X, e.Y))
+			if (m_doc.BackgroundMaps.CurrentMap.HandleMouse_EditMap(e.X, e.Y))
 			{
 				pbBM_SpriteList.Invalidate();
 				pbBM_EditBackgroundMap.Invalidate();
@@ -45,16 +45,16 @@ namespace Spritely
 
 		private void EditBackgroundMap_MouseMove(object sender, MouseEventArgs e)
 		{
-			SpriteList sl = m_doc.GetSprites(Tab.BackgroundSprites);
+			Map m = m_doc.BackgroundMaps.CurrentMap;
 			if (m_fEditBackgroundMap_Selecting)
 			{
-				if (sl.Map.HandleMouse_EditMap(e.X, e.Y))
+				if (m.HandleMouse_EditMap(e.X, e.Y))
 				{
 					pbBM_EditBackgroundMap.Invalidate();
 					m_doc.HasUnsavedChanges = true;
 				}
 			}
-			if (sl.Map.HandleMouseMove_EditMap(e.X, e.Y))
+			if (m.HandleMouseMove_EditMap(e.X, e.Y))
 			{
 				pbBM_EditBackgroundMap.Invalidate();
 			}
@@ -62,8 +62,8 @@ namespace Spritely
 
 		private void EditBackgroundMap_MouseLeave(object sender, EventArgs e)
 		{
-			SpriteList sl = m_doc.GetSprites(Tab.BackgroundSprites);
-			if (sl.Map.HandleMouseMove_EditMap(-10, -10))
+			Map m = m_doc.BackgroundMaps.CurrentMap;
+			if (m.HandleMouseMove_EditMap(-10, -10))
 			{
 				pbBM_EditBackgroundMap.Invalidate();
 			}
@@ -76,7 +76,7 @@ namespace Spritely
 
 		private void EditBackgroundMap_Paint(object sender, PaintEventArgs e)
 		{
-			m_doc.GetSprites(Tab.BackgroundSprites).Map.DrawBackgroundMap(e.Graphics);
+			m_doc.BackgroundMaps.CurrentMap.DrawBackgroundMap(e.Graphics);
 		}
 
 		#endregion
@@ -84,7 +84,7 @@ namespace Spritely
 		private void pbBM_SpritePreview_Paint(object sender, PaintEventArgs e)
 		{
 			//Graphics g = e.Graphics;
-			//g.DrawRectangle(Pens.Black, 0, 0, 128, 128);
+			//g.DrawRectangle(Pens.Black, 0, 0, 64, 64);
 		}
 
 	}

@@ -54,7 +54,7 @@ const int MaskWordWidth = 32;
 
 bool CollideSprite(int s1, int s2, int dx, int dy) {
 	// Make sure the sprite ids are valid.
-	if (s1 < 0 || s1 >= kNumSprites || s2 < 0 || s2 >= kNumSprites )
+	if (s1 < 0 || s1 >= kTotalSprites || s2 < 0 || s2 >= kTotalSprites )
 		return false;
 
 	// Width/height of each sprite/mask (in pixels)

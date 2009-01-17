@@ -4,23 +4,23 @@ using System.Text;
 
 namespace Spritely
 {
-	public class UndoAction_PaletteEdit : UndoAction
+	public class UndoAction_Subpalette16Edit : UndoAction
 	{
 		UndoMgr m_mgr;
-		Palette m_palette;
-		Palette.UndoData m_before;	// Undo
-		Palette.UndoData m_after;	// Redo
+		Subpalette m_subpalette;
+		Subpalette.UndoData m_before;	// Undo
+		Subpalette.UndoData m_after;	// Redo
 
-		public UndoAction_PaletteEdit(UndoMgr mgr, Palette palette, Palette.UndoData before, Palette.UndoData after, string strDesc)
+		public UndoAction_Subpalette16Edit(UndoMgr mgr, Subpalette subpalette, Subpalette.UndoData before, Subpalette.UndoData after, string strDesc)
 		{
 			m_mgr = mgr;
-			m_palette = palette;
-			m_before = new Palette.UndoData(before);
-			m_after = new Palette.UndoData(after);
+			m_subpalette = subpalette;
+			m_before = new Subpalette.UndoData(before);
+			m_after = new Subpalette.UndoData(after);
 
 			int b = before.currentColor;
 			int a = after.currentColor;
-			Description = "PaletteEdit " + palette.PaletteID + "," + before.currentColor + " ("
+			Description = "Subpalette16Edit " + subpalette.SubpaletteID + "," + before.currentColor + " ("
 				+ before.cRed[b] + "," + before.cGreen[b] + "," + before.cBlue[b]
 				+ ") -> ("
 				+ after.cRed[a] + "," + after.cGreen[a] + "," + after.cBlue[a]
@@ -64,14 +64,14 @@ namespace Spritely
 					)
 				{
 					nColorIndex = i;
-					nColorValue1 = m_palette.Encoding(m_before.cRed[i], m_before.cGreen[i], m_before.cBlue[i]);
-					nColorValue2 = m_palette.Encoding(m_after.cRed[i], m_after.cGreen[i], m_after.cBlue[i]);
+					nColorValue1 = m_subpalette.Encoding(m_before.cRed[i], m_before.cGreen[i], m_before.cBlue[i]);
+					nColorValue2 = m_subpalette.Encoding(m_after.cRed[i], m_after.cGreen[i], m_after.cBlue[i]);
 				}
 			}
 			return nColorIndex != -1;
 		}
 
-		public Palette.UndoData GetUndoData()
+		public Subpalette.UndoData GetUndoData()
 		{
 			return m_before;
 		}
@@ -80,19 +80,19 @@ namespace Spritely
 		/// Update the "after" UndoData. This is used when merging two UndoActions together.
 		/// </summary>
 		/// <param name="after"></param>
-		public void UpdateRedoData(Palette.UndoData after)
+		public void UpdateRedoData(Subpalette.UndoData after)
 		{
-			m_after = new Palette.UndoData(after);
+			m_after = new Subpalette.UndoData(after);
 		}
 
 		public override void ApplyUndo()
 		{
-			m_palette.ApplyUndoData(m_before);
+			m_subpalette.ApplyUndoData(m_before);
 		}
 
 		public override void ApplyRedo()
 		{
-			m_palette.ApplyUndoData(m_after);
+			m_subpalette.ApplyUndoData(m_after);
 		}
 	}
 }

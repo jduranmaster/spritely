@@ -11,21 +11,25 @@ namespace Spritely
 	{
 		#region SpriteList
 
-		public void AdjustAllSpriteListScrollbars(int nVisibleRows, int nMaxRows)
+		public void AdjustAllSpriteListScrollbars()
 		{
-			AdjustSpriteListScrollbar(Tab.Sprites, nVisibleRows, nMaxRows);
+			AdjustSpriteListScrollbar(Tab.Sprites);
 		}
 
-		public void AdjustAllBackgroundSpriteListScrollbars(int nVisibleRows, int nMaxRows)
+		public void AdjustAllBackgroundSpriteListScrollbars()
 		{
-			AdjustSpriteListScrollbar(Tab.BackgroundSprites, nVisibleRows, nMaxRows);
-			AdjustSpriteListScrollbar(Tab.BackgroundMap, nVisibleRows, nMaxRows);
+			AdjustSpriteListScrollbar(Tab.BackgroundSprites);
+			AdjustSpriteListScrollbar(Tab.BackgroundMap);
 		}
 
-		public void AdjustSpriteListScrollbar(Tab tab, int nVisibleRows, int nMaxRows)
+		public void AdjustSpriteListScrollbar(Tab tab)
 		{
 			VScrollBar sbSpriteList = GetSpriteListScrollbar(tab);
 			PictureBox pbSpriteList = GetSpriteListWindow(tab);
+			SpriteList sl = GetSpriteList(tab);
+
+			int nVisibleRows = sl.VisibleScrollRows;
+			int nMaxRows = sl.MaxScrollRows;
 
 			if (nVisibleRows >= nMaxRows)
 			{
@@ -199,7 +203,11 @@ namespace Spritely
 				}
 
 				if (fRecordUndo)
-					m_doc.GetCurrentSprite(tab).RecordUndoAction(strTool);
+				{
+					Sprite s = m_doc.GetCurrentSprite(tab);
+					if (s != null)
+						s.RecordUndoAction(strTool);
+				}
 			}
 
 			m_fEditSprite_Selecting = false;

@@ -107,6 +107,7 @@ namespace Spritely
 			this.menuTest_LoadImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_ShowProjectWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.sbS_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbS_EditSprite = new System.Windows.Forms.PictureBox();
 			this.pbS_Palette = new System.Windows.Forms.PictureBox();
@@ -156,6 +157,8 @@ namespace Spritely
 			this.pbBM_SpriteList = new System.Windows.Forms.PictureBox();
 			this.sbBM_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbBM_EditBackgroundMap = new System.Windows.Forms.PictureBox();
+			this.menuTest_RunUnittests = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_SpriteList)).BeginInit();
 			this.menuBar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_EditSprite)).BeginInit();
@@ -807,9 +810,12 @@ namespace Spritely
 			// menuTest
 			// 
 			this.menuTest.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuTest_RunUnittests,
+            this.menuTest_Separator1,
             this.menuTest_LoadImage,
             this.menuTest_ShowUndoHistory,
-            this.menuTest_CollisionTest});
+            this.menuTest_CollisionTest,
+            this.menuTest_ShowProjectWindow});
 			this.menuTest.Name = "menuTest";
 			this.menuTest.Size = new System.Drawing.Size(40, 20);
 			this.menuTest.Text = "Test";
@@ -817,23 +823,30 @@ namespace Spritely
 			// menuTest_LoadImage
 			// 
 			this.menuTest_LoadImage.Name = "menuTest_LoadImage";
-			this.menuTest_LoadImage.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_LoadImage.Size = new System.Drawing.Size(178, 22);
 			this.menuTest_LoadImage.Text = "LoadImage";
 			this.menuTest_LoadImage.Click += new System.EventHandler(this.menuTestLoadImage_Click);
 			// 
 			// menuTest_ShowUndoHistory
 			// 
 			this.menuTest_ShowUndoHistory.Name = "menuTest_ShowUndoHistory";
-			this.menuTest_ShowUndoHistory.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_ShowUndoHistory.Size = new System.Drawing.Size(178, 22);
 			this.menuTest_ShowUndoHistory.Text = "Show Undo History";
 			this.menuTest_ShowUndoHistory.Click += new System.EventHandler(this.menuTest_ShowUndoHistory_Click);
 			// 
 			// menuTest_CollisionTest
 			// 
 			this.menuTest_CollisionTest.Name = "menuTest_CollisionTest";
-			this.menuTest_CollisionTest.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_CollisionTest.Size = new System.Drawing.Size(178, 22);
 			this.menuTest_CollisionTest.Text = "Collision Test";
 			this.menuTest_CollisionTest.Click += new System.EventHandler(this.menuTest_CollisionTest_Click);
+			// 
+			// menuTest_ShowProjectWindow
+			// 
+			this.menuTest_ShowProjectWindow.Name = "menuTest_ShowProjectWindow";
+			this.menuTest_ShowProjectWindow.Size = new System.Drawing.Size(178, 22);
+			this.menuTest_ShowProjectWindow.Text = "Show Project Window";
+			this.menuTest_ShowProjectWindow.Click += new System.EventHandler(this.menuTest_ShowProjectWindow_Click);
 			// 
 			// sbS_SpriteList
 			// 
@@ -1343,7 +1356,7 @@ namespace Spritely
 			this.tabBackgroundMapEditor.Name = "tabBackgroundMapEditor";
 			this.tabBackgroundMapEditor.Size = new System.Drawing.Size(742, 525);
 			this.tabBackgroundMapEditor.TabIndex = 2;
-			this.tabBackgroundMapEditor.Text = "Background Map";
+			this.tabBackgroundMapEditor.Text = "Background Maps";
 			this.tabBackgroundMapEditor.UseVisualStyleBackColor = true;
 			// 
 			// pbBM_Toolbox
@@ -1361,17 +1374,17 @@ namespace Spritely
 			// 
 			// pbBM_Orientation
 			// 
-			this.pbBM_Orientation.Location = new System.Drawing.Point(12, 285);
+			this.pbBM_Orientation.Location = new System.Drawing.Point(12, 348);
 			this.pbBM_Orientation.Name = "pbBM_Orientation";
-			this.pbBM_Orientation.Size = new System.Drawing.Size(65, 127);
+			this.pbBM_Orientation.Size = new System.Drawing.Size(65, 65);
 			this.pbBM_Orientation.TabIndex = 6;
 			this.pbBM_Orientation.TabStop = false;
 			// 
 			// pbBM_SpritePreview
 			// 
-			this.pbBM_SpritePreview.Location = new System.Drawing.Point(83, 285);
+			this.pbBM_SpritePreview.Location = new System.Drawing.Point(83, 348);
 			this.pbBM_SpritePreview.Name = "pbBM_SpritePreview";
-			this.pbBM_SpritePreview.Size = new System.Drawing.Size(129, 129);
+			this.pbBM_SpritePreview.Size = new System.Drawing.Size(65, 65);
 			this.pbBM_SpritePreview.TabIndex = 25;
 			this.pbBM_SpritePreview.TabStop = false;
 			this.pbBM_SpritePreview.Paint += new System.Windows.Forms.PaintEventHandler(this.pbBM_SpritePreview_Paint);
@@ -1447,6 +1460,18 @@ namespace Spritely
 			this.pbBM_EditBackgroundMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseDown);
 			this.pbBM_EditBackgroundMap.Paint += new System.Windows.Forms.PaintEventHandler(this.EditBackgroundMap_Paint);
 			this.pbBM_EditBackgroundMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseUp);
+			// 
+			// menuTest_RunUnittests
+			// 
+			this.menuTest_RunUnittests.Name = "menuTest_RunUnittests";
+			this.menuTest_RunUnittests.Size = new System.Drawing.Size(178, 22);
+			this.menuTest_RunUnittests.Text = "Run Unittests";
+			this.menuTest_RunUnittests.Click += new System.EventHandler(this.menuTest_RunUnittests_Click);
+			// 
+			// menuTest_Separator1
+			// 
+			this.menuTest_Separator1.Name = "menuTest_Separator1";
+			this.menuTest_Separator1.Size = new System.Drawing.Size(175, 6);
 			// 
 			// MainForm
 			// 
@@ -1626,6 +1651,9 @@ namespace Spritely
 		private System.Windows.Forms.PictureBox pbBM_Toolbox;
 		private System.Windows.Forms.ToolStripMenuItem menuOptions_Map;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
+		private System.Windows.Forms.ToolStripMenuItem menuTest_ShowProjectWindow;
+		private System.Windows.Forms.ToolStripMenuItem menuTest_RunUnittests;
+		private System.Windows.Forms.ToolStripSeparator menuTest_Separator1;
 	}
 }
 

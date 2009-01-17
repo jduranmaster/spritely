@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -36,14 +37,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundMap.cs" />
+    <Compile Include="Files\FileHandler_Export.cs" />
+    <Compile Include="Files\FileHandler_Load.cs" />
+    <Compile Include="Forms\Palette16Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Palette16Form.Designer.cs">
+      <DependentUpon>Palette16Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProjectMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectMainForm.Designer.cs">
+      <DependentUpon>ProjectMainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProjectMainForm_Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectTreeViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectTreeViewForm.Designer.cs">
+      <DependentUpon>ProjectTreeViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpriteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpriteForm.Designer.cs">
+      <DependentUpon>SpriteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpritesetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpritesetForm.Designer.cs">
+      <DependentUpon>SpritesetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TempForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TempForm.Designer.cs">
+      <DependentUpon>TempForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Map.cs" />
     <Compile Include="Forms\CollisionTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CollisionTest.Designer.cs">
       <DependentUpon>CollisionTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Toolbox_Map.cs" />
+    <Compile Include="Maps\MapBlock.cs" />
+    <Compile Include="Maps\Maps.cs" />
+    <Compile Include="Maps\Map_LoadSave.cs" />
+    <Compile Include="Palettes\Palettes.cs" />
+    <Compile Include="Sprites\Spriteset.cs" />
+    <Compile Include="Sprites\Spritesets.cs" />
+    <Compile Include="Sprites\SpriteType.cs" />
+    <Compile Include="Sprites\Sprite_LoadSave.cs" />
+    <Compile Include="Toolbox\Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,8 +130,8 @@
     <Compile Include="Forms\OptionsEdit.Designer.cs">
       <DependentUpon>OptionsEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Document.cs" />
-    <Compile Include="FileHandler.cs" />
+    <Compile Include="Main\Document.cs" />
+    <Compile Include="Files\FileHandler.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,16 +153,16 @@
     <Compile Include="Forms\UndoHistory.Designer.cs">
       <DependentUpon>UndoHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options.cs" />
-    <Compile Include="Palette.cs" />
-    <Compile Include="PaletteMgr.cs" />
-    <Compile Include="RecentFiles.cs" />
+    <Compile Include="Main\Options.cs" />
+    <Compile Include="Palettes\Subpalette.cs" />
+    <Compile Include="Palettes\Palette.cs" />
+    <Compile Include="Files\RecentFiles.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Spritely.cs" />
+    <Compile Include="Main\Spritely.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\About.resx">
       <SubType>Designer</SubType>
@@ -138,13 +188,41 @@
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Palette16Form.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Palette16Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProjectMainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProjectMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProjectTreeViewForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProjectTreeViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpriteForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpriteForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpriteProperties.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpriteProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpritesetForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpritesetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TempForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TempForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\UndoHistory.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UndoHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UnitTestForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UnitTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -170,17 +248,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Sprite.cs" />
-    <Compile Include="SpriteList.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
+    <Compile Include="Sprites\SpriteList.cs" />
     <Compile Include="Resources\ResourceMgr.cs" />
-    <Compile Include="Tile.cs" />
-    <Compile Include="Toolbox.cs" />
-    <Compile Include="Toolbox_Sprite.cs" />
+    <Compile Include="Sprites\Tile.cs" />
+    <Compile Include="Toolbox\Toolbox.cs" />
+    <Compile Include="Toolbox\Toolbox_Sprite.cs" />
     <Compile Include="Undo\UndoAction.cs" />
     <Compile Include="Undo\UndoAction_AddSprite.cs" />
     <Compile Include="Undo\UndoAction_PaletteEdit.cs" />
     <Compile Include="Undo\UndoAction_SpriteEdit.cs" />
     <Compile Include="Undo\UndoMgr.cs" />
+    <Compile Include="Main\XMLUtils.cs" />
+    <Compile Include="Forms\UnitTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UnitTestForm.Designer.cs">
+      <DependentUpon>UnitTestForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="CHANGES" />
@@ -262,6 +347,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\object_utils_h.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\palettes_h.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\sprites_cpp.txt">
