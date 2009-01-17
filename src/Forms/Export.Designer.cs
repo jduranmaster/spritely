@@ -31,9 +31,6 @@ namespace Spritely
 			this.bExport = new System.Windows.Forms.Button();
 			this.bCancel = new System.Windows.Forms.Button();
 			this.gbExportAs = new System.Windows.Forms.GroupBox();
-			this.lCompleteProject = new System.Windows.Forms.Label();
-			this.lSpritesBackgrounds = new System.Windows.Forms.Label();
-			this.lUpdateProject = new System.Windows.Forms.Label();
 			this.rbUpdateProject = new System.Windows.Forms.RadioButton();
 			this.rbProject = new System.Windows.Forms.RadioButton();
 			this.rbSprites = new System.Windows.Forms.RadioButton();
@@ -50,7 +47,7 @@ namespace Spritely
 			// 
 			// bExport
 			// 
-			this.bExport.Location = new System.Drawing.Point(343, 213);
+			this.bExport.Location = new System.Drawing.Point(343, 174);
 			this.bExport.Name = "bExport";
 			this.bExport.Size = new System.Drawing.Size(75, 23);
 			this.bExport.TabIndex = 0;
@@ -61,7 +58,7 @@ namespace Spritely
 			// bCancel
 			// 
 			this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.bCancel.Location = new System.Drawing.Point(262, 213);
+			this.bCancel.Location = new System.Drawing.Point(262, 174);
 			this.bCancel.Name = "bCancel";
 			this.bCancel.Size = new System.Drawing.Size(75, 23);
 			this.bCancel.TabIndex = 1;
@@ -70,64 +67,31 @@ namespace Spritely
 			// 
 			// gbExportAs
 			// 
-			this.gbExportAs.Controls.Add(this.lCompleteProject);
-			this.gbExportAs.Controls.Add(this.lSpritesBackgrounds);
-			this.gbExportAs.Controls.Add(this.lUpdateProject);
 			this.gbExportAs.Controls.Add(this.rbUpdateProject);
 			this.gbExportAs.Controls.Add(this.rbProject);
 			this.gbExportAs.Controls.Add(this.rbSprites);
 			this.gbExportAs.Location = new System.Drawing.Point(12, 12);
 			this.gbExportAs.Name = "gbExportAs";
-			this.gbExportAs.Size = new System.Drawing.Size(263, 134);
+			this.gbExportAs.Size = new System.Drawing.Size(263, 86);
 			this.gbExportAs.TabIndex = 2;
 			this.gbExportAs.TabStop = false;
 			this.gbExportAs.Text = "Export as...";
 			// 
-			// lCompleteProject
-			// 
-			this.lCompleteProject.AutoSize = true;
-			this.lCompleteProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lCompleteProject.Location = new System.Drawing.Point(29, 99);
-			this.lCompleteProject.Name = "lCompleteProject";
-			this.lCompleteProject.Size = new System.Drawing.Size(39, 13);
-			this.lCompleteProject.TabIndex = 5;
-			this.lCompleteProject.Text = "All files";
-			// 
-			// lSpritesBackgrounds
-			// 
-			this.lSpritesBackgrounds.AutoSize = true;
-			this.lSpritesBackgrounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lSpritesBackgrounds.Location = new System.Drawing.Point(29, 35);
-			this.lSpritesBackgrounds.Name = "lSpritesBackgrounds";
-			this.lSpritesBackgrounds.Size = new System.Drawing.Size(217, 13);
-			this.lSpritesBackgrounds.TabIndex = 4;
-			this.lSpritesBackgrounds.Text = "Only sprites.(cpp | h) && backgrounds.(cpp | h)";
-			// 
-			// lUpdateProject
-			// 
-			this.lUpdateProject.AutoSize = true;
-			this.lUpdateProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lUpdateProject.Location = new System.Drawing.Point(29, 67);
-			this.lUpdateProject.Name = "lUpdateProject";
-			this.lUpdateProject.Size = new System.Drawing.Size(173, 13);
-			this.lUpdateProject.TabIndex = 3;
-			this.lUpdateProject.Text = "All files except game_state.(cpp | h)";
-			// 
 			// rbUpdateProject
 			// 
 			this.rbUpdateProject.AutoSize = true;
-			this.rbUpdateProject.Location = new System.Drawing.Point(12, 51);
+			this.rbUpdateProject.Location = new System.Drawing.Point(12, 39);
 			this.rbUpdateProject.Name = "rbUpdateProject";
-			this.rbUpdateProject.Size = new System.Drawing.Size(95, 17);
+			this.rbUpdateProject.Size = new System.Drawing.Size(116, 17);
 			this.rbUpdateProject.TabIndex = 2;
 			this.rbUpdateProject.TabStop = true;
-			this.rbUpdateProject.Text = "Update project";
+			this.rbUpdateProject.Text = "Update project files";
 			this.rbUpdateProject.UseVisualStyleBackColor = true;
 			// 
 			// rbProject
 			// 
 			this.rbProject.AutoSize = true;
-			this.rbProject.Location = new System.Drawing.Point(12, 83);
+			this.rbProject.Location = new System.Drawing.Point(12, 59);
 			this.rbProject.Name = "rbProject";
 			this.rbProject.Size = new System.Drawing.Size(104, 17);
 			this.rbProject.TabIndex = 1;
@@ -140,17 +104,17 @@ namespace Spritely
 			this.rbSprites.AutoSize = true;
 			this.rbSprites.Location = new System.Drawing.Point(12, 19);
 			this.rbSprites.Name = "rbSprites";
-			this.rbSprites.Size = new System.Drawing.Size(144, 17);
+			this.rbSprites.Size = new System.Drawing.Size(176, 17);
 			this.rbSprites.TabIndex = 0;
 			this.rbSprites.TabStop = true;
-			this.rbSprites.Text = "Sprites and Backgrounds";
+			this.rbSprites.Text = "Sprite and background files only";
 			this.rbSprites.UseVisualStyleBackColor = true;
 			// 
 			// gbLocation
 			// 
 			this.gbLocation.Controls.Add(this.bBrowse);
 			this.gbLocation.Controls.Add(this.tbLocation);
-			this.gbLocation.Location = new System.Drawing.Point(12, 152);
+			this.gbLocation.Location = new System.Drawing.Point(12, 113);
 			this.gbLocation.Name = "gbLocation";
 			this.gbLocation.Size = new System.Drawing.Size(406, 52);
 			this.gbLocation.TabIndex = 3;
@@ -214,7 +178,7 @@ namespace Spritely
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.bCancel;
-			this.ClientSize = new System.Drawing.Size(432, 246);
+			this.ClientSize = new System.Drawing.Size(432, 211);
 			this.Controls.Add(this.gbSystem);
 			this.Controls.Add(this.gbLocation);
 			this.Controls.Add(this.gbExportAs);
@@ -247,8 +211,5 @@ namespace Spritely
 		private System.Windows.Forms.RadioButton rbNDS;
 		private System.Windows.Forms.RadioButton rbGBA;
 		private System.Windows.Forms.RadioButton rbUpdateProject;
-		private System.Windows.Forms.Label lUpdateProject;
-		private System.Windows.Forms.Label lCompleteProject;
-		private System.Windows.Forms.Label lSpritesBackgrounds;
 	}
 }

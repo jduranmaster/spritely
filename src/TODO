@@ -18,6 +18,7 @@ Sprite Edit: tools for line, rect, filled rect, oval filled oval
 Sprite Edit: set/manage origin, bounding box
 Sprite Edit: flip/rotate sprites
 Sprite Edit: cursors for each active tool
+Sprite Edit: deleting last sprite in list doesn't select a new sprite
 
 Background Edit: flip, rotate tiles, sprites
 Background Edit: palette override

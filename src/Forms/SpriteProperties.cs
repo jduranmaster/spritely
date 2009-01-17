@@ -11,16 +11,18 @@ namespace Spritely
 {
 	public partial class SpriteProperties : Form
 	{
-		private MainForm m_owner;
+		private Document m_doc;
+		private Spriteset m_ts;
 		private SpriteList m_sl;
 		private Sprite m_sprite;
 
-		public SpriteProperties(MainForm owner, SpriteList sl)
+		public SpriteProperties(Document doc, Spriteset ss)
 		{
 			InitializeComponent();
 
-			m_owner = owner;
-			m_sl = sl;
+			m_doc = doc;
+			m_ts = ss;
+			m_sl = m_ts.SpriteList;
 			m_sprite = m_sl.CurrentSprite;
 
 			UpdateSpriteInfo();
@@ -55,7 +57,7 @@ namespace Spritely
 		{
 			m_sprite.Name = tbName.Text;
 			m_sprite.Description = tbDescription.Text;
-			m_owner.UpdateSpriteInfo(MainForm.Tab.Sprites);
+			m_doc.Owner.UpdateSpriteInfo(MainForm.Tab.Sprites);
 			this.Close();
 		}
 
@@ -127,15 +129,17 @@ namespace Spritely
 				// Fixup the name so that if the user tries to validate again, it will work.
 				// First, auto-generate a name if the field is blank
 				if (strNew == "")
-					strNew = m_owner.Doc.GenerateUniqueSpriteName();
+					strNew = m_ts.GenerateUniqueSpriteName();;
 				// Replace invalid characters with an underscore
 				strNew = Regex.Replace(strNew, "[^A-Za-z0-9_]", "_");
 				// Make sure string begins with a letter
 				if (!Regex.IsMatch(strNew, "^[A-Za-z_]"))
 					strNew = "S" + strNew;
 
-				//Error("Invalid sprite name.\nValid names must begin with a letter and contain only 'A'-'Z', 'a'-'z', '0'-'9' and '_' characters.");
-				m_owner.Error(String.Format(ResourceMgr.GetString("ErrorInvalidSpriteName"), strOriginal, strNew));
+				// "Invalid sprite name.
+				//	Valid names must begin with a letter and contain only 'A'-'Z', 'a'-'z', '0'-'9' and '_' characters.
+				//  Fixing up sprite name - changing from '{0}' to '{1}'."
+				m_doc.ErrorId("ErrorInvalidSpriteName", strOriginal, strNew);
 
 				// Update the sprite name.
 				tbName.Text = strNew;
@@ -152,7 +156,7 @@ namespace Spritely
 			if (m_sprite != null)
 			{
 				m_sprite.Name = tbName.Text;
-				m_owner.Doc.HasUnsavedChanges = true;
+				m_doc.HasUnsavedChanges = true;
 			}
 		}
 
@@ -161,7 +165,7 @@ namespace Spritely
 			if (m_sprite != null)
 			{
 				m_sprite.Description = tbDescription.Text;
-				m_owner.Doc.HasUnsavedChanges = true;
+				m_doc.HasUnsavedChanges = true;
 			}
 		}
 

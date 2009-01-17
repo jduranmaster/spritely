@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -106,7 +107,10 @@ namespace Spritely
 
 			// Enable/disable Palette menu items
 			menuPalette.Enabled = (m_eCurrentTab == Tab.Sprites || m_eCurrentTab == Tab.BackgroundSprites);
-			Palette p = m_doc.GetSpritePalettes(m_eCurrentTab).CurrentPalette;
+			Palette pm = m_doc.GetSpritePalette(m_eCurrentTab);
+			Subpalette p = null;
+			if (pm != null)
+				p = pm.CurrentSubpalette;
 			if (p != null)
 			{
 				menuPalette_Copy.Enabled = false;
@@ -138,6 +142,8 @@ namespace Spritely
 			menuTest.Visible = false;
 		}
 
+		#region File Menu
+
 		private void menuFile_New_Click(object sender, EventArgs e)
 		{
 			if (!m_doc.Close())
@@ -165,7 +171,8 @@ namespace Spritely
 			if (!m_doc.Close())
 				return;
 
-			Handle_NewDocument();
+			m_doc = null;
+			//Handle_NewDocument();
 		}
 
 		private void menuFile_Save_Click(object sender, EventArgs e)
@@ -199,7 +206,8 @@ namespace Spritely
 
 			if (!System.IO.File.Exists(strFilename))
 			{
-				Warning(String.Format(ResourceMgr.GetString("FileDoesntExist"), strFilename));
+				// "The requested file '{0}' doesn't exist."
+				m_doc.WarningId("FileDoesntExist", strFilename);
 				m_recent.RemoveFile(strFilename);
 				return;
 			}
@@ -220,6 +228,10 @@ namespace Spritely
 		{
 			this.Close();
 		}
+
+		#endregion
+
+		#region Edit Menu
 
 		private void menuEdit_Undo_Click(object sender, EventArgs e)
 		{
@@ -253,6 +265,10 @@ namespace Spritely
 		{
 		}
 
+		#endregion
+
+		#region Sprite Menu
+
 		private void menuSprite_New_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
@@ -263,7 +279,7 @@ namespace Spritely
 			int nWidth = Int32.Parse(aSize[0]);
 			int nHeight = Int32.Parse(aSize[1]);
 
-			m_doc.GetSprites(m_eCurrentTab).AddSprite(nWidth, nHeight, "", "", true);
+			m_doc.GetSpriteset(m_eCurrentTab).AddSprite(nWidth, nHeight, "", -1, "", true);
 			Handle_SpritesChanged(m_eCurrentTab);
 			m_doc.HasUnsavedChanges = true;
 		}
@@ -337,7 +353,7 @@ namespace Spritely
 					return;
 			}
 
-			m_doc.GetSprites(m_eCurrentTab).RemoveSelectedSprite();
+			m_doc.GetSpriteset(m_eCurrentTab).RemoveSelectedSprite();
 
 			Handle_SpritesChanged(m_eCurrentTab);
 			m_doc.HasUnsavedChanges = true;
@@ -447,7 +463,7 @@ namespace Spritely
 
 		private void menuSprite_Properties_Click(object sender, EventArgs e)
 		{
-			SpriteProperties properties = new SpriteProperties(this, m_doc.GetSprites(m_eCurrentTab));
+			SpriteProperties properties = new SpriteProperties(m_doc, m_doc.GetSpriteset(m_eCurrentTab));
 			properties.ShowDialog();
 		}
 
@@ -461,9 +477,13 @@ namespace Spritely
 
 		}
 
+		#endregion
+
+		#region Palette Menu
+
 		private void menuPalette_EditColors_Click(object sender, EventArgs e)
 		{
-			Palette p = m_doc.GetSpritePalettes(m_eCurrentTab).CurrentPalette;
+			Subpalette p = m_doc.GetSpritePalette(m_eCurrentTab).CurrentSubpalette;
 			if (p == null)
 				return;
 
@@ -474,6 +494,10 @@ namespace Spritely
 			if (result == DialogResult.Yes)
 				m_doc.HasUnsavedChanges = true;
 		}
+
+		#endregion
+
+		#region Options Menu
 
 		private void menuOptions_Sprite_Click(object sender, EventArgs e)
 		{
@@ -514,12 +538,25 @@ namespace Spritely
 			}
 		}
 
+		#endregion
+
+		#region Help Menu
+
 		private void menuHelp_About_Click(object sender, EventArgs e)
 		{
 			About about = new About();
 			about.ShowDialog();
 		}
 
+		#endregion
+
+		#region Test Menu
+
+		private void menuTest_RunUnittests_Click(object sender, EventArgs e)
+		{
+			UnitTestForm ut = new UnitTestForm();
+			ut.ShowDialog();
+		}
 
 		private void menuTestLoadImage_Click(object sender, EventArgs e)
 		{
@@ -542,6 +579,13 @@ namespace Spritely
 			CollisionTest ct = new CollisionTest(m_doc);
 			ct.ShowDialog();
 		}
+
+		private void menuTest_ShowProjectWindow_Click(object sender, EventArgs e)
+		{
+			m_project.ShowDialog();
+		}
+
+		#endregion
 
 	}
 }

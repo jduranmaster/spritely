@@ -42,7 +42,7 @@ namespace Spritely
 			this.label1.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(11, 6);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(125, 33);
+			this.label1.Size = new System.Drawing.Size(117, 33);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Spritely";
 			// 
@@ -74,7 +74,7 @@ namespace Spritely
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(169, 16);
 			this.label4.TabIndex = 3;
-			this.label4.Text = "Copyright 2007-8 Gary Kacmarcik";
+			this.label4.Text = "Copyright 2007-9 Gary Kacmarcik";
 			// 
 			// bOK
 			// 

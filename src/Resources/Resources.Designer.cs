@@ -88,6 +88,15 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ERROR: .
+        /// </summary>
+        internal static string ERROR {
+            get {
+                return ResourceManager.GetString("ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid sprite name.
         ///Valid names must begin with a letter and contain only &apos;A&apos;-&apos;Z&apos;, &apos;a&apos;-&apos;z&apos;, &apos;0&apos;-&apos;9&apos; and &apos;_&apos; characters.
         ///
@@ -127,7 +136,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many tiles specified for sprite &apos;{0}&apos;. Ignoring extra tiles..
+        ///   Looks up a localized string similar to Too many tiles specified for sprite &apos;{0}&apos;..
         /// </summary>
         internal static string ErrorSpriteTooManyTiles {
             get {
@@ -136,7 +145,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exception was thrown while load the project template files:.
+        ///   Looks up a localized string similar to An exception was thrown while load the project template files: {0}.
         /// </summary>
         internal static string ExceptionLoadTemplate {
             get {
@@ -145,7 +154,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exception was thrown while opening the project file for writing:.
+        ///   Looks up a localized string similar to An exception was thrown while opening the project file for writing: {0}.
         /// </summary>
         internal static string ExceptionOpenProjectWrite {
             get {
@@ -154,7 +163,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exception was thrown while opening the file for writing:.
+        ///   Looks up a localized string similar to An exception was thrown while opening the file for writing: {0}.
         /// </summary>
         internal static string ExceptionOpenWrite {
             get {
@@ -163,7 +172,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exception was thrown while parsing the XML file:.
+        ///   Looks up a localized string similar to An exception was thrown while parsing the XML file: {0}.
         /// </summary>
         internal static string ExceptionParseXML {
             get {
@@ -195,6 +204,36 @@ namespace Spritely.Resources {
         internal static string ExportSpritesSuccess {
             get {
                 return ResourceManager.GetString("ExportSpritesSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update the entire project. This will overwrite any game code you have written.
+        ///Use this option when creating a new project..
+        /// </summary>
+        internal static string ExportTooltipCompleteProject {
+            get {
+                return ResourceManager.GetString("ExportTooltipCompleteProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update only the sprites, tiles and maps.
+        ///Use this option when you want to update your project with updated graphics..
+        /// </summary>
+        internal static string ExportTooltipSprites {
+            get {
+                return ResourceManager.GetString("ExportTooltipSprites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update all files except game_state.cpp and game_state.h.
+        ///Use this option to update your project to the latest code without overwriting your game code..
+        /// </summary>
+        internal static string ExportTooltipUpdateProject {
+            get {
+                return ResourceManager.GetString("ExportTooltipUpdateProject", resourceCulture);
             }
         }
         
@@ -447,7 +486,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.8.7 beta.
+        ///   Looks up a localized string similar to 0.13.17 beta.
         /// </summary>
         internal static string Version {
             get {
@@ -456,11 +495,20 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 7 August 2008.
+        ///   Looks up a localized string similar to 17 January 2009.
         /// </summary>
         internal static string VersionDate {
             get {
                 return ResourceManager.GetString("VersionDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WARNING: .
+        /// </summary>
+        internal static string WARNING {
+            get {
+                return ResourceManager.GetString("WARNING", resourceCulture);
             }
         }
         

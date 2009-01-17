@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Spritely (beta)")]
-[assembly: AssemblyDescription("Spritely 0.8.7 beta")]
+[assembly: AssemblyDescription("Spritely 0.13.17 beta")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("http://code.google.com/p/spritely")]
 [assembly: AssemblyProduct("Spritely")]
-[assembly: AssemblyCopyright("Copyright © 2007-8")]
+[assembly: AssemblyCopyright("Copyright © 2007-9")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.8.7.0")]
-[assembly: AssemblyFileVersion("0.8.7.0")]
+[assembly: AssemblyVersion("0.13.17.0")]
+[assembly: AssemblyFileVersion("0.13.17.0")]

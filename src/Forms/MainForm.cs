@@ -11,6 +11,7 @@ namespace Spritely
 	{
 		public string AppName = "Spritely";
 
+		private ProjectMainForm m_project;
 		private Document m_doc;
 		private RecentFiles m_recent;
 
@@ -41,6 +42,7 @@ namespace Spritely
 			// Init the list of recent files.
 			m_recent = new RecentFiles(this, menuFile_RecentFiles);
 
+			// If we were given a filename, than open the specified file.
 			if (strFilename != "")
 			{
 				m_doc = new Document(this);
@@ -51,35 +53,32 @@ namespace Spritely
 				}
 			}
 
+			// otherwise, create a brand new (empty) document.
 			if (fNewDocument)
 				Handle_NewDocument();
 
-			m_SpriteToolbox = new Toolbox_Sprite(this);
-			m_BackgroundSpriteToolbox = new Toolbox_Sprite(this);
-			m_BackgroundMapToolbox = new Toolbox_Map(this);
-
-			if (fNewDocument)
-			{
-				// Add a default sprite so that first-time users don't have to add a new
-				// sprite in order to get started
-				m_doc.AddDefaultSprite();
-			}
+			m_SpriteToolbox = new Toolbox_Sprite();
+			m_BackgroundSpriteToolbox = new Toolbox_Sprite();
+			m_BackgroundMapToolbox = new Toolbox_Map();
 
 			Handle_AllSpritesChanged();
 
 			// Set edit zoom level to 16 pixels
 			cbS_Zoom.SelectedIndex = 4;
-			AdjustSpriteListScrollbar(Tab.Sprites, 0, 0);
+			AdjustSpriteListScrollbar(Tab.Sprites);
 			UpdatePaletteColor(Tab.Sprites);
 
 			cbBS_Zoom.SelectedIndex = 4;
-			AdjustSpriteListScrollbar(Tab.BackgroundSprites, 0, 0);
+			AdjustSpriteListScrollbar(Tab.BackgroundSprites);
 			UpdatePaletteColor(Tab.BackgroundSprites);
 
-			AdjustSpriteListScrollbar(Tab.BackgroundMap, 0, 0);
+			AdjustSpriteListScrollbar(Tab.BackgroundMap);
 
 			// Clear out the Undo stack to remove the default sprites.
 			m_doc.ResetUndo();
+
+			// Create the new UI form.
+			m_project = new ProjectMainForm(m_doc);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -133,43 +132,7 @@ namespace Spritely
 		private void Handle_NewDocument()
 		{
 			m_doc = new Document(this);
-
-			// Add some default palettes
-			PaletteMgr spal = m_doc.GetSpritePalettes(Tab.Sprites);
-			spal.AddDefaultPalette("Color1", Palette.DefaultColorSet.Color1);
-			spal.AddDefaultPalette("Color2", Palette.DefaultColorSet.Color2);
-			spal.AddDefaultPalette("Gray", Palette.DefaultColorSet.GrayScale);
-			spal.AddDefaultPalette("Blank1", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank2", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank3", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank4", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank5", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank6", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank7", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank8", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank9", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank10", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank11", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank12", Palette.DefaultColorSet.BlackAndWhite);
-			spal.AddDefaultPalette("Blank13", Palette.DefaultColorSet.BlackAndWhite);
-
-			PaletteMgr bspal = m_doc.GetSpritePalettes(Tab.BackgroundSprites);
-			bspal.AddDefaultPalette("Color1", Palette.DefaultColorSet.Color1);
-			bspal.AddDefaultPalette("Color2", Palette.DefaultColorSet.Color2);
-			bspal.AddDefaultPalette("Gray", Palette.DefaultColorSet.GrayScale);
-			bspal.AddDefaultPalette("Blank1", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank2", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank3", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank4", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank5", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank6", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank7", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank8", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank9", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank10", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank11", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank12", Palette.DefaultColorSet.BlackAndWhite);
-			bspal.AddDefaultPalette("Blank13", Palette.DefaultColorSet.BlackAndWhite);
+			m_doc.InitializeEmptyDocumnt();
 
 			Handle_AllSpritesChanged();
 			SetTitleBar("Untitled");
@@ -185,7 +148,7 @@ namespace Spritely
 		private void Handle_SpritesChanged(Tab tab)
 		{
 			if (m_doc.GetCurrentSprite(tab) != null)
-				m_doc.GetSpritePalettes(tab).CurrentPaletteID = m_doc.GetCurrentSprite(tab).PaletteID;
+				m_doc.GetSpritePalette(tab).CurrentSubpaletteID = m_doc.GetCurrentSprite(tab).PaletteID;
 
 			// Updating the palette causes a cascade of updates that results in the sprites and
 			// bg maps being updated.
@@ -206,6 +169,11 @@ namespace Spritely
 			get { return m_doc; }
 		}
 
+		public ProjectMainForm NewUI
+		{
+			get { return m_project; }
+		}
+
 		public void Info(string str)
 		{
 			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -213,7 +181,7 @@ namespace Spritely
 
 		public void NYI()
 		{
-			//MessageBox.Show("Sorry - Not Yet Implemented", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			// "Sorry - Not Yet Implemented"
 			MessageBox.Show(ResourceMgr.GetString("NYI"), AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
@@ -297,7 +265,7 @@ namespace Spritely
 			char ch = e.KeyChar;
 			if (ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f')
 			{
-				Palette p = m_doc.GetSpritePalettes(m_eCurrentTab).CurrentPalette;
+				Subpalette p = m_doc.GetSpritePalette(m_eCurrentTab).CurrentSubpalette;
 				int nIndex = ch - '0';
 				if (nIndex > 9)
 					nIndex -= ('a' - '0' - 10);

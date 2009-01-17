@@ -19,6 +19,14 @@ namespace Spritely
 
 			this.DialogResult = DialogResult.Cancel;
 
+			// Add Tooltips.
+			ToolTip ttSprites = new ToolTip();
+			ttSprites.SetToolTip(rbSprites, ResourceMgr.GetString("ExportTooltipSprites"));
+			ToolTip ttUpdateProject = new ToolTip();
+			ttUpdateProject.SetToolTip(rbUpdateProject, ResourceMgr.GetString("ExportTooltipUpdateProject"));
+			ToolTip ttCompleteProject = new ToolTip();
+			ttCompleteProject.SetToolTip(rbProject, ResourceMgr.GetString("ExportTooltipCompleteProject"));
+			
 			// Reset the export directory if we've opened a new file.
 			if (m_strLastDocument != strDocName)
 				m_strLastExportDirectory = "";
@@ -94,5 +102,6 @@ namespace Spritely
 		{
 			get { return rbUpdateProject.Checked; }
 		}
+
 	}
 }

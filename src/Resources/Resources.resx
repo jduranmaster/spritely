@@ -127,6 +127,10 @@
   <data name="EraseCurrentSprite" xml:space="preserve">
     <value>Are you sure you want to erase the data in the currently selected sprite?</value>
   </data>
+  <data name="ERROR" xml:space="preserve">
+    <value>ERROR: </value>
+    <comment>Error message prefix</comment>
+  </data>
   <data name="ErrorInvalidSpriteName" xml:space="preserve">
     <value>Invalid sprite name.
 Valid names must begin with a letter and contain only 'A'-'Z', 'a'-'z', '0'-'9' and '_' characters.
@@ -144,19 +148,19 @@ Fixing up sprite name - changing from '{0}' to '{1}'.</value>
     <comment>Development String - not exposed to user</comment>
   </data>
   <data name="ErrorSpriteTooManyTiles" xml:space="preserve">
-    <value>Too many tiles specified for sprite '{0}'. Ignoring extra tiles.</value>
+    <value>Too many tiles specified for sprite '{0}'.</value>
   </data>
   <data name="ExceptionLoadTemplate" xml:space="preserve">
-    <value>An exception was thrown while load the project template files:</value>
+    <value>An exception was thrown while load the project template files: {0}</value>
   </data>
   <data name="ExceptionOpenProjectWrite" xml:space="preserve">
-    <value>An exception was thrown while opening the project file for writing:</value>
+    <value>An exception was thrown while opening the project file for writing: {0}</value>
   </data>
   <data name="ExceptionOpenWrite" xml:space="preserve">
-    <value>An exception was thrown while opening the file for writing:</value>
+    <value>An exception was thrown while opening the file for writing: {0}</value>
   </data>
   <data name="ExceptionParseXML" xml:space="preserve">
-    <value>An exception was thrown while parsing the XML file:</value>
+    <value>An exception was thrown while parsing the XML file: {0}</value>
   </data>
   <data name="ExportFail" xml:space="preserve">
     <value>Unable to export!</value>
@@ -168,6 +172,18 @@ Fixing up sprite name - changing from '{0}' to '{1}'.</value>
   <data name="ExportSpritesSuccess" xml:space="preserve">
     <value>Successfully exported {0} sprite data to "{1}".</value>
     <comment>{0} = 'GBA' or 'NDS'. {1} = directory path</comment>
+  </data>
+  <data name="ExportTooltipCompleteProject" xml:space="preserve">
+    <value>Update the entire project. This will overwrite any game code you have written.
+Use this option when creating a new project.</value>
+  </data>
+  <data name="ExportTooltipSprites" xml:space="preserve">
+    <value>Update only the sprites, tiles and maps.
+Use this option when you want to update your project with updated graphics.</value>
+  </data>
+  <data name="ExportTooltipUpdateProject" xml:space="preserve">
+    <value>Update all files except game_state.cpp and game_state.h.
+Use this option to update your project to the latest code without overwriting your game code.</value>
   </data>
   <data name="FileDoesntExist" xml:space="preserve">
     <value>The requested file '{0}' doesn't exist.</value>
@@ -275,10 +291,14 @@ Please select a path that does not contain any spaces.</value>
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.8.7 beta</value>
+    <value>0.13.17 beta</value>
   </data>
   <data name="VersionDate" xml:space="preserve">
-    <value>7 August 2008</value>
+    <value>17 January 2009</value>
+  </data>
+  <data name="WARNING" xml:space="preserve">
+    <value>WARNING: </value>
+    <comment>Warning message prefix</comment>
   </data>
   <data name="WarnSpriteResizeClip" xml:space="preserve">
     <value>Resizing the sprite will cause some tiles to be clipped and the associated data will be lost.
