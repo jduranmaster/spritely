@@ -304,29 +304,21 @@ namespace Spritely
 			return true;
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
-			if (!fOldFormat)
-				tw.WriteLine(String.Format("\t\t<palette16 name=\"{0}\" id=\"{1}\" desc=\"{2}\">",
-						m_strName, m_id, m_strDesc));
+			tw.WriteLine(String.Format("\t\t<palette16 name=\"{0}\" id=\"{1}\" desc=\"{2}\">",
+					m_strName, m_id, m_strDesc));
 
 			for (int i = 0; i < m_nMaxSubpalettes; i++)
 			{
-				if (fOldFormat)
-					tw.WriteLine(String.Format("\t\t<palette id=\"{0}\">", i));
-				else
-					tw.WriteLine(String.Format("\t\t\t<subpalette16 id=\"{0}\">", i));
+				tw.WriteLine(String.Format("\t\t\t<subpalette16 id=\"{0}\">", i));
 
-				m_subpalettes[i].Save(tw, fOldFormat);
+				m_subpalettes[i].Save(tw);
 
-				if (fOldFormat)
-					tw.WriteLine("\t\t</palette>");
-				else
-					tw.WriteLine("\t\t\t</subpalette16>");
+				tw.WriteLine("\t\t\t</subpalette16>");
 			}
 
-			if (!fOldFormat)
-				tw.WriteLine("\t\t</palette16>");
+			tw.WriteLine("\t\t</palette16>");
 		}
 
 		private int m_nExportId;

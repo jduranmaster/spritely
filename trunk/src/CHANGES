@@ -1,4 +1,6 @@
-0.13.x
+0.*.*
+
+0.13.17
 Update generated code:
   Add palettes.h to store palette types and definitions.
     Select "Update project files" when exporting.

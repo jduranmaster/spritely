@@ -215,9 +215,9 @@ namespace Spritely
 			return true;
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
-			m_sl.Save(tw, fOldFormat, false);
+			m_sl.Save(tw, false);
 		}
 
 		private int m_nExportId;

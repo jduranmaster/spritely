@@ -680,44 +680,24 @@ namespace Spritely
 				m_spriteSelected.DrawEditSprite(g);
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat, bool fBackground)
+		public void Save(System.IO.TextWriter tw, bool fBackground)
 		{
 			int nExportSpriteID = 0;
 			int nExportFirstTileID = 0;
 
-			if (fOldFormat)
-			{
-				if (fBackground)
-					tw.WriteLine("\t<bgsprites>");
-				else
-					tw.WriteLine("\t<sprites>");
-			}
-			else
-			{
-				tw.WriteLine("\t\t<spriteset16 name=\"sprites\" id=\"0\" desc=\"\" palette_id=\"0\">");
-			}
+			tw.WriteLine("\t\t<spriteset16 name=\"sprites\" id=\"0\" desc=\"\" palette_id=\"0\">");
 
 			foreach (SpriteType st in SpriteTypes)
 			{
 				foreach (Sprite s in st.Sprites)
 				{
-					s.Save(tw, nExportSpriteID, nExportFirstTileID, fOldFormat);
+					s.Save(tw, nExportSpriteID, nExportFirstTileID);
 					nExportSpriteID++;
 					nExportFirstTileID += st.Width * st.Height;
 				}
 			}
 
-			if (fOldFormat)
-			{
-				if (fBackground)
-					tw.WriteLine("\t</bgsprites>");
-				else
-					tw.WriteLine("\t</sprites>");
-			}
-			else
-			{
-				tw.WriteLine("\t\t</spriteset16>");
-			}
+			tw.WriteLine("\t\t</spriteset16>");
 		}
 
 		public void Export_AssignIDs()

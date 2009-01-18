@@ -124,55 +124,34 @@ namespace Spritely
 				return false;
 			}
 
-			// Save files in the old file format?
-			bool fOldFormat = false;
-
 			tw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 
-			if (fOldFormat)
-			{
-				tw.WriteLine("<gba_tileset>");
+			tw.WriteLine("<spritely");
+			tw.WriteLine("\txmlns=\"http://schemas.kacmarcik.com/spritely/2009\"");
+			tw.WriteLine("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
+			tw.WriteLine("\txsi:schemaLocation=\"http://schemas.kacmarcik.com/spritely/2009 spritely.xsd\"");
+			tw.WriteLine("\t");
+			tw.WriteLine("\tversion=\"2\" name=\"project\"");
+			tw.WriteLine("\t>");
+			tw.WriteLine("");
 
-				m_doc.Palettes.Save(tw, fOldFormat);
-				m_doc.Spritesets.Save(tw, fOldFormat);
+			Options.Save(tw);
 
-				m_doc.BackgroundPalettes.Save(tw, fOldFormat);
-				m_doc.BackgroundSpritesets.Save(tw, fOldFormat);
+			m_doc.Palettes.Save(tw);
+			m_doc.Spritesets.Save(tw);
 
-				m_doc.BackgroundMaps.Save(tw, fOldFormat);
+			m_doc.BackgroundPalettes.Save(tw);
+			m_doc.BackgroundSpritesets.Save(tw);
 
-				tw.WriteLine("</gba_tileset>");
-			}
-			else
-			{
-				tw.WriteLine("<spritely");
-				tw.WriteLine("\txmlns=\"http://kacmarcik.com/spritely\"");
-				tw.WriteLine("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
-				tw.WriteLine("\txsi:schemaLocation=\"http://kacmarcik.com/spritely spritely.xsd\"");
-				tw.WriteLine("\t");
-				tw.WriteLine("\tversion=\"2\" name=\"project\"");
-				tw.WriteLine("\t>");
-				tw.WriteLine("");
+			m_doc.BackgroundMaps.Save(tw);
 
-				Options.Save(tw);
-
-				m_doc.Palettes.Save(tw, fOldFormat);
-				m_doc.Spritesets.Save(tw, fOldFormat);
-
-				m_doc.BackgroundPalettes.Save(tw, fOldFormat);
-				m_doc.BackgroundSpritesets.Save(tw, fOldFormat);
-
-				m_doc.BackgroundMaps.Save(tw, fOldFormat);
-
-				tw.WriteLine("</spritely>");
-			}
+			tw.WriteLine("</spritely>");
 
 			tw.Close();
 
 			m_fHasUnsavedChanges = false;
 			return true;
 		}
-
 
 	}
 }

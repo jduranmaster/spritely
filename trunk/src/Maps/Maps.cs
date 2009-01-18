@@ -84,18 +84,16 @@ namespace Spritely
 			return true;
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
-			if (!fOldFormat)
-				tw.WriteLine("\t<bgmaps>");
+			tw.WriteLine("\t<bgmaps>");
 
 			foreach (Map m in m_maps.Values)
 			{
-				m.Save(tw, fOldFormat);
+				m.Save(tw);
 			}
 
-			if (!fOldFormat)
-				tw.WriteLine("\t</bgmaps>");
+			tw.WriteLine("\t</bgmaps>");
 		}
 
 		public void Export_AssignIDs()
