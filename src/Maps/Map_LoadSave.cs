@@ -91,82 +91,50 @@ namespace Spritely
 
 		#region Save
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
 			int nDefaultSubpalette = 0;
 
-			if (fOldFormat)
-				tw.WriteLine("\t<map>");
-			else
-			{
-				tw.Write("\t\t<map16");
-				tw.Write(String.Format(" name=\"{0}\"", m_strName));
-				tw.Write(String.Format(" id=\"{0}\"", m_id));
-				tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
-				tw.Write(" size=\"32x32\"");
-				tw.Write(String.Format(" bgspriteset_id=\"{0}\"", m_bgtiles.Id));
-				tw.Write(String.Format(" default_subpalette_id=\"{0}\"", nDefaultSubpalette));
-				tw.WriteLine(">");
-				tw.WriteLine("\t\t\t<map16block id=\"0\">");
-			}
+			tw.Write("\t\t<map16");
+			tw.Write(String.Format(" name=\"{0}\"", m_strName));
+			tw.Write(String.Format(" id=\"{0}\"", m_id));
+			tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
+			tw.Write(" size=\"32x32\"");
+			tw.Write(String.Format(" bgspriteset_id=\"{0}\"", m_bgtiles.Id));
+			tw.Write(String.Format(" default_subpalette_id=\"{0}\"", nDefaultSubpalette));
+			tw.WriteLine(">");
+			tw.WriteLine("\t\t\t<map16block id=\"0\">");
 
 			for (int iy = 0; iy < kMaxMapTilesY; iy++)
 			{
-				if (fOldFormat)
-				{
-					tw.Write("\t\t<row");
-					tw.Write(String.Format(" y=\"{0}\"", iy));
-					tw.WriteLine(">");
-				}
-				else
-				{
-					tw.WriteLine(String.Format("\t\t\t\t<map16row row=\"{0}\">", iy));
-				}
+				tw.WriteLine(String.Format("\t\t\t\t<map16row row=\"{0}\">", iy));
 
 				StringBuilder sb = null;
-				int nPerLine = fOldFormat ? 1 : 4;
+				int nPerLine = 4;
 				for (int ix = 0; ix < kMaxMapTilesX; ix++)
 				{
 					if (ix % nPerLine == 0)
 					{
 						if (sb != null)
 							tw.WriteLine(sb.ToString());
-						sb = new StringBuilder(fOldFormat ? "\t\t\t" : "\t\t\t\t\t");
+						sb = new StringBuilder("\t\t\t\t\t");
 					}
 
 					int nTileId = m_BackgroundMap[ix, iy].nTileIndex;
-					if (fOldFormat)
-					{
-						sb.Append("<bgtile");
-						sb.Append(String.Format(" x=\"{0}\"", ix));
-						sb.Append(String.Format(" tileid=\"{0}\"", nTileId));
-						sb.Append(" />");
-					}
-					else
-					{
-						// TODO: add flip h,v values
-						sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nTileId));
-						if (m_BackgroundMap[ix, iy].nSubpalette != nDefaultSubpalette)
-							sb.Append(String.Format(" subpalette_id=\"{1}\"", m_BackgroundMap[ix, iy].nSubpalette));
-						sb.Append("/>");
-					}
+					// TODO: add flip h,v values
+					sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nTileId));
+					if (m_BackgroundMap[ix, iy].nSubpalette != nDefaultSubpalette)
+						sb.Append(String.Format(" subpalette_id=\"{1}\"", m_BackgroundMap[ix, iy].nSubpalette));
+					sb.Append("/>");
 				}
 				if (sb != null)
 					tw.WriteLine(sb.ToString());
 
-				if (fOldFormat)
-					tw.WriteLine("\t\t</row>");
-				else
-					tw.WriteLine("\t\t\t\t</map16row>");
+				tw.WriteLine("\t\t\t\t</map16row>");
 			}
 
-			if (fOldFormat)
-				tw.WriteLine("\t</map>");
-			else
-			{
-				tw.WriteLine("\t\t\t</map16block>");
-				tw.WriteLine("\t\t</map16>");
-			}
+			tw.WriteLine("\t\t\t</map16block>");
+			tw.WriteLine("\t\t</map16>");
 		}
 
 		#endregion

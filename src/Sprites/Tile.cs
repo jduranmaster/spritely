@@ -408,28 +408,24 @@ namespace Spritely
 			}
 		}
 
-		public void Save(System.IO.TextWriter tw, int nTileID, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw, int nTileID)
 		{
-			if (fOldFormat)
-				tw.Write("\t\t<tile");
-			else
-				tw.Write("\t\t\t\t<tile");
+			tw.Write("\t\t\t\t<tile");
 			tw.Write(String.Format(" id=\"{0}\"", nTileID));
 			tw.WriteLine(">");
 
 			StringBuilder sb = null;
-			int nPerLine = fOldFormat ? 4 : 1;
+			int nPerLine = 1;
 			for (int iRow = 0; iRow < TileSize; iRow++)
 			{
 				if (iRow % nPerLine == 0)
 				{
 					if (sb != null)
 					{
-						if (!fOldFormat)
-							sb.Append("</tilerow>");
+						sb.Append("</tilerow>");
 						tw.WriteLine(sb.ToString());
 					}
-					sb = new StringBuilder(fOldFormat ? "\t\t\t" : "\t\t\t\t\t<tilerow>");
+					sb = new StringBuilder("\t\t\t\t\t<tilerow>");
 				}
 				for (int iColumn = 0; iColumn < TileSize; iColumn++)
 				{
@@ -440,26 +436,17 @@ namespace Spritely
 					n = GetPixel(iColumn, iRow);
 					b2 = (byte)n;
 					byte b = (byte)((b2 << 4) + b1);
-					if (fOldFormat)
-						sb.Append(String.Format("0x{0:x2},", b));
-					else
-					{
-						sb.Append(String.Format("{0},", b1));
-						sb.Append(String.Format(iColumn == TileSize - 1 ? "{0}" : "{0},", b2));
-					}
+					sb.Append(String.Format("{0},", b1));
+					sb.Append(String.Format(iColumn == TileSize - 1 ? "{0}" : "{0},", b2));
 				}
 			}
 			if (sb != null)
 			{
-				if (!fOldFormat)
-					sb.Append("</tilerow>");
+				sb.Append("</tilerow>");
 				tw.WriteLine(sb.ToString());
 			}
 
-			if (fOldFormat)
-				tw.WriteLine("\t\t</tile>");
-			else
-				tw.WriteLine("\t\t\t\t</tile>");
+			tw.WriteLine("\t\t\t\t</tile>");
 		}
 
 		public void Export_TileIDs(System.IO.TextWriter tw, string strSpriteset, string strSprite,

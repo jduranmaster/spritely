@@ -83,7 +83,7 @@ namespace Spritely
 			return true;
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
 			switch (m_eType)
 			{
@@ -97,7 +97,7 @@ namespace Spritely
 
 			foreach (Palette p in m_palettes.Values)
 			{
-				p.Save(tw, fOldFormat);
+				p.Save(tw);
 			}
 
 			switch (m_eType)

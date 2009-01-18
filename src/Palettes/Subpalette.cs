@@ -580,15 +580,15 @@ namespace Spritely
 			RecordSnapshot();
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
-			WriteData(tw, fOldFormat ? "\t\t\t" : "\t\t\t\t", fOldFormat);
+			WriteData(tw, "\t\t\t\t");
 		}
 
-		private bool WriteData(System.IO.TextWriter tw, string strIndent, bool fOldFormat)
+		private bool WriteData(System.IO.TextWriter tw, string strIndent)
 		{
 			StringBuilder sb = null;
-			int nPerLine = fOldFormat ? 8 : 4;
+			int nPerLine = 4;
 
 			for (int i = 0; i < 16; i++)
 			{
@@ -598,10 +598,7 @@ namespace Spritely
 						tw.WriteLine(sb.ToString());
 					sb = new StringBuilder(strIndent);
 				}
-				if (fOldFormat)
-					sb.Append(String.Format("0x{0:x4},", Encoding(i)));
-				else
-					sb.Append(String.Format("<color rgb=\"{0:x2}{1:x2}{2:x2}\"/>", Red(i), Green(i), Blue(i)));
+				sb.Append(String.Format("<color rgb=\"{0:x2}{1:x2}{2:x2}\"/>", Red(i), Green(i), Blue(i)));
 			}
 			if (sb != null)
 				tw.WriteLine(sb.ToString());

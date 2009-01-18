@@ -93,46 +93,25 @@ namespace Spritely
 
 		#region Save
 
-		public void Save(System.IO.TextWriter tw, int nExportSpriteID, int nExportFirstTileID,
-			bool fOldFormat)
+		public void Save(System.IO.TextWriter tw, int nExportSpriteID, int nExportFirstTileID)
 		{
 			// Record the export ID and the first tile ID so that the other export routines can use it.
 			m_nExportSpriteID = nExportSpriteID;
 			m_nExportFirstTileID = nExportFirstTileID;
 
-			if (fOldFormat)
-				tw.Write("\t<sprite");
-			else
-				tw.Write("\t\t\t<sprite16");
-
-			if (fOldFormat)
-			{
-				tw.Write(String.Format(" name=\"{0}\"", m_strName));
-				tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
-				tw.Write(String.Format(" size=\"{0}x{1}\"", m_tileWidth, m_tileHeight));
-				tw.Write(String.Format(" palette=\"{0}\"", m_nSubpaletteID));
-				tw.Write(String.Format(" id=\"{0}\"", nExportSpriteID));
-				tw.Write(String.Format(" firsttileid=\"{0}\"", nExportFirstTileID));
-			}
-			else
-			{
-				// Sprites and bgsprites
-				tw.Write(String.Format(" name=\"{0}\"", m_strName));
-				tw.Write(String.Format(" id=\"{0}\"", nExportSpriteID));
-				tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
-				tw.Write(String.Format(" size=\"{0}x{1}\"", m_tileWidth, m_tileHeight));
-				tw.Write(String.Format(" subpalette_id=\"{0}\"", m_nSubpaletteID));
-			}
+			tw.Write("\t\t\t<sprite16");
+			tw.Write(String.Format(" name=\"{0}\"", m_strName));
+			tw.Write(String.Format(" id=\"{0}\"", nExportSpriteID));
+			tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
+			tw.Write(String.Format(" size=\"{0}x{1}\"", m_tileWidth, m_tileHeight));
+			tw.Write(String.Format(" subpalette_id=\"{0}\"", m_nSubpaletteID));
 			tw.WriteLine(">");
 
 			int nTileID = FirstTileID;
 			foreach (Tile t in m_Tiles)
-				t.Save(tw, nTileID++, fOldFormat);
+				t.Save(tw, nTileID++);
 
-			if (fOldFormat)
-				tw.WriteLine("\t</sprite>");
-			else
-				tw.WriteLine("\t\t\t</sprite16>");
+			tw.WriteLine("\t\t\t</sprite16>");
 		}
 
 		#endregion

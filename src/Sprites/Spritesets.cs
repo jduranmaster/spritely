@@ -119,28 +119,22 @@ namespace Spritely
 			return true;
 		}
 
-		public void Save(System.IO.TextWriter tw, bool fOldFormat)
+		public void Save(System.IO.TextWriter tw)
 		{
-			if (!fOldFormat)
-			{
-				if (m_fBackground)
-					tw.WriteLine("\t<bgspritesets>");
-				else
-					tw.WriteLine("\t<spritesets>");
-			}
+			if (m_fBackground)
+				tw.WriteLine("\t<bgspritesets>");
+			else
+				tw.WriteLine("\t<spritesets>");
 
 			foreach (Spriteset ss in m_spritesets.Values)
 			{
-				ss.Save(tw, fOldFormat);
+				ss.Save(tw);
 			}
 
-			if (!fOldFormat)
-			{
-				if (m_fBackground)
-					tw.WriteLine("\t</bgspritesets>");
-				else
-					tw.WriteLine("\t</spritesets>");
-			}
+			if (m_fBackground)
+				tw.WriteLine("\t</bgspritesets>");
+			else
+				tw.WriteLine("\t</spritesets>");
 		}
 
 		public void Export_AssignIDs()
