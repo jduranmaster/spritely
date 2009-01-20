@@ -19,7 +19,7 @@ namespace Spritely
 
 			InitializeComponent();
 
-			this.IsMdiContainer = true;
+			//this.IsMdiContainer = true;
 
 			m_ProjectTreeView = new ProjectTreeViewForm(this, doc);
 			m_ProjectTreeView.Show();
@@ -27,7 +27,7 @@ namespace Spritely
 
 		public int MenuBarHeight
 		{
-			get { return menuBar.Location.Y + menuBar.Height; }
+			get { return 0; }//return menuBar.Location.Y + menuBar.Height; }
 		}
 
 		/// <summary>
@@ -58,6 +58,45 @@ namespace Spritely
 				winPalette16.HasLocation = true;
 			}
 			winPalette16.Show();
+		}
+
+		private void tabSet_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			Graphics g = e.Graphics;
+
+			TabPage tp = tabSet.TabPages[e.Index];
+			string strTabName = tp.Text;
+
+			Rectangle r = e.Bounds;
+			SizeF size = g.MeasureString(strTabName, e.Font);
+			float x = r.X + (r.Width - size.Width) / 2;
+			float y = r.Y + 4;
+
+			if (tabSet.SelectedIndex == e.Index)
+			{
+				g.FillRectangle(Brushes.White, r);
+				g.DrawString(strTabName, e.Font, Brushes.Black, x, y + 1);
+			}
+			else
+			{
+				Color c = ControlPaint.Dark(this.BackColor, 0.01f);
+				System.Drawing.Drawing2D.LinearGradientBrush b = new System.Drawing.Drawing2D.LinearGradientBrush(
+					new Point(0, 0), new Point(0, 30), Color.White, c);
+				g.FillRectangle(b, r);
+				g.DrawString(strTabName, e.Font, Brushes.Black, x, y);
+				g.DrawLine(Pens.Black, r.Left, r.Bottom, r.Right, r.Bottom);
+			}
+
+			// Draw a line out past the last tab.
+			if (e.Index == tabSet.TabPages.Count - 1)
+			{
+				g.DrawLine(Pens.Black, r.Right, r.Bottom, r.Right+tabSet.Width, r.Bottom);
+			}
+		}
+
+		private void tabSet_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
 		}
 
 	}

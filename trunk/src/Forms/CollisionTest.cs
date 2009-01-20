@@ -30,7 +30,8 @@ namespace Spritely
 			xOffset = 0;
 			yOffset = 0;
 
-			slist = m_doc.GetSprites(m_doc.Owner.CurrentTab);
+			Tab tab = m_doc.Owner.CurrentTab;
+			slist = tab.SpriteList;
 			s1 = slist.CurrentSprite;
 			s2 = slist.NextSprite(s1);
 

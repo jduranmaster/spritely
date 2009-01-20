@@ -19,25 +19,30 @@ namespace Spritely
 		private Toolbox_Sprite m_BackgroundSpriteToolbox;
 		private Toolbox_Map m_BackgroundMapToolbox;
 
-		public enum Tab
-		{
-			Sprites = 0,
-			BackgroundSprites,
-			BackgroundMap,
-			MAX,
-			Unknown,
-		};
+		/// <summary>
+		/// Info about each of the tabs in the form.
+		/// </summary>
+		private Tab[] m_tabs;
 
 		/// <summary>
-		/// Index of the currently visible tab in the tabset.
+		/// Currently visible tab.
 		/// </summary>
-		private Tab m_eCurrentTab = Tab.Sprites;
+		private Tab m_tabCurrent;
 
 		public MainForm(string strFilename)
 		{
 			bool fNewDocument = true;
 
 			InitializeComponent();
+
+			m_SpriteToolbox = new Toolbox_Sprite();
+			m_BackgroundSpriteToolbox = new Toolbox_Sprite();
+			m_BackgroundMapToolbox = new Toolbox_Map();
+
+			// Create tabs
+			m_tabs = new Tab[(int)Tab.Type.MAX];
+			InitTabs();
+			m_tabCurrent = GetTab(Tab.Type.Sprites);
 
 			// Init the list of recent files.
 			m_recent = new RecentFiles(this, menuFile_RecentFiles);
@@ -57,28 +62,88 @@ namespace Spritely
 			if (fNewDocument)
 				Handle_NewDocument();
 
-			m_SpriteToolbox = new Toolbox_Sprite();
-			m_BackgroundSpriteToolbox = new Toolbox_Sprite();
-			m_BackgroundMapToolbox = new Toolbox_Map();
-
 			Handle_AllSpritesChanged();
 
 			// Set edit zoom level to 16 pixels
 			cbS_Zoom.SelectedIndex = 4;
-			AdjustSpriteListScrollbar(Tab.Sprites);
-			UpdatePaletteColor(Tab.Sprites);
+			AdjustAllSpriteListScrollbars();
+			UpdatePaletteColor(GetTab(Tab.Type.Sprites));
 
 			cbBS_Zoom.SelectedIndex = 4;
-			AdjustSpriteListScrollbar(Tab.BackgroundSprites);
-			UpdatePaletteColor(Tab.BackgroundSprites);
-
-			AdjustSpriteListScrollbar(Tab.BackgroundMap);
+			AdjustAllBackgroundSpriteListScrollbars();
+			UpdatePaletteColor(GetTab(Tab.Type.BackgroundSprites));
 
 			// Clear out the Undo stack to remove the default sprites.
 			m_doc.ResetUndo();
 
 			// Create the new UI form.
 			m_project = new ProjectMainForm(m_doc);
+		}
+
+		/// <summary>
+		/// Initialize the tab structures for this form with links to the appropriate
+		/// controls for each tab.
+		/// </summary>
+		private void InitTabs()
+		{
+			Tab tab;
+			
+			tab = new Tab(Tab.Type.Sprites, this);
+			tab.PaletteWindow = pbS_Palette;
+			tab.PaletteSelectWindow = pbS_PaletteSelect;
+			tab.PaletteSwatchWindow = pbS_PaletteSwatch;
+			tab.RedLabel = lS_RHex;
+			tab.GreenLabel = lS_GHex;
+			tab.BlueLabel = lS_BHex;
+			tab.RedScrollbar = sbS_Red;
+			tab.GreenScrollbar = sbS_Green;
+			tab.BlueScrollbar = sbS_Blue;
+			tab.SpriteListWindow = pbS_SpriteList;
+			tab.SpriteListScrollbar = sbS_SpriteList;
+			tab.EditSpriteWindow = pbS_EditSprite;
+			tab.EditMapWindow = null;
+			tab.Toolbox = m_SpriteToolbox;
+			tab.ToolboxWindow = pbS_Toolbox;
+			tab.ToolboxZoomCombobox = cbS_Zoom;
+			m_tabs[(int)Tab.Type.Sprites] = tab;
+
+			tab = new Tab(Tab.Type.BackgroundSprites, this);
+			tab.PaletteWindow = pbBS_Palette;
+			tab.PaletteSelectWindow = pbBS_PaletteSelect;
+			tab.PaletteSwatchWindow = pbBS_PaletteSwatch;
+			tab.RedLabel = lBS_RHex;
+			tab.GreenLabel = lBS_GHex;
+			tab.BlueLabel = lBS_BHex;
+			tab.RedScrollbar = sbBS_Red;
+			tab.GreenScrollbar = sbBS_Green;
+			tab.BlueScrollbar = sbBS_Blue;
+			tab.SpriteListWindow = pbBS_SpriteList;
+			tab.SpriteListScrollbar = sbBS_SpriteList;
+			tab.EditSpriteWindow = pbBS_EditSprite;
+			tab.EditMapWindow = null;
+			tab.Toolbox = m_BackgroundSpriteToolbox;
+			tab.ToolboxWindow = pbBS_Toolbox;
+			tab.ToolboxZoomCombobox = cbBS_Zoom;
+			m_tabs[(int)Tab.Type.BackgroundSprites] = tab;
+
+			tab = new Tab(Tab.Type.BackgroundMap, this);
+			tab.PaletteWindow = pbBM_Palette;
+			tab.PaletteSelectWindow = pbBM_PaletteSelect;
+			tab.PaletteSwatchWindow = null;
+			tab.RedLabel = null;
+			tab.GreenLabel = null;
+			tab.BlueLabel = null;
+			tab.RedScrollbar = null;
+			tab.GreenScrollbar = null;
+			tab.BlueScrollbar = null;
+			tab.SpriteListWindow = pbBM_SpriteList;
+			tab.SpriteListScrollbar = sbBM_SpriteList;
+			tab.EditSpriteWindow = null;
+			tab.EditMapWindow = pbBM_EditBackgroundMap;
+			tab.Toolbox = m_BackgroundMapToolbox;
+			tab.ToolboxWindow = pbBM_Toolbox;
+			tab.ToolboxZoomCombobox = null;
+			m_tabs[(int)Tab.Type.BackgroundMap] = tab;
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -102,26 +167,27 @@ namespace Spritely
 		{
 			SpriteList sl;
 			Sprite s;
+			Tab tab = m_tabCurrent;
 			switch (keyData)
 			{
 				case Keys.Alt | Keys.Left:
 				case Keys.Alt | Keys.Up:
-					sl = GetSpriteList(m_eCurrentTab);
+					sl = tab.SpriteList;;
 					s = sl.PrevSprite(sl.CurrentSprite);
 					if (s != null)
 					{
 						sl.CurrentSprite = s;
-						Handle_SpritesChanged(m_eCurrentTab);
+						Handle_SpritesChanged(tab);
 					}
 					return true;
 				case Keys.Alt | Keys.Right:
 				case Keys.Alt | Keys.Down:
-					sl = GetSpriteList(m_eCurrentTab);
+					sl = tab.SpriteList;
 					s = sl.NextSprite(sl.CurrentSprite);
 					if (s != null)
 					{
 						sl.CurrentSprite = s;
-						Handle_SpritesChanged(m_eCurrentTab);
+						Handle_SpritesChanged(tab);
 					}
 					return true;
 			}
@@ -132,7 +198,7 @@ namespace Spritely
 		private void Handle_NewDocument()
 		{
 			m_doc = new Document(this);
-			m_doc.InitializeEmptyDocumnt();
+			m_doc.InitializeEmptyDocument();
 
 			Handle_AllSpritesChanged();
 			SetTitleBar("Untitled");
@@ -140,15 +206,15 @@ namespace Spritely
 
 		private void Handle_AllSpritesChanged()
 		{
-			Handle_SpritesChanged(Tab.Sprites);
-			Handle_SpritesChanged(Tab.BackgroundSprites);
-			Handle_SpritesChanged(Tab.BackgroundMap);
+			Handle_SpritesChanged(GetTab(Tab.Type.Sprites));
+			Handle_SpritesChanged(GetTab(Tab.Type.BackgroundSprites));
+			Handle_SpritesChanged(GetTab(Tab.Type.BackgroundMap));
 		}
 
 		private void Handle_SpritesChanged(Tab tab)
 		{
-			if (m_doc.GetCurrentSprite(tab) != null)
-				m_doc.GetSpritePalette(tab).CurrentSubpaletteID = m_doc.GetCurrentSprite(tab).PaletteID;
+			if (tab.Spritesets.Current.CurrentSprite != null)
+				tab.Palettes.CurrentPalette.CurrentSubpaletteID = tab.Spritesets.Current.CurrentSprite.PaletteID;
 
 			// Updating the palette causes a cascade of updates that results in the sprites and
 			// bg maps being updated.
@@ -172,6 +238,11 @@ namespace Spritely
 		public ProjectMainForm NewUI
 		{
 			get { return m_project; }
+		}
+
+		public Tab GetTab(Tab.Type tab)
+		{
+			return m_tabs[(int)tab];
 		}
 
 		public void Info(string str)
@@ -234,320 +305,73 @@ namespace Spritely
 
 		public Tab CurrentTab
 		{
-			get { return m_eCurrentTab; }
+			get { return m_tabCurrent; }
 		}
 
 		private void tabSet_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Tab tabNew = (Tab)tabSet.SelectedIndex;
+			Tab.Type tabNew = (Tab.Type)tabSet.SelectedIndex;
 			switch (tabNew)
 			{
-				case Tab.Sprites:
+				case Tab.Type.Sprites:
 					break;
-				case Tab.BackgroundSprites:
+				case Tab.Type.BackgroundSprites:
 					break;
-				case Tab.BackgroundMap:
+				case Tab.Type.BackgroundMap:
 					UpdateBackgroundMapPalette();
 					break;
 			}
-			m_eCurrentTab = tabNew;
+			m_tabCurrent = GetTab(tabNew);
 
-			UpdateZoom(tabNew);
+			UpdateZoom(m_tabCurrent);
 			ActivateMenuItems();
 			UndoMgr.LoadDebugWindow(m_doc.Undo());
 		}
 
 		private void tabSet_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (m_eCurrentTab != Tab.Sprites && m_eCurrentTab != Tab.BackgroundSprites)
+			Tab tab = m_tabCurrent;
+			if (tab.TabType != Tab.Type.Sprites && tab.TabType != Tab.Type.BackgroundSprites)
 				return;
 
 			char ch = e.KeyChar;
 			if (ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f')
 			{
-				Subpalette p = m_doc.GetSpritePalette(m_eCurrentTab).CurrentSubpalette;
+				Subpalette p = tab.Palettes.CurrentPalette.CurrentSubpalette;
 				int nIndex = ch - '0';
 				if (nIndex > 9)
 					nIndex -= ('a' - '0' - 10);
 				p.CurrentColor = nIndex;
-				UpdatePaletteSelect(m_eCurrentTab);
+				UpdatePaletteSelect(tab);
 				//p.RecordUndoAction("key select");
 				e.Handled = true;
 			}
 			else if (ch == 'p')
 			{
-				GetToolbox(m_eCurrentTab).CurrentTool = Toolbox.ToolType.Pencil;
-				GetToolboxWindow(m_eCurrentTab).Invalidate();
+				tab.Toolbox.CurrentTool = Toolbox.ToolType.Pencil;
+				tab.ToolboxWindow.Invalidate();
 			}
 			else if (ch == 'g')
 			{
-				GetToolbox(m_eCurrentTab).CurrentTool = Toolbox.ToolType.FloodFill;
-				GetToolboxWindow(m_eCurrentTab).Invalidate();
+				tab.Toolbox.CurrentTool = Toolbox.ToolType.FloodFill;
+				tab.ToolboxWindow.Invalidate();
 			}
 			else if (ch == 'i')
 			{
-				GetToolbox(m_eCurrentTab).CurrentTool = Toolbox.ToolType.Eyedropper;
-				GetToolboxWindow(m_eCurrentTab).Invalidate();
+				tab.Toolbox.CurrentTool = Toolbox.ToolType.Eyedropper;
+				tab.ToolboxWindow.Invalidate();
 			}
 			else if (ch == 'x')
 			{
-				GetToolbox(m_eCurrentTab).CurrentTool = Toolbox.ToolType.Eraser;
-				GetToolboxWindow(m_eCurrentTab).Invalidate();
+				tab.Toolbox.CurrentTool = Toolbox.ToolType.Eraser;
+				tab.ToolboxWindow.Invalidate();
 			}
 			else if (ch == 'k')
 			{
 				Options.Palette_ShowPaletteIndex = !Options.Palette_ShowPaletteIndex;
-				GetPaletteWindow(m_eCurrentTab).Invalidate();
-				GetPaletteSwatchWindow(m_eCurrentTab).Invalidate();
+				tab.PaletteWindow.Invalidate();
+				tab.PaletteSwatchWindow.Invalidate();
 			}
-		}
-
-		#endregion
-
-		#region Tab <-> Control Mapping
-
-		private Tab GetTab_SpriteList(PictureBox pbox)
-		{
-			if (pbox == pbS_SpriteList)
-				return Tab.Sprites;
-			if (pbox == pbBS_SpriteList)
-				return Tab.BackgroundSprites;
-			if (pbox == pbBM_SpriteList)
-				return Tab.BackgroundMap;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_SpriteListScrollbar(VScrollBar sb)
-		{
-			if (sb == sbS_SpriteList)
-				return Tab.Sprites;
-			if (sb == sbBS_SpriteList)
-				return Tab.BackgroundSprites;
-			if (sb == sbBM_SpriteList)
-				return Tab.BackgroundMap;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_EditSprite(PictureBox pbox)
-		{
-			if (pbox == pbS_EditSprite)
-				return Tab.Sprites;
-			if (pbox == pbBS_EditSprite)
-				return Tab.BackgroundSprites;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_Toolbox(PictureBox pbox)
-		{
-			if (pbox == pbS_Toolbox)
-				return Tab.Sprites;
-			if (pbox == pbBS_Toolbox)
-				return Tab.BackgroundSprites;
-			if (pbox == pbBM_Toolbox)
-				return Tab.BackgroundMap;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_ToolboxZoom(ComboBox cb)
-		{
-			if (cb == cbS_Zoom)
-				return Tab.Sprites;
-			if (cb == cbBS_Zoom)
-				return Tab.BackgroundSprites;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_Palette(PictureBox pbox)
-		{
-			if (pbox == pbS_Palette)
-				return Tab.Sprites;
-			if (pbox == pbBS_Palette)
-				return Tab.BackgroundSprites;
-			if (pbox == pbBM_Palette)
-				return Tab.BackgroundMap;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_PaletteSelect(PictureBox pbox)
-		{
-			if (pbox == pbS_PaletteSelect)
-				return Tab.Sprites;
-			if (pbox == pbBS_PaletteSelect)
-				return Tab.BackgroundSprites;
-			if (pbox == pbBM_PaletteSelect)
-				return Tab.BackgroundMap;
-			return Tab.Unknown;
-		}
-
-		private Tab GetTab_PaletteSwatch(PictureBox pbox)
-		{
-			if (pbox == pbS_PaletteSwatch)
-				return Tab.Sprites;
-			if (pbox == pbBS_PaletteSwatch)
-				return Tab.BackgroundSprites;
-			// BackgroundMap doesn't have a palette swatch
-			return Tab.Unknown;
-		}
-
-		private SpriteList GetSpriteList(Tab tab)
-		{
-			return m_doc.GetSprites(tab);
-		}
-
-		private PictureBox GetSpriteListWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_SpriteList;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_SpriteList;
-			if (tab == Tab.BackgroundMap)
-				return pbBM_SpriteList;
-			return null;
-		}
-
-		private VScrollBar GetSpriteListScrollbar(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return sbS_SpriteList;
-			if (tab == Tab.BackgroundSprites)
-				return sbBS_SpriteList;
-			if (tab == Tab.BackgroundMap)
-				return sbBM_SpriteList;
-			return null;
-		}
-
-		private PictureBox GetEditSpriteWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_EditSprite;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_EditSprite;
-			// BackgroundMap doesn't have a sprite editor
-			return null;
-		}
-
-		private PictureBox GetEditMapWindow(Tab tab)
-		{
-			// Sprites don't have maps.
-			if (tab == Tab.BackgroundMap)
-				return pbBM_EditBackgroundMap;
-			return null;
-		}
-
-		public PictureBox GetToolboxWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_Toolbox;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_Toolbox;
-			if (tab == Tab.BackgroundMap)
-				return pbBM_Toolbox;
-			return null;
-		}
-
-		private PictureBox GetPaletteWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_Palette;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_Palette;
-			if (tab == Tab.BackgroundMap)
-				return pbBM_Palette;
-			return null;
-		}
-
-		private PictureBox GetPaletteSelectWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_PaletteSelect;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_PaletteSelect;
-			if (tab == Tab.BackgroundMap)
-				return pbBM_PaletteSelect;
-			return null;
-		}
-
-		private PictureBox GetPaletteSwatchWindow(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return pbS_PaletteSwatch;
-			if (tab == Tab.BackgroundSprites)
-				return pbBS_PaletteSwatch;
-			return null;
-		}
-
-		private Toolbox GetToolbox(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return m_SpriteToolbox;
-			if (tab == Tab.BackgroundSprites)
-				return m_BackgroundSpriteToolbox;
-			if (tab == Tab.BackgroundMap)
-				return m_BackgroundMapToolbox;
-			return null;
-		}
-
-		private ComboBox GetToolboxZoomCombobox(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return cbS_Zoom;
-			if (tab == Tab.BackgroundSprites)
-				return cbBS_Zoom;
-			return null;
-		}
-
-		private Label GetRedLabel(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return lS_RHex;
-			if (tab == Tab.BackgroundSprites)
-				return lBS_RHex;
-			return null;
-		}
-		
-		private Label GetGreenLabel(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return lS_GHex;
-			if (tab == Tab.BackgroundSprites)
-				return lBS_GHex;
-			return null;
-		}
-		
-		private Label GetBlueLabel(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return lS_BHex;
-			if (tab == Tab.BackgroundSprites)
-				return lBS_BHex;
-			return null;
-		}
-
-		private HScrollBar GetRedScrollbar(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return sbS_Red;
-			if (tab == Tab.BackgroundSprites)
-				return sbBS_Red;
-			return null;
-		}
-
-		private HScrollBar GetGreenScrollbar(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return sbS_Green;
-			if (tab == Tab.BackgroundSprites)
-				return sbBS_Green;
-			return null;
-		}
-
-		private HScrollBar GetBlueScrollbar(Tab tab)
-		{
-			if (tab == Tab.Sprites)
-				return sbS_Blue;
-			if (tab == Tab.BackgroundSprites)
-				return sbBS_Blue;
-			return null;
 		}
 
 		#endregion

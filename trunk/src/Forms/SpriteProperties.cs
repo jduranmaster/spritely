@@ -57,7 +57,9 @@ namespace Spritely
 		{
 			m_sprite.Name = tbName.Text;
 			m_sprite.Description = tbDescription.Text;
-			m_doc.Owner.UpdateSpriteInfo(MainForm.Tab.Sprites);
+
+			Tab tab = m_doc.Owner.GetTab(Tab.Type.Sprites);
+			m_doc.Owner.UpdateSpriteInfo(tab);
 			this.Close();
 		}
 

@@ -93,6 +93,7 @@
     <Compile Include="Sprites\Spritesets.cs" />
     <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="Sprites\Sprite_LoadSave.cs" />
+    <Compile Include="Tab.cs" />
     <Compile Include="Toolbox\Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>

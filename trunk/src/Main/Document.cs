@@ -24,7 +24,7 @@ namespace Spritely
 		/// A copy of the BackgroundSpritePalettes that is used when editing the BackgroundMap
 		/// to select the palette override for the tiles in the background.
 		/// </summary>
-		private Palette BackgroundMapPalette;
+		//private Palette BackgroundMapPalette;
 
 		/// <summary>
 		/// Undo managers for each tab.
@@ -47,14 +47,14 @@ namespace Spritely
 
 			m_data.Filer = new FileHandler(this);
 
-			int numTabs = (int)MainForm.Tab.MAX;
+			int numTabs = (int)Tab.Type.MAX;
 			m_Undo = new UndoMgr[numTabs];
 			for (int iTab = 0; iTab < numTabs; iTab++)
 				m_Undo[iTab] = new UndoMgr();
 
 			// TODO: remove this, share BG palettes
-			BackgroundMapPalette = new Palette(this, null, "bgmpal", -1, "");
-			BackgroundMapPalette.HilightSelectedColor = false;
+			//BackgroundMapPalette = new Palette(this, null, "bgmpal", -1, "");
+			//BackgroundMapPalette.HilightSelectedColor = false;
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Spritely
 		/// This is so that first-time users don't see an empty window - they can 
 		/// start editing their first sprite immediately.
 		/// </summary>
-		public void InitializeEmptyDocumnt()
+		public void InitializeEmptyDocument()
 		{
 			// Palettes
 			Palette pal = m_data.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
@@ -224,39 +224,6 @@ namespace Spritely
 			get { return m_data.BackgroundSpritesets; }
 		}
 
-		public Spriteset GetSpriteset(MainForm.Tab tab)
-		{
-			if (tab == MainForm.Tab.Sprites)
-				return m_data.Spritesets.Current;
-			if (tab == MainForm.Tab.BackgroundSprites)
-				return m_data.BackgroundSpritesets.Current;
-			if (tab == MainForm.Tab.BackgroundMap)
-				return m_data.BackgroundSpritesets.Current;
-			return null;
-		}
-
-		public SpriteList GetSprites(MainForm.Tab tab)
-		{
-			if (tab == MainForm.Tab.Sprites)
-				return m_data.Spritesets.Current.SpriteList;
-			if (tab == MainForm.Tab.BackgroundSprites)
-				return m_data.BackgroundSpritesets.Current.SpriteList;
-			if (tab == MainForm.Tab.BackgroundMap)
-				return m_data.BackgroundSpritesets.Current.SpriteList;
-			return null;
-		}
-
-		public Sprite GetCurrentSprite(MainForm.Tab tab)
-		{
-			if (tab == MainForm.Tab.Sprites)
-				return m_data.Spritesets.Current.CurrentSprite;
-			if (tab == MainForm.Tab.BackgroundSprites)
-				return m_data.BackgroundSpritesets.Current.CurrentSprite;
-			if (tab == MainForm.Tab.BackgroundMap)
-				return m_data.BackgroundSpritesets.Current.CurrentSprite;
-			return null;
-		}
-
 		/// <summary>
 		/// Foreground (sprite) palettes.
 		/// </summary>
@@ -283,27 +250,6 @@ namespace Spritely
 			return m_data.BackgroundPalettes.GetPalette(id);
 		}
 
-		public Palette GetBackgroundMapPalette()
-		{
-			return BackgroundMapPalette;
-		}
-
-		/// <summary>
-		/// Get the sprite palette for the current tab.
-		/// </summary>
-		/// <param name="tab"></param>
-		/// <returns></returns>
-		public Palette GetSpritePalette(MainForm.Tab tab)
-		{
-			if (tab == MainForm.Tab.Sprites)
-				return GetSpritePalette(Options.DefaultPaletteId);
-			if (tab == MainForm.Tab.BackgroundSprites)
-				return GetBackgroundPalette(Options.DefaultBgPaletteId);
-			if (tab == MainForm.Tab.BackgroundMap)
-				return BackgroundMapPalette;
-			return null;
-		}
-
 		public Maps BackgroundMaps
 		{
 			get { return m_data.BackgroundMaps; }
@@ -324,7 +270,7 @@ namespace Spritely
 		/// <returns></returns>
 		public UndoMgr Undo()
 		{
-			return m_Undo[(int)m_form.CurrentTab];
+			return m_Undo[(int)m_form.CurrentTab.TabType];
 		}
 
 		/// <summary>
@@ -332,7 +278,7 @@ namespace Spritely
 		/// </summary>
 		public void ResetUndo()
 		{
-			for (int i=0; i<(int)MainForm.Tab.MAX; ++i)
+			for (int i=0; i<(int)Tab.Type.MAX; ++i)
 				m_Undo[i].Reset();
 		}
 
@@ -457,8 +403,10 @@ namespace Spritely
 				m_form.Info(sb.ToString());
 
 				// The platform may have changed, update the map toolbox to reflect the current platform.
-				if (m_form.CurrentTab == MainForm.Tab.BackgroundMap)
-					m_form.GetToolboxWindow(MainForm.Tab.BackgroundMap).Invalidate();
+				if (m_form.CurrentTab.TabType == Tab.Type.BackgroundMap)
+				{
+					m_form.CurrentTab.ToolboxWindow.Invalidate();
+				}
 			}
 			else
 			{

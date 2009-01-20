@@ -12,7 +12,7 @@ namespace Spritely
 	{
 		public void CheckProjectList(bool check)
 		{
-			menuWindow_ProjectList.CheckState = (check ? CheckState.Checked : CheckState.Unchecked);
+			//menuWindow_ProjectList.CheckState = (check ? CheckState.Checked : CheckState.Unchecked);
 		}
 
 		/// <summary>
@@ -22,15 +22,15 @@ namespace Spritely
 		/// <param name="e"></param>
 		private void menuWindow_ProjectList_Click(object sender, EventArgs e)
 		{
-			if (menuWindow_ProjectList.CheckState == CheckState.Checked)
+			//if (menuWindow_ProjectList.CheckState == CheckState.Checked)
 			{
-				m_ProjectTreeView.Hide();
-				CheckProjectList(false);
+			//	m_ProjectTreeView.Hide();
+			//	CheckProjectList(false);
 			}
-			else
+			//else
 			{
-				m_ProjectTreeView.Show();
-				CheckProjectList(true);
+			//	m_ProjectTreeView.Show();
+			//	CheckProjectList(true);
 			}
 		}
 	}

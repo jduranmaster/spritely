@@ -104,6 +104,8 @@ namespace Spritely
 			this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_RunUnittests = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuTest_LoadImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,8 +159,6 @@ namespace Spritely
 			this.pbBM_SpriteList = new System.Windows.Forms.PictureBox();
 			this.sbBM_SpriteList = new System.Windows.Forms.VScrollBar();
 			this.pbBM_EditBackgroundMap = new System.Windows.Forms.PictureBox();
-			this.menuTest_RunUnittests = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_SpriteList)).BeginInit();
 			this.menuBar.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbS_EditSprite)).BeginInit();
@@ -196,10 +196,10 @@ namespace Spritely
 			this.pbS_SpriteList.Size = new System.Drawing.Size(131, 274);
 			this.pbS_SpriteList.TabIndex = 0;
 			this.pbS_SpriteList.TabStop = false;
-			this.pbS_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseMove);
-			this.pbS_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseDown);
-			this.pbS_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.SpriteList_Paint);
-			this.pbS_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseUp);
+			this.pbS_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.S_SpriteList_MouseMove);
+			this.pbS_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.S_SpriteList_MouseDown);
+			this.pbS_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.S_SpriteList_Paint);
+			this.pbS_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.S_SpriteList_MouseUp);
 			// 
 			// menuBar
 			// 
@@ -820,6 +820,18 @@ namespace Spritely
 			this.menuTest.Size = new System.Drawing.Size(40, 20);
 			this.menuTest.Text = "Test";
 			// 
+			// menuTest_RunUnittests
+			// 
+			this.menuTest_RunUnittests.Name = "menuTest_RunUnittests";
+			this.menuTest_RunUnittests.Size = new System.Drawing.Size(178, 22);
+			this.menuTest_RunUnittests.Text = "Run Unittests";
+			this.menuTest_RunUnittests.Click += new System.EventHandler(this.menuTest_RunUnittests_Click);
+			// 
+			// menuTest_Separator1
+			// 
+			this.menuTest_Separator1.Name = "menuTest_Separator1";
+			this.menuTest_Separator1.Size = new System.Drawing.Size(175, 6);
+			// 
 			// menuTest_LoadImage
 			// 
 			this.menuTest_LoadImage.Name = "menuTest_LoadImage";
@@ -857,7 +869,7 @@ namespace Spritely
 			this.sbS_SpriteList.Size = new System.Drawing.Size(17, 274);
 			this.sbS_SpriteList.TabIndex = 2;
 			this.sbS_SpriteList.TabStop = true;
-			this.sbS_SpriteList.ValueChanged += new System.EventHandler(this.SpriteList_ValueChanged);
+			this.sbS_SpriteList.ValueChanged += new System.EventHandler(this.S_SpriteList_ValueChanged);
 			// 
 			// pbS_EditSprite
 			// 
@@ -867,10 +879,10 @@ namespace Spritely
 			this.pbS_EditSprite.Size = new System.Drawing.Size(513, 513);
 			this.pbS_EditSprite.TabIndex = 4;
 			this.pbS_EditSprite.TabStop = false;
-			this.pbS_EditSprite.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseMove);
-			this.pbS_EditSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseDown);
-			this.pbS_EditSprite.Paint += new System.Windows.Forms.PaintEventHandler(this.EditSprite_Paint);
-			this.pbS_EditSprite.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseUp);
+			this.pbS_EditSprite.MouseMove += new System.Windows.Forms.MouseEventHandler(this.S_EditSprite_MouseMove);
+			this.pbS_EditSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.S_EditSprite_MouseDown);
+			this.pbS_EditSprite.Paint += new System.Windows.Forms.PaintEventHandler(this.S_EditSprite_Paint);
+			this.pbS_EditSprite.MouseUp += new System.Windows.Forms.MouseEventHandler(this.S_EditSprite_MouseUp);
 			// 
 			// pbS_Palette
 			// 
@@ -879,10 +891,10 @@ namespace Spritely
 			this.pbS_Palette.Size = new System.Drawing.Size(195, 51);
 			this.pbS_Palette.TabIndex = 6;
 			this.pbS_Palette.TabStop = false;
-			this.pbS_Palette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseMove);
-			this.pbS_Palette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseDown);
-			this.pbS_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.Palette_Paint);
-			this.pbS_Palette.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseUp);
+			this.pbS_Palette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.S_Palette_MouseMove);
+			this.pbS_Palette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.S_Palette_MouseDown);
+			this.pbS_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.S_Palette_Paint);
+			this.pbS_Palette.MouseUp += new System.Windows.Forms.MouseEventHandler(this.S_Palette_MouseUp);
 			// 
 			// sbS_Red
 			// 
@@ -892,7 +904,7 @@ namespace Spritely
 			this.sbS_Red.Name = "sbS_Red";
 			this.sbS_Red.Size = new System.Drawing.Size(100, 17);
 			this.sbS_Red.TabIndex = 10;
-			this.sbS_Red.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbS_Red.ValueChanged += new System.EventHandler(this.S_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// sbS_Green
 			// 
@@ -902,7 +914,7 @@ namespace Spritely
 			this.sbS_Green.Name = "sbS_Green";
 			this.sbS_Green.Size = new System.Drawing.Size(100, 17);
 			this.sbS_Green.TabIndex = 11;
-			this.sbS_Green.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbS_Green.ValueChanged += new System.EventHandler(this.S_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// sbS_Blue
 			// 
@@ -912,7 +924,7 @@ namespace Spritely
 			this.sbS_Blue.Name = "sbS_Blue";
 			this.sbS_Blue.Size = new System.Drawing.Size(100, 17);
 			this.sbS_Blue.TabIndex = 12;
-			this.sbS_Blue.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbS_Blue.ValueChanged += new System.EventHandler(this.S_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// lS_R
 			// 
@@ -980,7 +992,7 @@ namespace Spritely
 			this.pbS_PaletteSwatch.Size = new System.Drawing.Size(27, 27);
 			this.pbS_PaletteSwatch.TabIndex = 24;
 			this.pbS_PaletteSwatch.TabStop = false;
-			this.pbS_PaletteSwatch.Paint += new System.Windows.Forms.PaintEventHandler(this.PaletteSwatch_Paint);
+			this.pbS_PaletteSwatch.Paint += new System.Windows.Forms.PaintEventHandler(this.S_PaletteSwatch_Paint);
 			// 
 			// lS_BHex
 			// 
@@ -1022,10 +1034,10 @@ namespace Spritely
 			this.pbS_PaletteSelect.Size = new System.Drawing.Size(193, 17);
 			this.pbS_PaletteSelect.TabIndex = 16;
 			this.pbS_PaletteSelect.TabStop = false;
-			this.pbS_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseMove);
-			this.pbS_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseDown);
-			this.pbS_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.PaletteSelect_Paint);
-			this.pbS_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseUp);
+			this.pbS_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.S_PaletteSelect_MouseMove);
+			this.pbS_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.S_PaletteSelect_MouseDown);
+			this.pbS_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.S_PaletteSelect_Paint);
+			this.pbS_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.S_PaletteSelect_MouseUp);
 			// 
 			// cbS_Zoom
 			// 
@@ -1045,18 +1057,18 @@ namespace Spritely
 			this.cbS_Zoom.Name = "cbS_Zoom";
 			this.cbS_Zoom.Size = new System.Drawing.Size(55, 21);
 			this.cbS_Zoom.TabIndex = 20;
-			this.cbS_Zoom.SelectedIndexChanged += new System.EventHandler(this.Zoom_SelectedIndexChanged);
+			this.cbS_Zoom.SelectedIndexChanged += new System.EventHandler(this.S_Zoom_SelectedIndexChanged);
 			// 
 			// tabSet
 			// 
 			this.tabSet.Controls.Add(this.tabSpriteEditor);
 			this.tabSet.Controls.Add(this.tabBackgroundSpriteEditor);
 			this.tabSet.Controls.Add(this.tabBackgroundMapEditor);
-			this.tabSet.Location = new System.Drawing.Point(4, 24);
+			this.tabSet.Location = new System.Drawing.Point(4, 27);
 			this.tabSet.Name = "tabSet";
 			this.tabSet.Padding = new System.Drawing.Point(10, 3);
 			this.tabSet.SelectedIndex = 0;
-			this.tabSet.Size = new System.Drawing.Size(750, 551);
+			this.tabSet.Size = new System.Drawing.Size(750, 548);
 			this.tabSet.TabIndex = 22;
 			this.tabSet.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tabSet_KeyPress);
 			this.tabSet.SelectedIndexChanged += new System.EventHandler(this.tabSet_SelectedIndexChanged);
@@ -1074,7 +1086,7 @@ namespace Spritely
 			this.tabSpriteEditor.Location = new System.Drawing.Point(4, 22);
 			this.tabSpriteEditor.Name = "tabSpriteEditor";
 			this.tabSpriteEditor.Padding = new System.Windows.Forms.Padding(3);
-			this.tabSpriteEditor.Size = new System.Drawing.Size(742, 525);
+			this.tabSpriteEditor.Size = new System.Drawing.Size(742, 522);
 			this.tabSpriteEditor.TabIndex = 0;
 			this.tabSpriteEditor.Text = "Sprites";
 			this.tabSpriteEditor.UseVisualStyleBackColor = true;
@@ -1094,11 +1106,11 @@ namespace Spritely
 			this.pbS_Toolbox.Size = new System.Drawing.Size(55, 231);
 			this.pbS_Toolbox.TabIndex = 21;
 			this.pbS_Toolbox.TabStop = false;
-			this.pbS_Toolbox.MouseLeave += new System.EventHandler(this.Toolbox_MouseLeave);
-			this.pbS_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseMove);
-			this.pbS_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseDown);
-			this.pbS_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.Toolbox_Paint);
-			this.pbS_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseUp);
+			this.pbS_Toolbox.MouseLeave += new System.EventHandler(this.S_Toolbox_MouseLeave);
+			this.pbS_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.S_Toolbox_MouseMove);
+			this.pbS_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.S_Toolbox_MouseDown);
+			this.pbS_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.S_Toolbox_Paint);
+			this.pbS_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.S_Toolbox_MouseUp);
 			// 
 			// tabBackgroundSpriteEditor
 			// 
@@ -1112,7 +1124,7 @@ namespace Spritely
 			this.tabBackgroundSpriteEditor.Location = new System.Drawing.Point(4, 22);
 			this.tabBackgroundSpriteEditor.Name = "tabBackgroundSpriteEditor";
 			this.tabBackgroundSpriteEditor.Padding = new System.Windows.Forms.Padding(3);
-			this.tabBackgroundSpriteEditor.Size = new System.Drawing.Size(742, 525);
+			this.tabBackgroundSpriteEditor.Size = new System.Drawing.Size(742, 522);
 			this.tabBackgroundSpriteEditor.TabIndex = 1;
 			this.tabBackgroundSpriteEditor.Text = "Background Sprites";
 			this.tabBackgroundSpriteEditor.UseVisualStyleBackColor = true;
@@ -1124,11 +1136,11 @@ namespace Spritely
 			this.pbBS_Toolbox.Size = new System.Drawing.Size(55, 231);
 			this.pbBS_Toolbox.TabIndex = 22;
 			this.pbBS_Toolbox.TabStop = false;
-			this.pbBS_Toolbox.MouseLeave += new System.EventHandler(this.Toolbox_MouseLeave);
-			this.pbBS_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseMove);
-			this.pbBS_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseDown);
-			this.pbBS_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.Toolbox_Paint);
-			this.pbBS_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseUp);
+			this.pbBS_Toolbox.MouseLeave += new System.EventHandler(this.BS_Toolbox_MouseLeave);
+			this.pbBS_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BS_Toolbox_MouseMove);
+			this.pbBS_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BS_Toolbox_MouseDown);
+			this.pbBS_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_Toolbox_Paint);
+			this.pbBS_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BS_Toolbox_MouseUp);
 			// 
 			// cbBS_Zoom
 			// 
@@ -1148,7 +1160,7 @@ namespace Spritely
 			this.cbBS_Zoom.Name = "cbBS_Zoom";
 			this.cbBS_Zoom.Size = new System.Drawing.Size(55, 21);
 			this.cbBS_Zoom.TabIndex = 21;
-			this.cbBS_Zoom.SelectedIndexChanged += new System.EventHandler(this.Zoom_SelectedIndexChanged);
+			this.cbBS_Zoom.SelectedIndexChanged += new System.EventHandler(this.BS_Zoom_SelectedIndexChanged);
 			// 
 			// pbBS_SpriteList
 			// 
@@ -1158,10 +1170,10 @@ namespace Spritely
 			this.pbBS_SpriteList.Size = new System.Drawing.Size(131, 274);
 			this.pbBS_SpriteList.TabIndex = 7;
 			this.pbBS_SpriteList.TabStop = false;
-			this.pbBS_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseMove);
-			this.pbBS_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseDown);
-			this.pbBS_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.SpriteList_Paint);
-			this.pbBS_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseUp);
+			this.pbBS_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BS_SpriteList_MouseMove);
+			this.pbBS_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BS_SpriteList_MouseDown);
+			this.pbBS_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_SpriteList_Paint);
+			this.pbBS_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BS_SpriteList_MouseUp);
 			// 
 			// sbBS_SpriteList
 			// 
@@ -1172,7 +1184,7 @@ namespace Spritely
 			this.sbBS_SpriteList.Size = new System.Drawing.Size(17, 274);
 			this.sbBS_SpriteList.TabIndex = 8;
 			this.sbBS_SpriteList.TabStop = true;
-			this.sbBS_SpriteList.ValueChanged += new System.EventHandler(this.SpriteList_ValueChanged);
+			this.sbBS_SpriteList.ValueChanged += new System.EventHandler(this.BS_SpriteList_ValueChanged);
 			// 
 			// gbBS_BackgroundPalettes
 			// 
@@ -1204,7 +1216,7 @@ namespace Spritely
 			this.pbBS_PaletteSwatch.Size = new System.Drawing.Size(27, 27);
 			this.pbBS_PaletteSwatch.TabIndex = 24;
 			this.pbBS_PaletteSwatch.TabStop = false;
-			this.pbBS_PaletteSwatch.Paint += new System.Windows.Forms.PaintEventHandler(this.PaletteSwatch_Paint);
+			this.pbBS_PaletteSwatch.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_PaletteSwatch_Paint);
 			// 
 			// lBS_BHex
 			// 
@@ -1246,10 +1258,10 @@ namespace Spritely
 			this.pbBS_PaletteSelect.Size = new System.Drawing.Size(193, 17);
 			this.pbBS_PaletteSelect.TabIndex = 16;
 			this.pbBS_PaletteSelect.TabStop = false;
-			this.pbBS_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseMove);
-			this.pbBS_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseDown);
-			this.pbBS_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.PaletteSelect_Paint);
-			this.pbBS_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseUp);
+			this.pbBS_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BS_PaletteSelect_MouseMove);
+			this.pbBS_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BS_PaletteSelect_MouseDown);
+			this.pbBS_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_PaletteSelect_Paint);
+			this.pbBS_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BS_PaletteSelect_MouseUp);
 			// 
 			// sbBS_Red
 			// 
@@ -1259,7 +1271,7 @@ namespace Spritely
 			this.sbBS_Red.Name = "sbBS_Red";
 			this.sbBS_Red.Size = new System.Drawing.Size(100, 17);
 			this.sbBS_Red.TabIndex = 10;
-			this.sbBS_Red.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbBS_Red.ValueChanged += new System.EventHandler(this.BS_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// sbBS_Green
 			// 
@@ -1269,7 +1281,7 @@ namespace Spritely
 			this.sbBS_Green.Name = "sbBS_Green";
 			this.sbBS_Green.Size = new System.Drawing.Size(100, 17);
 			this.sbBS_Green.TabIndex = 11;
-			this.sbBS_Green.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbBS_Green.ValueChanged += new System.EventHandler(this.BS_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// sbBS_Blue
 			// 
@@ -1279,7 +1291,7 @@ namespace Spritely
 			this.sbBS_Blue.Name = "sbBS_Blue";
 			this.sbBS_Blue.Size = new System.Drawing.Size(100, 17);
 			this.sbBS_Blue.TabIndex = 12;
-			this.sbBS_Blue.ValueChanged += new System.EventHandler(this.Palette_ColorScrollbar_ValueChanged);
+			this.sbBS_Blue.ValueChanged += new System.EventHandler(this.BS_Palette_ColorScrollbar_ValueChanged);
 			// 
 			// lBS_B
 			// 
@@ -1300,10 +1312,10 @@ namespace Spritely
 			this.pbBS_Palette.Size = new System.Drawing.Size(195, 51);
 			this.pbBS_Palette.TabIndex = 6;
 			this.pbBS_Palette.TabStop = false;
-			this.pbBS_Palette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseMove);
-			this.pbBS_Palette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseDown);
-			this.pbBS_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.Palette_Paint);
-			this.pbBS_Palette.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Palette_MouseUp);
+			this.pbBS_Palette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BS_Palette_MouseMove);
+			this.pbBS_Palette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BS_Palette_MouseDown);
+			this.pbBS_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_Palette_Paint);
+			this.pbBS_Palette.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BS_Palette_MouseUp);
 			// 
 			// lBS_R
 			// 
@@ -1337,10 +1349,10 @@ namespace Spritely
 			this.pbBS_EditSprite.Size = new System.Drawing.Size(513, 513);
 			this.pbBS_EditSprite.TabIndex = 5;
 			this.pbBS_EditSprite.TabStop = false;
-			this.pbBS_EditSprite.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseMove);
-			this.pbBS_EditSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseDown);
-			this.pbBS_EditSprite.Paint += new System.Windows.Forms.PaintEventHandler(this.EditSprite_Paint);
-			this.pbBS_EditSprite.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditSprite_MouseUp);
+			this.pbBS_EditSprite.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BS_EditSprite_MouseMove);
+			this.pbBS_EditSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BS_EditSprite_MouseDown);
+			this.pbBS_EditSprite.Paint += new System.Windows.Forms.PaintEventHandler(this.BS_EditSprite_Paint);
+			this.pbBS_EditSprite.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BS_EditSprite_MouseUp);
 			// 
 			// tabBackgroundMapEditor
 			// 
@@ -1354,7 +1366,7 @@ namespace Spritely
 			this.tabBackgroundMapEditor.Controls.Add(this.pbBM_EditBackgroundMap);
 			this.tabBackgroundMapEditor.Location = new System.Drawing.Point(4, 22);
 			this.tabBackgroundMapEditor.Name = "tabBackgroundMapEditor";
-			this.tabBackgroundMapEditor.Size = new System.Drawing.Size(742, 525);
+			this.tabBackgroundMapEditor.Size = new System.Drawing.Size(742, 522);
 			this.tabBackgroundMapEditor.TabIndex = 2;
 			this.tabBackgroundMapEditor.Text = "Background Maps";
 			this.tabBackgroundMapEditor.UseVisualStyleBackColor = true;
@@ -1366,11 +1378,11 @@ namespace Spritely
 			this.pbBM_Toolbox.Size = new System.Drawing.Size(55, 231);
 			this.pbBM_Toolbox.TabIndex = 26;
 			this.pbBM_Toolbox.TabStop = false;
-			this.pbBM_Toolbox.MouseLeave += new System.EventHandler(this.Toolbox_MouseLeave);
-			this.pbBM_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseMove);
-			this.pbBM_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseDown);
-			this.pbBM_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.Toolbox_Paint);
-			this.pbBM_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Toolbox_MouseUp);
+			this.pbBM_Toolbox.MouseLeave += new System.EventHandler(this.BM_Toolbox_MouseLeave);
+			this.pbBM_Toolbox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BM_Toolbox_MouseMove);
+			this.pbBM_Toolbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BM_Toolbox_MouseDown);
+			this.pbBM_Toolbox.Paint += new System.Windows.Forms.PaintEventHandler(this.BM_Toolbox_Paint);
+			this.pbBM_Toolbox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BM_Toolbox_MouseUp);
 			// 
 			// pbBM_Orientation
 			// 
@@ -1409,10 +1421,10 @@ namespace Spritely
 			this.pbBM_PaletteSelect.Size = new System.Drawing.Size(193, 17);
 			this.pbBM_PaletteSelect.TabIndex = 16;
 			this.pbBM_PaletteSelect.TabStop = false;
-			this.pbBM_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseMove);
-			this.pbBM_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseDown);
-			this.pbBM_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.PaletteSelect_Paint);
-			this.pbBM_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaletteSelect_MouseUp);
+			this.pbBM_PaletteSelect.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BM_PaletteSelect_MouseMove);
+			this.pbBM_PaletteSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BM_PaletteSelect_MouseDown);
+			this.pbBM_PaletteSelect.Paint += new System.Windows.Forms.PaintEventHandler(this.BM_PaletteSelect_Paint);
+			this.pbBM_PaletteSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BM_PaletteSelect_MouseUp);
 			// 
 			// pbBM_Palette
 			// 
@@ -1421,7 +1433,7 @@ namespace Spritely
 			this.pbBM_Palette.Size = new System.Drawing.Size(195, 51);
 			this.pbBM_Palette.TabIndex = 6;
 			this.pbBM_Palette.TabStop = false;
-			this.pbBM_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.Palette_Paint);
+			this.pbBM_Palette.Paint += new System.Windows.Forms.PaintEventHandler(this.BM_Palette_Paint);
 			// 
 			// pbBM_SpriteList
 			// 
@@ -1431,10 +1443,10 @@ namespace Spritely
 			this.pbBM_SpriteList.Size = new System.Drawing.Size(131, 274);
 			this.pbBM_SpriteList.TabIndex = 22;
 			this.pbBM_SpriteList.TabStop = false;
-			this.pbBM_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseMove);
-			this.pbBM_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseDown);
-			this.pbBM_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.SpriteList_Paint);
-			this.pbBM_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SpriteList_MouseUp);
+			this.pbBM_SpriteList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BM_SpriteList_MouseMove);
+			this.pbBM_SpriteList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BM_SpriteList_MouseDown);
+			this.pbBM_SpriteList.Paint += new System.Windows.Forms.PaintEventHandler(this.BM_SpriteList_Paint);
+			this.pbBM_SpriteList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BM_SpriteList_MouseUp);
 			// 
 			// sbBM_SpriteList
 			// 
@@ -1445,7 +1457,7 @@ namespace Spritely
 			this.sbBM_SpriteList.Size = new System.Drawing.Size(17, 274);
 			this.sbBM_SpriteList.TabIndex = 23;
 			this.sbBM_SpriteList.TabStop = true;
-			this.sbBM_SpriteList.ValueChanged += new System.EventHandler(this.SpriteList_ValueChanged);
+			this.sbBM_SpriteList.ValueChanged += new System.EventHandler(this.BM_SpriteList_ValueChanged);
 			// 
 			// pbBM_EditBackgroundMap
 			// 
@@ -1460,18 +1472,6 @@ namespace Spritely
 			this.pbBM_EditBackgroundMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseDown);
 			this.pbBM_EditBackgroundMap.Paint += new System.Windows.Forms.PaintEventHandler(this.EditBackgroundMap_Paint);
 			this.pbBM_EditBackgroundMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EditBackgroundMap_MouseUp);
-			// 
-			// menuTest_RunUnittests
-			// 
-			this.menuTest_RunUnittests.Name = "menuTest_RunUnittests";
-			this.menuTest_RunUnittests.Size = new System.Drawing.Size(178, 22);
-			this.menuTest_RunUnittests.Text = "Run Unittests";
-			this.menuTest_RunUnittests.Click += new System.EventHandler(this.menuTest_RunUnittests_Click);
-			// 
-			// menuTest_Separator1
-			// 
-			this.menuTest_Separator1.Name = "menuTest_Separator1";
-			this.menuTest_Separator1.Size = new System.Drawing.Size(175, 6);
 			// 
 			// MainForm
 			// 
