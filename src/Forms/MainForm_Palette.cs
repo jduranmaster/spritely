@@ -14,31 +14,59 @@ namespace Spritely
 		private bool m_fPaletteSelect_Selecting = false;
 		private int m_fPaletteSelect_OriginalPalette = 0;
 
-		private void PaletteSelect_MouseDown(object sender, MouseEventArgs e)
+		private void S_PaletteSelect_MouseDown(object sender, MouseEventArgs e)
 		{
-			PictureBox pbPaletteSelect = sender as PictureBox;
-			Tab tab = GetTab_PaletteSelect(pbPaletteSelect);
+			PaletteSelect_MouseDown(GetTab(Tab.Type.Sprites), e);
+		}
 
-			Sprite s = m_doc.GetCurrentSprite(tab);
+		private void BS_PaletteSelect_MouseDown(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseDown(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void BM_PaletteSelect_MouseDown(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseDown(GetTab(Tab.Type.BackgroundMap), e);
+		}
+
+		private void PaletteSelect_MouseDown(Tab tab, MouseEventArgs e)
+		{
+			PictureBox pbPaletteSelect = tab.PaletteSelectWindow;
+
+			Sprite s = tab.Spritesets.Current.CurrentSprite;
 			if (s == null)
 				return;
 			m_fPaletteSelect_OriginalPalette = s.PaletteID;
 			m_fPaletteSelect_Selecting = true;
-			if (m_doc.GetSpritePalette(tab).HandleSelectorMouse(e.X, e.Y))
+			if (tab.Palettes.CurrentPalette.HandleSelectorMouse(e.X, e.Y))
 			{
 				UpdatePaletteSelect(tab);
 				m_doc.HasUnsavedChanges = true;
 			}
 		}
 
-		private void PaletteSelect_MouseMove(object sender, MouseEventArgs e)
+		private void S_PaletteSelect_MouseMove(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseMove(GetTab(Tab.Type.Sprites), e);
+		}
+
+		private void BS_PaletteSelect_MouseMove(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseMove(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void BM_PaletteSelect_MouseMove(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseMove(GetTab(Tab.Type.BackgroundMap), e);
+		}
+
+		private void PaletteSelect_MouseMove(Tab tab, MouseEventArgs e)
 		{
 			if (m_fPaletteSelect_Selecting)
 			{
-				PictureBox pbPaletteSelect = sender as PictureBox;
-				Tab tab = GetTab_PaletteSelect(pbPaletteSelect);
+				PictureBox pbPaletteSelect = tab.PaletteSelectWindow;
 
-				if (m_doc.GetSpritePalette(tab).HandleSelectorMouse(e.X, e.Y))
+				if (tab.Palettes.CurrentPalette.HandleSelectorMouse(e.X, e.Y))
 				{
 					UpdatePaletteSelect(tab);
 					m_doc.HasUnsavedChanges = true;
@@ -46,29 +74,57 @@ namespace Spritely
 			}
 		}
 
-		private void PaletteSelect_MouseUp(object sender, MouseEventArgs e)
+		private void S_PaletteSelect_MouseUp(object sender, MouseEventArgs e)
 		{
-			PictureBox pbPaletteSelect = sender as PictureBox;
-			Tab tab = GetTab_PaletteSelect(pbPaletteSelect);
+			PaletteSelect_MouseUp(GetTab(Tab.Type.Sprites));
+		}
+
+		private void BS_PaletteSelect_MouseUp(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseUp(GetTab(Tab.Type.BackgroundSprites));
+		}
+
+		private void BM_PaletteSelect_MouseUp(object sender, MouseEventArgs e)
+		{
+			PaletteSelect_MouseUp(GetTab(Tab.Type.BackgroundMap));
+		}
+
+		private void PaletteSelect_MouseUp(Tab tab)
+		{
+			PictureBox pbPaletteSelect = tab.PaletteSelectWindow;
 
 			if (!m_fPaletteSelect_Selecting)
 				return;
 			m_fPaletteSelect_Selecting = false;
 
 			// Record an undo action if the current palette selection has changed
-			Sprite s = m_doc.GetCurrentSprite(tab);
+			Sprite s = tab.Spritesets.Current.CurrentSprite;
 			if (s != null && m_fPaletteSelect_OriginalPalette != s.PaletteID)
 			{
 				s.RecordUndoAction("palette select");
 			}
 		}
 
-		private void PaletteSelect_Paint(object sender, PaintEventArgs e)
+		private void S_PaletteSelect_Paint(object sender, PaintEventArgs e)
 		{
-			PictureBox pbPaletteSelect = sender as PictureBox;
-			Tab tab = GetTab_PaletteSelect(pbPaletteSelect);
+			PaletteSelect_Paint(GetTab(Tab.Type.Sprites), e);
+		}
 
-			m_doc.GetSpritePalette(tab).DrawSelector(e.Graphics);
+		private void BS_PaletteSelect_Paint(object sender, PaintEventArgs e)
+		{
+			PaletteSelect_Paint(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void BM_PaletteSelect_Paint(object sender, PaintEventArgs e)
+		{
+			PaletteSelect_Paint(GetTab(Tab.Type.BackgroundMap), e);
+		}
+
+		private void PaletteSelect_Paint(Tab tab, PaintEventArgs e)
+		{
+			PictureBox pbPaletteSelect = tab.PaletteSelectWindow;
+
+			tab.Palettes.CurrentPalette.DrawSelector(e.Graphics);
 		}
 
 		#endregion
@@ -85,11 +141,11 @@ namespace Spritely
 		private void UpdatePaletteSelect(Tab tab)
 		{
 			UpdatePaletteColor(tab);
-			if (tab == Tab.Sprites || tab == Tab.BackgroundSprites)
+			if (tab.TabType == Tab.Type.Sprites || tab.TabType == Tab.Type.BackgroundSprites)
 			{
-				Sprite s = m_doc.GetCurrentSprite(tab);
+				Sprite s = tab.Spritesets.Current.CurrentSprite;
 				if (s != null)
-					s.PaletteID = m_doc.GetSpritePalette(tab).CurrentSubpaletteID;
+					s.PaletteID = tab.Palettes.CurrentPalette.CurrentSubpaletteID;
 			}
 		}
 
@@ -104,16 +160,16 @@ namespace Spritely
 		/// </summary>
 		private void UpdatePaletteColor(Tab tab)
 		{
-			Subpalette p = m_doc.GetSpritePalette(tab).CurrentSubpalette;
+			Subpalette p = tab.Palettes.CurrentPalette.CurrentSubpalette;
 
 			// Setting the scrollbar values will fire a Palette_ColorScrollbar_ValueChanged
 			// message which will (in turn) call us again. Set a flag to prevent this
 			// infinite recursion.
 			m_fUpdatePalette = false;
 
-			HScrollBar sbRed = GetRedScrollbar(tab);
-			HScrollBar sbGreen = GetGreenScrollbar(tab);
-			HScrollBar sbBlue = GetBlueScrollbar(tab);
+			HScrollBar sbRed = tab.RedScrollbar;
+			HScrollBar sbGreen = tab.GreenScrollbar;
+			HScrollBar sbBlue = tab.BlueScrollbar;
 
 			if (sbRed != null && sbGreen != null && sbBlue != null)
 			{
@@ -127,6 +183,16 @@ namespace Spritely
 			m_fUpdatePalette = true;
 		}
 
+		private void S_Palette_ColorScrollbar_ValueChanged(object sender, EventArgs e)
+		{
+			Palette_ColorScrollbar_ValueChanged(GetTab(Tab.Type.Sprites));
+		}
+
+		private void BS_Palette_ColorScrollbar_ValueChanged(object sender, EventArgs e)
+		{
+			Palette_ColorScrollbar_ValueChanged(GetTab(Tab.Type.BackgroundSprites));
+		}
+
 		/// <summary>
 		/// This is called when:
 		///   The current palette has changed (indirectly from S_AdjustPaletteScrollbars)
@@ -135,7 +201,7 @@ namespace Spritely
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void Palette_ColorScrollbar_ValueChanged(object sender, EventArgs e)
+		private void Palette_ColorScrollbar_ValueChanged(Tab tab)
 		{
 			// Don't try to update the palettes if we're already in the middle of
 			// an update.
@@ -143,13 +209,13 @@ namespace Spritely
 			{
 				// This section is entered only when the scrollbar handler is called as a result of
 				// the user clicking on the scrollbar.
-				Subpalette p = m_doc.GetSpritePalette(m_eCurrentTab).CurrentSubpalette;
-				HScrollBar sbRed = GetRedScrollbar(m_eCurrentTab);
-				HScrollBar sbGreen = GetGreenScrollbar(m_eCurrentTab);
-				HScrollBar sbBlue = GetBlueScrollbar(m_eCurrentTab);
+				Subpalette p = tab.Palettes.GetPalette(0).CurrentSubpalette;
+				HScrollBar sbRed = tab.RedScrollbar;
+				HScrollBar sbGreen = tab.GreenScrollbar;
+				HScrollBar sbBlue = tab.BlueScrollbar;
 				p.UpdateColor(sbRed.Value, sbGreen.Value, sbBlue.Value);
 
-				UpdatePalette(m_eCurrentTab);
+				UpdatePalette(tab);
 				m_doc.HasUnsavedChanges = true;
 
 				p.RecordUndoAction("scrollbar palette change");
@@ -169,22 +235,22 @@ namespace Spritely
 			PictureBox pbox;
 
 			m_doc.FlushBitmaps();
-			pbox = GetSpriteListWindow(tab);
+			pbox = tab.SpriteListWindow;
 			if (pbox != null)
 				pbox.Invalidate();
-			pbox = GetEditSpriteWindow(tab);
+			pbox = tab.EditSpriteWindow;
 			if (pbox != null)
 				pbox.Invalidate();
-			pbox = GetEditMapWindow(tab);
+			pbox = tab.EditMapWindow;
 			if (pbox != null)
 				pbox.Invalidate();
-			pbox = GetPaletteWindow(tab);
+			pbox = tab.PaletteWindow;
 			if (pbox != null)
 				pbox.Invalidate();
-			pbox = GetPaletteSelectWindow(tab);
+			pbox = tab.PaletteSelectWindow;
 			if (pbox != null)
 				pbox.Invalidate();
-			pbox = GetPaletteSwatchWindow(tab);
+			pbox = tab.PaletteSwatchWindow;
 			if (pbox != null)
 				pbox.Invalidate();
 			UpdatePaletteHexValues(tab);
@@ -192,9 +258,9 @@ namespace Spritely
 
 		private void UpdatePaletteHexValues(Tab tab)
 		{
-			UpdatePaletteHexValue(GetRedLabel(tab), GetRedScrollbar(tab));
-			UpdatePaletteHexValue(GetGreenLabel(tab), GetGreenScrollbar(tab));
-			UpdatePaletteHexValue(GetBlueLabel(tab), GetBlueScrollbar(tab));
+			UpdatePaletteHexValue(tab.RedLabel, tab.RedScrollbar);
+			UpdatePaletteHexValue(tab.GreenLabel, tab.GreenScrollbar);
+			UpdatePaletteHexValue(tab.BlueLabel, tab.BlueScrollbar);
 		}
 
 		private void UpdatePaletteHexValue(Label l, HScrollBar sb)
@@ -207,12 +273,21 @@ namespace Spritely
 		private bool m_fPalette_Selecting = false;
 		private int m_fPalette_OriginalColor = 0;
 
-		// This is called when the user presses the mouse in the palette.
-		private void Palette_MouseDown(object sender, MouseEventArgs e)
+		private void S_Palette_MouseDown(object sender, MouseEventArgs e)
 		{
-			PictureBox pbPalette = sender as PictureBox;
-			Tab tab = GetTab_Palette(pbPalette);
-			Subpalette palette = m_doc.GetSpritePalette(tab).CurrentSubpalette;
+			Palette_MouseDown(GetTab(Tab.Type.Sprites), e);
+		}
+
+		private void BS_Palette_MouseDown(object sender, MouseEventArgs e)
+		{
+			Palette_MouseDown(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		// This is called when the user presses the mouse in the palette.
+		private void Palette_MouseDown(Tab tab, MouseEventArgs e)
+		{
+			PictureBox pbPalette = tab.PaletteWindow;
+			Subpalette palette = tab.Palettes.CurrentPalette.CurrentSubpalette;
 
 			m_fPalette_OriginalColor = palette.CurrentColor;
 			m_fPalette_Selecting = true;
@@ -222,13 +297,22 @@ namespace Spritely
 			}
 		}
 
-		private void Palette_MouseMove(object sender, MouseEventArgs e)
+		private void S_Palette_MouseMove(object sender, MouseEventArgs e)
+		{
+			Palette_MouseMove(GetTab(Tab.Type.Sprites), e);
+		}
+
+		private void BS_Palette_MouseMove(object sender, MouseEventArgs e)
+		{
+			Palette_MouseMove(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void Palette_MouseMove(Tab tab, MouseEventArgs e)
 		{
 			if (m_fPalette_Selecting)
 			{
-				PictureBox pbPalette = sender as PictureBox;
-				Tab tab = GetTab_Palette(pbPalette);
-				Subpalette palette = m_doc.GetSpritePalette(tab).CurrentSubpalette;
+				PictureBox pbPalette = tab.PaletteWindow;
+				Subpalette palette = tab.Palettes.CurrentPalette.CurrentSubpalette;
 
 				if (palette.HandleMouse(e.X, e.Y))
 				{
@@ -237,12 +321,21 @@ namespace Spritely
 			}
 		}
 
-		// This is called when the user releases the mouse after pressing it within the palette
-		private void Palette_MouseUp(object sender, MouseEventArgs e)
+		private void S_Palette_MouseUp(object sender, MouseEventArgs e)
 		{
-			PictureBox pbPalette = sender as PictureBox;
-			Tab tab = GetTab_Palette(pbPalette);
-			Subpalette palette = m_doc.GetSpritePalette(tab).CurrentSubpalette;
+			Palette_MouseUp(GetTab(Tab.Type.Sprites));
+		}
+
+		private void BS_Palette_MouseUp(object sender, MouseEventArgs e)
+		{
+			Palette_MouseUp(GetTab(Tab.Type.BackgroundSprites));
+		}
+
+		// This is called when the user releases the mouse after pressing it within the palette
+		private void Palette_MouseUp(Tab tab)
+		{
+			PictureBox pbPalette = tab.PaletteWindow;
+			Subpalette palette = tab.Palettes.CurrentPalette.CurrentSubpalette;
 
 			m_fPalette_Selecting = false;
 
@@ -253,11 +346,25 @@ namespace Spritely
 			}
 		}
 
-		private void Palette_Paint(object sender, PaintEventArgs e)
+		private void S_Palette_Paint(object sender, PaintEventArgs e)
 		{
-			PictureBox pbPalette = sender as PictureBox;
-			Tab tab = GetTab_Palette(pbPalette);
-			Subpalette palette = m_doc.GetSpritePalette(tab).CurrentSubpalette;
+			Palette_Paint(GetTab(Tab.Type.Sprites), e);
+		}
+
+		private void BS_Palette_Paint(object sender, PaintEventArgs e)
+		{
+			Palette_Paint(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void BM_Palette_Paint(object sender, PaintEventArgs e)
+		{
+			Palette_Paint(GetTab(Tab.Type.BackgroundMap), e);
+		}
+
+		private void Palette_Paint(Tab tab, PaintEventArgs e)
+		{
+			PictureBox pbPalette = tab.PaletteWindow;
+			Subpalette palette = tab.Palettes.CurrentPalette.CurrentSubpalette;
 
 			palette.Draw(e.Graphics);
 		}
@@ -266,11 +373,20 @@ namespace Spritely
 
 		#region Palette Swatch
 
-		private void PaletteSwatch_Paint(object sender, PaintEventArgs e)
+		private void S_PaletteSwatch_Paint(object sender, PaintEventArgs e)
 		{
-			PictureBox pbSwatch = sender as PictureBox;
-			Tab tab = GetTab_PaletteSwatch(pbSwatch);
-			m_doc.GetSpritePalette(tab).CurrentSubpalette.DrawSwatch(e.Graphics);
+			PaletteSwatch_Paint(GetTab(Tab.Type.Sprites), e);
+		}
+
+		private void BS_PaletteSwatch_Paint(object sender, PaintEventArgs e)
+		{
+			PaletteSwatch_Paint(GetTab(Tab.Type.BackgroundSprites), e);
+		}
+
+		private void PaletteSwatch_Paint(Tab tab, PaintEventArgs e)
+		{
+			PictureBox pbSwatch = tab.PaletteSwatchWindow;
+			tab.Palettes.CurrentPalette.CurrentSubpalette.DrawSwatch(e.Graphics);
 		}
 
 		#endregion

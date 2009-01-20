@@ -1,4 +1,7 @@
 0.*.*
+Create real Tab class to manage controls on each tab (finally).
+New UI prototype: Ownerdraw tabs in new project window so that the area to
+  the right of the last tab isn't drawn in the dark "MDI background" color.
 
 0.13.17
 Update generated code:

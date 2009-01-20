@@ -23,9 +23,10 @@ namespace Spritely
 		// This is called when the user switches to the BackgroundMap tab.
 		public void UpdateBackgroundMapPalette()
 		{
+			//TODO: fix this
 			Palette bgpal = m_doc.GetBackgroundPalette(Options.DefaultBgPaletteId);
-			Palette bmpal = m_doc.GetBackgroundMapPalette();
-			bmpal.CopySubpalettes(bgpal);
+			//Palette bmpal = m_doc.GetBackgroundMapPalette();
+			//bmpal.CopySubpalettes(bgpal);
 		}
 
 		#region Edit Background Map

@@ -60,6 +60,11 @@ namespace Spritely
 			return m_palettes[id];
 		}
 
+		public Palette CurrentPalette
+		{
+			get { return m_palettes[0]; }
+		}
+
 		public bool LoadXML_palettes(XmlNode xnode)
 		{
 			foreach (XmlNode xn in xnode.ChildNodes)
