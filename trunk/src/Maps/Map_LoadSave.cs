@@ -100,7 +100,7 @@ namespace Spritely
 			tw.Write(String.Format(" id=\"{0}\"", m_id));
 			tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
 			tw.Write(" size=\"32x32\"");
-			tw.Write(String.Format(" bgspriteset_id=\"{0}\"", m_bgtiles.Id));
+			tw.Write(String.Format(" bgspriteset_id=\"{0}\"", m_ss.Id));
 			tw.Write(String.Format(" default_subpalette_id=\"{0}\"", nDefaultSubpalette));
 			tw.WriteLine(">");
 			tw.WriteLine("\t\t\t<map16block id=\"0\">");

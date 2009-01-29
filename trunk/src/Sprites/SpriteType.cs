@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Spritely
 {
-	class SpriteType
+	public class SpriteType
 	{
 		public string Name;
 		/// <summary>

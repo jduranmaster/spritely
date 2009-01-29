@@ -128,7 +128,6 @@ namespace Spritely
 			m_nRGBWordBits[nIndex++] = (cRed & 0x04) == 0x04 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cRed & 0x02) == 0x02 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cRed & 0x01) == 0x01 ? 1 : 0;
-
 		}
 
 		private void AdjustColorScrollbars()

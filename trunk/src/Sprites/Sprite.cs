@@ -277,15 +277,20 @@ namespace Spritely
 			set { m_strDesc = value; }
 		}
 
-		public int PaletteID
+		public int SubpaletteID
 		{
 			get { return m_nSubpaletteID; }
 			set { m_nSubpaletteID = value; }
 		}
 
-		public Subpalette Palette
+		//public Palette Palette
+		//{
+		//	get { return m_sl.Palette; }
+		//}
+
+		public Subpalette Subpalette
 		{
-			get { return m_sl.Palettes.GetSubpalette(m_nSubpaletteID); }
+			get { return m_ss.Palette.GetSubpalette(m_nSubpaletteID); }
 		}
 
 		public Tile GetTile(int nTileIndex)
@@ -612,107 +617,6 @@ namespace Spritely
 			}
 		}
 
-		/// <summary>
-		/// Handle a click at the specified (x,y) pixel coords
-		/// </summary>
-		/// <param name="pxSpriteX">Click x-position (in pixels)</param>
-		/// <param name="pxSpriteY">Click y-position (in pixels)</param>
-		/// <returns>True if the sprite changes as a result of this click, false otherwise.</returns>
-		public bool Click(int pxSpriteX, int pxSpriteY, Toolbox.ToolType tool)
-		{
-			// Ignore if pixel is outside bounds of current sprite.
-			if (pxSpriteX >= PixelWidth || pxSpriteY >= PixelHeight)
-				return false;
-
-			if (tool == Toolbox.ToolType.FloodFill)
-				return FloodFillClick(pxSpriteX, pxSpriteY);
-
-			// Convert sprite pixel coords (x,y) into tile index (x,y) and tile pixel coords (x,y).
-			int tileX = pxSpriteX / Tile.TileSize;
-			int pxX = pxSpriteX % Tile.TileSize;
-			int tileY = pxSpriteY / Tile.TileSize;
-			int pxY = pxSpriteY % Tile.TileSize;
-
-			int nTileIndex = (tileY * TileWidth) + tileX;
-
-			if (tool == Toolbox.ToolType.Eyedropper)
-				return m_Tiles[nTileIndex].SelectColorClick(pxX, pxY);
-
-			return m_Tiles[nTileIndex].Click(pxX, pxY, tool == Toolbox.ToolType.Eraser);
-		}
-
-		/// <summary>
-		/// Finish an editing operation.
-		/// </summary>
-		public void FinishEdit(Toolbox.ToolType tool)
-		{
-			switch (tool)
-			{
-				case Toolbox.ToolType.Eraser:
-				case Toolbox.ToolType.Eyedropper:
-				case Toolbox.ToolType.FloodFill:
-				case Toolbox.ToolType.Pencil:
-					// These are immediate tools - nothing to finish up.
-					return;
-			}
-
-			//return m_Tiles[nTileIndex].Click(pxX, pxY, tool == Toolbox.ToolType.Eraser);
-		}
-
-		public class PixelCoord
-		{
-			public int X, Y;
-
-			public PixelCoord(int x, int y)
-			{
-				X = x;
-				Y = y;
-			}
-		}
-
-		/// <summary>
-		/// Perform a floodfill click at the specified (x,y) pixel coords
-		/// </summary>
-		/// <param name="pxSpriteX">Click x-position (in pixels)</param>
-		/// <param name="pxSpriteY">Click y-position (in pixels)</param>
-		/// <returns>True if the sprite changes as a result of this click, false otherwise.</returns>
-		public bool FloodFillClick(int pxSpriteX, int pxSpriteY)
-		{
-			int colorOld = GetPixel(pxSpriteX, pxSpriteY);
-			int colorNew = Palette.CurrentColor;
-			if (colorOld == colorNew)
-				return false;
-
-			// Stack of pixels to process.
-			Stack<PixelCoord> stackPixels = new Stack<PixelCoord>();
-
-			PixelCoord p = new PixelCoord(pxSpriteX, pxSpriteY);
-			stackPixels.Push(p);
-
-			while (stackPixels.Count != 0)
-			{
-				p = stackPixels.Pop();
-				SetPixel(p.X, p.Y, colorNew);
-
-				FloodFill_CheckPixel(p.X-1, p.Y,   colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X + 1, p.Y, colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X, p.Y - 1, colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X, p.Y + 1, colorOld, ref stackPixels);
-			}
-
-			FlushBitmaps();
-			return true;
-		}
-
-		private void FloodFill_CheckPixel(int x, int y, int color, ref Stack<PixelCoord> stack)
-		{
-			if (x >= 0 && x < PixelWidth && y >= 0 && y < PixelHeight
-				&& GetPixel(x, y) == color)
-			{
-				stack.Push(new PixelCoord(x, y));
-			}
-		}
-
 		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
 		{
 			if (shift == Toolbox_Sprite.ShiftArrow.Left)
@@ -871,64 +775,7 @@ namespace Spritely
 			}
 		}
 
-		public void DrawBigSprite(Graphics g)
-		{
-			int nX, nY;
-
-			for (int iRow = 0; iRow < TileHeight; iRow++)
-			{
-				for (int iColumn = 0; iColumn < TileWidth; iColumn++)
-				{
-					nX = (iColumn * Tile.BigBitmapScreenSize);
-					nY = (iRow * Tile.BigBitmapScreenSize);
-					m_Tiles[(iRow * TileWidth) + iColumn].DrawBigTile(g, nX, nY);
-				}
-			}
-		}
-
-		public void DrawEditSprite(Graphics g)
-		{
-			DrawBigSprite(g);
-
-			// Draw the grid and border.
-			int pxPixelSize = Tile.BigBitmapPixelSize;
-			int pxTileSize = Tile.BigBitmapScreenSize;
-			int pxX0 = 0;
-			int pxY0 = 0;
-			int pxX1 = TileWidth * pxTileSize;
-			int pxY1 = TileHeight * pxTileSize;
-
-			Pen penPixelBorder = Pens.LightGray;
-			Pen penSpriteBorder = Pens.Gray;
-
-			// Draw border around each pixel.
-			if (Tile.BigBitmapPixelSize > 2 && Options.Sprite_ShowPixelGrid)
-			{
-				for (int i = pxX0 + pxPixelSize; i < pxX1; i += pxPixelSize)
-					g.DrawLine(penPixelBorder, i, pxY0, i, pxY1);
-				for (int i = pxY0 + pxPixelSize; i < pxY1; i += pxPixelSize)
-					g.DrawLine(penPixelBorder, pxX0, i, pxX1, i);
-			}
-			else
-			{
-				penSpriteBorder = Pens.LightGray;
-			}
-
-			// Draw a border around each sprite.
-			if (Tile.BigBitmapPixelSize > 1 && Options.Sprite_ShowTileGrid)
-			{
-				for (int i = pxX0 + pxTileSize; i < pxX1; i += pxTileSize)
-					g.DrawLine(penSpriteBorder, i, pxY0, i, pxY1);
-				for (int i = pxY0 + pxTileSize; i < pxY1; i += pxTileSize)
-					g.DrawLine(penSpriteBorder, pxX0, i, pxX1, i);
-			}
-
-			// Draw the outer border.
-			g.DrawLine(Pens.Black, pxX0, pxY0, pxX1, pxY0);	// Top
-			g.DrawLine(Pens.Black, pxX0, pxY0, pxX0, pxY1);	// Left
-			g.DrawLine(Pens.Black, pxX0, pxY1, pxX1, pxY1);	// Bottom
-			g.DrawLine(Pens.Black, pxX1, pxY0, pxX1, pxY1);	// Right
-		}
+		#region Undo
 
 		public void RecordUndoAction(string strDesc)
 		{
@@ -941,7 +788,7 @@ namespace Spritely
 			// Don't record anything if there aren't any changes
 			if (!data.Equals(m_snapshot))
 			{
-				UndoAction_SpriteEdit action = new UndoAction_SpriteEdit(undo, m_sl, this, m_snapshot, data, strDesc);
+				UndoAction_SpriteEdit action = new UndoAction_SpriteEdit(undo, m_ss, this, m_snapshot, data, strDesc);
 				undo.Push(action);
 
 				// Update the snapshot for the next UndoAction
@@ -1000,6 +847,8 @@ namespace Spritely
 
 			RecordSnapshot();
 		}
+
+		#endregion
 
 	}
 

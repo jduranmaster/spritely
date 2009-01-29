@@ -16,7 +16,6 @@ Sprite List: reorder sprites (up/down within size group)
 Sprite Edit: marquee select
 Sprite Edit: tools for line, rect, filled rect, oval filled oval
 Sprite Edit: set/manage origin, bounding box
-Sprite Edit: flip/rotate sprites
 Sprite Edit: cursors for each active tool
 Sprite Edit: deleting last sprite in list doesn't select a new sprite
 
@@ -27,8 +26,6 @@ Background Edit: collision editor to mark places on map
 
 Background: Allow import of 256-color images into background
 Background: splash screen
-
-Tests: Add unit test framework
 
 Palettes: Add better color editing options: RGB, HSV, large palette
 Palettes: Add support for a single 256-color palette

@@ -1,7 +1,14 @@
-0.*.*
-Create real Tab class to manage controls on each tab (finally).
-New UI prototype: Ownerdraw tabs in new project window so that the area to
-  the right of the last tab isn't drawn in the dark "MDI background" color.
+0.13.28
+*** CHECKPOINT - Not intended for binary release ***
+Switch to new UI:
+  Subwindows for each UI component: spriteset, sprite, palette, map.
+  Background tile editing and map editing now on same tab.
+  Eventually will allow multiple subwindows for each type.
+  Ownerdraw tabs in new project window so that the area to the right of
+    the last tab isn't drawn in the dark "MDI background" color.
+Note:
+  Numerous UI elements are not completely hooked up and this version
+    is not completely functional.
 
 0.13.17
 Update generated code:

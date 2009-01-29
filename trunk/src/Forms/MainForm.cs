@@ -7,13 +7,13 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class MainForm : Form
+	public partial class OldMainForm : Form
 	{
 		public string AppName = "Spritely";
 
-		private ProjectMainForm m_project;
 		private Document m_doc;
-		private RecentFiles m_recent;
+
+		private ProjectMainForm m_newui;
 
 		private Toolbox_Sprite m_SpriteToolbox;
 		private Toolbox_Sprite m_BackgroundSpriteToolbox;
@@ -22,16 +22,17 @@ namespace Spritely
 		/// <summary>
 		/// Info about each of the tabs in the form.
 		/// </summary>
-		private Tab[] m_tabs;
+		private OldTab[] m_tabs;
 
 		/// <summary>
 		/// Currently visible tab.
 		/// </summary>
-		private Tab m_tabCurrent;
+		private OldTab m_tabCurrent;
 
-		public MainForm(string strFilename)
+		public OldMainForm(Document doc, ProjectMainForm newui)
 		{
-			bool fNewDocument = true;
+			m_doc = doc;
+			m_newui = newui;
 
 			InitializeComponent();
 
@@ -40,44 +41,9 @@ namespace Spritely
 			m_BackgroundMapToolbox = new Toolbox_Map();
 
 			// Create tabs
-			m_tabs = new Tab[(int)Tab.Type.MAX];
+			m_tabs = new OldTab[(int)OldTab.Type.MAX];
 			InitTabs();
-			m_tabCurrent = GetTab(Tab.Type.Sprites);
-
-			// Init the list of recent files.
-			m_recent = new RecentFiles(this, menuFile_RecentFiles);
-
-			// If we were given a filename, than open the specified file.
-			if (strFilename != "")
-			{
-				m_doc = new Document(this);
-				if (m_doc.Open(strFilename))
-				{
-					fNewDocument = false;
-					SetTitleBar(m_doc.Name);
-				}
-			}
-
-			// otherwise, create a brand new (empty) document.
-			if (fNewDocument)
-				Handle_NewDocument();
-
-			Handle_AllSpritesChanged();
-
-			// Set edit zoom level to 16 pixels
-			cbS_Zoom.SelectedIndex = 4;
-			AdjustAllSpriteListScrollbars();
-			UpdatePaletteColor(GetTab(Tab.Type.Sprites));
-
-			cbBS_Zoom.SelectedIndex = 4;
-			AdjustAllBackgroundSpriteListScrollbars();
-			UpdatePaletteColor(GetTab(Tab.Type.BackgroundSprites));
-
-			// Clear out the Undo stack to remove the default sprites.
-			m_doc.ResetUndo();
-
-			// Create the new UI form.
-			m_project = new ProjectMainForm(m_doc);
+			m_tabCurrent = GetTab(OldTab.Type.Sprites);
 		}
 
 		/// <summary>
@@ -86,9 +52,9 @@ namespace Spritely
 		/// </summary>
 		private void InitTabs()
 		{
-			Tab tab;
+			OldTab tab;
 			
-			tab = new Tab(Tab.Type.Sprites, this);
+			tab = new OldTab(OldTab.Type.Sprites, this);
 			tab.PaletteWindow = pbS_Palette;
 			tab.PaletteSelectWindow = pbS_PaletteSelect;
 			tab.PaletteSwatchWindow = pbS_PaletteSwatch;
@@ -105,9 +71,9 @@ namespace Spritely
 			tab.Toolbox = m_SpriteToolbox;
 			tab.ToolboxWindow = pbS_Toolbox;
 			tab.ToolboxZoomCombobox = cbS_Zoom;
-			m_tabs[(int)Tab.Type.Sprites] = tab;
+			m_tabs[(int)OldTab.Type.Sprites] = tab;
 
-			tab = new Tab(Tab.Type.BackgroundSprites, this);
+			tab = new OldTab(OldTab.Type.BackgroundSprites, this);
 			tab.PaletteWindow = pbBS_Palette;
 			tab.PaletteSelectWindow = pbBS_PaletteSelect;
 			tab.PaletteSwatchWindow = pbBS_PaletteSwatch;
@@ -124,9 +90,9 @@ namespace Spritely
 			tab.Toolbox = m_BackgroundSpriteToolbox;
 			tab.ToolboxWindow = pbBS_Toolbox;
 			tab.ToolboxZoomCombobox = cbBS_Zoom;
-			m_tabs[(int)Tab.Type.BackgroundSprites] = tab;
+			m_tabs[(int)OldTab.Type.BackgroundSprites] = tab;
 
-			tab = new Tab(Tab.Type.BackgroundMap, this);
+			tab = new OldTab(OldTab.Type.BackgroundMap, this);
 			tab.PaletteWindow = pbBM_Palette;
 			tab.PaletteSelectWindow = pbBM_PaletteSelect;
 			tab.PaletteSwatchWindow = null;
@@ -143,11 +109,22 @@ namespace Spritely
 			tab.Toolbox = m_BackgroundMapToolbox;
 			tab.ToolboxWindow = pbBM_Toolbox;
 			tab.ToolboxZoomCombobox = null;
-			m_tabs[(int)Tab.Type.BackgroundMap] = tab;
+			m_tabs[(int)OldTab.Type.BackgroundMap] = tab;
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			Handle_AllSpritesChanged();
+
+			// Set edit zoom level to 16 pixels
+			cbS_Zoom.SelectedIndex = 4;
+			AdjustAllSpriteListScrollbars();
+			UpdatePaletteColor(GetTab(OldTab.Type.Sprites));
+
+			cbBS_Zoom.SelectedIndex = 4;
+			AdjustAllBackgroundSpriteListScrollbars();
+			UpdatePaletteColor(GetTab(OldTab.Type.BackgroundSprites));
+
 			// This allows the form to preview the key before it is passed to the control.
 			this.KeyPreview = true;
 
@@ -167,26 +144,26 @@ namespace Spritely
 		{
 			SpriteList sl;
 			Sprite s;
-			Tab tab = m_tabCurrent;
+			OldTab tab = m_tabCurrent;
 			switch (keyData)
 			{
 				case Keys.Alt | Keys.Left:
 				case Keys.Alt | Keys.Up:
 					sl = tab.SpriteList;;
-					s = sl.PrevSprite(sl.CurrentSprite);
+					s = null;// sl.PrevSprite(sl.CurrentSprite);
 					if (s != null)
 					{
-						sl.CurrentSprite = s;
+						//sl.CurrentSprite = s;
 						Handle_SpritesChanged(tab);
 					}
 					return true;
 				case Keys.Alt | Keys.Right:
 				case Keys.Alt | Keys.Down:
 					sl = tab.SpriteList;
-					s = sl.NextSprite(sl.CurrentSprite);
+					s = null;// sl.NextSprite(sl.CurrentSprite);
 					if (s != null)
 					{
-						sl.CurrentSprite = s;
+						//sl.CurrentSprite = s;
 						Handle_SpritesChanged(tab);
 					}
 					return true;
@@ -197,7 +174,7 @@ namespace Spritely
 
 		private void Handle_NewDocument()
 		{
-			m_doc = new Document(this);
+			m_doc = new Document(m_newui);
 			m_doc.InitializeEmptyDocument();
 
 			Handle_AllSpritesChanged();
@@ -206,15 +183,15 @@ namespace Spritely
 
 		private void Handle_AllSpritesChanged()
 		{
-			Handle_SpritesChanged(GetTab(Tab.Type.Sprites));
-			Handle_SpritesChanged(GetTab(Tab.Type.BackgroundSprites));
-			Handle_SpritesChanged(GetTab(Tab.Type.BackgroundMap));
+			Handle_SpritesChanged(GetTab(OldTab.Type.Sprites));
+			Handle_SpritesChanged(GetTab(OldTab.Type.BackgroundSprites));
+			Handle_SpritesChanged(GetTab(OldTab.Type.BackgroundMap));
 		}
 
-		private void Handle_SpritesChanged(Tab tab)
+		private void Handle_SpritesChanged(OldTab tab)
 		{
-			if (tab.Spritesets.Current.CurrentSprite != null)
-				tab.Palettes.CurrentPalette.CurrentSubpaletteID = tab.Spritesets.Current.CurrentSprite.PaletteID;
+			//if (tab.Spritesets.Current.CurrentSprite != null)
+			//	tab.Palettes.CurrentPalette.CurrentSubpaletteID = tab.Spritesets.Current.CurrentSprite.PaletteID;
 
 			// Updating the palette causes a cascade of updates that results in the sprites and
 			// bg maps being updated.
@@ -226,8 +203,6 @@ namespace Spritely
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (!m_doc.Close())
-				e.Cancel = true;
 		}
 
 		public Document Doc
@@ -235,65 +210,9 @@ namespace Spritely
 			get { return m_doc; }
 		}
 
-		public ProjectMainForm NewUI
-		{
-			get { return m_project; }
-		}
-
-		public Tab GetTab(Tab.Type tab)
+		public OldTab GetTab(OldTab.Type tab)
 		{
 			return m_tabs[(int)tab];
-		}
-
-		public void Info(string str)
-		{
-			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-		}
-
-		public void NYI()
-		{
-			// "Sorry - Not Yet Implemented"
-			MessageBox.Show(ResourceMgr.GetString("NYI"), AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-		}
-
-		public void Warning(string str)
-		{
-			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-		}
-
-		public void Error(string str)
-		{
-			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-		}
-
-		/// <summary>
-		/// Pose a yes/no question to the user
-		/// </summary>
-		/// <param name="str">The yes/no question to pose to the user</param>
-		/// <returns>True if yes, false if no</returns>
-		public bool AskYesNo(string str)
-		{
-			DialogResult result = MessageBox.Show(str, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-			if (result == DialogResult.Yes)
-				return true;
-			return false;
-		}
-
-		/// <summary>
-		/// Pose a yes/no question to the user, allowing the user to cancel
-		/// </summary>
-		/// <param name="str">The yes/no question to pose to the user</param>
-		/// <param name="fCancel">Flag indicating if the user has cancelled</param>
-		/// <returns>True if yes, false if no</returns>
-		public bool AskYesNoCancel(string str, out bool fCancel)
-		{
-			fCancel = false;
-			DialogResult result = MessageBox.Show(str, AppName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-			if (result == DialogResult.Cancel)
-				fCancel = true;
-			if (result == DialogResult.Yes)
-				return true;
-			return false;
 		}
 
 		private void SetTitleBar(string strFilename)
@@ -303,21 +222,21 @@ namespace Spritely
 
 		#region TabSet
 
-		public Tab CurrentTab
+		public OldTab CurrentTab
 		{
 			get { return m_tabCurrent; }
 		}
 
 		private void tabSet_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Tab.Type tabNew = (Tab.Type)tabSet.SelectedIndex;
+			OldTab.Type tabNew = (OldTab.Type)tabSet.SelectedIndex;
 			switch (tabNew)
 			{
-				case Tab.Type.Sprites:
+				case OldTab.Type.Sprites:
 					break;
-				case Tab.Type.BackgroundSprites:
+				case OldTab.Type.BackgroundSprites:
 					break;
-				case Tab.Type.BackgroundMap:
+				case OldTab.Type.BackgroundMap:
 					UpdateBackgroundMapPalette();
 					break;
 			}
@@ -330,18 +249,18 @@ namespace Spritely
 
 		private void tabSet_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			if (tab.TabType != Tab.Type.Sprites && tab.TabType != Tab.Type.BackgroundSprites)
+			OldTab tab = m_tabCurrent;
+			if (tab.TabType != OldTab.Type.Sprites && tab.TabType != OldTab.Type.BackgroundSprites)
 				return;
 
 			char ch = e.KeyChar;
 			if (ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'f')
 			{
-				Subpalette p = tab.Palettes.CurrentPalette.CurrentSubpalette;
+				//Subpalette p = null;// tab.Palettes.CurrentPalette.CurrentSubpalette;
 				int nIndex = ch - '0';
 				if (nIndex > 9)
 					nIndex -= ('a' - '0' - 10);
-				p.CurrentColor = nIndex;
+				//p.CurrentColor = nIndex;
 				UpdatePaletteSelect(tab);
 				//p.RecordUndoAction("key select");
 				e.Handled = true;

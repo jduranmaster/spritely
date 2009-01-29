@@ -37,13 +37,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Files\FileHandler_Export.cs" />
-    <Compile Include="Files\FileHandler_Load.cs" />
-    <Compile Include="Forms\Palette16Form.cs">
+    <Compile Include="Forms\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Palette16Form.Designer.cs">
-      <DependentUpon>Palette16Form.cs</DependentUpon>
+    <Compile Include="Forms\MapForm.Designer.cs">
+      <DependentUpon>MapForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Palettes\Color555.cs" />
+    <Compile Include="Files\FileHandler_Export.cs" />
+    <Compile Include="Files\FileHandler_Load.cs" />
+    <Compile Include="Forms\Palette256Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Palette256Form.Designer.cs">
+      <DependentUpon>Palette256Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProjectMainForm.cs">
       <SubType>Form</SubType>
@@ -53,12 +60,6 @@
     </Compile>
     <Compile Include="Forms\ProjectMainForm_Menu.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProjectTreeViewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProjectTreeViewForm.Designer.cs">
-      <DependentUpon>ProjectTreeViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SpriteForm.cs">
       <SubType>Form</SubType>
@@ -88,12 +89,19 @@
     <Compile Include="Maps\MapBlock.cs" />
     <Compile Include="Maps\Maps.cs" />
     <Compile Include="Maps\Map_LoadSave.cs" />
+    <Compile Include="Forms\Palette16Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Palette16Form.Designer.cs">
+      <DependentUpon>Palette16Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Palettes\Palettes.cs" />
     <Compile Include="Sprites\Spriteset.cs" />
     <Compile Include="Sprites\Spritesets.cs" />
     <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="Sprites\Sprite_LoadSave.cs" />
-    <Compile Include="Tab.cs" />
+    <Compile Include="Main\Tab.cs" />
+    <Compile Include="Forms\TabMgr.cs" />
     <Compile Include="Toolbox\Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
@@ -177,6 +185,14 @@
       <SubType>Designer</SubType>
       <DependentUpon>ColorEncodingView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapForm.resx">
+      <DependentUpon>MapForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Palette256Form.resx">
+      <DependentUpon>Palette256Form.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Export.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Export.cs</DependentUpon>
@@ -189,17 +205,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Palette16Form.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Palette16Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProjectMainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProjectMainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProjectTreeViewForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ProjectTreeViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpriteForm.resx">
       <SubType>Designer</SubType>
@@ -224,6 +232,10 @@
     <EmbeddedResource Include="Forms\UnitTestForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UnitTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Palette16Form.resx">
+      <DependentUpon>Palette16Form.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

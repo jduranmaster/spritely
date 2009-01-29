@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class MainForm : Form
+	public partial class OldMainForm : Form
 	{
 		#region Toolbox
 
@@ -15,20 +15,20 @@ namespace Spritely
 
 		private void S_Toolbox_MouseDown(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseDown(GetTab(Tab.Type.Sprites), e);
+			Toolbox_MouseDown(GetTab(OldTab.Type.Sprites), e);
 		}
 
 		private void BS_Toolbox_MouseDown(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseDown(GetTab(Tab.Type.BackgroundSprites), e);
+			Toolbox_MouseDown(GetTab(OldTab.Type.BackgroundSprites), e);
 		}
 
 		private void BM_Toolbox_MouseDown(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseDown(GetTab(Tab.Type.BackgroundMap), e);
+			Toolbox_MouseDown(GetTab(OldTab.Type.BackgroundMap), e);
 		}
 
-		private void Toolbox_MouseDown(Tab tab, MouseEventArgs e)
+		private void Toolbox_MouseDown(OldTab tab, MouseEventArgs e)
 		{
 			PictureBox pbToolbox = tab.ToolboxWindow;
 			Toolbox toolbox = tab.Toolbox;
@@ -64,20 +64,20 @@ namespace Spritely
 
 		private void S_Toolbox_MouseMove(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseMove(GetTab(Tab.Type.Sprites), e);
+			Toolbox_MouseMove(GetTab(OldTab.Type.Sprites), e);
 		}
 
 		private void BS_Toolbox_MouseMove(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseMove(GetTab(Tab.Type.BackgroundSprites), e);
+			Toolbox_MouseMove(GetTab(OldTab.Type.BackgroundSprites), e);
 		}
 
 		private void BM_Toolbox_MouseMove(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseMove(GetTab(Tab.Type.BackgroundMap), e);
+			Toolbox_MouseMove(GetTab(OldTab.Type.BackgroundMap), e);
 		}
 
-		private void Toolbox_MouseMove(Tab tab, MouseEventArgs e)
+		private void Toolbox_MouseMove(OldTab tab, MouseEventArgs e)
 		{
 			PictureBox pbToolbox = tab.ToolboxWindow;
 			Toolbox toolbox = tab.Toolbox;
@@ -100,20 +100,20 @@ namespace Spritely
 
 		private void S_Toolbox_MouseUp(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseUp(GetTab(Tab.Type.Sprites), e);
+			Toolbox_MouseUp(GetTab(OldTab.Type.Sprites), e);
 		}
 
 		private void BS_Toolbox_MouseUp(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseUp(GetTab(Tab.Type.BackgroundSprites), e);
+			Toolbox_MouseUp(GetTab(OldTab.Type.BackgroundSprites), e);
 		}
 
 		private void BM_Toolbox_MouseUp(object sender, MouseEventArgs e)
 		{
-			Toolbox_MouseUp(GetTab(Tab.Type.BackgroundMap), e);
+			Toolbox_MouseUp(GetTab(OldTab.Type.BackgroundMap), e);
 		}
 
-		private void Toolbox_MouseUp(Tab tab, MouseEventArgs e)
+		private void Toolbox_MouseUp(OldTab tab, MouseEventArgs e)
 		{
 			PictureBox pbToolbox = tab.ToolboxWindow;
 			Toolbox toolbox = tab.Toolbox;
@@ -130,20 +130,20 @@ namespace Spritely
 
 		private void S_Toolbox_MouseLeave(object sender, EventArgs e)
 		{
-			Toolbox_MouseLeave(GetTab(Tab.Type.Sprites), e);
+			Toolbox_MouseLeave(GetTab(OldTab.Type.Sprites), e);
 		}
 
 		private void BS_Toolbox_MouseLeave(object sender, EventArgs e)
 		{
-			Toolbox_MouseLeave(GetTab(Tab.Type.BackgroundSprites), e);
+			Toolbox_MouseLeave(GetTab(OldTab.Type.BackgroundSprites), e);
 		}
 
 		private void BM_Toolbox_MouseLeave(object sender, EventArgs e)
 		{
-			Toolbox_MouseLeave(GetTab(Tab.Type.BackgroundMap), e);
+			Toolbox_MouseLeave(GetTab(OldTab.Type.BackgroundMap), e);
 		}
 
-		private void Toolbox_MouseLeave(Tab tab, EventArgs e)
+		private void Toolbox_MouseLeave(OldTab tab, EventArgs e)
 		{
 			PictureBox pbToolbox = tab.ToolboxWindow;
 			Toolbox toolbox = tab.Toolbox;
@@ -162,20 +162,20 @@ namespace Spritely
 
 		private void S_Toolbox_Paint(object sender, PaintEventArgs e)
 		{
-			Toolbox_Paint(GetTab(Tab.Type.Sprites), e);
+			Toolbox_Paint(GetTab(OldTab.Type.Sprites), e);
 		}
 
 		private void BS_Toolbox_Paint(object sender, PaintEventArgs e)
 		{
-			Toolbox_Paint(GetTab(Tab.Type.BackgroundSprites), e);
+			Toolbox_Paint(GetTab(OldTab.Type.BackgroundSprites), e);
 		}
 
 		private void BM_Toolbox_Paint(object sender, PaintEventArgs e)
 		{
-			Toolbox_Paint(GetTab(Tab.Type.BackgroundMap), e);
+			Toolbox_Paint(GetTab(OldTab.Type.BackgroundMap), e);
 		}
 
-		private void Toolbox_Paint(Tab tab, PaintEventArgs e)
+		private void Toolbox_Paint(OldTab tab, PaintEventArgs e)
 		{
 			PictureBox pbToolbox = tab.ToolboxWindow;
 			Toolbox toolbox = tab.Toolbox;
@@ -184,33 +184,14 @@ namespace Spritely
 
 		private void S_Zoom_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateZoom(GetTab(Tab.Type.Sprites));
 		}
 
 		private void BS_Zoom_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateZoom(GetTab(Tab.Type.BackgroundSprites));
 		}
 
-		private void UpdateZoom(Tab tab)
+		private void UpdateZoom(OldTab tab)
 		{
-			if (tab.TabType != Tab.Type.Sprites && tab.TabType != Tab.Type.BackgroundSprites)
-				return;
-
-			ComboBox cbZoom = tab.ToolboxZoomCombobox;
-			PictureBox pbEditSprite = tab.EditSpriteWindow;
-
-			switch (cbZoom.SelectedIndex)
-			{
-				case 0: Tile.BigBitmapPixelSize = 1; break;
-				case 1: Tile.BigBitmapPixelSize = 2; break;
-				case 2: Tile.BigBitmapPixelSize = 4; break;
-				case 3: Tile.BigBitmapPixelSize = 8; break;
-				case 4: Tile.BigBitmapPixelSize = 16; break;
-				case 5: Tile.BigBitmapPixelSize = 32; break;
-			}
-
-			pbEditSprite.Invalidate();
 		}
 
 		#endregion

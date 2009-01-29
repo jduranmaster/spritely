@@ -11,11 +11,13 @@ namespace Spritely
 		private string m_strName;
 		private int m_id;
 		private string m_strDesc;
+		private bool m_fIsBackground;
 		private Palette m_palette;
 
 		private SpriteList m_sl;
 
 		private SpritesetForm m_winSpriteset;
+		private SpriteForm m_winSprite;
 
 		// List of maps that are based on this spritelist.
 		private List<Map> m_Maps;
@@ -27,10 +29,16 @@ namespace Spritely
 			m_id = id;
 			m_strDesc = strDesc;
 			m_palette = pal;
+			m_fIsBackground = pal.IsBackground;
 
-			m_winSpriteset = null;
-			m_sl = new SpriteList(doc, this, pal, pal.IsBackground);
+			m_sl = new SpriteList(doc, this);
 			m_Maps = new List<Map>();
+
+			if (m_doc.Owner != null)
+			{
+				m_winSpriteset = new SpritesetForm(m_doc.Owner, this); ;
+				m_winSprite = new SpriteForm(m_doc.Owner, this, CurrentSprite);
+			}
 		}
 
 		public void UpdateDocument(Document doc)
@@ -41,12 +49,25 @@ namespace Spritely
 
 		public SpritesetForm SpritesetWindow
 		{
-			get
-			{
-				if (m_winSpriteset == null)
-					m_winSpriteset = new SpritesetForm(m_doc.Owner.NewUI, this);
-				return m_winSpriteset;
-			}
+			get { return m_winSpriteset; }
+		}
+
+		public SpriteForm SpriteWindow
+		{
+			get { return m_winSprite; }
+		}
+
+		public Palette Palette
+		{
+			get { return m_palette; }
+		}
+
+		/// <summary>
+		/// Flush the bitmaps for all sprites so that they get regenerated.
+		/// </summary>
+		public void FlushBitmaps()
+		{
+			m_sl.FlushBitmaps();
 		}
 
 		// TODO: remove the SpriteList class and this accessor
@@ -66,6 +87,11 @@ namespace Spritely
 		public int Id
 		{
 			get { return m_id; }
+		}
+
+		public bool IsBackground
+		{
+			get { return m_fIsBackground; }
 		}
 
 		/// <summary>
@@ -112,12 +138,12 @@ namespace Spritely
 
 		public string AutoGenerateSpriteName()
 		{
-			return String.Format("S{0}", NextSpriteId++);
+			return String.Format(m_fIsBackground ? "BgS{0}" : "S{0}", NextSpriteId++);
 		}
 
 		public void RemoveSelectedSprite()
 		{
-			Sprite sToRemove = m_sl.CurrentSprite;
+			Sprite sToRemove = CurrentSprite;
 			m_sl.RemoveSprite(sToRemove, true);
 
 			foreach (Map m in m_Maps)
@@ -126,16 +152,14 @@ namespace Spritely
 			}
 		}
 
-		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, bool fAddUndo)
-		{
-			return m_sl.AddSprite(nWidth, nHeight, strName, id, strDesc, 0, fAddUndo);
-		}
-
 		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, bool fAddUndo)
 		{
 			if (id == -1)
 				id = NextTileId++;
 			Sprite s = m_sl.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpalette, fAddUndo);
+
+			if (m_winSprite != null)
+				m_winSprite.SetSprite(s);
 			return s;
 		}
 
@@ -149,26 +173,39 @@ namespace Spritely
 			return m_sl.FindSprite(nTileID);
 		}
 
+		/// <summary>
+		/// Select the first sprite.
+		/// This is useful after loading a file of sprites since otherwise the selected
+		/// sprite will be the last one loaded from the file.
+		/// </summary>
 		public void SelectFirstSprite()
 		{
-			m_sl.SelectFirstSprite();
+			foreach (SpriteType st in SpriteList.SpriteTypes)
+			{
+				foreach (Sprite s in st.Sprites)
+				{
+					CurrentSprite = s;
+					return;
+				}
+			}
 		}
 
 		/// <summary>
-		/// Flush the bitmaps for all sprites so that they get regenerated.
+		/// The currently selected sprite in the spriteset.
 		/// </summary>
-		public void FlushBitmaps()
-		{
-			m_sl.FlushBitmaps();
-		}
+		private Sprite m_spriteCurrent;
 
 		/// <summary>
 		/// The currently selected sprite in the spriteset.
 		/// </summary>
 		public Sprite CurrentSprite
 		{
-			get { return m_sl.CurrentSprite; }
-			set { m_sl.CurrentSprite = value; }
+			get { return m_spriteCurrent; }
+			set
+			{
+				m_spriteCurrent = value;
+				m_doc.Owner.HandleSpriteSelectionChanged(this);
+			}
 		}
 
 		/// <summary>
@@ -190,6 +227,8 @@ namespace Spritely
 		{
 			m_Maps.Add(m);
 		}
+
+		#region Load/Save/Export
 
 		public bool LoadXML_spriteset16(XmlNode xnode)
 		{
@@ -274,6 +313,8 @@ namespace Spritely
 		{
 			m_sl.Export_SpriteMaskData(tw);
 		}
+
+		#endregion
 
 	}
 }

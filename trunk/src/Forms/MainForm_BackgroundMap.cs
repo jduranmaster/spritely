@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class MainForm : Form
+	public partial class OldMainForm : Form
 	{
 		/// <summary>
 		/// The selection has changed, update the display.
@@ -63,21 +63,21 @@ namespace Spritely
 
 		private void EditBackgroundMap_MouseLeave(object sender, EventArgs e)
 		{
-			Map m = m_doc.BackgroundMaps.CurrentMap;
-			if (m.HandleMouseMove_EditMap(-10, -10))
-			{
-				pbBM_EditBackgroundMap.Invalidate();
-			}
+			//Map m = m_doc.BackgroundMaps.CurrentMap;
+			//if (m.HandleMouseMove_EditMap(-10, -10))
+			//{
+			//	pbBM_EditBackgroundMap.Invalidate();
+			//}
 		}
 
 		private void EditBackgroundMap_MouseUp(object sender, MouseEventArgs e)
 		{
-			m_fEditBackgroundMap_Selecting = false;
+			//m_fEditBackgroundMap_Selecting = false;
 		}
 
 		private void EditBackgroundMap_Paint(object sender, PaintEventArgs e)
 		{
-			m_doc.BackgroundMaps.CurrentMap.DrawBackgroundMap(e.Graphics);
+			//m_doc.BackgroundMaps.CurrentMap.DrawBackgroundMap(e.Graphics);
 		}
 
 		#endregion

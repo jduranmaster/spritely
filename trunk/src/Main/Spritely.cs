@@ -18,7 +18,7 @@ namespace Spritely
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm(strFilename));
+			Application.Run(new ProjectMainForm(strFilename));
 		}
 	}
 }

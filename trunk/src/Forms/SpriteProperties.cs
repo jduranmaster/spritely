@@ -12,8 +12,7 @@ namespace Spritely
 	public partial class SpriteProperties : Form
 	{
 		private Document m_doc;
-		private Spriteset m_ts;
-		private SpriteList m_sl;
+		private Spriteset m_ss;
 		private Sprite m_sprite;
 
 		public SpriteProperties(Document doc, Spriteset ss)
@@ -21,9 +20,8 @@ namespace Spritely
 			InitializeComponent();
 
 			m_doc = doc;
-			m_ts = ss;
-			m_sl = m_ts.SpriteList;
-			m_sprite = m_sl.CurrentSprite;
+			m_ss = ss;
+			m_sprite = m_ss.CurrentSprite;
 
 			UpdateSpriteInfo();
 		}
@@ -40,12 +38,12 @@ namespace Spritely
 			{
 				case Keys.Alt | Keys.Left:
 				case Keys.Alt | Keys.Up:
-					if (ValidateAllTextFields() && !m_sl.IsFirstSprite(m_sprite))
+					if (ValidateAllTextFields() && !m_ss.SpriteList.IsFirstSprite(m_sprite))
 						bPrev_Click(null, null);
 					return true;
 				case Keys.Alt | Keys.Right:
 				case Keys.Alt | Keys.Down:
-					if (ValidateAllTextFields() && !m_sl.IsLastSprite(m_sprite))
+					if (ValidateAllTextFields() && !m_ss.SpriteList.IsLastSprite(m_sprite))
 						bNext_Click(null, null);
 					return true;
 			}
@@ -58,8 +56,8 @@ namespace Spritely
 			m_sprite.Name = tbName.Text;
 			m_sprite.Description = tbDescription.Text;
 
-			Tab tab = m_doc.Owner.GetTab(Tab.Type.Sprites);
-			m_doc.Owner.UpdateSpriteInfo(tab);
+			OldTab tab = m_doc.OldOwner.GetTab(OldTab.Type.Sprites);
+			m_doc.OldOwner.UpdateSpriteInfo(tab);
 			this.Close();
 		}
 
@@ -81,13 +79,13 @@ namespace Spritely
 			pbSprite.Invalidate();
 
 			// Enable/disable the next/prev buttons.
-			bNext.Enabled = !m_sl.IsLastSprite(m_sprite);
-			bPrev.Enabled = !m_sl.IsFirstSprite(m_sprite);
+			bNext.Enabled = !m_ss.SpriteList.IsLastSprite(m_sprite);
+			bPrev.Enabled = !m_ss.SpriteList.IsFirstSprite(m_sprite);
 		}
 
 		private void bNext_Click(object sender, EventArgs e)
 		{
-			Sprite s = m_sl.NextSprite(m_sprite);
+			Sprite s = m_ss.SpriteList.NextSprite(m_sprite);
 			if (s != null)
 			{
 				m_sprite = s;
@@ -97,7 +95,7 @@ namespace Spritely
 
 		private void bPrev_Click(object sender, EventArgs e)
 		{
-			Sprite s = m_sl.PrevSprite(m_sprite);
+			Sprite s = m_ss.SpriteList.PrevSprite(m_sprite);
 			if (s != null)
 			{
 				m_sprite = s;
@@ -131,7 +129,7 @@ namespace Spritely
 				// Fixup the name so that if the user tries to validate again, it will work.
 				// First, auto-generate a name if the field is blank
 				if (strNew == "")
-					strNew = m_ts.GenerateUniqueSpriteName();;
+					strNew = m_ss.GenerateUniqueSpriteName();;
 				// Replace invalid characters with an underscore
 				strNew = Regex.Replace(strNew, "[^A-Za-z0-9_]", "_");
 				// Make sure string begins with a letter

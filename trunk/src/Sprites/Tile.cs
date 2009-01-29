@@ -51,6 +51,9 @@ namespace Spritely
 		private bool m_fHasSmallBitmap = false;
 		private Bitmap m_bmSmall = null;
 
+		/// <summary>
+		/// Number of pixels in a tile (x or y).
+		/// </summary>
 		public const int TileSize = 8;
 
 		public Tile(Sprite s, int nTileId)
@@ -67,38 +70,31 @@ namespace Spritely
 
 		public const int SmallBitmapPixelSize = 2;
 
-		public static int m_pxBigBitmapSize = 4;
-		public static int BigBitmapPixelSize
-		{
-			get { return m_pxBigBitmapSize; }
-			set { m_pxBigBitmapSize = value; }
-		}
-
 		// size of small bitmap
 		public const int SmallBitmapScreenSize = SmallBitmapPixelSize * TileSize;
 		
-		public static int BigBitmapScreenSize
-		{
-			get { return BigBitmapPixelSize * TileSize; }
-		}
+		//public static int BigBitmapScreenSize
+		//{
+		//	get { return BigBitmapPixelSize * TileSize; }
+		//}
 
 		/// <summary>
-		/// Get the palette for this tile
+		/// Get the subpalette for this tile
 		/// </summary>
 		/// <returns></returns>
-		public Subpalette GetPalette()
+		public Subpalette GetSubpalette()
 		{
-			return m_sprite.Palette;
+			return m_sprite.Subpalette;
 		}
 
 		/// <summary>
 		/// Get the pixel at the given (x,y) coord.
 		/// Assumes that x,y are valid pixel coords.
 		/// </summary>
-		/// <returns>The value (palette id) of the specified pixel</returns>
+		/// <returns>The rgb color value of the specified pixel</returns>
 		public Color GetPixelColor(int pxX, int pxY)
 		{
-			Subpalette p = m_sprite.Palette;
+			Subpalette p = m_sprite.Subpalette;
 			int nIndex = m_data.pixels[pxX, pxY];
 			int cRed = p.Red(nIndex);
 			int cGreen = p.Green(nIndex);
@@ -110,14 +106,14 @@ namespace Spritely
 		/// Get the pixel at the given (x,y) coord.
 		/// Assumes that x,y are valid pixel coords.
 		/// </summary>
-		/// <returns>The value (palette id) of the specified pixel</returns>
+		/// <returns>The value (index into palette) of the specified pixel</returns>
 		public int GetPixel(int pxX, int pxY)
 		{
 			return m_data.pixels[pxX, pxY];
 		}
 
 		/// <summary>
-		/// Set the pixel to the given color (palette id).
+		/// Set the pixel to the given color (index into palette).
 		/// Assumes that (x,y) are valid pixel coordinates.
 		/// Does *not* flush the tile bitmaps. You will need to do that manually.
 		/// </summary>
@@ -179,76 +175,20 @@ namespace Spritely
 			g.DrawImage(SmallBitmap(), dst);
 		}
 
-		public void DrawBigTile(Graphics g, int pxOriginX, int pxOriginY)
-		{
-			// create a new bitmap
-			int pxSize = BigBitmapPixelSize;
-			int pxInset = pxSize / 4;
-			Subpalette p = GetPalette();
-
-			Font f;
-			int[] nXOffset;
-			int nYOffset;
-			if (pxSize == 16)
-			{
-				f = new Font("Arial", 9);
-				nXOffset = new int[16] { 3,3,3,3, 3,3,3,3, 3,3,2,2, 2,2,2,3 };
-				nYOffset = 1;
-			}
-			else
-			{
-				f = new Font("Arial Black", 10);
-				nXOffset = new int[16] { 10,9,10,10, 10,10,10,10,  10,10,9,9, 9,9,9,10 };
-				nYOffset = 6;
-			}
-
-			g.FillRectangle(Brushes.White, pxOriginX, pxOriginY, TileSize * pxSize, TileSize * pxSize);
-			for (int iRow = 0; iRow < TileSize; iRow++)
-			{
-				for (int iColumn = 0; iColumn < TileSize; iColumn++)
-				{
-					int nPaletteIndex = GetPixel(iColumn, iRow);
-
-					int pxX0 = pxOriginX + (iColumn * pxSize);
-					int pxY0 = pxOriginY + (iRow * pxSize);
-					g.FillRectangle(p.Brush(nPaletteIndex), pxX0, pxY0, pxSize, pxSize);
-
-					// draw a red X over the transparent color (index 0)
-					if (Options.Sprite_ShowRedXForTransparent && nPaletteIndex == 0 && BigBitmapPixelSize >= 8)
-					{
-						int pxX0i = pxX0 + pxInset;
-						int pxY0i = pxY0 + pxInset;
-						int pxX1i = pxX0 + pxSize - pxInset;
-						int pxY1i = pxY0 + pxSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
-
-					if (Options.Sprite_ShowPaletteIndex && pxSize >= 16)
-					{
-						// Draw the palette index in each pixel.
-						int pxLabelOffsetX = nXOffset[nPaletteIndex];
-						int pxLabelOffsetY = nYOffset;
-						g.DrawString(p.Label(nPaletteIndex), f, p.LabelBrush(nPaletteIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
-					}
-				}
-			}
-		}
-
 		// create a bitmap from this tile data
 		private Bitmap CreateBitmap(int pxSize)
 		{
 			// create a new bitmap
 			Bitmap bm = new Bitmap(TileSize * pxSize, TileSize * pxSize);//, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(bm);
-			Subpalette p = GetPalette();
+			Subpalette sp = m_sprite.Subpalette;
 
 			g.FillRectangle(Brushes.White, 0, 0, TileSize * pxSize, TileSize * pxSize);
 			for (int iRow = 0; iRow < TileSize; iRow++)
 			{
 				for (int iColumn = 0; iColumn < TileSize; iColumn++)
 				{
-					g.FillRectangle(p.Brush(GetPixel(iColumn, iRow)), iColumn * pxSize, iRow * pxSize, pxSize, pxSize);
+					g.FillRectangle(sp.Brush(GetPixel(iColumn, iRow)), iColumn * pxSize, iRow * pxSize, pxSize, pxSize);
 				}
 			}
 
@@ -261,14 +201,14 @@ namespace Spritely
 			// create a new bitmap
 			Bitmap bm = new Bitmap(TileSize * pxSize, TileSize * pxSize);//, PixelFormat.Format32bppArgb);
 			Graphics g = Graphics.FromImage(bm);
-			Subpalette p = GetPalette();
+			Subpalette sp = m_sprite.Subpalette;
 
 			g.FillRectangle(Brushes.White, 0, 0, TileSize * pxSize, TileSize * pxSize);
 			for (int iRow = 0; iRow < TileSize; iRow++)
 			{
 				for (int iColumn = 0; iColumn < TileSize; iColumn++)
 				{
-					g.FillRectangle(p.Brush(GetPixel(iColumn, iRow)), iColumn * pxSize, iRow * pxSize, pxSize, pxSize);
+					g.FillRectangle(sp.Brush(GetPixel(iColumn, iRow)), iColumn * pxSize, iRow * pxSize, pxSize, pxSize);
 				}
 			}
 
@@ -285,38 +225,6 @@ namespace Spritely
 				m_bmSmall = null;
 				m_fHasSmallBitmap = false;
 			}
-		}
-
-		// returns true if the tile changes as a result of this click
-		public bool Click(int pxX, int pxY, bool fErase)
-		{
-			int nColor = fErase ? 0 : GetPalette().CurrentColor;
-
-			// same color - no need to update
-			if (GetPixel(pxX, pxY) == nColor)
-				return false;
-
-			// set the new color
-			SetPixel(pxX, pxY, nColor);
-
-			// remove the old bitmaps
-			FlushBitmaps();
-			return true;
-		}
-
-		// returns true if the current color selection changes as a result of this click
-		public bool SelectColorClick(int pxX, int pxY)
-		{
-			int nCurrColor = GetPalette().CurrentColor;
-			int nClickColor = GetPixel(pxX, pxY);
-
-			// same color - no need to update
-			if (nClickColor == nCurrColor)
-				return false;
-
-			// select the new color
-			GetPalette().CurrentColor = nClickColor;
-			return true;
 		}
 
 		/// <summary>
@@ -346,46 +254,6 @@ namespace Spritely
 			FlushBitmaps();
 		}
 
-		/// <summary>
-		/// Import tile from an array of 64 integers.
-		/// </summary>
-		/// <param name="b"></param>
-		public void Import(int[] b)
-		{
-			int iByte = 0;
-			for (int iRow = 0; iRow < TileSize; iRow++)
-			{
-				for (int iColumn = 0; iColumn < TileSize; iColumn++)
-				{
-					int nData = b[iByte++];
-					SetPixel(iColumn, iRow, (nData & 0x0f));
-				}
-			}
-			FlushBitmaps();
-		}
-
-		/// <summary>
-		/// Import tile from an array of 32 integers.
-		/// Each integer contains data for 2 pixels (4-bits per pixel).
-		/// </summary>
-		/// <param name="b"></param>
-		public void Import32(uint[] b)
-		{
-			int iByte = 0;
-			for (int iRow = 0; iRow < TileSize; iRow++)
-			{
-				for (int iColumn = 0; iColumn < TileSize; )
-				{
-					uint nData = b[iByte++];
-					SetPixel(iColumn, iRow, (int)(nData & 0x0f));
-					nData >>= 4;
-					SetPixel(iColumn + 1, iRow, (int)(nData & 0x0f));
-					iColumn += 2;
-				}
-			}
-			FlushBitmaps();
-		}
-
 		public UndoData GetUndoData()
 		{
 			UndoData undo = new UndoData(TileSize);
@@ -407,6 +275,8 @@ namespace Spritely
 					SetPixel(iColumn, iRow, undo.pixels[iColumn, iRow]);
 			}
 		}
+
+		#region Save/Import/Export
 
 		public void Save(System.IO.TextWriter tw, int nTileID)
 		{
@@ -458,6 +328,46 @@ namespace Spritely
 				tw.WriteLine(String.Format("const int k{0}_{1}_{2} = {3};", strSpriteset, strSprite, nTileIndex, nExportId));
 		}
 
+		/// <summary>
+		/// Import tile from an array of 64 integers.
+		/// </summary>
+		/// <param name="b"></param>
+		public void Import(int[] b)
+		{
+			int iByte = 0;
+			for (int iRow = 0; iRow < TileSize; iRow++)
+			{
+				for (int iColumn = 0; iColumn < TileSize; iColumn++)
+				{
+					int nData = b[iByte++];
+					SetPixel(iColumn, iRow, (nData & 0x0f));
+				}
+			}
+			FlushBitmaps();
+		}
+
+		/// <summary>
+		/// Import tile from an array of 32 integers.
+		/// Each integer contains data for 2 pixels (4-bits per pixel).
+		/// </summary>
+		/// <param name="b"></param>
+		public void Import32(uint[] b)
+		{
+			int iByte = 0;
+			for (int iRow = 0; iRow < TileSize; iRow++)
+			{
+				for (int iColumn = 0; iColumn < TileSize; )
+				{
+					uint nData = b[iByte++];
+					SetPixel(iColumn, iRow, (int)(nData & 0x0f));
+					nData >>= 4;
+					SetPixel(iColumn + 1, iRow, (int)(nData & 0x0f));
+					iColumn += 2;
+				}
+			}
+			FlushBitmaps();
+		}
+
 		// Export_TileData
 		// Export the tile as a string so that we can write it out to a C-source file.
 		// For each pixel, we write out the corresponding palette index.
@@ -502,6 +412,8 @@ namespace Spritely
 			tw.WriteLine(sb.ToString());
 			return true;
 		}
-		
+
+		#endregion
+
 	}
 }

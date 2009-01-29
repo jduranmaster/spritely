@@ -58,6 +58,12 @@ namespace Spritely
 			}
 		}
 
+		public void Clear()
+		{
+			m_spritesets.Clear();
+			m_ssCurrent = null;
+		}
+
 		public Spriteset AddSpriteset(string strName, int id, string strDesc, Palette pal)
 		{
 			// Don't allow a second spriteset with the same id.

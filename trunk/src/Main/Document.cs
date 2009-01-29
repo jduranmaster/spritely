@@ -7,7 +7,7 @@ namespace Spritely
 {
 	public class Document
 	{
-		private MainForm m_form;
+		private ProjectMainForm m_form;
 
 		private struct DocumentData
 		{
@@ -21,12 +21,6 @@ namespace Spritely
 		DocumentData m_data;
 
 		/// <summary>
-		/// A copy of the BackgroundSpritePalettes that is used when editing the BackgroundMap
-		/// to select the palette override for the tiles in the background.
-		/// </summary>
-		//private Palette BackgroundMapPalette;
-
-		/// <summary>
 		/// Undo managers for each tab.
 		/// </summary>
 		public UndoMgr[] m_Undo;
@@ -35,7 +29,7 @@ namespace Spritely
 		/// Initialize a Spritely document.
 		/// </summary>
 		/// <param name="form">The display form that owns this document</param>
-		public Document(MainForm form)
+		public Document(ProjectMainForm form)
 		{
 			m_form = form;
 
@@ -47,14 +41,10 @@ namespace Spritely
 
 			m_data.Filer = new FileHandler(this);
 
-			int numTabs = (int)Tab.Type.MAX;
+			int numTabs = (int)OldTab.Type.MAX;
 			m_Undo = new UndoMgr[numTabs];
 			for (int iTab = 0; iTab < numTabs; iTab++)
 				m_Undo[iTab] = new UndoMgr();
-
-			// TODO: remove this, share BG palettes
-			//BackgroundMapPalette = new Palette(this, null, "bgmpal", -1, "");
-			//BackgroundMapPalette.HilightSelectedColor = false;
 		}
 
 		/// <summary>
@@ -69,23 +59,28 @@ namespace Spritely
 			pal.SetDefaultPalette();
 
 			// Spritesets
-			m_data.Spritesets.AddSpriteset(Options.DefaultSpritesetName, Options.DefaultPaletteId, "", pal);
+			Spriteset ss = m_data.Spritesets.AddSpriteset(Options.DefaultSpritesetName, Options.DefaultPaletteId, "", pal);
 
 			// Add a single 2x2 sprite.
-			m_data.Spritesets.Current.AddSprite(2, 2, "", -1, "", false);
+			ss.AddSprite(2, 2, "", -1, "", 0, false);
+			ss.SelectFirstSprite();
 
 			// Background palettes
 			Palette bgpal = m_data.BackgroundPalettes.AddPalette16(Options.DefaultBgPaletteName, 0, "");
 			bgpal.SetDefaultPalette();
 
 			// Background tiles (bgsprites and bgtilegroups)
-			m_data.BackgroundSpritesets.AddSpriteset(Options.DefaultBgPaletteName, Options.DefaultBgPaletteId, "", bgpal);
+			Spriteset bss = m_data.BackgroundSpritesets.AddSpriteset(Options.DefaultBgTilesetName, Options.DefaultBgPaletteId, "", bgpal);
 
 			// Add a single blank background tile.
-			m_data.BackgroundSpritesets.Current.AddSprite(1, 1, "", -1, "", false);
+			bss.AddSprite(1, 1, "", -1, "", 0, false);
+			bss.SelectFirstSprite();
 
 			// Background tile map
 			m_data.BackgroundMaps.AddMap("map", 0, "", m_data.BackgroundSpritesets.Current);
+
+			// The sprites we just added above don't count as document changes.
+			HasUnsavedChanges = false;
 		}
 
 		/// <summary>
@@ -187,9 +182,13 @@ namespace Spritely
 		/// <summary>
 		/// The form that owns this document.
 		/// </summary>
-		public MainForm Owner
+		public ProjectMainForm Owner
 		{
 			get { return m_form; }
+		}
+		public OldMainForm OldOwner
+		{
+			get { return m_form.OldUI; }
 		}
 
 		/// <summary>
@@ -270,7 +269,7 @@ namespace Spritely
 		/// <returns></returns>
 		public UndoMgr Undo()
 		{
-			return m_Undo[(int)m_form.CurrentTab.TabType];
+			return m_Undo[(int)m_form.OldUI.CurrentTab.TabType];
 		}
 
 		/// <summary>
@@ -278,7 +277,7 @@ namespace Spritely
 		/// </summary>
 		public void ResetUndo()
 		{
-			for (int i=0; i<(int)Tab.Type.MAX; ++i)
+			for (int i=0; i<(int)OldTab.Type.MAX; ++i)
 				m_Undo[i].Reset();
 		}
 
@@ -346,15 +345,24 @@ namespace Spritely
 			Spriteset ss = m_data.Spritesets.Current;
 			if (ss != null)
 				ss.SelectFirstSprite();
-			Spriteset ts = m_data.BackgroundSpritesets.Current;
-			if (ts != null)
-				ts.SelectFirstSprite();
+			Spriteset bs = m_data.BackgroundSpritesets.Current;
+			if (bs != null)
+				bs.SelectFirstSprite();
 			ResetUndo();
 		}
 
 		public bool Close()
 		{
-			return m_data.Filer.Close();
+			if (!m_data.Filer.Close())
+				return false;
+
+			m_data.Palettes.Clear();
+			m_data.Spritesets.Clear();
+			m_data.BackgroundPalettes.Clear();
+			m_data.BackgroundSpritesets.Clear();
+			m_data.BackgroundMaps.Clear();
+
+			return true;
 		}
 
 		public void Save()
@@ -403,9 +411,9 @@ namespace Spritely
 				m_form.Info(sb.ToString());
 
 				// The platform may have changed, update the map toolbox to reflect the current platform.
-				if (m_form.CurrentTab.TabType == Tab.Type.BackgroundMap)
+				if (m_form.OldUI.CurrentTab.TabType == OldTab.Type.BackgroundMap)
 				{
-					m_form.CurrentTab.ToolboxWindow.Invalidate();
+					m_form.OldUI.CurrentTab.ToolboxWindow.Invalidate();
 				}
 			}
 			else

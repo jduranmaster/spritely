@@ -31,6 +31,8 @@ namespace Spritely
 
 		public void UpdateDocument(Document doc)
 		{
+			m_doc = doc;
+
 			foreach (Palette p in m_palettes.Values)
 			{
 				p.UpdateDocument(doc);
@@ -40,6 +42,11 @@ namespace Spritely
 		public int NumPalettes
 		{
 			get { return m_palettes.Count; }
+		}
+
+		public void Clear()
+		{
+			m_palettes.Clear();
 		}
 
 		public Palette AddPalette16(string strName, int id, string strDesc)

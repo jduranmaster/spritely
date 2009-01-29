@@ -82,7 +82,7 @@ namespace Spritely
 			{
 				Palette bgpal = m_doc.BackgroundPalettes.GetPalette(0);
 				m_doc.BackgroundSpritesets.AddSpriteset(Options.DefaultBgPaletteName, Options.DefaultBgPaletteId, "", bgpal);
-				m_doc.BackgroundSpritesets.Current.AddSprite(1, 1, "", -1, "", false);
+				m_doc.BackgroundSpritesets.Current.AddSprite(1, 1, "", -1, "", 0, false);
 			}
 			if (!m_fFoundBackgroundMap)
 			{
