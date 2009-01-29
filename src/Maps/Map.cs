@@ -8,18 +8,17 @@ namespace Spritely
 	public partial class Map
 	{
 		private Document m_doc;
-		private Spriteset m_bgtiles;
+		private Spriteset m_ss;
 
 		private string m_strName;
 		private int m_id;
 		private string m_strDesc;
 
+		private MapForm m_winMap;
+
 		// Tiles to highlight under the cursor in the Background Map.
 		private int m_tileSpriteX;
 		private int m_tileSpriteY;
-
-		private static Pen m_penHilight = new Pen(Color.FromArgb(128, Color.Red), 3);
-		private static Pen m_penHilight2 = new Pen(Color.FromArgb(128, Color.Black), 1);
 
 		//private List<MapBlock> m_mapblocks;
 
@@ -57,8 +56,8 @@ namespace Spritely
 		public Map(Document doc, string strName, int id, string strDesc, Spriteset bgtiles)
 		{
 			m_doc = doc;
-			m_bgtiles = bgtiles;
-			m_bgtiles.AddMap(this);
+			m_ss = bgtiles;
+			m_ss.AddMap(this);
 
 			m_strName = strName;
 			m_id = id;
@@ -78,6 +77,11 @@ namespace Spritely
 
 			m_tileSpriteX = -1;
 			m_tileSpriteY = -1;
+
+			if (m_doc.Owner != null)
+			{
+				m_winMap = new MapForm(m_doc.Owner, this, bgtiles, null); ;
+			}
 		}
 
 		public void UpdateDocument(Document doc)
@@ -85,9 +89,19 @@ namespace Spritely
 			m_doc = doc;
 		}
 
+		public MapForm MapWindow
+		{
+			get { return m_winMap; }
+		}
+
 		public string Name
 		{
 			get { return m_strName; }
+		}
+
+		public Spriteset Spriteset
+		{
+			get { return m_ss; }
 		}
 
 		/// <summary>
@@ -147,7 +161,7 @@ namespace Spritely
 
 		public bool HandleMouse_EditMap(int pxX, int pxY)
 		{
-			Sprite spriteSelected = m_bgtiles.CurrentSprite;
+			Sprite spriteSelected = m_ss.CurrentSprite;
 			if (spriteSelected == null)
 				return false;
 
@@ -190,7 +204,7 @@ namespace Spritely
 
 		public bool HandleMouseMove_EditMap(int pxX, int pxY)
 		{
-			Sprite spriteSelected = m_bgtiles.CurrentSprite;
+			Sprite spriteSelected = m_ss.CurrentSprite;
 			if (spriteSelected == null)
 				return false;
 
@@ -222,92 +236,6 @@ namespace Spritely
 			return false;
 		}
 
-		public void DrawBackgroundMap(Graphics g)
-		{
-			int pxX = 0;
-			int pxY = 0;
-			for (int ix = 0; ix < kMaxMapTilesX; ix++)
-			{
-				pxY = 0;
-				for (int iy = 0; iy < kMaxMapTilesY; iy++)
-				{
-					bool fDrawn = false;
-					int nTileIndex = m_BackgroundMap[ix, iy].nTileIndex;
-					Sprite s = m_bgtiles.FindSprite(nTileIndex);
-					if (s != null)
-					{
-						Tile t = s.GetTile(nTileIndex - s.FirstTileID);
-						if (t != null)
-						{
-							t.DrawSmallTile(g, pxX, pxY);
-							fDrawn = true;
-						}
-					}
-
-					if (!fDrawn)
-					{
-						int pxInset = Tile.SmallBitmapScreenSize / 4;
-						int pxX0i = pxX + pxInset;
-						int pxY0i = pxY + pxInset;
-						int pxX1i = pxX + Tile.SmallBitmapScreenSize - pxInset;
-						int pxY1i = pxY + Tile.SmallBitmapScreenSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
-					pxY += Tile.SmallBitmapScreenSize;
-				}
-				pxX += Tile.SmallBitmapScreenSize;
-			}
-
-			// Draw the grid and border.
-			int pxTileSize = Tile.SmallBitmapScreenSize;
-			pxX = 0;
-			pxY = 0;
-			int pxWidth = pxTileSize * kMaxMapTilesX;
-			int pxHeight = pxTileSize * kMaxMapTilesY;
-
-			if (Options.BackgroundMap_ShowGrid)
-			{
-				Pen penTileBorder = Pens.LightGray;
-
-				// Draw a border around each tile.
-				for (int i = pxX + pxTileSize; i < pxWidth; i += pxTileSize)
-					g.DrawLine(penTileBorder, i, pxY, i, pxHeight);
-				for (int i = pxY + pxTileSize; i < pxHeight; i += pxTileSize)
-					g.DrawLine(penTileBorder, pxX, i, pxWidth, i);
-			}
-
-			// Draw the outer border.
-			g.DrawRectangle(Pens.Black, pxX, pxY, pxWidth, pxHeight);
-
-			if (Options.BackgroundMap_ShowScreen)
-			{
-				if (Options.Platform == Options.PlatformType.GBA)
-				{
-					pxWidth = pxTileSize * kGBAScreenTilesX;
-					pxHeight = pxTileSize * kGBAScreenTilesY;
-				}
-				else
-				{
-					pxWidth = pxTileSize * kNDSScreenTilesX;
-					pxHeight = pxTileSize * kNDSScreenTilesY;
-				}
-				g.DrawRectangle(m_penHilight, pxX, pxY, pxWidth, pxHeight);
-				g.DrawRectangle(m_penHilight2, pxX, pxY, pxWidth, pxHeight);
-			}
-
-			// Draw a border around the current background "sprite".
-			Sprite spriteSelected = m_bgtiles.CurrentSprite;
-			if (m_tileSpriteX != -1 && m_tileSpriteY != -1 && spriteSelected != null)
-			{
-				pxX = m_tileSpriteX * pxTileSize;
-				pxY = m_tileSpriteY * pxTileSize;
-				pxWidth = spriteSelected.TileWidth* pxTileSize;
-				pxHeight = spriteSelected.TileHeight* pxTileSize;
-				g.DrawRectangle(m_penHilight, pxX, pxY, pxWidth, pxHeight);
-				g.DrawRectangle(m_penHilight2, pxX, pxY, pxWidth, pxHeight);
-			}
-		}
 
 	}
 }

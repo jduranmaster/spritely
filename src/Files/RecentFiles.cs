@@ -10,11 +10,11 @@ namespace Spritely
 	{
 		private const int MaxRecentFiles = 10;
 
-		private MainForm m_form;
+		private ProjectMainForm m_form;
 		private ToolStripMenuItem m_menu;
 		private StringCollection m_files;
 
-		public RecentFiles(MainForm form, ToolStripMenuItem menu)
+		public RecentFiles(ProjectMainForm form, ToolStripMenuItem menu)
 		{
 			m_form = form;
 			m_menu = menu;

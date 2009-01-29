@@ -7,15 +7,16 @@ namespace Spritely
 	public class UndoAction_SpriteEdit : UndoAction
 	{
 		UndoMgr m_mgr;
-		SpriteList m_spritelist;
+		Spriteset m_ss;
+		//SpriteList m_spritelist;
 		Sprite m_sprite;
 		Sprite.UndoData m_before;
 		Sprite.UndoData m_after;
 
-		public UndoAction_SpriteEdit(UndoMgr mgr, SpriteList slist, Sprite sprite, Sprite.UndoData before, Sprite.UndoData after, string strDesc)
+		public UndoAction_SpriteEdit(UndoMgr mgr, Spriteset ss, Sprite sprite, Sprite.UndoData before, Sprite.UndoData after, string strDesc)
 		{
 			m_mgr = mgr;
-			m_spritelist = slist;
+			m_ss = ss;
 			m_sprite = sprite;
 			m_before = new Sprite.UndoData(before);
 			m_after = new Sprite.UndoData(after);
@@ -52,15 +53,15 @@ namespace Spritely
 		public override void ApplyUndo()
 		{
 			m_sprite.ApplyUndoData(m_before);
-			m_spritelist.CurrentSprite = m_sprite;
-			m_spritelist.MoveToCorrectSpriteType(m_sprite);
+			m_ss.CurrentSprite = m_sprite;
+			m_ss.SpriteList.MoveToCorrectSpriteType(m_sprite);
 		}
 
 		public override void ApplyRedo()
 		{
 			m_sprite.ApplyUndoData(m_after);
-			m_spritelist.CurrentSprite = m_sprite;
-			m_spritelist.MoveToCorrectSpriteType(m_sprite);
+			m_ss.CurrentSprite = m_sprite;
+			m_ss.SpriteList.MoveToCorrectSpriteType(m_sprite);
 		}
 	}
 }

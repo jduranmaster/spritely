@@ -12,24 +12,21 @@ namespace Spritely
 	{
 		private Document m_doc;
 		private Palettes m_palettes;
+
 		private string m_strName;
 		private int m_id;
 		private string m_strDesc;
 
-		private Palette16Form m_winPalette;
-
 		/// <summary>
-		/// Hilight the selected color?
+		/// Index of the current subpalette (16-color palettes only).
 		/// </summary>
-		private bool m_fHilightSelectedColor;
+		public int CurrentSubpalette;
+
+		private Palette16Form m_winPalette;
 
 		private Subpalette[] m_subpalettes;
 
 		private const int m_nMaxSubpalettes = 16;
-		private int m_nCurrentSubpalette;
-
-		private const int m_pxSelectorHeight = 16;
-		private const int m_pxSelectorWidth = 12;
 
 		public Palette(Document doc, Palettes pals, string strName, int id, string strDesc)
 		{
@@ -39,12 +36,14 @@ namespace Spritely
 			m_id = id;
 			m_strDesc = strDesc;
 
-			m_fHilightSelectedColor = true;
-
 			m_subpalettes = new Subpalette[m_nMaxSubpalettes];
 			for (int i = 0; i < m_nMaxSubpalettes; i++)
 				m_subpalettes[i] = new Subpalette(doc, this, i, Subpalette.DefaultColorSet.BlackAndWhite);
-			m_nCurrentSubpalette = 0;
+
+			CurrentSubpalette = 0;
+
+			if (m_doc.Owner != null)
+				m_winPalette = new Palette16Form(m_doc.Owner, this);
 		}
 
 		public void UpdateDocument(Document doc)
@@ -59,27 +58,17 @@ namespace Spritely
 
 		public Palette16Form PaletteWindow
 		{
-			get
-			{
-				if (m_winPalette == null)
-					m_winPalette = new Palette16Form(m_doc.Owner.NewUI, m_doc.GetSpritePalette(Options.DefaultPaletteId));
-				return m_winPalette;
-			}
+			get { return m_winPalette; }
 		}
 
-		public static int EncodeColor(int cRed, int cGreen, int cBlue)
-		{
-			return cRed | (cGreen << 5) | (cBlue << 10);
-		}
-
-		public String Name
+		public string Name
 		{
 			get { return m_strName; }
 		}
 
-		public String NameDesc
+		public string NameDesc
 		{
-			get { return m_strName + " [16x16 colors]"; }
+			get { return m_strName + " [16]"; }
 		}
 
 		public bool IsBackground
@@ -87,26 +76,14 @@ namespace Spritely
 			get { return m_palettes.IsBackground; }
 		}
 
-		public bool HilightSelectedColor
-		{
-			get { return m_fHilightSelectedColor; }
-			set { m_fHilightSelectedColor = value; }
-		}
-
 		public int NumSubpalettes
 		{
 			get { return m_nMaxSubpalettes; }
 		}
 
-		public int CurrentSubpaletteID
+		public Subpalette GetCurrentSubpalette()
 		{
-			get { return m_nCurrentSubpalette; }
-			set { m_nCurrentSubpalette = value; }
-		}
-
-		public Subpalette CurrentSubpalette
-		{
-			get { return m_subpalettes[m_nCurrentSubpalette]; }
+			return m_subpalettes[CurrentSubpalette];
 		}
 
 		public Subpalette GetSubpalette(int nIndex)
@@ -144,16 +121,6 @@ namespace Spritely
 			m_subpalettes[nId].SetDefaultSubpaletteColors(colorset);
 		}
 
-		public void CopySubpalettes(Palette orig)
-		{
-			m_nCurrentSubpalette = orig.m_nCurrentSubpalette;
-			for (int i = 0; i < m_nMaxSubpalettes; i++)
-			{
-				m_subpalettes[i] = new Subpalette(m_doc, this, i);
-				m_subpalettes[i].Copy(orig.m_subpalettes[i]);
-			}
-		}
-
 		public bool ImportSubpalette(int nId, int[] anPalette)
 		{
 			if (nId < 0 || nId >= m_nMaxSubpalettes)
@@ -161,67 +128,7 @@ namespace Spritely
 			return m_subpalettes[nId].Import(anPalette);
 		}
 
-		/// <summary>
-		/// Handle a mouse move in the subpalette selector
-		/// </summary>
-		/// <param name="pxX"></param>
-		/// <param name="pxY"></param>
-		/// <returns>True if a new palette is selected</returns>
-		public bool HandleSelectorMouse(int pxX, int pxY)
-		{
-			if (pxX < 0 || pxY < 0)
-				return false;
-
-			// Convert pixel (x,y) to palette (x,y).
-			int nX = pxX / m_pxSelectorWidth;
-			int nY = pxY / m_pxSelectorHeight;
-
-			// Ignore if outside the bounds.
-			if (nX >= m_nMaxSubpalettes || nY != 0)
-				return false;
-
-			// Update the selection if a new palette has been selected.
-			if (m_nCurrentSubpalette != nX)
-			{
-				m_nCurrentSubpalette = nX;
-				return true;
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Draw the subpalette selector.
-		/// </summary>
-		/// <param name="g"></param>
-		public void DrawSelector(Graphics g)
-		{
-			Font f = new Font("Arial Narrow", 8);
-			int pxLabelOffsetX = 2;
-			int pxLabelOffsetY = 1;
-
-			for (int i = 0; i < m_nMaxSubpalettes; i++)
-			{
-				int pxX0 = i * m_pxSelectorWidth;
-				int pxY0 = 0;
-
-				Brush brBackground = Brushes.White;
-				Brush brFont = Brushes.Black;
-
-				if (i == m_nCurrentSubpalette)
-				{
-					brBackground = Brushes.DarkGray;
-					brFont = Brushes.White;
-				}
-
-				g.FillRectangle(brBackground, pxX0, pxY0, m_pxSelectorWidth, m_pxSelectorHeight);
-				string strSubpaletteName = String.Format("{0:X1}", i);
-				g.DrawString(strSubpaletteName, f, brFont, pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
-
-				// Draw a border around each palette index.
-				g.DrawRectangle(Pens.Gray, pxX0, pxY0, m_pxSelectorWidth, m_pxSelectorHeight);
-			}
-		}
+		#region Load/Save/Export
 
 		public bool LoadXML_palette16(XmlNode xnode)
 		{
@@ -277,7 +184,7 @@ namespace Spritely
 					int r = Convert.ToInt32(matchGroups[1].Value, 16);
 					int g = Convert.ToInt32(matchGroups[2].Value, 16);
 					int b = Convert.ToInt32(matchGroups[3].Value, 16);
-					int nRGB = Palette.EncodeColor(r, g, b);
+					int nRGB = Color555.Encode(r, g, b);
 					if (nCount < 16)
 						anPalette[nCount] = nRGB;
 					nCount++;
@@ -350,6 +257,8 @@ namespace Spritely
 			for (int i = 0; i < m_nMaxSubpalettes; i++)
 				m_subpalettes[i].Export_Subpalette(tw, i);
 		}
+
+		#endregion
 
 		#region Tests
 

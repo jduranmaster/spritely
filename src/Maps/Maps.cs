@@ -18,20 +18,30 @@ namespace Spritely
 			m_maps = new Dictionary<int, Map>();
 		}
 
-		public Map AddMap(string strName, int id, string strDesc, Spriteset bgtiles)
+		public void UpdateDocument(Document doc)
 		{
-			if (m_maps.ContainsKey(id))
-				return null;
+			m_doc = doc;
 
-			Map m = new Map(m_doc, strName, id, strDesc, bgtiles);
-			m_maps.Add(id, m);
-			m_mapCurrent = m;
-			return m;
+			foreach (Map m in m_maps.Values)
+			{
+				m.UpdateDocument(doc);
+			}
 		}
 
 		public int NumMaps
 		{
 			get { return m_maps.Count; }
+		}
+
+		public Map CurrentMap
+		{
+			get { return m_mapCurrent; }
+		}
+
+		public void Clear()
+		{
+			m_maps.Clear();
+			m_mapCurrent = null;
 		}
 
 		public Map GetMap(int id)
@@ -41,19 +51,15 @@ namespace Spritely
 			return m_maps[id];
 		}
 
-		public Map CurrentMap
+		public Map AddMap(string strName, int id, string strDesc, Spriteset bgtiles)
 		{
-			get { return m_mapCurrent; }
-		}
+			if (m_maps.ContainsKey(id))
+				return null;
 
-		public void UpdateDocument(Document doc)
-		{
-			m_doc = doc;
-
-			foreach (Map m in m_maps.Values)
-			{
-				m.UpdateDocument(doc);
-			}
+			Map m = new Map(m_doc, strName, id, strDesc, bgtiles);
+			m_maps.Add(id, m);
+			m_mapCurrent = m;
+			return m;
 		}
 
 		public bool LoadXML_bgmaps(XmlNode xnode)

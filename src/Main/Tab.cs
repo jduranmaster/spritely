@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public class Tab
+	public class OldTab
 	{
 		public enum Type
 		{
@@ -16,7 +16,7 @@ namespace Spritely
 			Unknown,
 		};
 
-		private MainForm m_owner;
+		private OldMainForm m_owner;
 
 		public Type TabType;
 
@@ -40,7 +40,7 @@ namespace Spritely
 		public PictureBox ToolboxWindow;
 		public ComboBox ToolboxZoomCombobox;
 
-		public Tab(Type type, MainForm owner)
+		public OldTab(Type type, OldMainForm owner)
 		{
 			m_owner = owner;
 			TabType = type;

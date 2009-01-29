@@ -80,27 +80,11 @@ namespace Spritely
 		private UndoData m_snapshot;
 
 		/// <summary>
-		/// Number of colors in the subpalette.
-		/// </summary>
-		private const int k_nColors = 16;
-
-		/// <summary>
-		/// Size of each color swatch in the palette (in pixels).
-		/// </summary>
-		private const int k_pxSwatchSize = 24;
-
-		private const int k_nSwatchColumns = 8;
-		private const int k_nSwatchRows = 2;
-		
-		/// <summary>
 		/// Array of brushes for each color in the palette.
 		/// </summary>
 		private SolidBrush[] m_Brush;
 
-		/// <summary>
-		/// Pen used to hilight the current color in the palette.
-		/// </summary>
-		private static Pen m_penHilight = new Pen(Color.FromArgb(128, Color.Red), 3);
+		private const int k_nColors = 16;
 
 		public enum DefaultColorSet {
 			None,
@@ -125,7 +109,6 @@ namespace Spritely
 			m_doc = doc;
 			m_mgr = mgr;
 			m_nSubpaletteID = nSubpaletteID;
-			//TODO: check for subpalette id between 0 and 15
 
 			m_data = new UndoData(k_nColors);
 			m_Brush = new SolidBrush[k_nColors];
@@ -169,7 +152,7 @@ namespace Spritely
 		{
 			UpdateColor(0, 0x7fff);		// transparent (white)
 			UpdateColor(1, 0x0000);		// black
-			for (int i = 2; i < 16; i++)
+			for (int i = 2; i < k_nColors; i++)
 				UpdateColor(i, 0x7fff);	// white
 		}
 
@@ -180,20 +163,22 @@ namespace Spritely
 			UpdateColor(i++, 0x00, 0x00, 0x00);		// black
 			UpdateColor(i++, 0x10, 0x00, 0x00);		// dk red
 			UpdateColor(i++, 0x00, 0x10, 0x00);		// green
-			UpdateColor(i++, 0x10, 0x10, 0x00);		// greenish yellow
-			UpdateColor(i++, 0x00, 0x00, 0x10);		// blue
-			UpdateColor(i++, 0x10, 0x00, 0x10);		// purple
-			UpdateColor(i++, 0x00, 0x10, 0x10);		// aqua
 
 			UpdateColor(i++, 0x1f, 0x1f, 0x1f);		// white
 			UpdateColor(i++, 0x10, 0x10, 0x10);		// gray
 			UpdateColor(i++, 0x1f, 0x00, 0x00);		// red
 			UpdateColor(i++, 0x00, 0x1f, 0x00);		// lt green
+
+			UpdateColor(i++, 0x10, 0x10, 0x00);		// greenish yellow
+			UpdateColor(i++, 0x00, 0x00, 0x10);		// blue
+			UpdateColor(i++, 0x10, 0x00, 0x10);		// purple
+			UpdateColor(i++, 0x00, 0x10, 0x10);		// aqua
+
 			UpdateColor(i++, 0x1f, 0x1f, 0x00);		// yellow
 			UpdateColor(i++, 0x00, 0x00, 0x1f);		// blue
 			UpdateColor(i++, 0x1f, 0x00, 0x1f);		// magenta
 			UpdateColor(i++, 0x00, 0x1f, 0x1f);		// cyan
-			if (i != 16)
+			if (i != k_nColors)
 				//System.Windows.Forms.MessageBox.Show("Wrong number of colors in palette");
 				System.Windows.Forms.MessageBox.Show(ResourceMgr.GetString("ErrorNumColorsInPalette0"));
 		}
@@ -217,7 +202,7 @@ namespace Spritely
 			UpdateColor(i++, 0x7e93);		// lt blue
 			UpdateColor(i++, 0x1e7f);		// orange
 			UpdateColor(i++, 0x5cd1);		// purple
-			if (i != 16)
+			if (i != k_nColors)
 				//System.Windows.Forms.MessageBox.Show("Wrong number of colors in palette");
 				System.Windows.Forms.MessageBox.Show(ResourceMgr.GetString("ErrorNumColorsInPalette0"));
 		}
@@ -273,15 +258,6 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// The index of the currently selected color in the palette.
-		/// </summary>
-		public int CurrentColor
-		{
-			get { return m_data.currentColor; }
-			set { m_data.currentColor = value; }
-		}
-
-		/// <summary>
 		/// Return the brush corresponding to this index in the palette.
 		/// </summary>
 		/// <param name="nIndex">Index into palette</param>
@@ -313,6 +289,15 @@ namespace Spritely
 			return Brushes.White;
 		}
 
+		/// <summary>
+		/// The index of the currently selected color in the palette.
+		/// </summary>
+		public int CurrentColor
+		{
+			get { return m_data.currentColor; }
+			set { m_data.currentColor = value; }
+		}
+
 		public void UpdateColor(int cRed, int cGreen, int cBlue)
 		{
 			UpdateColor(m_data.currentColor, cRed, cGreen, cBlue);
@@ -334,125 +319,6 @@ namespace Spritely
 			int cRed, cGreen, cBlue;
 			ExtractColors(color, out cRed, out cGreen, out cBlue);
 			UpdateColor(nIndex, cRed, cGreen, cBlue);
-		}
-
-		public bool HandleMouse(int pxX, int pxY)
-		{
-			if (pxX < 0 || pxY < 0)
-				return false;
-
-			// Convert pixel (x,y) to palette (x,y).
-			int nX = pxX / k_pxSwatchSize;
-			int nY = pxY / k_pxSwatchSize;
-
-			// Ignore if outside the SpriteList bounds.
-			if (nX >= k_nSwatchColumns || nY >= k_nSwatchRows)
-				return false;
-
-			int nSelectedColor = nY * k_nSwatchColumns + nX;
-
-			// Update the selection if a new color has been selected.
-			if (m_data.currentColor != nSelectedColor)
-			{
-				m_data.currentColor = nSelectedColor;
-				return true;
-			}
-
-			return false;
-		}
-
-		public void Draw(Graphics g)
-		{
-			Font f = new Font("Arial Black", 10);
-			// TODO: query fontmetrics and center text in box
-			int[] nLabelXOffset = new int[16] { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 6 };
-
-			int pxInset = k_pxSwatchSize / 4;
-
-			for (int iRow = 0; iRow < k_nSwatchRows; iRow++)
-			{
-				for (int iColumn = 0; iColumn < k_nSwatchColumns; iColumn++)
-				{
-					int nIndex = iRow * k_nSwatchColumns + iColumn;
-
-					int pxX0 = 1 + iColumn * k_pxSwatchSize;
-					int pxY0 = 1+ iRow * k_pxSwatchSize;
-
-					g.FillRectangle(Brush(nIndex), pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
-
-					// Draw a red X over the transparent color (index 0).
-					if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-					{
-						int pxX0i = pxX0 + pxInset;
-						int pxY0i = pxY0 + pxInset;
-						int pxX1i = pxX0 + k_pxSwatchSize - pxInset;
-						int pxY1i = pxY0 + k_pxSwatchSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
-
-					// Draw the palette index in each swatch.
-					if (Options.Palette_ShowPaletteIndex)
-					{
-						int pxLabelOffsetX = nLabelXOffset[nIndex];
-						int pxLabelOffsetY = 2;
-						g.DrawString(Label(nIndex), f, LabelBrush(nIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
-					}
-
-					// Draw a border around each color swatch.
-					g.DrawRectangle(Pens.White, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
-				}
-			}
-
-			g.DrawRectangle(Pens.Black, 0, 0, 2+ k_nSwatchColumns * k_pxSwatchSize, 2+ k_nSwatchRows * k_pxSwatchSize);
-
-			// Hilight the currently selected color.
-			if (m_mgr.HilightSelectedColor)
-			{
-				int x = (m_data.currentColor % k_nSwatchColumns) * k_pxSwatchSize;
-				int y = (m_data.currentColor / k_nSwatchColumns) * k_pxSwatchSize;
-				g.DrawRectangle(m_penHilight, x + 1, y + 1, k_pxSwatchSize, k_pxSwatchSize);
-			}
-		}
-
-		public void DrawSwatch(Graphics g)
-		{
-			Font f = new Font("Arial Black", 10);
-			// TODO: query fontmetrics and center text in box
-			int[] nLabelXOffset = new int[16] { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 6 };
-
-			int pxInset = k_pxSwatchSize / 4;
-
-			int nIndex = m_data.currentColor;
-
-			int pxX0 = 1;
-			int pxY0 = 1;
-
-			g.FillRectangle(Brush(nIndex), pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
-
-			// Draw a red X over the transparent color (index 0).
-			if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-			{
-				int pxX0i = pxX0 + pxInset;
-				int pxY0i = pxY0 + pxInset;
-				int pxX1i = pxX0 + k_pxSwatchSize - pxInset;
-				int pxY1i = pxY0 + k_pxSwatchSize - pxInset;
-				g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-				g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-			}
-
-			// Draw the palette index in each swatch.
-			if (Options.Palette_ShowPaletteIndex)
-			{
-				int pxLabelOffsetX = nLabelXOffset[nIndex];
-				int pxLabelOffsetY = 2;
-				g.DrawString(Label(nIndex), f, LabelBrush(nIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
-			}
-
-			// Draw a border around each color swatch.
-			g.DrawRectangle(Pens.White, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
-
-			g.DrawRectangle(Pens.Black, 0, 0, 2 + k_pxSwatchSize, 2 + k_pxSwatchSize);
 		}
 
 		/// <summary>

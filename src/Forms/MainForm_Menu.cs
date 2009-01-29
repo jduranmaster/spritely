@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class MainForm : Form
+	public partial class OldMainForm : Form
 	{
 		/// <summary>
 		/// Enable/disable menu items as appropriate
@@ -25,7 +25,7 @@ namespace Spritely
 		/// </summary>
 		private void ActivateMenuItems()
 		{
-			bool fEditingSprites = (m_tabCurrent.TabType == Tab.Type.Sprites || m_tabCurrent.TabType == Tab.Type.BackgroundSprites);
+			bool fEditingSprites = (m_tabCurrent.TabType == OldTab.Type.Sprites || m_tabCurrent.TabType == OldTab.Type.BackgroundSprites);
 
 			// Enable/disable File menu items
 			menuFile.Enabled = true;
@@ -35,7 +35,7 @@ namespace Spritely
 			menuFile_Save.Enabled = true;
 			menuFile_SaveAs.Enabled = true;
 			menuFile_Export.Enabled = true;
-			menuFile_RecentFiles.Enabled = (m_recent.Count != 0);
+			menuFile_RecentFiles.Enabled = false;
 			menuFile_Exit.Enabled = true;
 
 			menuEdit.Enabled = true;
@@ -47,10 +47,10 @@ namespace Spritely
 			menuEdit_Paste.Enabled = false;
 
 			// Enable/disable Sprite menu items
-			Tab tab = m_tabCurrent;
-			menuSprite.Enabled = (tab.TabType == Tab.Type.Sprites || tab.TabType == Tab.Type.BackgroundSprites);
+			OldTab tab = m_tabCurrent;
+			menuSprite.Enabled = (tab.TabType == OldTab.Type.Sprites || tab.TabType == OldTab.Type.BackgroundSprites);
 			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if ((tab.TabType == Tab.Type.Sprites || tab.TabType == Tab.Type.BackgroundSprites)
+			if ((tab.TabType == OldTab.Type.Sprites || tab.TabType == OldTab.Type.BackgroundSprites)
 				&& s != null
 				)
 			{
@@ -107,11 +107,11 @@ namespace Spritely
 			}
 
 			// Enable/disable Palette menu items
-			menuPalette.Enabled = (tab.TabType == Tab.Type.Sprites || tab.TabType == Tab.Type.BackgroundSprites);
+			menuPalette.Enabled = (tab.TabType == OldTab.Type.Sprites || tab.TabType == OldTab.Type.BackgroundSprites);
 			Palette pm = tab.Palettes.CurrentPalette;
 			Subpalette p = null;
-			if (pm != null)
-				p = pm.CurrentSubpalette;
+			//if (pm != null)
+			//	p = pm.CurrentSubpalette;
 			if (p != null)
 			{
 				menuPalette_Copy.Enabled = false;
@@ -147,82 +147,30 @@ namespace Spritely
 
 		private void menuFile_New_Click(object sender, EventArgs e)
 		{
-			if (!m_doc.Close())
-				return;
-
-			Handle_NewDocument();
 		}
 
 		private void menuFile_Open_Click(object sender, EventArgs e)
 		{
-			if (!m_doc.Close())
-				return;
-
-			if (!m_doc.Open())
-				return;
-
-			m_recent.AddFile(m_doc.Name);
-
-			Handle_AllSpritesChanged();
-			SetTitleBar(m_doc.Name);
 		}
 
 		private void menuFile_Close_Click(object sender, EventArgs e)
 		{
-			if (!m_doc.Close())
-				return;
-
-			m_doc = null;
-			//Handle_NewDocument();
 		}
 
 		private void menuFile_Save_Click(object sender, EventArgs e)
 		{
-			m_doc.Save();
-			SetTitleBar(m_doc.Name);
 		}
 
 		private void menuFile_SaveAs_Click(object sender, EventArgs e)
 		{
-			m_doc.SaveAs();
-			SetTitleBar(m_doc.Name);
 		}
 
 		private void menuFile_Export_Click(object sender, EventArgs e)
 		{
-			pbS_SpriteList.Focus();
-			m_doc.Export();
 		}
 
 		public void menuFile_RecentFiles_Click(object sender, EventArgs e)
 		{
-			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
-			string strTag = mi.Tag as string;
-			if (strTag == null || strTag == "")
-				return;
-			int nIndex = Int32.Parse(strTag);
-			string strFilename = m_recent.GetNthRecentFile(nIndex);
-			if (strFilename == "")
-				return;
-
-			if (!System.IO.File.Exists(strFilename))
-			{
-				// "The requested file '{0}' doesn't exist."
-				m_doc.WarningId("FileDoesntExist", strFilename);
-				m_recent.RemoveFile(strFilename);
-				return;
-			}
-
-			if (!m_doc.Close())
-				return;
-
-			if (!m_doc.Open(strFilename))
-				return;
-
-			m_recent.AddFile(m_doc.Name);
-
-			Handle_AllSpritesChanged();
-			SetTitleBar(m_doc.Name);
 		}
 
 		private void menuFile_Exit_Click(object sender, EventArgs e)
@@ -236,22 +184,10 @@ namespace Spritely
 
 		private void menuEdit_Undo_Click(object sender, EventArgs e)
 		{
-			UndoMgr undo = m_doc.Undo();
-			if (undo == null)
-				return;
-			undo.ApplyUndo();
-
-			Handle_AllSpritesChanged();
 		}
 
 		private void menuEdit_Redo_Click(object sender, EventArgs e)
 		{
-			UndoMgr undo = m_doc.Undo();
-			if (undo == null)
-				return;
-			undo.ApplyRedo();
-
-			Handle_AllSpritesChanged();
 		}
 
 		private void menuEdit_Cut_Click(object sender, EventArgs e)
@@ -272,222 +208,58 @@ namespace Spritely
 
 		private void menuSprite_New_Click(object sender, EventArgs e)
 		{
-			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
-			string strTag = mi.Tag as string;
-			if (strTag == null || strTag == "")
-				return;
-			string[] aSize = strTag.Split('x');
-			int nWidth = Int32.Parse(aSize[0]);
-			int nHeight = Int32.Parse(aSize[1]);
-
-			Tab tab = m_tabCurrent;
-			tab.SpriteList.AddSprite(nWidth, nHeight, "", -1, "", true);
-			Handle_SpritesChanged(tab);
-			m_doc.HasUnsavedChanges = true;
 		}
 
 		private void menuSprite_Clear_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				//if (!AskYesNo("Are you sure you want to erase the data in the currently selected sprite?"))
-				if (!AskYesNo(ResourceMgr.GetString("EraseCurrentSprite")))
-					return;
-				s.Clear();
-				s.RecordUndoAction("clear");
-				m_doc.HasUnsavedChanges = true;
-
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Duplicate_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite sToCopy = tab.Spritesets.Current.CurrentSprite;
-			Sprite sNew = tab.SpriteList.DuplicateSprite(sToCopy);
-			if (sNew != null)
-			{
-				sNew.RecordUndoAction("duplicate");
-				m_doc.HasUnsavedChanges = true;
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Resize_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			bool fBackground = (tab.TabType == Tab.Type.BackgroundSprites
-									|| tab.TabType == Tab.Type.BackgroundMap);
-
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			ToolStripMenuItem mi = (sender as ToolStripMenuItem);
-			string strTag = mi.Tag as string;
-			if (strTag == null || strTag == "")
-				return;
-			string[] aSize = strTag.Split('x');
-			int tileWidth = Int32.Parse(aSize[0]);
-			int tileHeight = Int32.Parse(aSize[1]);
-
-			if (tab.SpriteList.ResizeSelectedSprite(tileWidth, tileHeight))
-			{
-				s.RecordUndoAction("resize");
-				m_doc.HasUnsavedChanges = true;
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Delete_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				//if (!AskYesNo("Are you sure you want to delete the currently selected sprite?"))
-				if (!AskYesNo(ResourceMgr.GetString("DeleteCurrentSprite")))
-					return;
-			}
-
-			tab.Spritesets.Current.RemoveSelectedSprite();
-
-			Handle_SpritesChanged(tab);
-			m_doc.HasUnsavedChanges = true;
 		}
 
 		private void menuSprite_Rotate_Clockwise_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				SpriteList sl = tab.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise90))
-				{
-					s.RecordUndoAction("rotatecw");
-					m_doc.HasUnsavedChanges = true;
-					Handle_SpritesChanged(tab);
-				}
-			}
 		}
 
 		private void menuSprite_Rotate_Counterclockwise_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				SpriteList sl = tab.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Counterclockwise90))
-				{
-					s.RecordUndoAction("rotateccw");
-					m_doc.HasUnsavedChanges = true;
-					Handle_SpritesChanged(tab);
-				}
-			}
 		}
 
 		private void menuSprite_Rotate_180_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				SpriteList sl = tab.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise180))
-				{
-					s.RecordUndoAction("rotate180");
-					m_doc.HasUnsavedChanges = true;
-					Handle_SpritesChanged(tab);
-				}
-			}
 		}
 
 		private void menuSprite_Flip_Horizontal_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				s.Flip(true, false);
-				s.RecordUndoAction("fliph");
-				m_doc.HasUnsavedChanges = true;
-
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Flip_Vertical_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				s.Flip(false, true);
-				s.RecordUndoAction("flipv");
-				m_doc.HasUnsavedChanges = true;
-
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Flip_Both_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-
-			if (!s.IsEmpty())
-			{
-				s.Flip(true, true);
-				s.RecordUndoAction("flipboth");
-				m_doc.HasUnsavedChanges = true;
-
-				Handle_SpritesChanged(tab);
-			}
 		}
 
 		private void menuSprite_Properties_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			SpriteProperties properties = new SpriteProperties(m_doc, tab.Spritesets.Current);
-			properties.ShowDialog();
 		}
 
 		private void menuSprite_Arrange_MoveUp_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void menuSprite_Arrange_MoveDown_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		#endregion
@@ -496,17 +268,6 @@ namespace Spritely
 
 		private void menuPalette_EditColors_Click(object sender, EventArgs e)
 		{
-			Tab tab = m_tabCurrent;
-			Subpalette p = tab.Palettes.CurrentPalette.CurrentSubpalette;
-			if (p == null)
-				return;
-
-			ColorEncodingView cedit = new ColorEncodingView(p);
-			DialogResult result = cedit.ShowDialog();
-
-			UpdatePaletteColor(tab);
-			if (result == DialogResult.Yes)
-				m_doc.HasUnsavedChanges = true;
 		}
 
 		#endregion
@@ -515,52 +276,18 @@ namespace Spritely
 
 		private void menuOptions_Sprite_Click(object sender, EventArgs e)
 		{
-			menuOptions_XXX_Click(0);
 		}
 
 		private void menuOptions_Palette_Click(object sender, EventArgs e)
 		{
-			menuOptions_XXX_Click(1);
 		}
 
 		private void menuOptions_Map_Click(object sender, EventArgs e)
 		{
-			menuOptions_XXX_Click(2);
 		}
 
 		private void menuOptions_XXX_Click(int nOptionPageIndex)
 		{
-			OptionsEdit opt = new OptionsEdit(nOptionPageIndex);
-			DialogResult result = opt.ShowDialog();
-
-			// If any of the options have changed...
-			if (result == DialogResult.Yes)
-			{
-				Tab tab = m_tabCurrent;
-				PictureBox pb;
-				pb = tab.EditSpriteWindow;
-				if (pb != null)
-					pb.Invalidate();
-				pb = tab.EditMapWindow;
-				if (pb != null)
-					pb.Invalidate();
-				pb = tab.PaletteWindow;
-				if  (pb != null)
-					pb.Invalidate();
-				pb = tab.PaletteSwatchWindow;
-				if (pb != null)
-					pb.Invalidate();
-			}
-		}
-
-		#endregion
-
-		#region Help Menu
-
-		private void menuHelp_About_Click(object sender, EventArgs e)
-		{
-			About about = new About();
-			about.ShowDialog();
 		}
 
 		#endregion
@@ -569,36 +296,22 @@ namespace Spritely
 
 		private void menuTest_RunUnittests_Click(object sender, EventArgs e)
 		{
-			UnitTestForm ut = new UnitTestForm();
-			ut.ShowDialog();
 		}
 
 		private void menuTestLoadImage_Click(object sender, EventArgs e)
 		{
-			// bitmap import test
-			Bitmap b = new Bitmap(@"c:\gamedev\projects\test.png");
-			Tab tab = m_tabCurrent;
-			Sprite s = tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-			s.ImportBitmap(b);
 		}
 
 		private void menuTest_ShowUndoHistory_Click(object sender, EventArgs e)
 		{
-			menuTest_ShowUndoHistory.Checked = !menuTest_ShowUndoHistory.Checked;
-			UndoMgr.ShowDebugWindow = menuTest_ShowUndoHistory.Checked;
 		}
 
 		private void menuTest_CollisionTest_Click(object sender, EventArgs e)
 		{
-			CollisionTest ct = new CollisionTest(m_doc);
-			ct.ShowDialog();
 		}
 
 		private void menuTest_ShowProjectWindow_Click(object sender, EventArgs e)
 		{
-			m_project.ShowDialog();
 		}
 
 		#endregion

@@ -10,25 +10,11 @@ namespace Spritely
 	{
 		private Document m_doc;
 		private Spriteset m_ss;
-		private Palette m_Palettes;
-
-		private bool m_fBackground;
-
-		private int m_nScrollPosition;
-		private Font m_font = new Font("Arial", 8, FontStyle.Bold);
-
-		private Sprite m_spriteSelected = null;
 
 		private int m_nSprites;
 		private int m_nTiles;
 
-		private const int MaxTilesX = 8;
-		private const int MaxTilesY = 17;
-		private const int MarginX = 0;
-
-		private static Pen m_penHilight = new Pen(Color.FromArgb(128, Color.Red), 3);
-
-		private SpriteType[] SpriteTypes = new SpriteType[]
+		public SpriteType[] SpriteTypes = new SpriteType[]
 		{
 			new SpriteType("1x1",		1,1,	Sprite.GBASize.Size8,		Sprite.GBAShape.Square),
 			new SpriteType("1x2",		1,2,	Sprite.GBASize.Size8,		Sprite.GBAShape.Tall),
@@ -44,20 +30,10 @@ namespace Spritely
 			new SpriteType("8x8",		8,8,	Sprite.GBASize.Size64,		Sprite.GBAShape.Square),
 		};
 
-		public SpriteList(Document doc, Spriteset ts, Palette palette, bool fBackground)
+		public SpriteList(Document doc, Spriteset ts)
 		{
 			m_doc = doc;
 			m_ss = ts;
-			m_Palettes = palette;
-
-			m_fBackground = fBackground;
-
-			m_nScrollPosition = 0;
-		}
-
-		public Palette Palettes
-		{
-			get { return m_Palettes; }
 		}
 
 		public int NumSprites
@@ -68,12 +44,6 @@ namespace Spritely
 		public int NumTiles
 		{
 			get { return m_nTiles; }
-		}
-
-		public Sprite CurrentSprite
-		{
-			get { return m_spriteSelected; }
-			set { m_spriteSelected = value; }
 		}
 
 		public void UpdateDocument(Document doc)
@@ -137,7 +107,6 @@ namespace Spritely
 		private Sprite AddSprite(Sprite s, List<Sprite> slist, bool fAddUndo)
 		{
 			slist.Add(s);
-			m_spriteSelected = s;
 
 			m_nSprites++;
 			m_nTiles += (s.TileWidth * s.TileHeight);
@@ -146,10 +115,10 @@ namespace Spritely
 			{
 				UndoMgr undo = m_doc.Undo();
 				if (undo != null)
-					undo.Push(new UndoAction_AddSprite(undo, this, s, true));
+					undo.Push(new UndoAction_AddSprite(undo, m_ss, s, true));
 			}
 
-			RecalcScrollHeights();
+			m_doc.Owner.HandleSpriteTypeChanged(m_ss);
 			return s;
 		}
 
@@ -225,18 +194,19 @@ namespace Spritely
 			if (stToRemove.Sprites.Remove(sToRemove))
 			{
 				UndoMgr undo = m_doc.Undo();
-				m_spriteSelected = null;
+				m_ss.CurrentSprite = null;
 				if (undo != null)
-					m_spriteSelected = undo.FindMostRecentSprite();
-				if (m_spriteSelected == null)
-					m_spriteSelected = sNewSelection;
+					m_ss.CurrentSprite = undo.FindMostRecentSprite();
+				if (m_ss.CurrentSprite == null)
+					m_ss.CurrentSprite = sNewSelection;
 
 				m_nSprites--;
 				m_nTiles -= nTiles;
-				RecalcScrollHeights();
 
 				if (fAddUndo && undo != null)
-					undo.Push(new UndoAction_AddSprite(undo, this, sToRemove, false));
+					undo.Push(new UndoAction_AddSprite(undo, m_ss, sToRemove, false));
+
+				m_doc.Owner.HandleSpriteTypeChanged(m_ss);
 			}
 		}
 
@@ -258,12 +228,13 @@ namespace Spritely
 					stRemove.Sprites.Remove(sprite);
 				if (stAdd != null)
 					stAdd.Sprites.Add(sprite);
+				m_doc.Owner.HandleSpriteTypeChanged(m_ss);
 			}
 		}
 
 		public bool ResizeSelectedSprite(int tileNewWidth, int tileNewHeight)
 		{
-			Sprite sToResize = m_spriteSelected;
+			Sprite sToResize = m_ss.CurrentSprite;
 			if (sToResize == null)
 				return false;
 
@@ -277,14 +248,13 @@ namespace Spritely
 			//TODO: adjust the background map
 
 			MoveToCorrectSpriteType(sToResize);
-			RecalcScrollHeights();
 			return true;
 		}
 
 		// Return true if successfully rotated.
 		public bool RotateSelectedSprite(Sprite.RotateDirection dir)
 		{
-			Sprite sToRotate = m_spriteSelected;
+			Sprite sToRotate = m_ss.CurrentSprite;
 			if (sToRotate == null)
 				return false;
 
@@ -295,7 +265,6 @@ namespace Spritely
 				return false;
 
 			MoveToCorrectSpriteType(sToRotate);
-			RecalcScrollHeights();
 			return true;
 		}
 
@@ -315,23 +284,6 @@ namespace Spritely
 				}
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// Select the first sprite.
-		/// This is useful after loading a file of sprites since otherwise the selected
-		/// sprite will be the last one loaded from the file.
-		/// </summary>
-		public void SelectFirstSprite()
-		{
-			foreach (SpriteType st in SpriteTypes)
-			{
-				foreach (Sprite s in st.Sprites)
-				{
-					m_spriteSelected = s;
-					return;
-				}
-			}
 		}
 
 		/// <summary>
@@ -450,54 +402,6 @@ namespace Spritely
 			return null;
 		}
 
-		private int m_nTotalScrollHeight = 0;
-
-		public int VisibleScrollRows
-		{
-			get {return MaxTilesY;}
-		}
-
-		public int MaxScrollRows
-		{
-			get { return m_nTotalScrollHeight; }
-		}
-
-		private void RecalcScrollHeights()
-		{
-			m_nTotalScrollHeight = 0;
-			foreach (SpriteType st in SpriteTypes)
-			{
-				st.FirstLine = m_nTotalScrollHeight;
-				if (st.Sprites.Count == 0)
-					st.ScrollHeight = 0;
-				else
-				{
-					// Number of rows required for this SpriteType
-					int nRows = ((st.Width * st.Sprites.Count) + (MaxTilesX - 1)) / MaxTilesX;
-					// 1 (for the title bar) + rows * height of each row (in tiles)
-					st.ScrollHeight = 1 + (nRows * st.Height);
-				}
-
-				m_nTotalScrollHeight += st.ScrollHeight;
-			}
-
-			if (m_doc.Owner != null)
-			{
-				if (m_fBackground)
-					m_doc.Owner.AdjustAllBackgroundSpriteListScrollbars();
-				else
-				{
-					m_doc.Owner.AdjustAllSpriteListScrollbars();
-					//m_Owner.NewUI.
-				}
-			}
-		}
-
-		public void ScrollTo(int nPosition)
-		{
-			m_nScrollPosition = nPosition;
-		}
-
 		public void FlushBitmaps()
 		{
 			foreach (SpriteType st in SpriteTypes)
@@ -505,180 +409,15 @@ namespace Spritely
 					s.FlushBitmaps();
 		}
 
-		/// <returns>True if the SpriteList needs to be redrawn.</returns>
-		public bool HandleMouse(int pxX, int pxY)
-		{
-			if (pxX < 0 || pxY < 0)
-				return false;
-
-			// Convert screen pixel (x,y) to tile (x,y).
-			int nTileX = pxX / Tile.SmallBitmapScreenSize;
-			int nTileY = pxY / Tile.SmallBitmapScreenSize;
-
-			// Ignore if outside the SpriteList bounds.
-			if (nTileX >= MaxTilesX || nTileY >= MaxTilesY)
-				return false;
-
-			// Adjust for the current scroll position.
-			nTileY += m_nScrollPosition;
-
-			foreach (SpriteType st in SpriteTypes)
-			{
-				if (st.Sprites.Count != 0
-					// Ignore (st.FirstLine == nTileY) because this is a click on the label
-					&& st.FirstLine < nTileY
-					&& (st.FirstLine + st.ScrollHeight) > nTileY
-					)
-				{
-					// Calculate which tile was clicked on within this SpriteType.
-					nTileY -= (st.FirstLine + 1);
-
-					int nSpriteX = nTileX / st.Width;
-					int nSpriteY = nTileY / st.Height;
-					int nSpritesPerRow = MaxTilesX / st.Width;
-					int nSelectedSprite = (nSpriteY * nSpritesPerRow) + nSpriteX;
-
-					// Don't allow selection beyond the end of the valid sprites.
-					if (nSelectedSprite >= st.Sprites.Count)
-						return false;
-
-					// Update the selection if a new tile has been selected.
-					if (m_spriteSelected != st.Sprites[nSelectedSprite])
-					{
-						m_spriteSelected = st.Sprites[nSelectedSprite];
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		public bool HandleMouse_Edit(int pxX, int pxY, Toolbox.ToolType tool)
-		{
-			if (m_spriteSelected == null)
-				return false;
-
-			if (pxX < 0 || pxY < 0)
-				return false;
-
-			// Convert screen pixel (x,y) to sprite pixel index (x,y).
-			int nPixelX = pxX / Tile.BigBitmapPixelSize;
-			int nPixelY = pxY / Tile.BigBitmapPixelSize;
-
-			return m_spriteSelected.Click(nPixelX, nPixelY, tool);
-		}
-
-		// Call this on mouseUp when the current editing tool has finished.
-		public void HandleMouse_FinishEdit(Toolbox.ToolType tool)
-		{
-			if (m_spriteSelected == null)
-				return;
-
-			m_spriteSelected.FinishEdit(tool);
-		}
-
 		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
 		{
-			if (m_spriteSelected == null)
+			if (m_ss.CurrentSprite == null)
 				return;
 			
-			m_spriteSelected.ShiftPixels(shift);
+			m_ss.CurrentSprite.ShiftPixels(shift);
 		}
 
-		public void DrawList(Graphics g)
-		{
-			int pxTileSize = Tile.SmallBitmapScreenSize;		// size of each tile (in screen pixels)
-
-			int pxX = MarginX;
-			int pxY = 0;
-			int nRow = 0;
-			int pxScrollOffset = m_nScrollPosition * pxTileSize + 1;
-
-			// Information about currently selected sprite.
-			Rectangle rSelectedSprite = new Rectangle(0,0, 0,0);
-			bool fSelectedSprite = false;
-
-			Brush brTitleBar;
-			if (m_fBackground)
-				brTitleBar = Brushes.DarkViolet;
-			else
-				brTitleBar = Brushes.Green;
-
-			foreach (SpriteType st in SpriteTypes)
-			{
-				if (st.Sprites.Count != 0)
-				{
-					// Draw label for sprite size.
-					if (nRow >= m_nScrollPosition && nRow < (m_nScrollPosition + MaxTilesY))
-					{
-						const int pxFontAdjustX = 2;	// Font indent
-						const int pxFontAdjustY = 1;	// Font baseline adjust
-						g.FillRectangle(brTitleBar, pxX+1, pxY+2 - pxScrollOffset, (MaxTilesX * pxTileSize) -1, pxTileSize - 3);
-						g.DrawString(st.Name, m_font, Brushes.White, pxX + pxFontAdjustX, pxY + pxFontAdjustY - pxScrollOffset);
-						//g.DrawString(st.ScrollHeight.ToString(), m_font, Brushes.White, (MaxTilesX * (pxTileSize - 2)) + pxFontAdjustX, nY + pxFontAdjustY - pxScrollOffset);
-					}
-					pxY += pxTileSize;
-					nRow++;
-
-					int pxSpriteWidth = st.Width * pxTileSize;
-					int pxSpriteHeight = st.Height * pxTileSize;
-
-					foreach (Sprite s in st.Sprites)
-					{
-						// Move to a new row if necessary.
-						if (pxX >= MaxTilesX * pxTileSize)
-						{
-							pxY += pxSpriteHeight;
-							nRow += st.Height;
-							pxX = MarginX;
-						}
-
-						int pxX0 = pxX;
-						int pxY0 = pxY - pxScrollOffset;
-
-						// Don't draw unless some part of the sprite is visible.
-						if (nRow >= m_nScrollPosition && nRow <= (m_nScrollPosition + MaxTilesY)
-							|| ((nRow + st.Height) >= m_nScrollPosition && (nRow + st.Height) < (m_nScrollPosition + MaxTilesY))
-							)
-						{
-							// Draw the sprite.
-							s.DrawSmallSprite(g, pxX0, pxY0);
-
-							// Draw a border around the sprite.
-							g.DrawRectangle(Pens.Gray, pxX0, pxY0, pxSpriteWidth, pxSpriteHeight);
-
-							if (m_spriteSelected == s)
-							{
-								// Record the bounds of the currently selected sprite so that we can draw
-								// a rectangle border around it. We want this border to be drawn on top of
-								// all of the sprites (since it may extend slightly on top of neighboring
-								// sprites), so we need to draw it last. 
-								fSelectedSprite = true;
-								rSelectedSprite = new Rectangle(pxX0, pxY0, pxSpriteWidth, pxSpriteHeight);
-							}
-						}
-
-						pxX += pxSpriteWidth;
-					}
-
-					// Position pen for the next label.
-					pxX = MarginX;
-					pxY += pxSpriteHeight;
-					nRow += st.Height;
-				}
-			}
-
-			// Draw a heavy border around the current sprite (if any).
-			if (fSelectedSprite)
-				g.DrawRectangle(m_penHilight, rSelectedSprite);
-		}
-
-		// Draw the currently selected sprite
-		public void DrawEditSprite(Graphics g)
-		{
-			if (m_spriteSelected != null)
-				m_spriteSelected.DrawEditSprite(g);
-		}
+		#region Save/Export
 
 		public void Save(System.IO.TextWriter tw, bool fBackground)
 		{
@@ -768,6 +507,8 @@ namespace Spritely
 					s.Export_SpriteMaskData(tw);
 			}
 		}
+
+		#endregion
 
 	}
 }

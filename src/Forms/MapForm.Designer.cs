@@ -1,6 +1,6 @@
 namespace Spritely
 {
-	partial class SpriteForm
+	partial class MapForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,10 +29,10 @@ namespace Spritely
 		private void InitializeComponent()
 		{
 			this.pbTools = new System.Windows.Forms.PictureBox();
-			this.pbSprite = new System.Windows.Forms.PictureBox();
+			this.pbMap = new System.Windows.Forms.PictureBox();
 			this.cbZoom = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pbSprite)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbMap)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pbTools
@@ -49,20 +49,20 @@ namespace Spritely
 			this.pbTools.Paint += new System.Windows.Forms.PaintEventHandler(this.pbTools_Paint);
 			this.pbTools.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbTools_MouseUp);
 			// 
-			// pbSprite
+			// pbMap
 			// 
-			this.pbSprite.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.pbMap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.pbSprite.Location = new System.Drawing.Point(65, 5);
-			this.pbSprite.Name = "pbSprite";
-			this.pbSprite.Size = new System.Drawing.Size(326, 291);
-			this.pbSprite.TabIndex = 1;
-			this.pbSprite.TabStop = false;
-			this.pbSprite.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseMove);
-			this.pbSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseDown);
-			this.pbSprite.Paint += new System.Windows.Forms.PaintEventHandler(this.pbSprite_Paint);
-			this.pbSprite.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseUp);
+			this.pbMap.Location = new System.Drawing.Point(65, 5);
+			this.pbMap.Name = "pbMap";
+			this.pbMap.Size = new System.Drawing.Size(326, 291);
+			this.pbMap.TabIndex = 1;
+			this.pbMap.TabStop = false;
+			this.pbMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseMove);
+			this.pbMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseDown);
+			this.pbMap.Paint += new System.Windows.Forms.PaintEventHandler(this.pbMap_Paint);
+			this.pbMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseUp);
 			// 
 			// cbZoom
 			// 
@@ -82,22 +82,22 @@ namespace Spritely
 			this.cbZoom.TabStop = false;
 			this.cbZoom.SelectedIndexChanged += new System.EventHandler(this.cbZoom_SelectedIndexChanged);
 			// 
-			// SpriteForm
+			// MapForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(395, 301);
 			this.Controls.Add(this.cbZoom);
-			this.Controls.Add(this.pbSprite);
+			this.Controls.Add(this.pbMap);
 			this.Controls.Add(this.pbTools);
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(206, 297);
-			this.Name = "SpriteForm";
+			this.Name = "MapForm";
 			this.Text = "SpriteForm";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpriteForm_FormClosing);
 			this.Resize += new System.EventHandler(this.SpriteForm_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pbSprite)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbMap)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -105,7 +105,7 @@ namespace Spritely
 		#endregion
 
 		private System.Windows.Forms.PictureBox pbTools;
-		private System.Windows.Forms.PictureBox pbSprite;
+		private System.Windows.Forms.PictureBox pbMap;
 		private System.Windows.Forms.ComboBox cbZoom;
 	}
 }

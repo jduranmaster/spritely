@@ -12,7 +12,7 @@ namespace Spritely
 	{
 		Document m_doc;
 
-		SpriteList slist;
+		Spriteset ss;
 		Sprite s1, s2;
 		int xOffset, yOffset;
 
@@ -30,10 +30,11 @@ namespace Spritely
 			xOffset = 0;
 			yOffset = 0;
 
-			Tab tab = m_doc.Owner.CurrentTab;
-			slist = tab.SpriteList;
-			s1 = slist.CurrentSprite;
-			s2 = slist.NextSprite(s1);
+			//OldTab tab = m_doc.OldOwner.CurrentTab;
+			ss = d.Owner.ActiveSpriteset();
+
+			s1 = ss.CurrentSprite;
+			s2 = ss.SpriteList.NextSprite(s1);
 
 			mask1 = CalcMask(s1, out mask1w, out mask1h);
 			mask2 = CalcMask(s2, out mask2w, out mask2h);
