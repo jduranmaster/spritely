@@ -11,7 +11,7 @@ namespace Spritely
 	{
 		#region Load
 
-		public bool LoadXML_sprite16(XmlNode xnode)
+		public bool LoadXML_sprite16(XmlNode xnode, int nFirstTileId)
 		{
 			int nTileIndex = 0;
 
@@ -21,7 +21,13 @@ namespace Spritely
 				{
 					if (nTileIndex < NumTiles)
 					{
-						//int id = XMLUtils.GetXMLIntegerAttribute(xn, "id");
+						int id = XMLUtils.GetXMLIntegerAttribute(xn, "id");
+						if (id != (nFirstTileId + nTileIndex))
+						{
+							m_doc.ErrorString("Out of order tile id in sprite '{0}'. Expected {1}, found {2}",
+									Name, nFirstTileId + nTileIndex, id);
+							return false;
+						}
 
 						if (!LoadXML_tile(xn, nTileIndex))
 						{
@@ -107,7 +113,7 @@ namespace Spritely
 			tw.Write(String.Format(" subpalette_id=\"{0}\"", m_nSubpaletteID));
 			tw.WriteLine(">");
 
-			int nTileID = FirstTileID;
+			int nTileID = ExportFirstTileId;
 			foreach (Tile t in m_Tiles)
 				t.Save(tw, nTileID++);
 
@@ -124,6 +130,12 @@ namespace Spritely
 			m_nExportSpriteID = nSpriteExportID;
 			m_nExportFirstTileID = nFirstTileID;
 			m_nMaskIndex = nMaskIndex;
+
+			int nTileId = nFirstTileID;
+			for (int i = 0; i < m_Tiles.Length; i++)
+			{
+				m_Tiles[i].Export_AssignIDs(nTileId++);
+			}
 		}
 
 		public void Export_SpriteIDs(System.IO.TextWriter tw, string strSpriteset)
@@ -136,7 +148,7 @@ namespace Spritely
 			int nExportId = m_nExportFirstTileID;
 			for (int i = 0; i < m_Tiles.Length; i++)
 			{
-				m_Tiles[i].Export_TileIDs(tw, strSpritesetName, m_strName, i, m_Tiles.Length, nExportId++);
+				m_Tiles[i].Export_TileIDs(tw, strSpritesetName, m_strName, i, m_Tiles.Length);
 			}
 		}
 
@@ -256,7 +268,7 @@ namespace Spritely
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			// Note: <sprite16> attributes not needed for test.
 			Test_LoadXML_sprite16_AddTile(xnSprite, 0, 8, 8);
-			Assert.IsTrue(s.LoadXML_sprite16(xnSprite));
+			Assert.IsTrue(s.LoadXML_sprite16(xnSprite, 0));
 
 			// Verify the data is the same as the XML
 			// Pixel 0 is the same as the tileid
@@ -281,7 +293,7 @@ namespace Spritely
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			for (int i = 0; i < 8; i++)
 				Test_LoadXML_sprite16_AddTile(xnSprite, i, 8, 8);
-			Assert.IsTrue(s.LoadXML_sprite16(xnSprite));
+			Assert.IsTrue(s.LoadXML_sprite16(xnSprite, 0));
 
 			// Verify the data is the same as the XML
 			// Pixel 0 is the same as the tileid
@@ -309,7 +321,7 @@ namespace Spritely
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			for (int i = 0; i < 2; i++)
 				Test_LoadXML_sprite16_AddTile(xnSprite, i, 8, 8);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		[Test]
@@ -327,7 +339,7 @@ namespace Spritely
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			for (int i = 0; i < 3; i++)
 				Test_LoadXML_sprite16_AddTile(xnSprite, i, 8, 8);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		[Test]
@@ -344,7 +356,7 @@ namespace Spritely
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			Test_LoadXML_sprite16_AddTile(xnSprite, 0, 8, 7);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		[Test]
@@ -361,7 +373,7 @@ namespace Spritely
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			Test_LoadXML_sprite16_AddTile(xnSprite, 0, 8, 9);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		[Test]
@@ -378,7 +390,7 @@ namespace Spritely
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			Test_LoadXML_sprite16_AddTile(xnSprite, 0, 7, 8);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		[Test]
@@ -395,7 +407,7 @@ namespace Spritely
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
 			Test_LoadXML_sprite16_AddTile(xnSprite, 0, 9, 8);
-			Assert.IsFalse(s.LoadXML_sprite16(xnSprite));
+			Assert.IsFalse(s.LoadXML_sprite16(xnSprite, 0));
 		}
 
 		private void Test_LoadXML_sprite16_AddTile(XmlElement xnSprite, int nTileId, int nColumns, int nRows)

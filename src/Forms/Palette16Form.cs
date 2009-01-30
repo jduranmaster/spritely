@@ -119,7 +119,7 @@ namespace Spritely
 
 		private void pbPaletteSelect_MouseDown(object sender, MouseEventArgs e)
 		{
-			m_fSubpaletteSelect_OriginalSubpalette = m_palette.CurrentSubpalette;
+			m_fSubpaletteSelect_OriginalSubpalette = m_palette.CurrentSubpaletteId;
 			m_fSubpaletteSelect_Selecting = true;
 
 			pbPaletteSelect_MouseMove(sender, e);
@@ -131,6 +131,9 @@ namespace Spritely
 			{
 				if (HandleMouse_SelectSubpalette(e.X, e.Y))
 				{
+					Sprite s = m_parent.ActiveSprite();
+					s.SubpaletteID = m_palette.CurrentSubpaletteId;
+					s.FlushBitmaps();
 					m_parent.HandleSubpaletteSelectChange(m_palette);
 				}
 			}
@@ -143,7 +146,7 @@ namespace Spritely
 			m_fSubpaletteSelect_Selecting = false;
 
 			// Record an undo action if the current palette selection has changed
-			if (m_fSubpaletteSelect_OriginalSubpalette != m_palette.CurrentSubpalette)
+			if (m_fSubpaletteSelect_OriginalSubpalette != m_palette.CurrentSubpaletteId)
 			{
 				Sprite s =  m_parent.ActiveSprite();
 				s.RecordUndoAction("palette select");
@@ -172,9 +175,9 @@ namespace Spritely
 			int nSelectedSubpalette = nY * k_nSelectorColumns + nX;
 
 			// Update the selection if a new palette has been selected.
-			if (m_palette.CurrentSubpalette != nSelectedSubpalette)
+			if (m_palette.CurrentSubpaletteId != nSelectedSubpalette)
 			{
-				m_palette.CurrentSubpalette = nSelectedSubpalette;
+				m_palette.CurrentSubpaletteId = nSelectedSubpalette;
 				return true;
 			}
 
@@ -205,7 +208,7 @@ namespace Spritely
 					Brush brBackground = Brushes.White;
 					Brush brFont = Brushes.Black;
 
-					if (i == m_palette.CurrentSubpalette)
+					if (i == m_palette.CurrentSubpaletteId)
 					{
 						brBackground = Brushes.DarkGray;
 						brFont = Brushes.White;
@@ -250,10 +253,10 @@ namespace Spritely
 
 		private void pbPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			m_fPalette_OriginalColor = m_palette.CurrentSubpalette;
+			m_fPalette_OriginalColor = m_palette.CurrentSubpaletteId;
 			m_fPalette_Selecting = true;
 
-			pbPaletteSelect_MouseMove(sender, e);
+			pbPalette_MouseMove(sender, e);
 		}
 
 		private void pbPalette_MouseMove(object sender, MouseEventArgs e)
@@ -272,7 +275,7 @@ namespace Spritely
 			m_fPalette_Selecting = false;
 
 			// Record an undo action if the current color selection has changed
-			if (m_fPalette_OriginalColor != m_palette.CurrentSubpalette)
+			if (m_fPalette_OriginalColor != m_palette.CurrentSubpaletteId)
 			{
 				Subpalette sp = m_palette.GetCurrentSubpalette();
 				sp.RecordUndoAction("select color");

@@ -216,7 +216,10 @@ namespace Spritely
 				m_doc = new Document(this);
 
 			if (!m_doc.Open())
+			{
+				m_doc = null;
 				return;
+			}
 
 			AddProjectMenuItems();
 			AddSubwindowsToTabs();
@@ -284,7 +287,10 @@ namespace Spritely
 				m_doc = new Document(this);
 
 			if (!m_doc.Open(strFilename))
+			{
+				m_doc = null;
 				return;
+			}
 
 			AddProjectMenuItems();
 			AddSubwindowsToTabs();
@@ -602,20 +608,20 @@ namespace Spritely
 			// If any of the options have changed...
 			if (result == DialogResult.Yes)
 			{
-				OldTab tab = null;// m_tabCurrent;
-				PictureBox pb;
-				pb = tab.EditSpriteWindow;
-				if (pb != null)
-					pb.Invalidate();
-				pb = tab.EditMapWindow;
-				if (pb != null)
-					pb.Invalidate();
-				pb = tab.PaletteWindow;
-				if (pb != null)
-					pb.Invalidate();
-				pb = tab.PaletteSwatchWindow;
-				if (pb != null)
-					pb.Invalidate();
+				//OldTab tab = null;// m_tabCurrent;
+				//PictureBox pb;
+				//pb = tab.EditSpriteWindow;
+				//if (pb != null)
+				//	pb.Invalidate();
+				//pb = tab.EditMapWindow;
+				//if (pb != null)
+				//	pb.Invalidate();
+				//pb = tab.PaletteWindow;
+				//if (pb != null)
+				//	pb.Invalidate();
+				//pb = tab.PaletteSwatchWindow;
+				//if (pb != null)
+				//	pb.Invalidate();
 			}
 		}
 
@@ -669,11 +675,6 @@ namespace Spritely
 		{
 			CollisionTest ct = new CollisionTest(m_doc);
 			ct.ShowDialog();
-		}
-
-		private void menuTest_ShowOldUI_Click(object sender, EventArgs e)
-		{
-			m_oldui.ShowDialog();
 		}
 
 		#endregion

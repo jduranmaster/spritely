@@ -92,6 +92,8 @@ namespace Spritely
 
 		public void Save(System.IO.TextWriter tw)
 		{
+			Export_AssignIDs();
+
 			tw.WriteLine("\t<bgmaps>");
 
 			foreach (Map m in m_maps.Values)

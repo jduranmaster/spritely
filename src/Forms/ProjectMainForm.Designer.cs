@@ -130,7 +130,6 @@ namespace Spritely
 			this.menuTest_LoadImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuTest_ShowOldUI = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabSet.SuspendLayout();
 			this.menuBar.SuspendLayout();
 			this.SuspendLayout();
@@ -362,12 +361,12 @@ namespace Spritely
 			// menuProject_Palettes_Separator
 			// 
 			this.menuProject_Palettes_Separator.Name = "menuProject_Palettes_Separator";
-			this.menuProject_Palettes_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuProject_Palettes_Separator.Size = new System.Drawing.Size(104, 6);
 			// 
 			// menuProject_Palettes_New
 			// 
 			this.menuProject_Palettes_New.Name = "menuProject_Palettes_New";
-			this.menuProject_Palettes_New.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_Palettes_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_Palettes_New.Text = "New...";
 			// 
 			// menuProject_Spritesets
@@ -382,12 +381,12 @@ namespace Spritely
 			// menuProject_Spritesets_Separator
 			// 
 			this.menuProject_Spritesets_Separator.Name = "menuProject_Spritesets_Separator";
-			this.menuProject_Spritesets_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuProject_Spritesets_Separator.Size = new System.Drawing.Size(104, 6);
 			// 
 			// menuProject_Spritesets_New
 			// 
 			this.menuProject_Spritesets_New.Name = "menuProject_Spritesets_New";
-			this.menuProject_Spritesets_New.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_Spritesets_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_Spritesets_New.Text = "New...";
 			// 
 			// menuProject_Separator1
@@ -407,12 +406,12 @@ namespace Spritely
 			// menuProject_BackgroundPalettes_Separator
 			// 
 			this.menuProject_BackgroundPalettes_Separator.Name = "menuProject_BackgroundPalettes_Separator";
-			this.menuProject_BackgroundPalettes_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuProject_BackgroundPalettes_Separator.Size = new System.Drawing.Size(104, 6);
 			// 
 			// menuProject_BackgroundPalettes_New
 			// 
 			this.menuProject_BackgroundPalettes_New.Name = "menuProject_BackgroundPalettes_New";
-			this.menuProject_BackgroundPalettes_New.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_BackgroundPalettes_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_BackgroundPalettes_New.Text = "New...";
 			// 
 			// menuProject_BackgroundTilesets
@@ -427,12 +426,12 @@ namespace Spritely
 			// menuProject_BackgroundTilesets_Separator
 			// 
 			this.menuProject_BackgroundTilesets_Separator.Name = "menuProject_BackgroundTilesets_Separator";
-			this.menuProject_BackgroundTilesets_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuProject_BackgroundTilesets_Separator.Size = new System.Drawing.Size(104, 6);
 			// 
 			// menuProject_BackgroundTilesets_New
 			// 
 			this.menuProject_BackgroundTilesets_New.Name = "menuProject_BackgroundTilesets_New";
-			this.menuProject_BackgroundTilesets_New.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_BackgroundTilesets_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_BackgroundTilesets_New.Text = "New...";
 			// 
 			// menuProject_BackgroundMaps
@@ -447,12 +446,12 @@ namespace Spritely
 			// menuProject_BackgroundMaps_Separator
 			// 
 			this.menuProject_BackgroundMaps_Separator.Name = "menuProject_BackgroundMaps_Separator";
-			this.menuProject_BackgroundMaps_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuProject_BackgroundMaps_Separator.Size = new System.Drawing.Size(104, 6);
 			// 
 			// menuProject_BackgroundMaps_New
 			// 
 			this.menuProject_BackgroundMaps_New.Name = "menuProject_BackgroundMaps_New";
-			this.menuProject_BackgroundMaps_New.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_BackgroundMaps_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_BackgroundMaps_New.Text = "New...";
 			// 
 			// menuSprite
@@ -919,8 +918,7 @@ namespace Spritely
             this.menuTest_Separator1,
             this.menuTest_LoadImage,
             this.menuTest_ShowUndoHistory,
-            this.menuTest_CollisionTest,
-            this.menuTest_ShowOldUI});
+            this.menuTest_CollisionTest});
 			this.menuTest.Name = "menuTest";
 			this.menuTest.Size = new System.Drawing.Size(40, 20);
 			this.menuTest.Text = "&Test";
@@ -957,13 +955,6 @@ namespace Spritely
 			this.menuTest_CollisionTest.Size = new System.Drawing.Size(165, 22);
 			this.menuTest_CollisionTest.Text = "Collision Test";
 			this.menuTest_CollisionTest.Click += new System.EventHandler(this.menuTest_CollisionTest_Click);
-			// 
-			// menuTest_ShowOldUI
-			// 
-			this.menuTest_ShowOldUI.Name = "menuTest_ShowOldUI";
-			this.menuTest_ShowOldUI.Size = new System.Drawing.Size(165, 22);
-			this.menuTest_ShowOldUI.Text = "Show Old UI";
-			this.menuTest_ShowOldUI.Click += new System.EventHandler(this.menuTest_ShowOldUI_Click);
 			// 
 			// ProjectMainForm
 			// 
@@ -1099,7 +1090,6 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuTest_LoadImage;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_ShowUndoHistory;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
-		private System.Windows.Forms.ToolStripMenuItem menuTest_ShowOldUI;
 
 	}
 }

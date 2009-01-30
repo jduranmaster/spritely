@@ -14,7 +14,6 @@ namespace Spritely
 
 		private Map m_map;
 		private Spriteset m_ss;
-		private Sprite m_sprite;
 
 		private Toolbox_Map m_toolbox;
 
@@ -81,11 +80,9 @@ namespace Spritely
 
 			// Set to 16x.
 			cbZoom.SelectedIndex = (int)ZoomLevel.Zoom_16x;
-		}
 
-		public Sprite Sprite
-		{
-			get { return m_sprite; }
+			m_tileSpriteX = -1;
+			m_tileSpriteY = -1;
 		}
 
 		public void SetMap(Map m)
@@ -150,151 +147,163 @@ namespace Spritely
 
 		#region Toolbox
 
-		private void pbTools_Paint(object sender, PaintEventArgs e)
-		{
-			m_toolbox.Draw(e.Graphics);
-		}
+		private bool m_fToolbox_Selecting = false;
 
 		private void pbTools_MouseDown(object sender, MouseEventArgs e)
-		{		
-		}
-
-		private void pbTools_MouseLeave(object sender, EventArgs e)
 		{
+			if (m_toolbox.HandleMouse(e.X, e.Y))
+			{
+				pbTools.Invalidate();
+			}
+			m_fToolbox_Selecting = true;
 		}
 
 		private void pbTools_MouseMove(object sender, MouseEventArgs e)
 		{
+			if (m_fToolbox_Selecting)
+			{
+				if (m_toolbox.HandleMouse(e.X, e.Y))
+					pbTools.Invalidate();
+			}
+			else
+			{
+				if (m_toolbox.HandleMouseMove(e.X, e.Y))
+					pbTools.Invalidate();
+			}
 		}
 
 		private void pbTools_MouseUp(object sender, MouseEventArgs e)
 		{
+			m_fToolbox_Selecting = false;
+			pbTools.Invalidate();
+		}
+
+		private void pbTools_MouseLeave(object sender, EventArgs e)
+		{
+			if (m_toolbox.HandleMouseMove(-10, -10))
+			{
+				pbTools.Invalidate();
+			}
+		}
+
+		private void pbTools_Paint(object sender, PaintEventArgs e)
+		{
+			m_toolbox.Draw(e.Graphics);
 		}
 
 		#endregion
 
 		#region Map
 
-		private bool m_fEditSprite_Selecting = false;
-		private bool m_fEditSprite_Erase = false;
+		private bool m_fEditBackgroundMap_Selecting = false;
 
 		private void pbMap_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (m_sprite == null)
-				return;
-
-			m_fEditSprite_Selecting = true;
-
-			// Right click is handled the same as the Eraser tool
-			m_fEditSprite_Erase = (e.Button == MouseButtons.Right);
-
+			m_fEditBackgroundMap_Selecting = true;
 			pbMap_MouseMove(sender, e);
 		}
 
 		private void pbMap_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (m_fEditSprite_Selecting)
+			if (m_fEditBackgroundMap_Selecting)
 			{
-				Toolbox.ToolType tool = m_toolbox.CurrentTool;
-				if (m_fEditSprite_Erase)
-					tool = Toolbox.ToolType.Eraser;
-
-				if (HandleMouseMove(e.X, e.Y, tool))
+				if (HandleMouse_EditMap(e.X, e.Y))
 				{
-					if (tool == Toolbox.ToolType.Eyedropper)
-					{
-						//UpdatePaletteSelect(tab);
-					}
-					else
-					{
-						m_parent.HandleMapDataChange(m_map);
-					}
+					m_parent.HandleMapDataChange(m_map);
 				}
+			}
+
+			// Update boundary rect for currently selected sprite.
+			if (HandleMouseMove_EditMap(e.X, e.Y))
+			{
+				pbMap.Invalidate();
 			}
 		}
 
 		private void pbMap_MouseUp(object sender, MouseEventArgs e)
 		{
-			if (m_fEditSprite_Selecting)
+			if (HandleMouseMove_EditMap(-10, -10))
 			{
-				Toolbox.ToolType tool = m_toolbox.CurrentTool;
+				pbMap.Invalidate();
+			}
+			m_fEditBackgroundMap_Selecting = false;
+		}
 
-				// Record the undo action.
-				string strTool = "";
-				bool fRecordUndo = false;
-				switch (tool)
+		public bool HandleMouse_EditMap(int pxX, int pxY)
+		{
+			Sprite spriteSelected = m_ss.CurrentSprite;
+			if (spriteSelected == null)
+				return false;
+
+			if (pxX < 0 || pxY < 0)
+				return false;
+
+			// Convert screen pixel (x,y) to map coordinate (x,y).
+			int x = pxX / Tile.SmallBitmapScreenSize;
+			int y = pxY / Tile.SmallBitmapScreenSize;
+
+			if (x >= k_nMaxMapTilesX || y >= k_nMaxMapTilesY)
+				return false;
+
+			bool fUpdate = false;
+			int nIndex = 0;
+			for (int iy = 0; iy < spriteSelected.TileHeight; iy++)
+			{
+				if (y + iy >= k_nMaxMapTilesY)
 				{
-					//case Toolbox.ToolType.Select - no  undo
-					case Toolbox.ToolType.Pencil:
-						strTool = "pencil";
-						fRecordUndo = true;
-						break;
-					//case Toolbox.ToolType.Eyedropper - no undo
-					case Toolbox.ToolType.FloodFill:
-						strTool = "bucket";
-						fRecordUndo = true;
-						break;
-					case Toolbox.ToolType.Eraser:
-						strTool = "eraser";
-						break;
+					nIndex++;
+					continue;
 				}
-
-				if (fRecordUndo)
+				for (int ix = 0; ix < spriteSelected.TileWidth; ix++)
 				{
-					Sprite s = m_ss.CurrentSprite;
-					if (s != null)
-						s.RecordUndoAction(strTool);
+					if (x + ix >= k_nMaxMapTilesX)
+					{
+						nIndex++;
+						continue;
+					}
+					m_map.SetBackgroundTile(x + ix, y + iy,
+							spriteSelected.FirstTileId + nIndex,
+							spriteSelected.SubpaletteID);
+					nIndex++;
+					fUpdate = true;
 				}
 			}
 
-			m_fEditSprite_Selecting = false;
+			return fUpdate;
 		}
 
-		private bool HandleMouseMove(int pxX, int pxY, Toolbox.ToolType tool)
+		public bool HandleMouseMove_EditMap(int pxX, int pxY)
 		{
-			if (m_sprite == null || pxX < 0 || pxY < 0)
+			Sprite spriteSelected = m_ss.CurrentSprite;
+			if (spriteSelected == null)
 				return false;
 
-			// Convert screen pixel (x,y) to sprite pixel index (x,y).
-			int pxSpriteX = pxX / BigBitmapPixelSize;
-			int pxSpriteY = pxY / BigBitmapPixelSize;
+			// Convert screen pixel (x,y) to map coordinate (x,y).
+			int x = pxX / Tile.SmallBitmapScreenSize;
+			int y = pxY / Tile.SmallBitmapScreenSize;
 
-			// Ignore if pixel is outside bounds of current sprite.
-			if (pxSpriteX >= m_sprite.PixelWidth || pxSpriteY >= m_sprite.PixelHeight)
-				return false;
-
-			// Convert sprite pixel coords (x,y) into tile index (x,y) and tile pixel coords (x,y).
-			int tileX = pxSpriteX / Tile.TileSize;
-			int pxTileX = pxSpriteX % Tile.TileSize;
-			int tileY = pxSpriteY / Tile.TileSize;
-			int pxTileY = pxSpriteY % Tile.TileSize;
-
-			int nTileIndex = (tileY * m_sprite.TileWidth) + tileX;
-			Palette p = m_parent.ActivePalette();
-			Subpalette sp = p.GetCurrentSubpalette();
-
-			if (tool == Toolbox.ToolType.Eyedropper)
+			if (pxX < 0 || pxY < 0 || x >= k_nMaxMapTilesX || y >= k_nMaxMapTilesY)
 			{
-				int nCurrColor = m_sprite.GetPixel(pxSpriteX, pxSpriteY);
-				if (nCurrColor == sp.CurrentColor)
-					return false;
-				sp.CurrentColor = nCurrColor;
+				// Turn off the hilight if we currently have one.
+				if (m_tileSpriteX != -1 || m_tileSpriteY != -1)
+				{
+					m_tileSpriteX = -1;
+					m_tileSpriteY = -1;
+					return true;
+				}
+				return false;
+			}
+
+			// Has the current mouse position changed?
+			if (x != m_tileSpriteX || y != m_tileSpriteY)
+			{
+				m_tileSpriteX = x;
+				m_tileSpriteY = y;
 				return true;
 			}
 
-			Tile t = m_sprite.GetTile(nTileIndex);
-			int nColor = tool == Toolbox.ToolType.Eraser ? 0 : sp.CurrentColor;
-
-			// Same color - no need to update.
-			if (t.GetPixel(pxTileX, pxTileY) == nColor)
-				return false;
-
-			// Set the new color.
-			t.SetPixel(pxTileX, pxTileY, nColor);
-
-			// Remove the old bitmaps.
-			m_sprite.FlushBitmaps();
-			return true;
+			// No change.
+			return false;
 		}
 
 		private void pbMap_Paint(object sender, PaintEventArgs e)
@@ -314,7 +323,7 @@ namespace Spritely
 					Sprite s = m_map.Spriteset.FindSprite(nTileId);
 					if (s != null)
 					{
-						Tile t = s.GetTile(nTileId - s.FirstTileID);
+						Tile t = s.GetTile(nTileId - s.FirstTileId);
 						if (t != null)
 						{
 							t.DrawSmallTile(g, pxX, pxY);

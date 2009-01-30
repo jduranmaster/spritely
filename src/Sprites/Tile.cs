@@ -56,16 +56,32 @@ namespace Spritely
 		/// </summary>
 		public const int TileSize = 8;
 
+		private int m_nExportId;
+
 		public Tile(Sprite s, int nTileId)
 		{
 			m_sprite = s;
 			m_id = nTileId;
 			m_data = new UndoData(TileSize);
+
+			// This will be assigned when the spriteset is saved or exported.
+			m_nExportId = 0;
 		}
 
+		/// <summary>
+		/// The internal tile id for use when editing.
+		/// </summary>
 		public int TileId
 		{
 			get { return m_id; }
+		}
+
+		/// <summary>
+		/// The tile id used when exporting tiles.
+		/// </summary>
+		public int ExportId
+		{
+			get { return m_nExportId; }
 		}
 
 		public const int SmallBitmapPixelSize = 2;
@@ -319,15 +335,6 @@ namespace Spritely
 			tw.WriteLine("\t\t\t\t</tile>");
 		}
 
-		public void Export_TileIDs(System.IO.TextWriter tw, string strSpriteset, string strSprite,
-			int nTileIndex, int nTotalTiles, int nExportId)
-		{
-			if (nTotalTiles == 1)
-				tw.WriteLine(String.Format("const int k{0}_{1} = {2};", strSpriteset, strSprite, nExportId));
-			else
-				tw.WriteLine(String.Format("const int k{0}_{1}_{2} = {3};", strSpriteset, strSprite, nTileIndex, nExportId));
-		}
-
 		/// <summary>
 		/// Import tile from an array of 64 integers.
 		/// </summary>
@@ -366,6 +373,20 @@ namespace Spritely
 				}
 			}
 			FlushBitmaps();
+		}
+
+		public void Export_AssignIDs(int nTileId)
+		{
+			m_nExportId = nTileId;
+		}
+
+		public void Export_TileIDs(System.IO.TextWriter tw, string strSpriteset, string strSprite,
+			int nTileIndex, int nTotalTiles)
+		{
+			if (nTotalTiles == 1)
+				tw.WriteLine(String.Format("const int k{0}_{1} = {2};", strSpriteset, strSprite, m_nExportId));
+			else
+				tw.WriteLine(String.Format("const int k{0}_{1}_{2} = {3};", strSpriteset, strSprite, nTileIndex, m_nExportId));
 		}
 
 		// Export_TileData

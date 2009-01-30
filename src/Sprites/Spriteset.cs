@@ -158,8 +158,8 @@ namespace Spritely
 				id = NextTileId++;
 			Sprite s = m_sl.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpalette, fAddUndo);
 
-			if (m_winSprite != null)
-				m_winSprite.SetSprite(s);
+			// Make this the currently selected sprite.
+			CurrentSprite = s;
 			return s;
 		}
 
@@ -204,7 +204,8 @@ namespace Spritely
 			set
 			{
 				m_spriteCurrent = value;
-				m_doc.Owner.HandleSpriteSelectionChanged(this);
+				if (m_doc.Owner != null)
+					m_doc.Owner.HandleSpriteSelectionChanged(this);
 			}
 		}
 
@@ -232,6 +233,8 @@ namespace Spritely
 
 		public bool LoadXML_spriteset16(XmlNode xnode)
 		{
+			int nTileId = 0;
+
 			foreach (XmlNode xn in xnode.ChildNodes)
 			{
 				if (xn.Name == "sprite16")
@@ -247,8 +250,10 @@ namespace Spritely
 					int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
 					Sprite s = AddSprite(nWidth, nHeight, strName, NextSpriteId++, strDesc, nSubpaletteId, true);
-					if (!s.LoadXML_sprite16(xn))
+					if (!s.LoadXML_sprite16(xn, nTileId))
 						return false;
+
+					nTileId += s.NumTiles;
 				}
 			}
 			return true;

@@ -39,6 +39,9 @@ namespace Spritely
 				Text = "Tileset '" + ss.Name + "'";
 			else
 				Text = "Spriteset '" + ss.Name + "'";
+
+			cbPalette.Items.Add(ss.Palette.Name);
+			cbPalette.SelectedIndex = 0;
 		}
 
 		#region Window events
@@ -84,6 +87,8 @@ namespace Spritely
 
 		#endregion
 
+		#region Scrollbar
+
 		private int m_nTotalScrollHeight = 0;
 
 		public int VisibleScrollRows
@@ -121,15 +126,18 @@ namespace Spritely
 			m_nScrollPosition = nPosition;
 		}
 
-		public void AdjustScrollbar(int nVisibleRows, int nMaxRows)
+		public void AdjustScrollbar()
 		{
+			int nVisibleRows = VisibleScrollRows;
+			int nMaxRows = MaxScrollRows;
+
 			if (nVisibleRows >= nMaxRows)
 			{
 				sbSprites.Enabled = false;
 				sbSprites.Value = 0;
 			}
 			else
-			{
+			{	
 				sbSprites.Enabled = true;
 				sbSprites.Minimum = 0;
 				sbSprites.Maximum = nMaxRows - 2;
@@ -140,9 +148,11 @@ namespace Spritely
 
 		private void sbSprites_ValueChanged(object sender, EventArgs e)
 		{
-			//m_sl.ScrollTo(sbSprites.Value);
+			ScrollTo(sbSprites.Value);
 			pbSprites.Invalidate();
 		}
+
+		#endregion
 
 		private bool m_fSpriteList_Selecting = false;
 

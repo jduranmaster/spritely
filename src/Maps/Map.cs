@@ -16,14 +16,10 @@ namespace Spritely
 
 		private MapForm m_winMap;
 
-		// Tiles to highlight under the cursor in the Background Map.
-		private int m_tileSpriteX;
-		private int m_tileSpriteY;
-
 		//private List<MapBlock> m_mapblocks;
 
 		// We don't assign the real tile ids until export time, so we need to keep track of each
-		// tile in the background tile map by recording the sprite and the tile index
+		// tile in the background map by recording the sprite and the tile index
 		// into that sprite.
 		struct BackgroundMapTileInfo
 		{
@@ -32,7 +28,7 @@ namespace Spritely
 			public bool fHFlip;
 			public bool fVFlip;
 
-			public BackgroundMapTileInfo(int nIndex, int subpalette)
+			public BackgroundMapTileInfo(Sprite s, int nIndex, int subpalette)
 			{
 				nTileIndex = nIndex;
 				nSubpalette = subpalette;
@@ -67,16 +63,13 @@ namespace Spritely
 
 			int nDefaultTile = -1;
 			if (bgtiles.CurrentSprite != null)
-				nDefaultTile = bgtiles.CurrentSprite.FirstTileID;
+				nDefaultTile = bgtiles.CurrentSprite.FirstTileId;
 			for (int ix = 0; ix < kMaxMapTilesX; ix++)
 				for (int iy = 0; iy < kMaxMapTilesY; iy++)
 				{
 					m_BackgroundMap[ix, iy].nTileIndex = nDefaultTile;
 					m_BackgroundMap[ix, iy].nSubpalette = 0;
 				}
-
-			m_tileSpriteX = -1;
-			m_tileSpriteY = -1;
 
 			if (m_doc.Owner != null)
 			{
@@ -116,8 +109,8 @@ namespace Spritely
 				for (int iy = 0; iy < kMaxMapTilesY; iy++)
 				{
 					int nTile = m_BackgroundMap[ix, iy].nTileIndex;
-					int nSpriteTile1 = sToRemove.FirstTileID;
-					int nSpriteTileN = sToRemove.FirstTileID + sToRemove.NumTiles-1;
+					int nSpriteTile1 = sToRemove.FirstTileId;
+					int nSpriteTileN = sToRemove.FirstTileId + sToRemove.NumTiles-1;
 					if (nTile >= nSpriteTile1 && nTile <= nSpriteTileN)
 						m_BackgroundMap[ix, iy].nTileIndex = -1;
 				}
@@ -157,83 +150,6 @@ namespace Spritely
 			fHorizontal = m_BackgroundMap[x, y].fHFlip;
 			fVertical = m_BackgroundMap[x, y].fVFlip;
 			return true;
-		}
-
-		public bool HandleMouse_EditMap(int pxX, int pxY)
-		{
-			Sprite spriteSelected = m_ss.CurrentSprite;
-			if (spriteSelected == null)
-				return false;
-
-			if (pxX < 0 || pxY < 0)
-				return false;
-
-			// Convert screen pixel (x,y) to map coordinate (x,y).
-			int x = pxX / Tile.SmallBitmapScreenSize;
-			int y = pxY / Tile.SmallBitmapScreenSize;
-
-			if (x >= kMaxMapTilesX || y >= kMaxMapTilesY)
-				return false;
-
-			bool fUpdate = false;
-			int nIndex = 0;
-			for (int iy = 0; iy < spriteSelected.TileHeight; iy++)
-			{
-				if (y + iy >= kMaxMapTilesY)
-				{
-					nIndex++;
-					continue;
-				}
-				for (int ix = 0; ix < spriteSelected.TileWidth; ix++)
-				{
-					if (x + ix >= kMaxMapTilesX)
-					{
-						nIndex++;
-						continue;
-					}
-					m_BackgroundMap[x + ix, y + iy].nTileIndex = spriteSelected.FirstTileID + nIndex;
-					// TODO: choose correct palette
-					m_BackgroundMap[x + ix, y + iy].nSubpalette = 0;
-					nIndex++;
-					fUpdate = true;
-				}
-			}
-
-			return fUpdate;
-		}
-
-		public bool HandleMouseMove_EditMap(int pxX, int pxY)
-		{
-			Sprite spriteSelected = m_ss.CurrentSprite;
-			if (spriteSelected == null)
-				return false;
-
-			// Convert screen pixel (x,y) to map coordinate (x,y).
-			int x = pxX / Tile.SmallBitmapScreenSize;
-			int y = pxY / Tile.SmallBitmapScreenSize;
-
-			if (pxX < 0 || pxY < 0 || x >= kMaxMapTilesX || y >= kMaxMapTilesY)
-			{
-				// Turn off the hilight if we currently have one.
-				if (m_tileSpriteX != -1 || m_tileSpriteY != -1)
-				{
-					m_tileSpriteX = -1;
-					m_tileSpriteY = -1;
-					return true;
-				}
-				return false;
-			}
-
-			// Has the current mouse position changed?
-			if (x != m_tileSpriteX || y != m_tileSpriteY)
-			{
-				m_tileSpriteX = x;
-				m_tileSpriteY = y;
-				return true;
-			}
-
-			// No change.
-			return false;
 		}
 
 
