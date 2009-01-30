@@ -248,10 +248,19 @@ namespace Spritely
 		/// This value is valid only after the sprites have been loaded, exported or saved.
 		/// Editing operations (adding/removing sprites) will cause this to become invalid.
 		/// </summary>
-		public int ExportID
+		//public int ExportId
+		//{
+		//	get { return m_nExportSpriteID; }
+		//}
+
+		/// <summary>
+		/// The tile ID for the first tile in this sprite.
+		/// This value is valid only after the sprites have been loaded, exported or saved.
+		/// Editing operations (adding/removing sprites) will cause this to become invalid.
+		/// </summary>
+		public int FirstTileId
 		{
-			get { return m_nExportSpriteID; }
-			set { m_nExportSpriteID = value; }
+			get { return m_Tiles[0].TileId; }
 		}
 
 		/// <summary>
@@ -259,10 +268,9 @@ namespace Spritely
 		/// This value is valid only after the sprites have been loaded, exported or saved.
 		/// Editing operations (adding/removing sprites) will cause this to become invalid.
 		/// </summary>
-		public int FirstTileID
+		public int ExportFirstTileId
 		{
-			get { return m_Tiles[0].TileId; }
-			//set { m_nFirstTileID = value; }
+			get { return m_nExportFirstTileID; }
 		}
 
 		public string Name

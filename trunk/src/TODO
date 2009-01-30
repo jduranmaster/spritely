@@ -35,5 +35,6 @@ Preferences: Set default GBA/NDS project
 
 File: New document doesn't create default sprites
 File: catch exceptions when loading to ensure that file is closed properly
+File: make file loading robust to poorly formed files
 
 Export: add manifest file for projects

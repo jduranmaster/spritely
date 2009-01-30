@@ -15,8 +15,6 @@ namespace Spritely
 		private Document m_doc;
 		private RecentFiles m_recent;
 
-		private OldMainForm m_oldui;
-
 		private TabMgr[] m_tabs;
 		private TabMgr m_tabCurrent;
 
@@ -46,13 +44,6 @@ namespace Spritely
 
 			// Init the list of recent files.
 			m_recent = new RecentFiles(this, menuFile_RecentFiles);
-
-			m_oldui = new OldMainForm(m_doc, this);
-		}
-
-		public OldMainForm OldUI
-		{
-			get { return m_oldui; }
 		}
 
 		public int ContentWidth
@@ -164,10 +155,16 @@ namespace Spritely
 			if (m_doc == null || m_tabCurrent == null)
 				return null;
 
+			Spritesets ss;
 			if (m_tabCurrent.Id == TabMgr.TabId.Sprites)
-				return m_doc.Spritesets.Current.CurrentSprite;
+				ss = m_doc.Spritesets;
 			else if (m_tabCurrent.Id == TabMgr.TabId.Backgrounds)
-				return m_doc.BackgroundSpritesets.Current.CurrentSprite;
+				ss = m_doc.BackgroundSpritesets;
+			else
+				return null;
+
+			if (ss.Current != null)
+				return ss.Current.CurrentSprite;
 			return null;
 		}
 
@@ -186,6 +183,11 @@ namespace Spritely
 		#endregion
 
 		#region Tabs
+
+		public TabMgr CurrentTab
+		{
+			get { return m_tabCurrent; }
+		}
 
 		public TabMgr GetTab(TabMgr.TabId id)
 		{
@@ -361,6 +363,22 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// One of the spritetypes has changed.
+		/// E.g., by having a sprite added, deleted or having its tile geometry changed.
+		/// </summary>
+		public void HandleSpriteTypeChanged(Spriteset ss)
+		{
+			m_doc.HasUnsavedChanges = true;
+
+			SpritesetForm win = ss.SpritesetWindow;
+			if (win != null)
+			{
+				win.RecalcScrollHeights();
+				win.AdjustScrollbar();
+			}
+		}
+
+		/// <summary>
 		/// A new subpalette has been selected, notify all other windows that are potentially
 		/// impacted by this change
 		/// </summary>
@@ -406,20 +424,8 @@ namespace Spritely
 		/// </summary>
 		public void HandleMapDataChange(Map m)
 		{
-			m.MapWindow.MapDataChanged();
-		}
-
-		/// <summary>
-		/// One of the spritetypes has changed.
-		/// E.g., by having a sprite added, deleted or having its tile geometry changed.
-		/// </summary>
-		public void HandleSpriteTypeChanged(Spriteset ss)
-		{
 			m_doc.HasUnsavedChanges = true;
-
-			SpritesetForm win = ss.SpritesetWindow;
-			if (win != null)
-				win.RecalcScrollHeights();
+			m.MapWindow.MapDataChanged();
 		}
 
 		#endregion

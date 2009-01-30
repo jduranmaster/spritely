@@ -41,7 +41,7 @@ namespace Spritely
 
 			m_data.Filer = new FileHandler(this);
 
-			int numTabs = (int)OldTab.Type.MAX;
+			int numTabs = (int)TabMgr.TabId.MAX;
 			m_Undo = new UndoMgr[numTabs];
 			for (int iTab = 0; iTab < numTabs; iTab++)
 				m_Undo[iTab] = new UndoMgr();
@@ -186,10 +186,6 @@ namespace Spritely
 		{
 			get { return m_form; }
 		}
-		public OldMainForm OldOwner
-		{
-			get { return m_form.OldUI; }
-		}
 
 		/// <summary>
 		/// The name of the file used to store this document.
@@ -269,7 +265,7 @@ namespace Spritely
 		/// <returns></returns>
 		public UndoMgr Undo()
 		{
-			return m_Undo[(int)m_form.OldUI.CurrentTab.TabType];
+			return m_Undo[(int)m_form.CurrentTab.Id];
 		}
 
 		/// <summary>
@@ -277,7 +273,7 @@ namespace Spritely
 		/// </summary>
 		public void ResetUndo()
 		{
-			for (int i=0; i<(int)OldTab.Type.MAX; ++i)
+			for (int i=0; i<(int)TabMgr.TabId.MAX; ++i)
 				m_Undo[i].Reset();
 		}
 
@@ -411,10 +407,10 @@ namespace Spritely
 				m_form.Info(sb.ToString());
 
 				// The platform may have changed, update the map toolbox to reflect the current platform.
-				if (m_form.OldUI.CurrentTab.TabType == OldTab.Type.BackgroundMap)
-				{
-					m_form.OldUI.CurrentTab.ToolboxWindow.Invalidate();
-				}
+				//if (m_form.OldUI.CurrentTab.TabType == OldTab.Type.BackgroundMap)
+				//{
+				//	m_form.OldUI.CurrentTab.ToolboxWindow.Invalidate();
+				//}
 			}
 			else
 			{

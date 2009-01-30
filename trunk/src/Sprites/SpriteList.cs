@@ -95,7 +95,10 @@ namespace Spritely
 			foreach (SpriteType st in SpriteTypes)
 			{
 				if (st.Width == s.TileWidth && st.Height == s.TileHeight)
+				{
 					slist = st.Sprites;
+					break;
+				}
 			}
 
 			if (slist == null)
@@ -118,7 +121,8 @@ namespace Spritely
 					undo.Push(new UndoAction_AddSprite(undo, m_ss, s, true));
 			}
 
-			m_doc.Owner.HandleSpriteTypeChanged(m_ss);
+			if (m_doc.Owner != null)
+				m_doc.Owner.HandleSpriteTypeChanged(m_ss);
 			return s;
 		}
 
@@ -395,7 +399,7 @@ namespace Spritely
 			{
 				foreach (Sprite s in st.Sprites)
 				{
-					if (nTileID >= s.FirstTileID && nTileID < s.FirstTileID + s.NumTiles)
+					if (nTileID >= s.FirstTileId && nTileID < s.FirstTileId + s.NumTiles)
 						return s;
 				}
 			}

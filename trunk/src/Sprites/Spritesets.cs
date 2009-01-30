@@ -127,6 +127,8 @@ namespace Spritely
 
 		public void Save(System.IO.TextWriter tw)
 		{
+			Export_AssignIDs();
+
 			if (m_fBackground)
 				tw.WriteLine("\t<bgspritesets>");
 			else

@@ -68,7 +68,6 @@ namespace Spritely
 		public void SetSprite(Sprite s)
 		{
 			m_sprite = s;
-			pbSprite.Invalidate();
 
 			// Update title with sprite name.
 			if (s != null)
@@ -121,29 +120,60 @@ namespace Spritely
 
 		#region Toolbox
 
-		private void pbTools_Paint(object sender, PaintEventArgs e)
-		{
-			m_toolbox.Draw(e.Graphics);
-		}
+		private bool m_fToolbox_Selecting = false;
 
 		private void pbTools_MouseDown(object sender, MouseEventArgs e)
 		{
-		
-		}
+			if (m_toolbox.HilightedShiftArrow() != Toolbox_Sprite.ShiftArrow.None)
+			{
+				m_toolbox.SetMouseDownShiftArrow(true);
+				pbTools.Invalidate();
 
-		private void pbTools_MouseLeave(object sender, EventArgs e)
-		{
-		
+				m_sprite.ShiftPixels(m_toolbox.HilightedShiftArrow());
+				m_sprite.RecordUndoAction("shift");
+				m_parent.HandleSpriteDataChanged(m_ss);
+				return;
+			}
+
+			if (m_toolbox.HandleMouse(e.X, e.Y))
+				pbTools.Invalidate();
+
+			m_fToolbox_Selecting = true;
 		}
 
 		private void pbTools_MouseMove(object sender, MouseEventArgs e)
 		{
-		
+			if (m_fToolbox_Selecting)
+			{
+				if (m_toolbox.HandleMouse(e.X, e.Y))
+					pbTools.Invalidate();
+			}
+			else
+			{
+				if (m_toolbox.HandleMouseMove(e.X, e.Y))
+					pbTools.Invalidate();
+			}
 		}
 
 		private void pbTools_MouseUp(object sender, MouseEventArgs e)
 		{
+			m_toolbox.SetMouseDownShiftArrow(false);
 
+			m_fToolbox_Selecting = false;
+			pbTools.Invalidate();
+		}
+
+		private void pbTools_MouseLeave(object sender, EventArgs e)
+		{
+			m_toolbox.SetMouseDownShiftArrow(false);
+
+			if (m_toolbox.HandleMouseMove(-10, -10))
+				pbTools.Invalidate();
+		}
+
+		private void pbTools_Paint(object sender, PaintEventArgs e)
+		{
+			m_toolbox.Draw(e.Graphics);
 		}
 
 		#endregion
@@ -178,7 +208,7 @@ namespace Spritely
 				{
 					if (tool == Toolbox.ToolType.Eyedropper)
 					{
-						//UpdatePaletteSelect(tab);
+						m_parent.HandleColorSelectChange(m_ss.Palette);
 					}
 					else
 					{
@@ -432,7 +462,7 @@ namespace Spritely
 		public bool FloodFillClick(int pxSpriteX, int pxSpriteY)
 		{
 			int colorOld = m_sprite.GetPixel(pxSpriteX, pxSpriteY);
-			int colorNew = 0;// p.CurrentColorIndex; //TODO Palette.CurrentColor;
+			int colorNew = m_sprite.Subpalette.CurrentColor;
 			if (colorOld == colorNew)
 				return false;
 

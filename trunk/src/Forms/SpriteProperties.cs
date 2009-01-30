@@ -56,8 +56,8 @@ namespace Spritely
 			m_sprite.Name = tbName.Text;
 			m_sprite.Description = tbDescription.Text;
 
-			OldTab tab = m_doc.OldOwner.GetTab(OldTab.Type.Sprites);
-			m_doc.OldOwner.UpdateSpriteInfo(tab);
+			//OldTab tab = m_doc.OldOwner.GetTab(OldTab.Type.Sprites);
+			//m_doc.OldOwner.UpdateSpriteInfo(tab);
 			this.Close();
 		}
 

@@ -120,11 +120,19 @@ namespace Spritely
 						sb = new StringBuilder("\t\t\t\t\t");
 					}
 
+					// Internal tile id.
 					int nTileId = m_BackgroundMap[ix, iy].nTileIndex;
-					// TODO: add flip h,v values
-					sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nTileId));
+					// Find sprite that owns this tile.
+					Sprite s = m_ss.FindSprite(nTileId);
+					// Tile index into sprite.
+					int nTileIndex = nTileId - s.FirstTileId;
+					// Export Id for this tile.
+					int nExportId = s.ExportFirstTileId + nTileIndex;
+
+					sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nExportId));
 					if (m_BackgroundMap[ix, iy].nSubpalette != nDefaultSubpalette)
 						sb.Append(String.Format(" subpalette_id=\"{1}\"", m_BackgroundMap[ix, iy].nSubpalette));
+					// TODO: add flip h,v values
 					sb.Append("/>");
 				}
 				if (sb != null)

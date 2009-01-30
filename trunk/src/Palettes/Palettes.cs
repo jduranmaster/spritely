@@ -10,6 +10,8 @@ namespace Spritely
 		private Document m_doc;
 		private Dictionary<int, Palette> m_palettes;
 
+		private Palette m_paletteCurrent;
+
 		public enum Type
 		{
 			Sprite,
@@ -22,6 +24,7 @@ namespace Spritely
 			m_doc = doc;
 			m_palettes = new Dictionary<int, Palette>();
 			m_eType = eType;
+			m_paletteCurrent = null;
 		}
 
 		public bool IsBackground
@@ -57,6 +60,7 @@ namespace Spritely
 
 			Palette pal16 = new Palette(m_doc, this, strName, id, strDesc);
 			m_palettes.Add(id, pal16);
+			m_paletteCurrent = pal16;
 			return pal16;
 		}
 
@@ -69,7 +73,7 @@ namespace Spritely
 
 		public Palette CurrentPalette
 		{
-			get { return m_palettes[0]; }
+			get { return m_paletteCurrent; }
 		}
 
 		public bool LoadXML_palettes(XmlNode xnode)
@@ -97,6 +101,8 @@ namespace Spritely
 
 		public void Save(System.IO.TextWriter tw)
 		{
+			Export_AssignIDs();
+
 			switch (m_eType)
 			{
 				case Type.Sprite:

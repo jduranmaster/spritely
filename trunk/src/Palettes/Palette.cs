@@ -20,7 +20,7 @@ namespace Spritely
 		/// <summary>
 		/// Index of the current subpalette (16-color palettes only).
 		/// </summary>
-		public int CurrentSubpalette;
+		public int CurrentSubpaletteId;
 
 		private Palette16Form m_winPalette;
 
@@ -40,7 +40,7 @@ namespace Spritely
 			for (int i = 0; i < m_nMaxSubpalettes; i++)
 				m_subpalettes[i] = new Subpalette(doc, this, i, Subpalette.DefaultColorSet.BlackAndWhite);
 
-			CurrentSubpalette = 0;
+			CurrentSubpaletteId = 0;
 
 			if (m_doc.Owner != null)
 				m_winPalette = new Palette16Form(m_doc.Owner, this);
@@ -83,7 +83,7 @@ namespace Spritely
 
 		public Subpalette GetCurrentSubpalette()
 		{
-			return m_subpalettes[CurrentSubpalette];
+			return m_subpalettes[CurrentSubpaletteId];
 		}
 
 		public Subpalette GetSubpalette(int nIndex)

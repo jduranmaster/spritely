@@ -1,3 +1,18 @@
+0.13.29
+Fix bug with map tile ids. Previously the internal tile id would be 
+  written out instead of the tile export id, which would lead to 
+  invalid tile ids being written into the map when bgsprites had
+  been deleted from the tileset.
+Fix subpalette select to update the sprite subpalette and redraw the
+  spriteset and map windows.
+Fix sprite unittests (check for null mainform).
+Fix scrollbar in spriteset window
+Fix add sprite so that it selects the newly added sprite.
+Fix SpritesetForm's palette combobox to display name of palette.
+Fix sprite toolbox: tool select, bucket, eyedropper
+Fix background map editing
+Remove old UI forms, classes
+
 0.13.28
 *** CHECKPOINT - Not intended for binary release ***
 Switch to new UI:

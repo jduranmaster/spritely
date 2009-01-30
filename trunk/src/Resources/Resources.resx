@@ -291,10 +291,10 @@ Please select a path that does not contain any spaces.</value>
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.13.28 beta</value>
+    <value>0.13.29 beta</value>
   </data>
   <data name="VersionDate" xml:space="preserve">
-    <value>28 January 2009</value>
+    <value>29 January 2009</value>
   </data>
   <data name="WARNING" xml:space="preserve">
     <value>WARNING: </value>
