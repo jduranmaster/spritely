@@ -721,30 +721,6 @@ namespace Spritely
 			return true;
 		}
 
-		public bool ImportBitmap(Bitmap b)
-		{
-			int nHeight = b.Height;
-			int nWidth = b.Width;
-			int flags = b.Flags;
-
-			// Determine the number of unique colors in the bitmap.
-			Dictionary<Color, int> pal = new Dictionary<Color, int>();
-			int nTransparent = 0;
-			for (int ix = 0; ix < nWidth; ix++)
-			{
-				for (int iy = 0; iy < nHeight; iy++)
-				{
-					Color c = b.GetPixel(ix, iy);
-					if (c == Color.Transparent)
-						nTransparent++;
-					if (!pal.ContainsKey(c))
-						pal.Add(c, 0);
-					pal[c]++;
-				}
-			}
-			return true;
-		}
-
 		public void FlushBitmaps()
 		{
 			int nTiles = NumTiles;

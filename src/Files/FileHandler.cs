@@ -81,6 +81,24 @@ namespace Spritely
 			return true;
 		}
 
+		/// <summary>
+		/// Show a file dialog box so that the user can choose an image file to load
+		/// as a background.
+		/// </summary>
+		/// <returns></returns>
+		public string ChooseBgImageFile()
+		{
+			OpenFileDialog OpenFileDialog;
+			OpenFileDialog = new OpenFileDialog();
+			OpenFileDialog.InitialDirectory = @"";
+			OpenFileDialog.Filter = "Image files (bmp,gif,jpg,png)|*.bmp;*.gif;*.jpg;*.png|All files|*.*";
+
+			if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+				return OpenFileDialog.FileName;
+
+			return "";
+		}
+
 		public bool SaveFile()
 		{
 			if (m_strFilename == "")
@@ -144,6 +162,7 @@ namespace Spritely
 			m_doc.BackgroundSpritesets.Save(tw);
 
 			m_doc.BackgroundMaps.Save(tw);
+			m_doc.BackgroundImages.Save(tw);
 
 			tw.WriteLine("</spritely>");
 

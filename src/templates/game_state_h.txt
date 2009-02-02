@@ -6,13 +6,16 @@
 #define _GAME_STATE_H_
 
 #include "sprites.h"
-#include "backgrounds.h"
-#include "animation.h"
+#include "background_maps.h"
+
+// The stages in our game.
+const int kStage_Title = 0;		// Show the title/splash screen
+const int kStage_Level1 = 1;
+const int kStage_GameOver = 2;
 
 // The objects in our game.
 // Only 128 objects (0-127) can be defined at any time.
 const int kObj_Player = 0;
-
 
 // The GameState class holds all of the global game state information.
 class GameState {
@@ -21,11 +24,18 @@ public:
 	// This method initializes the game state.
 	GameState();
 	
+	// SetupStage
+	// Set up the stage (backgrounds, sprites) for the next level.
+	void SetupStage(int stage);
+	
 	// Update
 	// This is called continuously to update the game to the next state.
 	void Update();
 	
 private:
+	// The current stage of the game.
+	int _stage;
+	
 	// The (x,y) location of the object representing the player.
 	int _xPlayer, _yPlayer;
 };

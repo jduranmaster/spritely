@@ -14,8 +14,6 @@ typedef struct {
 	bool color16;
 } PaletteInfoStruct;
 
-typedef unsigned short int PaletteColorEntry;
-
 // Size of each palette in bytes (16-color or 256-color).
 //  16-color = 16 subpalettes each with 16 2-byte color entries.
 //  256-color = 256 2-byte color entries.

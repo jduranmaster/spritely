@@ -13,7 +13,7 @@ const PaletteInfoStruct SpritePaletteInfo[] = {
 };
 
 // Color data for all the sprite palettes.
-const PaletteColorEntry SpritePalettes[] = {
+const unsigned short int SpritePalettes[] = {
 %%_SPRITE_PALETTES_%%
 };
 

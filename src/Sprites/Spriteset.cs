@@ -229,7 +229,7 @@ namespace Spritely
 			m_Maps.Add(m);
 		}
 
-		#region Load/Save/Export
+		#region Load/Save
 
 		public bool LoadXML_spriteset16(XmlNode xnode)
 		{
@@ -262,6 +262,27 @@ namespace Spritely
 		public void Save(System.IO.TextWriter tw)
 		{
 			m_sl.Save(tw, false);
+		}
+
+		#endregion
+
+		#region Export
+
+		/// <summary>
+		/// Convert internal tile id into an export tile id.
+		/// </summary>
+		/// <param name="nInternalTileId">Internal tile id.</param>
+		/// <returns>Exportable tile id.</returns>
+		public int GetTileExportId(int nInternalTileId)
+		{
+			// Find sprite that owns this tile.
+			Sprite s = FindSprite(nInternalTileId);
+			// Tile index into sprite.
+			int nTileIndex = nInternalTileId - s.FirstTileId;
+			// Export Id for this tile.
+			int nTileExportId = s.ExportFirstTileId + nTileIndex;
+
+			return nTileExportId;
 		}
 
 		private int m_nExportId;

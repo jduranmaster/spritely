@@ -150,12 +150,27 @@ namespace Spritely
 			return true;
 		}
 
+		public static bool ParseRGBColorValue(string strRGB, out int nRGB)
+		{
+			Regex rxRGB = new Regex(@"([0-1][0-9A-Fa-f])([0-1][0-9A-Fa-f])([0-1][0-9A-Fa-f])");
+			Match mxRGB = rxRGB.Match(strRGB);
+			nRGB = 0;
+			if (!mxRGB.Success)
+				return false;
+
+			GroupCollection matchGroups = mxRGB.Groups;
+			int r = Convert.ToInt32(matchGroups[1].Value, 16);
+			int g = Convert.ToInt32(matchGroups[2].Value, 16);
+			int b = Convert.ToInt32(matchGroups[3].Value, 16);
+			nRGB = Color555.Encode(r, g, b);
+			return true;
+		}
+
 		private bool LoadXML_subpalette16(XmlNode xnode, int nSubpaletteId)
 		{
 			int nId = XMLUtils.GetXMLIntegerAttribute(xnode, "id");
 			if (nId != nSubpaletteId)
 			{
-				// TODO: move to resource
 				m_doc.WarningString("Expected subpalette id = {0} in palette '{1}'.", nSubpaletteId, Name);
 				return false;
 			}
@@ -172,19 +187,13 @@ namespace Spritely
 				if (xn.Name == "color")
 				{
 					string strRGB = XMLUtils.GetXMLAttribute(xn, "rgb");
-					Regex rxRGB = new Regex(@"([0-1][0-9A-Fa-f])([0-1][0-9A-Fa-f])([0-1][0-9A-Fa-f])");
-					Match mxRGB = rxRGB.Match(strRGB);
-					if (!mxRGB.Success)
+					int nRGB;
+					if (!ParseRGBColorValue(strRGB, out nRGB))
 					{
-						// TODO: move to resource
-						m_doc.ErrorString("Unable to parse color value in subpalette {0} of palette '{1}'.", nSubpaletteId, Name);
+						m_doc.ErrorString("Unable to parse color value '{0}' in palette '{1}'.", strRGB, Name);
 						return false;
 					}
-					GroupCollection matchGroups = mxRGB.Groups;
-					int r = Convert.ToInt32(matchGroups[1].Value, 16);
-					int g = Convert.ToInt32(matchGroups[2].Value, 16);
-					int b = Convert.ToInt32(matchGroups[3].Value, 16);
-					int nRGB = Color555.Encode(r, g, b);
+
 					if (nCount < 16)
 						anPalette[nCount] = nRGB;
 					nCount++;

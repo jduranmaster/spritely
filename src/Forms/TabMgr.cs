@@ -9,26 +9,36 @@ namespace Spritely
 	{
 		private ProjectMainForm m_owner;
 		private TabId m_eId;
-		private List<Form> m_winSpritesets;
-		private List<Form> m_winSprites;
-		private List<Form> m_winPalettes;
-		private List<Form> m_winMaps;
 
 		public enum TabId
 		{
 			Sprites=0,
-			Backgrounds,
+			BackgroundMaps,
+			BackgroundImages,
 			MAX,
 		};
+
+		enum FormListType
+		{
+			Spritesets=0,
+			Sprites,
+			Palettes,
+			Maps,
+			BgImageLists,
+			BgImages,
+			MAX,
+		};
+
+		private List<Form>[] m_winLists;
 
 		public TabMgr(ProjectMainForm owner, TabId id)
 		{
 			m_owner = owner;
 			m_eId = id;
-			m_winSpritesets = new List<Form>();
-			m_winSprites = new List<Form>();
-			m_winPalettes = new List<Form>();
-			m_winMaps = new List<Form>();
+
+			m_winLists = new List<Form>[(int)FormListType.MAX];
+			for (int i=0; i<(int)FormListType.MAX; i++)
+				m_winLists[(int)i] = new List<Form>();
 		}
 
 		public TabId Id
@@ -36,92 +46,102 @@ namespace Spritely
 			get { return m_eId; }
 		}
 
+		private List<Form> WinList(FormListType eWinType)
+		{
+			return m_winLists[(int)eWinType];
+		}
+
+		private List<Form> WinList(int id)
+		{
+			return m_winLists[id];
+		}
+
 		public void AddSpritesetWindow(Form f)
 		{
-			if (!m_winSpritesets.Contains(f))
-				m_winSpritesets.Add(f);
+			List<Form> winlist = WinList(FormListType.Spritesets);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
 		}
 
 		public void AddSpriteWindow(Form f)
 		{
-			if (!m_winSprites.Contains(f))
-				m_winSprites.Add(f);
+			List<Form> winlist = WinList(FormListType.Sprites);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
 		}
 
 		public void AddPaletteWindow(Form f)
 		{
-			if (!m_winPalettes.Contains(f))
-				m_winPalettes.Add(f);
+			List<Form> winlist = WinList(FormListType.Palettes);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
 		}
 
 		public void AddMapWindow(Form f)
 		{
-			if (!m_winMaps.Contains(f))
-				m_winMaps.Add(f);
+			List<Form> winlist = WinList(FormListType.Maps);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
+		}
+
+		public void AddBgImageListWindow(Form f)
+		{
+			List<Form> winlist = WinList(FormListType.BgImageLists);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
+		}
+
+		public void AddBgImageWindow(Form f)
+		{
+			List<Form> winlist = WinList(FormListType.BgImages);
+			if (!winlist.Contains(f))
+				winlist.Add(f);
 		}
 
 		public void RemoveWindow(Form f)
 		{
-			if (m_winSpritesets.Contains(f))
-				m_winSpritesets.Remove(f);
-			if (m_winSprites.Contains(f))
-				m_winSprites.Remove(f);
-			if (m_winPalettes.Contains(f))
-				m_winPalettes.Remove(f);
-			if (m_winMaps.Contains(f))
-				m_winMaps.Remove(f);
+			for (int i = 0; i < (int)FormListType.MAX; i++)
+			{
+				if (WinList(i).Contains(f))
+					WinList(i).Remove(f);
+			}
 		}
 
 		public void RemoveAllWindows()
 		{
-			foreach (Form f in m_winSpritesets)
-				f.Dispose();
-			m_winSpritesets.Clear();
-			foreach (Form f in m_winSprites)
-				f.Dispose();
-			m_winSprites.Clear();
-			foreach (Form f in m_winPalettes)
-				f.Dispose();
-			m_winPalettes.Clear();
-			foreach (Form f in m_winMaps)
-				f.Dispose();
-			m_winMaps.Clear();
+			for (int i = 0; i < (int)FormListType.MAX; i++)
+			{
+				foreach (Form f in WinList(i))
+					f.Dispose();
+				WinList(i).Clear();
+			}
 		}
 
 		public void ShowWindows()
 		{
-			foreach (Form f in m_winSpritesets)
-				f.Show();
-			foreach (Form f in m_winSprites)
-				f.Show();
-			foreach (Form f in m_winPalettes)
-				f.Show();
-			foreach (Form f in m_winMaps)
-				f.Show();
+			for (int i = 0; i < (int)FormListType.MAX; i++)
+			{
+				foreach (Form f in WinList(i))
+					f.Show();
+			}
 		}
 
 		public void HideWindows()
 		{
-			foreach (Form f in m_winSpritesets)
-				f.Hide();
-			foreach (Form f in m_winSprites)
-				f.Hide();
-			foreach (Form f in m_winPalettes)
-				f.Hide();
-			foreach (Form f in m_winMaps)
-				f.Hide();
+			for (int i = 0; i < (int)FormListType.MAX; i++)
+			{
+				foreach (Form f in WinList(i))
+					f.Hide();
+			}
 		}
 
 		public void CloseWindows()
 		{
-			foreach (Form f in m_winSpritesets)
-				f.Close();
-			foreach (Form f in m_winSprites)
-				f.Close();
-			foreach (Form f in m_winPalettes)
-				f.Close();
-			foreach (Form f in m_winMaps)
-				f.Close();
+			for (int i = 0; i < (int)FormListType.MAX; i++)
+			{
+				foreach (Form f in WinList(i))
+					f.Close();
+			}
 		}
 
 		/// <summary>
@@ -133,32 +153,61 @@ namespace Spritely
 		const int k_pxSprite1IdealWidth = 206;
 		const int k_pxSprite2IdealWidth = 330;
 		const int k_pxSprite4IdealWidth = 591;
-		const int k_pxMapIdealWidth = 591;
+		const int k_pxBackgroundMapIdealWidth = 591;
+		const int k_pxBackgroundImageIdealWidth = 591;
 
 		public void ArrangeWindows()
 		{
-			if (m_winSpritesets.Count == 0
-					|| m_winSprites.Count == 0
-					|| m_winPalettes.Count == 0
-					|| (m_eId == TabId.Backgrounds && m_winMaps.Count == 0)
-				)
-				return;
-
-			Form ss = m_winSpritesets[0];
-			ss.Top = 0;
-			ss.Left = 0;
-
-			Form p = m_winPalettes[0];
-			p.Top = ss.Height;
-			p.Left = 0;
-
-			Form s = m_winSprites[0];
-			s.Top = 0;
-			s.Left = ss.Right;
-			s.Height = m_owner.ContentHeight;
-			if (m_eId == TabId.Backgrounds)
+			if (m_eId == TabId.Sprites)
 			{
-				Form m = m_winMaps[0];
+				int nSpritesets = WinList(FormListType.Spritesets).Count;
+				int nSprites = WinList(FormListType.Sprites).Count;
+				int nPalettes = WinList(FormListType.Palettes).Count;
+
+				if (nSpritesets == 0 || nSprites == 0 || nPalettes == 0)
+					return;
+
+				Form ss = WinList(FormListType.Spritesets)[0];
+				ss.Top = 0;
+				ss.Left = 0;
+
+				Form p = WinList(FormListType.Palettes)[0];
+				p.Top = ss.Height;
+				p.Left = 0;
+
+				Form s = WinList(FormListType.Sprites)[0];
+				s.Top = 0;
+				s.Left = ss.Right;
+				s.Height = m_owner.ContentHeight;
+
+				// Expand window to fill all remaining space.
+				s.Width = m_owner.ContentWidth - s.Left;
+			}
+
+			if (m_eId == TabId.BackgroundMaps)
+			{
+				int nSpritesets = WinList(FormListType.Spritesets).Count;
+				int nSprites = WinList(FormListType.Sprites).Count;
+				int nPalettes = WinList(FormListType.Palettes).Count;
+				int nMaps = WinList(FormListType.Maps).Count;
+
+				if (nSpritesets == 0 || nSprites == 0 || nPalettes == 0 || nMaps == 0)
+					return;
+
+				Form ss = WinList(FormListType.Spritesets)[0];
+				ss.Top = 0;
+				ss.Left = 0;
+
+				Form p = WinList(FormListType.Palettes)[0];
+				p.Top = ss.Height;
+				p.Left = 0;
+
+				Form s = WinList(FormListType.Sprites)[0];
+				s.Top = 0;
+				s.Left = ss.Right;
+				s.Height = m_owner.ContentHeight;
+
+				Form m = WinList(FormListType.Maps)[0];
 				m.Top = 0;
 				m.Height = m_owner.ContentHeight;
 
@@ -166,11 +215,11 @@ namespace Spritely
 				int pxSpace = m_owner.ContentWidth - s.Left;
 
 				// Is there room for a map and 2-tile wide sprite?
-				if (pxSpace >= k_pxSprite2IdealWidth + k_pxMapIdealWidth)
+				if (pxSpace >= k_pxSprite2IdealWidth + k_pxBackgroundMapIdealWidth)
 				{
 					s.Width = k_pxSprite2IdealWidth;
 					m.Left = s.Right;
-					m.Width = k_pxMapIdealWidth;
+					m.Width = k_pxBackgroundMapIdealWidth;
 				}
 				else
 				{
@@ -178,21 +227,38 @@ namespace Spritely
 					s.Width = k_pxSprite1IdealWidth;
 					m.Left = s.Right;
 					// Make map window as big as possible.
-					if (pxSpace >= k_pxSprite1IdealWidth + k_pxMapIdealWidth)
-						m.Width = k_pxMapIdealWidth;
+					if (pxSpace >= k_pxSprite1IdealWidth + k_pxBackgroundMapIdealWidth)
+						m.Width = k_pxBackgroundMapIdealWidth;
 					else
 						m.Width = m_owner.ContentWidth - s.Right;
 				}
 			}
-			else
-			{
-				// Expand window to fill all remaining space.
-				s.Width = m_owner.ContentWidth - s.Left;
-			}
 
-			if (m_eId == TabId.Backgrounds)
+			if (m_eId == TabId.BackgroundImages)
 			{
+				int nBgImageLists = WinList(FormListType.BgImageLists).Count;
+				int nBgImages = WinList(FormListType.BgImages).Count;
+
+				if (nBgImageLists == 0 || nBgImages == 0)
+					return;
+
+				Form bglist = WinList(FormListType.BgImageLists)[0];
+				bglist.Top = 0;
+				bglist.Left = 0;
+
+				Form bgi = WinList(FormListType.BgImages)[0];
+				bgi.Top = 0;
+				bgi.Left = bglist.Right;
+				bgi.Height = m_owner.ContentHeight;
+
+				int pxSpace = m_owner.ContentWidth - bgi.Left;
+
+				if (pxSpace >= k_pxBackgroundImageIdealWidth)
+					bgi.Width = k_pxBackgroundMapIdealWidth;
+				else
+					bgi.Width = m_owner.ContentWidth - bgi.Left;
 			}
 		}
+
 	}
 }

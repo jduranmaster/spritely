@@ -37,12 +37,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\BgImageListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BgImageListForm.Designer.cs">
+      <DependentUpon>BgImageListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BgImageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BgImageForm.Designer.cs">
+      <DependentUpon>BgImageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Maps\BgImages.cs" />
+    <Compile Include="Maps\BgImage.cs" />
     <Compile Include="Palettes\Color555.cs" />
     <Compile Include="Files\FileHandler_Export.cs" />
     <Compile Include="Files\FileHandler_Load.cs" />
@@ -101,6 +115,7 @@
     <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="Sprites\Sprite_LoadSave.cs" />
     <Compile Include="Forms\TabMgr.cs" />
+    <Compile Include="Toolbox\Toolbox_BgImage.cs" />
     <Compile Include="Toolbox\Toolbox_Map.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
@@ -162,6 +177,14 @@
     <EmbeddedResource Include="Forms\ColorEncodingView.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ColorEncodingView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BgImageListForm.resx">
+      <DependentUpon>BgImageListForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BgImageForm.resx">
+      <DependentUpon>BgImageForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapForm.resx">
       <DependentUpon>MapForm.cs</DependentUpon>
@@ -288,10 +311,16 @@
     <Content Include="templates\animation_h.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="templates\backgrounds_cpp.txt">
+    <Content Include="templates\background_images_cpp.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="templates\backgrounds_h.txt">
+    <Content Include="templates\background_images_h.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\background_maps_cpp.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\background_maps_h.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\collision_cpp.txt">
@@ -307,6 +336,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\game_state_h.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\game_utils_cpp.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="templates\game_utils_h.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="templates\gba_memmap_h.txt">

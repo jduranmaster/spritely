@@ -1,6 +1,6 @@
 namespace Spritely
 {
-	partial class MapForm
+	partial class BgImageForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,10 +29,10 @@ namespace Spritely
 		private void InitializeComponent()
 		{
 			this.pbTools = new System.Windows.Forms.PictureBox();
-			this.pbMap = new System.Windows.Forms.PictureBox();
+			this.pbBgImage = new System.Windows.Forms.PictureBox();
 			this.cbZoom = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pbMap)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbBgImage)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pbTools
@@ -49,20 +49,20 @@ namespace Spritely
 			this.pbTools.Paint += new System.Windows.Forms.PaintEventHandler(this.pbTools_Paint);
 			this.pbTools.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbTools_MouseUp);
 			// 
-			// pbMap
+			// pbBgImage
 			// 
-			this.pbMap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.pbBgImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.pbMap.Location = new System.Drawing.Point(65, 5);
-			this.pbMap.Name = "pbMap";
-			this.pbMap.Size = new System.Drawing.Size(326, 291);
-			this.pbMap.TabIndex = 1;
-			this.pbMap.TabStop = false;
-			this.pbMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseMove);
-			this.pbMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseDown);
-			this.pbMap.Paint += new System.Windows.Forms.PaintEventHandler(this.pbMap_Paint);
-			this.pbMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMap_MouseUp);
+			this.pbBgImage.Location = new System.Drawing.Point(65, 5);
+			this.pbBgImage.Name = "pbBgImage";
+			this.pbBgImage.Size = new System.Drawing.Size(326, 291);
+			this.pbBgImage.TabIndex = 1;
+			this.pbBgImage.TabStop = false;
+			this.pbBgImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbBgImage_MouseMove);
+			this.pbBgImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbBgImage_MouseDown);
+			this.pbBgImage.Paint += new System.Windows.Forms.PaintEventHandler(this.pbBgImage_Paint);
+			this.pbBgImage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbBgImage_MouseUp);
 			// 
 			// cbZoom
 			// 
@@ -82,22 +82,22 @@ namespace Spritely
 			this.cbZoom.TabStop = false;
 			this.cbZoom.SelectedIndexChanged += new System.EventHandler(this.cbZoom_SelectedIndexChanged);
 			// 
-			// MapForm
+			// BgImageForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(395, 301);
 			this.Controls.Add(this.cbZoom);
-			this.Controls.Add(this.pbMap);
+			this.Controls.Add(this.pbBgImage);
 			this.Controls.Add(this.pbTools);
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(206, 297);
-			this.Name = "MapForm";
-			this.Text = "SpriteForm";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MapForm_FormClosing);
-			this.Resize += new System.EventHandler(this.MapForm_Resize);
+			this.Name = "BgImageForm";
+			this.Text = "Background Image";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BgImageForm_FormClosing);
+			this.Resize += new System.EventHandler(this.BgImageForm_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pbMap)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbBgImage)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -105,7 +105,7 @@ namespace Spritely
 		#endregion
 
 		private System.Windows.Forms.PictureBox pbTools;
-		private System.Windows.Forms.PictureBox pbMap;
+		private System.Windows.Forms.PictureBox pbBgImage;
 		private System.Windows.Forms.ComboBox cbZoom;
 	}
 }

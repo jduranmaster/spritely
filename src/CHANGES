@@ -1,5 +1,20 @@
-0.13.29
-Fix bug with map tile ids. Previously the internal tile id would be 
+0.14.1
+Force window updates when display options change.
+Force window updates after applying undo/redo actions.
+Re-enable color encoding window.
+Add Background Image tab to import images.
+Add background image export (GBA 240x160 only)
+Support image import
+Fix show/hide display of UndoHistory window (test only)
+Fix map loading to use correct spriteset id.
+Update generated code:
+  backgrounds.cpp|h renamed to background_maps.cpp|h
+  Added background_images.cpp|h
+  Added game_utils.cpp
+  Added code to manage game stages
+
+0.13.29 *** CHECKPOINT ***
+Fix bug with map tile ids. Previously the internal tile id would be
   written out instead of the tile export id, which would lead to 
   invalid tile ids being written into the map when bgsprites had
   been deleted from the tileset.
@@ -13,8 +28,7 @@ Fix sprite toolbox: tool select, bucket, eyedropper
 Fix background map editing
 Remove old UI forms, classes
 
-0.13.28
-*** CHECKPOINT - Not intended for binary release ***
+0.13.28 *** CHECKPOINT ***
 Switch to new UI:
   Subwindows for each UI component: spriteset, sprite, palette, map.
   Background tile editing and map editing now on same tab.
@@ -25,7 +39,7 @@ Note:
   Numerous UI elements are not completely hooked up and this version
     is not completely functional.
 
-0.13.17
+0.13.17 *** BINARY RELEASE ***
 Update generated code:
   Add palettes.h to store palette types and definitions.
     Select "Update project files" when exporting.
