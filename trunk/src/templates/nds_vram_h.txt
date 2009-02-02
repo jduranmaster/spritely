@@ -12,10 +12,10 @@
 // was used, the NDS has 9 VRAM banks of various sizes that you need to
 // map before you can use them.
 //
-// There are 6 display modes, numbered 0-7.
+// There are 8 display modes, numbered 0-7.
 //   Modes 0-5 are tiled and/or 3D modes.
 //   Mode 6 is a 3D mode.
-//   Mode 7 is a bitmap mode.
+//   Mode 7 is a bitmap (framebuffer) mode.
 //
 // Each mode allows different types of background layers.
 // There are 4 types of background layers:

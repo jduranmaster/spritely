@@ -16,6 +16,7 @@ namespace Spritely
 			public Palettes BackgroundPalettes;
 			public Spritesets BackgroundSpritesets;
 			public Maps BackgroundMaps;
+			public BgImages BackgroundImages;
 			public FileHandler Filer;
 		}
 		DocumentData m_data;
@@ -38,6 +39,7 @@ namespace Spritely
 			m_data.BackgroundPalettes = new Palettes(this, Palettes.Type.Background);
 			m_data.BackgroundSpritesets = new Spritesets(this, true);
 			m_data.BackgroundMaps = new Maps(this);
+			m_data.BackgroundImages = new BgImages(this);
 
 			m_data.Filer = new FileHandler(this);
 
@@ -84,6 +86,13 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// This bolean is used to verify that the Error/Warning/Ask dialogs are displayed
+		/// through the Document class instead of having the ProjectMainform class methods
+		/// called directly.
+		/// </summary>
+		public bool ShowMessageCheck = false;
+
+		/// <summary>
 		/// Display an error message using a hard-coded string.
 		/// All calls to this routine should be converted to use ErrorId()
 		/// so that they can be localized.
@@ -96,7 +105,11 @@ namespace Spritely
 			if (m_form == null)
 				System.Console.WriteLine(ResourceMgr.GetString("ERROR") + strMessage);
 			else
+			{
+				ShowMessageCheck = true;
 				m_form.Error(strMessage);
+				ShowMessageCheck = false;
+			}
 		}
 
 		/// <summary>
@@ -111,7 +124,11 @@ namespace Spritely
 			if (m_form == null)
 				System.Console.WriteLine(ResourceMgr.GetString("ERROR") + strMessage);
 			else
+			{
+				ShowMessageCheck = true;
 				m_form.Error(strMessage);
+				ShowMessageCheck = false;
+			}
 		}
 
 		/// <summary>
@@ -127,7 +144,11 @@ namespace Spritely
 			if (m_form == null)
 				System.Console.WriteLine(ResourceMgr.GetString("WARNING") + strMessage);
 			else
+			{
+				ShowMessageCheck = true;
 				m_form.Warning(strMessage);
+				ShowMessageCheck = false;
+			}
 		}
 
 		/// <summary>
@@ -142,7 +163,11 @@ namespace Spritely
 			if (m_form == null)
 				System.Console.WriteLine(ResourceMgr.GetString("WARNING") + strMessage);
 			else
+			{
+				ShowMessageCheck = true;
 				m_form.Warning(strMessage);
+				ShowMessageCheck = false;
+			}
 		}
 
 		/// <summary>
@@ -158,7 +183,12 @@ namespace Spritely
 				return false;
 			}
 			else
-				return m_form.AskYesNo(strMessage);
+			{
+				ShowMessageCheck = true;
+				bool result = m_form.AskYesNo(strMessage);
+				ShowMessageCheck = false;
+				return result;
+			}
 		}
 
 		/// <summary>
@@ -176,7 +206,12 @@ namespace Spritely
 				return false;
 			}
 			else
-				return m_form.AskYesNoCancel(strMessage, out fCancel);
+			{
+				ShowMessageCheck = true;
+				bool result = m_form.AskYesNoCancel(strMessage, out fCancel);
+				ShowMessageCheck = false;
+				return result;
+			}
 		}
 
 		/// <summary>
@@ -248,6 +283,11 @@ namespace Spritely
 		public Maps BackgroundMaps
 		{
 			get { return m_data.BackgroundMaps; }
+		}
+
+		public BgImages BackgroundImages
+		{
+			get { return m_data.BackgroundImages; }
 		}
 
 		/// <summary>
@@ -341,9 +381,12 @@ namespace Spritely
 			Spriteset ss = m_data.Spritesets.Current;
 			if (ss != null)
 				ss.SelectFirstSprite();
-			Spriteset bs = m_data.BackgroundSpritesets.Current;
-			if (bs != null)
-				bs.SelectFirstSprite();
+			Spriteset bss = m_data.BackgroundSpritesets.Current;
+			if (bss != null)
+				bss.SelectFirstSprite();
+			BgImages bgis = m_data.BackgroundImages;
+			if (bgis != null)
+				bgis.SelectFirstImage();
 			ResetUndo();
 		}
 

@@ -249,12 +249,12 @@ namespace Spritely
 		/// <returns>The encoding for the specified palette entry</returns>
 		public int Encoding(int nIndex)
 		{
-			return Encoding(m_data.cRed[nIndex], m_data.cGreen[nIndex], m_data.cBlue[nIndex]);
+			return Color555.Encode(m_data.cRed[nIndex], m_data.cGreen[nIndex], m_data.cBlue[nIndex]);
 		}
 
 		public int Encoding(int cRed, int cGreen, int cBlue)
 		{
-			return cRed | (cGreen << 5) | (cBlue << 10);
+			return Color555.Encode(cRed, cGreen, cBlue);
 		}
 
 		/// <summary>
@@ -311,13 +311,13 @@ namespace Spritely
 
 			if (m_Brush[nIndex] != null)
 				m_Brush[nIndex].Dispose();
-			m_Brush[nIndex] = new SolidBrush(Color.FromArgb(cRed * 8, cGreen * 8, cBlue * 8));
+			m_Brush[nIndex] = new SolidBrush(Color555.CalcColor(cRed, cGreen, cBlue));
 		}
 
 		public void UpdateColor(int nIndex, int color)
 		{
 			int cRed, cGreen, cBlue;
-			ExtractColors(color, out cRed, out cGreen, out cBlue);
+			Color555.ExtractColors(color, out cRed, out cGreen, out cBlue);
 			UpdateColor(nIndex, cRed, cGreen, cBlue);
 		}
 
@@ -343,25 +343,8 @@ namespace Spritely
 		public void ImportColor(int nIndex, int color)
 		{
 			int cRed, cGreen, cBlue;
-
-			ExtractColors(color, out cRed, out cGreen, out cBlue);
+			Color555.ExtractColors(color, out cRed, out cGreen, out cBlue);
 			UpdateColor(nIndex, cRed, cGreen, cBlue);
-		}
-
-		/// <summary>
-		/// Extract the individual rgb colors from the encoded color.
-		/// </summary>
-		/// <param name="color"></param>
-		/// <param name="cRed"></param>
-		/// <param name="cGreen"></param>
-		/// <param name="cBlue"></param>
-		private void ExtractColors(int color, out int cRed, out int cGreen, out int cBlue)
-		{
-			cRed = (color & 0x001F);
-			color >>= 5;
-			cGreen = (color & 0x001F);
-			color >>= 5;
-			cBlue = (color & 0x001F);
 		}
 
 		public void RecordUndoAction(string strDesc)
@@ -448,13 +431,9 @@ namespace Spritely
 
 		public void Save(System.IO.TextWriter tw)
 		{
-			WriteData(tw, "\t\t\t\t");
-		}
-
-		private bool WriteData(System.IO.TextWriter tw, string strIndent)
-		{
 			StringBuilder sb = null;
-			int nPerLine = 4;
+			int nPerLine = 8;
+			string strIndent = "\t\t\t\t";
 
 			for (int i = 0; i < 16; i++)
 			{
@@ -468,7 +447,6 @@ namespace Spritely
 			}
 			if (sb != null)
 				tw.WriteLine(sb.ToString());
-			return true;
 		}
 
 		public bool Export_Subpalette(System.IO.TextWriter tw, int nSubpaletteId)

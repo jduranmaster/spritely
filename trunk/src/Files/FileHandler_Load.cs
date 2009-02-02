@@ -132,6 +132,10 @@ namespace Spritely
 							return false;
 						m_fFoundBackgroundMap = true;
 						break;
+					case "bgimages":
+						if (!m_doc.BackgroundImages.LoadXML_bgimages(xn))
+							return false;
+						break;
 				}
 			}
 			return true;

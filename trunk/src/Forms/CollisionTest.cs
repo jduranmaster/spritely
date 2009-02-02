@@ -30,7 +30,6 @@ namespace Spritely
 			xOffset = 0;
 			yOffset = 0;
 
-			//OldTab tab = m_doc.OldOwner.CurrentTab;
 			ss = d.Owner.ActiveSpriteset();
 
 			s1 = ss.CurrentSprite;
@@ -40,11 +39,6 @@ namespace Spritely
 			mask2 = CalcMask(s2, out mask2w, out mask2h);
 
 			CollisionCheck();
-		}
-
-		private void CollisionCheck()
-		{
-			CollideBBox();
 		}
 
 		private int[] CalcMask(Sprite s, out int width, out int height)
@@ -98,7 +92,7 @@ namespace Spritely
 		//    |-----|
 		//       x offset
 
-		private bool CollideBBox()
+		private bool CollisionCheck()
 		{
 			if (s2 == null)
 				return false;

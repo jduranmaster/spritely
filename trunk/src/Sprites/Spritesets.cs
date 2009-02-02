@@ -145,6 +145,8 @@ namespace Spritely
 				tw.WriteLine("\t</spritesets>");
 		}
 
+		#region Export
+
 		public void Export_AssignIDs()
 		{
 			int nSpritesetExportID = 0;
@@ -205,6 +207,8 @@ namespace Spritely
 			foreach (Spriteset ss in m_spritesets.Values)
 				ss.Export_SpriteMaskData(tw);
 		}
+
+		#endregion
 
 	}
 }

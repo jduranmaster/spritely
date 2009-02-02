@@ -3,8 +3,9 @@
 <!--
    XML Schema Definition (XSD) for the version 2 data files used by Spritely.
    Author: Gary Kacmarcik
-   Initial version: 4 Jan 2009
-      Last Updated: 4 Jan 2009
+   Revision History:
+     30 Jan 2009  GJK  Added support for paletted background images
+     04 Jan 2009  GJK  Initial version
  -->
 
 <xs:schema id="spritely"
@@ -25,6 +26,7 @@
 				<xs:element name="bgpalettes" type="palettes" minOccurs="1" maxOccurs="1" />
 				<xs:element name="bgspritesets" type="spritesets" minOccurs="1" maxOccurs="1" />
 				<xs:element ref="bgmaps" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="bgimages" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 			<xs:attribute name="version" type="xs:int" use="required" />
 			<xs:attribute name="name" type="xs:string" use="required" />
@@ -170,7 +172,7 @@
 		<xs:attribute name="size" type="sprite_size" use="required" />
 	</xs:complexType>
 
-	<!-- sprite_size: valid NxN sprite sizes -->
+	<!-- sprite_size: valid NxM sprite sizes -->
 	<xs:simpleType name="sprite_size">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="[124]x[124]" />
@@ -207,7 +209,7 @@
 		</xs:restriction>
 	</xs:simpleType>
 
-	<!-- MAPS -->
+	<!-- BACKGROUND MAPS -->
 
 	<!-- The set of all maps for this project. -->
 	<xs:element name="bgmaps">
@@ -233,7 +235,7 @@
 		</xs:complexType>
 	</xs:element>
 
-	<!-- map_size: valid NxN map sizes -->
+	<!-- map_size: valid NxM map sizes -->
 	<xs:simpleType name="map_size">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="(32x32)|(32x64)|(64x32)|(64x64)" />
@@ -273,6 +275,66 @@
 	<xs:simpleType name="maptile_flip">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="h?v?" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- BACKGROUND IMAGES -->
+
+	<!-- The set of all background images for this project. -->
+	<xs:element name="bgimages">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="bgimage_pal8" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- An indexed background image with its palette.
+	     Each pixel is 8bpp, which is the index into the palette. -->
+	<xs:element name="bgimage_pal8">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="palette256" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="bgimagedata" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="id" type="xs:int"  use="required" />
+			<xs:attribute name="desc" type="xs:string" use="optional" />
+			<xs:attribute name="size" type="image_size" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- image_size: valid NxM map sizes -->
+	<xs:simpleType name="image_size">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d+x\d+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Data for a single background image. -->
+	<xs:element name="bgimagedata">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="bgimagerow" minOccurs="1" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:int"  use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- A single row in an image definition. -->
+	<xs:element name="bgimagerow">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="bgimagerow_data">
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- imagerow_data: a single row of image data (palette index values). -->
+	<xs:simpleType name="bgimagerow_data">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-fA-F]{2},)*[0-9a-fA-F]{2}" />
 		</xs:restriction>
 	</xs:simpleType>
 

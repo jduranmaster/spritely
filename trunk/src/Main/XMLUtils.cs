@@ -43,6 +43,19 @@ namespace Spritely
 			return nVal;
 		}
 
+		public static int ParseHexInteger(string str)
+		{
+			int nVal = 0;
+			try
+			{
+				nVal = Int32.Parse(str, System.Globalization.NumberStyles.HexNumber);
+			}
+			catch
+			{
+			}
+			return nVal;
+		}
+
 	}
 
 	#region Tests
@@ -86,6 +99,18 @@ namespace Spritely
 		public void Test_ParseInteger()
 		{
 			Assert.AreEqual(2, XMLUtils.ParseInteger("2"));
+			Assert.AreEqual(0, XMLUtils.ParseInteger(""));
+			Assert.AreEqual(0, XMLUtils.ParseInteger("fred"));
+		}
+
+		[Test]
+		public void Test_ParseHexInteger()
+		{
+			Assert.AreEqual(2, XMLUtils.ParseInteger("2"));
+			Assert.AreEqual(16, XMLUtils.ParseInteger("10"));
+			Assert.AreEqual(10, XMLUtils.ParseInteger("a"));
+			Assert.AreEqual(10, XMLUtils.ParseInteger("A"));
+			Assert.AreEqual(255, XMLUtils.ParseInteger("fF"));
 			Assert.AreEqual(0, XMLUtils.ParseInteger(""));
 			Assert.AreEqual(0, XMLUtils.ParseInteger("fred"));
 		}

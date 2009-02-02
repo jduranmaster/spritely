@@ -46,12 +46,13 @@ namespace Spritely
 
 		private void bOK_Click(object sender, EventArgs e)
 		{
-			this.Hide();
+			UndoMgr.ShowDebugWindow = false;
 		}
 
-		private void UndoHistory_FormClosed(object sender, FormClosedEventArgs e)
+		private void UndoHistory_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			this.Hide();
+			UndoMgr.ShowDebugWindow = false;
+			e.Cancel = true;
 		}
 	}
 }

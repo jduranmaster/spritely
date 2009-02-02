@@ -26,6 +26,7 @@ namespace Spritely
 		private void ActivateMenuItems()
 		{
 			bool fHasDoc = m_doc != null;
+			bool fSpriteEditing = m_tabCurrent.Id == TabMgr.TabId.Sprites || m_tabCurrent.Id == TabMgr.TabId.BackgroundMaps;
 
 			// Enable/disable File menu items
 			menuFile.Enabled = true;
@@ -96,7 +97,7 @@ namespace Spritely
 			else
 			{
 				// The 'new sprite' option is always enabled when were in sprite editing mode.
-				menuSprite_New.Enabled = fHasDoc;
+				menuSprite_New.Enabled = fHasDoc && fSpriteEditing;
 
 				// Disable all sprite editing options if there is no sprite selection or
 				// if we're not editing sprites.
@@ -127,7 +128,7 @@ namespace Spritely
 				menuPalette_Copy.Enabled = false;
 				menuPalette_Paste.Enabled = false;
 				menuPalette_Clear.Enabled = false;
-				menuPalette_ViewEncoding.Enabled = false;// fEditingSprites;
+				menuPalette_ViewEncoding.Enabled = fSpriteEditing;
 				menuPalette_Color.Enabled = false;
 				menuPalette_Color_Copy.Enabled = false;
 				menuPalette_Color_Paste.Enabled = false;
@@ -158,6 +159,10 @@ namespace Spritely
 
 			// Used for debugging only - set to false for release builds.
 			//menuTest.Visible = false;
+			menuTest_RunUnittests.Visible = true;
+			menuTest_ShowUndoHistory.Visible = true;
+			menuTest_ShowUndoHistory.Checked = UndoMgr.ShowDebugWindow;
+			menuTest_CollisionTest.Visible = true;
 		}
 
 		private void AddProjectMenuItems()
@@ -317,7 +322,7 @@ namespace Spritely
 				return;
 			undo.ApplyUndo();
 
-			//Handle_AllSpritesChanged();
+			HandleEverythingChanged();
 		}
 
 		private void menuEdit_Redo_Click(object sender, EventArgs e)
@@ -327,7 +332,7 @@ namespace Spritely
 				return;
 			undo.ApplyRedo();
 
-			//Handle_AllSpritesChanged();
+			HandleEverythingChanged();
 		}
 
 		private void menuEdit_Cut_Click(object sender, EventArgs e)
@@ -568,8 +573,7 @@ namespace Spritely
 
 		private void menuPalette_EditColors_Click(object sender, EventArgs e)
 		{
-			//OldTab tab = m_tabCurrent;
-			Subpalette p = null;// tab.Palettes.CurrentPalette.CurrentSubpalette;
+			Subpalette p = ActivePalette().GetCurrentSubpalette();
 			if (p == null)
 				return;
 
@@ -578,7 +582,10 @@ namespace Spritely
 
 			//UpdatePaletteColor(tab);
 			if (result == DialogResult.Yes)
+			{
 				m_doc.HasUnsavedChanges = true;
+				HandleColorDataChange(ActivePalette());
+			}
 		}
 
 		#endregion
@@ -608,20 +615,14 @@ namespace Spritely
 			// If any of the options have changed...
 			if (result == DialogResult.Yes)
 			{
-				//OldTab tab = null;// m_tabCurrent;
-				//PictureBox pb;
-				//pb = tab.EditSpriteWindow;
-				//if (pb != null)
-				//	pb.Invalidate();
-				//pb = tab.EditMapWindow;
-				//if (pb != null)
-				//	pb.Invalidate();
-				//pb = tab.PaletteWindow;
-				//if (pb != null)
-				//	pb.Invalidate();
-				//pb = tab.PaletteSwatchWindow;
-				//if (pb != null)
-				//	pb.Invalidate();
+				// ...force a refresh of all windows.
+				m_doc.Palettes.CurrentPalette.PaletteWindow.Refresh();
+				m_doc.Spritesets.Current.SpritesetWindow.Refresh();
+				m_doc.Spritesets.Current.SpriteWindow.Refresh();
+				m_doc.BackgroundPalettes.CurrentPalette.PaletteWindow.Refresh();
+				m_doc.BackgroundSpritesets.Current.SpritesetWindow.Refresh();
+				m_doc.BackgroundSpritesets.Current.SpriteWindow.Refresh();
+				m_doc.BackgroundMaps.CurrentMap.MapWindow.Refresh();
 			}
 		}
 
@@ -654,21 +655,10 @@ namespace Spritely
 			ut.ShowDialog();
 		}
 
-		private void menuTest_LoadImage_Click(object sender, EventArgs e)
-		{
-			// bitmap import test
-			Bitmap b = new Bitmap(@"c:\gamedev\projects\test.png");
-			//OldTab tab = m_tabCurrent;
-			Sprite s = null;// tab.Spritesets.Current.CurrentSprite;
-			if (s == null)
-				return;
-			s.ImportBitmap(b);
-		}
-
 		private void menuTest_ShowUndoHistory_Click(object sender, EventArgs e)
 		{
-			menuTest_ShowUndoHistory.Checked = !menuTest_ShowUndoHistory.Checked;
-			UndoMgr.ShowDebugWindow = menuTest_ShowUndoHistory.Checked;
+			UndoMgr.ShowDebugWindow = !UndoMgr.ShowDebugWindow;
+			menuTest_ShowUndoHistory.Checked = UndoMgr.ShowDebugWindow;
 		}
 
 		private void menuTest_CollisionTest_Click(object sender, EventArgs e)

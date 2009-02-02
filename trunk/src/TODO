@@ -2,6 +2,7 @@
 
 General: Set GBA/NDS "mode" and have UI change appropriately: screen border, export, ...
 General: Improve when running under Mono (Mac/Linux)
+General: Validate object names to ensure they don't collide with generated names.
 
 Undo: Record changing sprite size
 Undo: Record undo info for each tab instead of per document
@@ -12,6 +13,8 @@ Undo: bug: duplicate sprite, edit, undo results in blank sprite
 
 Sprite List: disable sprite
 Sprite List: reorder sprites (up/down within size group)
+Sprite List: scroll to currently selected sprite when selection changes
+Sprite List: auto scroll when selecting and mouse moved above/below visible region
 
 Sprite Edit: marquee select
 Sprite Edit: tools for line, rect, filled rect, oval filled oval
@@ -19,22 +22,30 @@ Sprite Edit: set/manage origin, bounding box
 Sprite Edit: cursors for each active tool
 Sprite Edit: deleting last sprite in list doesn't select a new sprite
 
-Background Edit: flip, rotate tiles, sprites
-Background Edit: palette override
-Background Edit: show DS screen bounds
-Background Edit: collision editor to mark places on map
+Background Map: flip, rotate tiles, sprites
+Background Map: subpalette override
+Background Map: collision editor to mark places on map
 
-Background: Allow import of 256-color images into background
-Background: splash screen
+Background Image: allow transparency color select for 256 color images (all images?)
+
+Background Image List: scroll to currently selected image when selection changes
+Background Image List: auto scroll when selecting and mouse moved above/below visible region
 
 Palettes: Add better color editing options: RGB, HSV, large palette
 Palettes: Add support for a single 256-color palette
 
 Preferences: Record last save directory
 Preferences: Set default GBA/NDS project
+Preferences: Store prefs in local xml file instead of in registry
 
-File: New document doesn't create default sprites
 File: catch exceptions when loading to ensure that file is closed properly
-File: make file loading robust to poorly formed files
+File: make file loading robust to poorly formed files (more error/warning messages)
+File: don't load into separate document when load. save existing doc and load into main doc.
+File: auto-save changes into tmp file
 
 Export: add manifest file for projects
+Export: generate project files automatically from manifest
+Export: background image: currently only 240x160 images work on GBA. broken on NDS
+Export: support export to PA lib
+
+Generated Code: move screen boundary code into tutorial

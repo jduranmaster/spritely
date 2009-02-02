@@ -52,6 +52,8 @@ namespace Spritely
 			new ExportFile("animation.h",		"animation_h.txt",		true,	false,	"source"),
 			new ExportFile("game_state.h",		"game_state_h.txt",		true,	true,	"source"),
 			new ExportFile("game_state.cpp",	"game_state_cpp.txt",	true,	true,	"source"),
+			new ExportFile("game_utils.h",		"game_utils_h.txt",		true,	true,	"source"),
+			new ExportFile("game_utils.cpp",	"game_utils_cpp.txt",	true,	true,	"source"),
 			new ExportFile("collision.cpp",		"collision_cpp.txt",	true,	false,	"source"),
 			new ExportFile("collision.h",		"collision_h.txt",		true,	false,	"source"),
 			new ExportFile("main.cpp",			"main_cpp.txt",			true,	false,	"source"),
@@ -60,10 +62,12 @@ namespace Spritely
 			new ExportFile("object_utils.h",	"object_utils_h.txt",	true,	false,	"source"),
 			new ExportFile("palettes.h",		"palettes_h.txt",		true,	false,	"source"),
 			// Sprite/Background files
-			new ExportFile("backgrounds.cpp",	"backgrounds_cpp.txt",	false,	false,	"source"),
-			new ExportFile("backgrounds.h",		"backgrounds_h.txt",	false,	false,	"source"),
-			new ExportFile("sprites.cpp",		"sprites_cpp.txt",		false,	false,	"source"),
-			new ExportFile("sprites.h",			"sprites_h.txt",		false,	false,	"source"),
+			new ExportFile("background_images.cpp",	"background_images_cpp.txt",false,	false,	"source"),
+			new ExportFile("background_images.h",	"background_images_h.txt",	false,	false,	"source"),
+			new ExportFile("background_maps.cpp",	"background_maps_cpp.txt",	false,	false,	"source"),
+			new ExportFile("background_maps.h",		"background_maps_h.txt",	false,	false,	"source"),
+			new ExportFile("sprites.cpp",			"sprites_cpp.txt",			false,	false,	"source"),
+			new ExportFile("sprites.h",				"sprites_h.txt",			false,	false,	"source"),
 		};
 
 		public enum ExportResult
@@ -261,12 +265,14 @@ namespace Spritely
 			Palettes palettes = m_doc.Palettes;
 			Palettes bgpalettes = m_doc.BackgroundPalettes;
 			Maps maps = m_doc.BackgroundMaps;
+			BgImages bgimages = m_doc.BackgroundImages;
 
 			sprites.Export_AssignIDs();
 			bgsprites.Export_AssignIDs();
 			palettes.Export_AssignIDs();
 			bgpalettes.Export_AssignIDs();
 			maps.Export_AssignIDs();
+			bgimages.Export_AssignIDs();
 
 			string strLine;
 			while ((strLine = tr.ReadLine()) != null)
@@ -375,6 +381,32 @@ namespace Spritely
 					continue;
 				}
 
+				if (strLine == "%%_BACKGROUND_IMAGE_INFO_%%")
+				{
+					bgimages.Export_BgImageInfo(tw);
+					continue;
+				}
+				if (strLine == "%%_BACKGROUND_IMAGE_IDS_%%")
+				{
+					bgimages.Export_BgImageIDs(tw);
+					continue;
+				}
+				if (strLine == "%%_BACKGROUND_IMAGE_HEADERS_%%")
+				{
+					bgimages.Export_BgImageHeaders(tw);
+					continue;
+				}
+				if (strLine == "%%_BACKGROUND_IMAGE_PALETTEDATA_%%")
+				{
+					bgimages.Export_BgImagePaletteData(tw);
+					continue;
+				}
+				if (strLine == "%%_BACKGROUND_IMAGE_DATA_%%")
+				{
+					bgimages.Export_BgImageData(tw);
+					continue;
+				}
+
 				strLine = strLine.Replace("%%_NAME_%%", strProjName);
 				strLine = strLine.Replace("%%_VERSION_%%", ResourceMgr.GetString("Version"));
 				strLine = strLine.Replace("%%_PLATFORM_%%", fNDS ? "NDS" : "GBA");
@@ -389,6 +421,8 @@ namespace Spritely
 				strLine = strLine.Replace("%%_NUM_BACKGROUND_TILES_%%", bgsprites.NumTiles.ToString());
 
 				strLine = strLine.Replace("%%_NUM_BACKGROUND_MAPS_%%", maps.NumMaps.ToString());
+
+				strLine = strLine.Replace("%%_NUM_BACKGROUND_IMAGES_%%", bgimages.NumImages.ToString());
 
 				tw.WriteLine(strLine);
 			}

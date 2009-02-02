@@ -60,7 +60,7 @@ namespace Spritely
 			this.Controls.Add(this.bOK);
 			this.Name = "UndoHistory";
 			this.Text = "UndoHistory";
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UndoHistory_FormClosed);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UndoHistory_FormClosing);
 			this.ResumeLayout(false);
 
 		}

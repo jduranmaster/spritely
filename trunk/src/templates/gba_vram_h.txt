@@ -38,17 +38,20 @@
 //
 // Mode 3:
 //   240x160. 16-bit per pixel bitmap mode.
+//   RGB555 (5-bits for each R,G and B value) stored for each pixel.
 //   May be rotated, scaled by adjusting layer 2.
 //   512 sprite tiles available.
 //
 // Mode 4:
 //   240x160. 8-bit per pixel bitmap mode.
+//   8-bit palette index stored for each pixel.
 //   Two frame buffers allow page flipping.
 //   May be rotated, scaled by adjusting layer 2.
 //   512 sprite tiles available.
 //
 // Mode 5:
 //   160x128. 16-bit per pixel bitmap mode.
+//   RGB555 (5-bits for each R,G and B value) stored for each pixel.
 //   Two frame buffers allow page flipping.
 //   Background may be rotated, scaled by adjusting layer 2.
 //   Screen image is at upper-left corner of LCD.
@@ -57,16 +60,20 @@
 // Memory for each of these modes is allocated as follows:
 //
 // Mode 0,1,2:
+//   0x05000000 - 0x050001ff (512) : Background palette
 //   0x06000000 - 0x0600ffff (64K) : Background tile data and tile map
 //   0x06010000 - 0x06017fff (32K) : Sprite tile data (1024 sprite entries)
 // Mode 3:
+//   0x05000000 - 0x050001ff (512) : unused
 //   0x06000000 - 0x06012bff (75K) Front Buffer - 240x160, 16bpp
 //   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
 // Mode 4:
-//   0x06000000 - 0x060095ff (37.5K) Front Buffer - 240x160, 8bpp
-//   0x0600a000 - 0x060135ff (37.5K) Back Buffer - 240x160, 8bpp
+//   0x05000000 - 0x050001ff (512) : Background palette
+//   0x06000000 - 0x060095ff (37.5K) Front Buffer - 240x160, 8bpp indexed
+//   0x0600a000 - 0x060135ff (37.5K) Back Buffer - 240x160, 8bpp indexed
 //   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
 // Mode 5:
+//   0x05000000 - 0x050001ff (512) : unused
 //   0x06000000 - 0x0600a000 (40K) Front Buffer - 160x128, 16bpp
 //   0x0600a000 - 0x06013fff (40K) Back Buffer - 160x128, 16bpp
 //   0x06014000 - 0x06017fff (16K) Sprite tile data (Upper 512 sprite entries)
@@ -205,7 +212,7 @@
 // more than one 16K block.
 //
 // for BG_COLOR16:
-//  each tile pixel require 4-bits to encode the palette index,
+//  each tile pixel require 4-bits to encode the subpalette index,
 //  so each tile requires 32 bytes.
 // for BG_COLOR256:
 //  each tile pixel require 8-bits to encode the palette index,
@@ -217,8 +224,8 @@
 //  16-color:
 //   1024 16-color bg tiles = 32K = 2 16K data blocks.
 //  256-color:
-//   1024 256-color bg tiles = 64K = all 4 16K data blocks (which
-//   leaves no room for the background map data).
+//   1024 256-color bg tiles = 64K = all 4 16K data blocks
+//     (which leaves no room for the background map data).
 //   Pratical max is 64K-2K (for map) = 62K of tiles = 992 tiles
 // Rotation backgrounds
 //  Max 256 bg tiles (only 256-color).

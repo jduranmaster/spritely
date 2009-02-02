@@ -13,7 +13,6 @@ namespace Spritely
 		private ProjectMainForm m_parent;
 		private Spriteset m_ss;
 
-		private int m_nScrollPosition;
 		private Font m_font = new Font("Arial", 8, FontStyle.Bold);
 
 		private const int MaxTilesX = 8;
@@ -89,6 +88,7 @@ namespace Spritely
 
 		#region Scrollbar
 
+		private int m_nScrollPosition;
 		private int m_nTotalScrollHeight = 0;
 
 		public int VisibleScrollRows
@@ -183,7 +183,12 @@ namespace Spritely
 			//m_ss.SpriteWindow.Show();
 		}
 
-		/// <returns>True if the SpriteList needs to be redrawn.</returns>
+		/// <summary>
+		/// Handle a mouse event in the sprite list.
+		/// </summary>
+		/// <param name="pxX"></param>
+		/// <param name="pxY"></param>
+		/// <returns>True if the spritelist needs to be redrawn</returns>
 		public bool HandleMouse(int pxX, int pxY)
 		{
 			if (pxX < 0 || pxY < 0)

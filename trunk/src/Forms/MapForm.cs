@@ -97,12 +97,12 @@ namespace Spritely
 
 		#region Window events
 		
-		private void SpriteForm_Resize(object sender, EventArgs e)
+		private void MapForm_Resize(object sender, EventArgs e)
 		{
 			m_parent.ResizeSubwindow(this);
 		}
 
-		private void SpriteForm_FormClosing(object sender, FormClosingEventArgs e)
+		private void MapForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			m_parent.CloseSubwindow(this);
 			e.Cancel = true;

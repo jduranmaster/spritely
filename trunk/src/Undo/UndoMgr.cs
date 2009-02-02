@@ -96,7 +96,7 @@ namespace Spritely
 
 		public UndoAction GetCurrent()
 		{
-			if (m_nCurrent < 0)
+			if (m_nCurrent < 0 || m_nCurrent >= m_history.Count)
 				return null;
 			return m_history[m_nCurrent];
 		}
@@ -157,6 +157,9 @@ namespace Spritely
 
 		public void ApplyUndo()
 		{
+			if (m_nCurrent < 0 || m_nCurrent >= m_history.Count)
+				return;
+
 			// Apply the current undo action
 			m_history[m_nCurrent].ApplyUndo();
 
@@ -175,6 +178,9 @@ namespace Spritely
 
 		public void ApplyRedo()
 		{
+			if (m_nCurrent < 0 || m_nCurrent >= m_history.Count)
+				return;
+
 			// Increment the current undo action index.
 			//   +---+   +---+   +---+   +---+   +---+
 			//   | 0 | > | 1 | > | 2 | > | 3 | > | 4 |

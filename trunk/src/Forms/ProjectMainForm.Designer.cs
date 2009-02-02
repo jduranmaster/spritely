@@ -30,7 +30,8 @@ namespace Spritely
 		{
 			this.tabSet = new System.Windows.Forms.TabControl();
 			this.tabSprites = new System.Windows.Forms.TabPage();
-			this.tabBackgrounds = new System.Windows.Forms.TabPage();
+			this.tabBackgroundMaps = new System.Windows.Forms.TabPage();
+			this.tabBackgroundImages = new System.Windows.Forms.TabPage();
 			this.menuBar = new System.Windows.Forms.MenuStrip();
 			this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuFile_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +128,6 @@ namespace Spritely
 			this.menuTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_RunUnittests = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.menuTest_LoadImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabSet.SuspendLayout();
@@ -137,7 +137,8 @@ namespace Spritely
 			// tabSet
 			// 
 			this.tabSet.Controls.Add(this.tabSprites);
-			this.tabSet.Controls.Add(this.tabBackgrounds);
+			this.tabSet.Controls.Add(this.tabBackgroundMaps);
+			this.tabSet.Controls.Add(this.tabBackgroundImages);
 			this.tabSet.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tabSet.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 			this.tabSet.ItemSize = new System.Drawing.Size(0, 20);
@@ -160,14 +161,23 @@ namespace Spritely
 			this.tabSprites.Text = "Sprites";
 			this.tabSprites.UseVisualStyleBackColor = true;
 			// 
-			// tabBackgrounds
+			// tabBackgroundMaps
 			// 
-			this.tabBackgrounds.Location = new System.Drawing.Point(4, 24);
-			this.tabBackgrounds.Name = "tabBackgrounds";
-			this.tabBackgrounds.Size = new System.Drawing.Size(734, 0);
-			this.tabBackgrounds.TabIndex = 1;
-			this.tabBackgrounds.Text = "Background Maps";
-			this.tabBackgrounds.UseVisualStyleBackColor = true;
+			this.tabBackgroundMaps.Location = new System.Drawing.Point(4, 24);
+			this.tabBackgroundMaps.Name = "tabBackgroundMaps";
+			this.tabBackgroundMaps.Size = new System.Drawing.Size(734, 0);
+			this.tabBackgroundMaps.TabIndex = 1;
+			this.tabBackgroundMaps.Text = "Background Maps";
+			this.tabBackgroundMaps.UseVisualStyleBackColor = true;
+			// 
+			// tabBackgroundImages
+			// 
+			this.tabBackgroundImages.Location = new System.Drawing.Point(4, 24);
+			this.tabBackgroundImages.Name = "tabBackgroundImages";
+			this.tabBackgroundImages.Size = new System.Drawing.Size(734, 0);
+			this.tabBackgroundImages.TabIndex = 2;
+			this.tabBackgroundImages.Text = "Background Images";
+			this.tabBackgroundImages.UseVisualStyleBackColor = true;
 			// 
 			// menuBar
 			// 
@@ -916,7 +926,6 @@ namespace Spritely
 			this.menuTest.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuTest_RunUnittests,
             this.menuTest_Separator1,
-            this.menuTest_LoadImage,
             this.menuTest_ShowUndoHistory,
             this.menuTest_CollisionTest});
 			this.menuTest.Name = "menuTest";
@@ -934,13 +943,6 @@ namespace Spritely
 			// 
 			this.menuTest_Separator1.Name = "menuTest_Separator1";
 			this.menuTest_Separator1.Size = new System.Drawing.Size(162, 6);
-			// 
-			// menuTest_LoadImage
-			// 
-			this.menuTest_LoadImage.Name = "menuTest_LoadImage";
-			this.menuTest_LoadImage.Size = new System.Drawing.Size(165, 22);
-			this.menuTest_LoadImage.Text = "LoadImage";
-			this.menuTest_LoadImage.Click += new System.EventHandler(this.menuTest_LoadImage_Click);
 			// 
 			// menuTest_ShowUndoHistory
 			// 
@@ -981,7 +983,7 @@ namespace Spritely
 
 		private System.Windows.Forms.TabControl tabSet;
 		private System.Windows.Forms.TabPage tabSprites;
-		private System.Windows.Forms.TabPage tabBackgrounds;
+		private System.Windows.Forms.TabPage tabBackgroundMaps;
 		private System.Windows.Forms.MenuStrip menuBar;
 
 		private System.Windows.Forms.ToolStripMenuItem menuFile;
@@ -1087,9 +1089,9 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuTest;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_RunUnittests;
 		private System.Windows.Forms.ToolStripSeparator menuTest_Separator1;
-		private System.Windows.Forms.ToolStripMenuItem menuTest_LoadImage;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_ShowUndoHistory;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
+		private System.Windows.Forms.TabPage tabBackgroundImages;
 
 	}
 }

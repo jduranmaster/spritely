@@ -38,7 +38,7 @@ typedef struct {
 extern const PaletteInfoStruct SpritePaletteInfo[];
 
 // Color data for all the sprite palettes.
-extern const PaletteColorEntry SpritePalettes[];
+extern const unsigned short int SpritePalettes[];
 
 // General info about each Spriteset.
 extern const SpritesetInfoStruct SpritesetInfo[];

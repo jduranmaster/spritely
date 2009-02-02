@@ -70,8 +70,11 @@ namespace Spritely
 			TabMgr tabSprites = new TabMgr(this, TabMgr.TabId.Sprites);
 			m_tabs[(int)TabMgr.TabId.Sprites] = tabSprites;
 
-			TabMgr tabBackgrounds = new TabMgr(this, TabMgr.TabId.Backgrounds);
-			m_tabs[(int)TabMgr.TabId.Backgrounds] = tabBackgrounds;
+			TabMgr tabBackgroundMaps = new TabMgr(this, TabMgr.TabId.BackgroundMaps);
+			m_tabs[(int)TabMgr.TabId.BackgroundMaps] = tabBackgroundMaps;
+
+			TabMgr tabBackgroundImages = new TabMgr(this, TabMgr.TabId.BackgroundImages);
+			m_tabs[(int)TabMgr.TabId.BackgroundImages] = tabBackgroundImages;
 
 			m_tabCurrent = tabSprites;
 			tabSet.SelectedIndex = (int)m_tabCurrent.Id;
@@ -133,7 +136,7 @@ namespace Spritely
 
 			if (m_tabCurrent.Id == TabMgr.TabId.Sprites)
 				return m_doc.Palettes.CurrentPalette;
-			else if (m_tabCurrent.Id == TabMgr.TabId.Backgrounds)
+			else if (m_tabCurrent.Id == TabMgr.TabId.BackgroundMaps)
 				return m_doc.BackgroundPalettes.CurrentPalette;
 			return null;
 		}
@@ -145,7 +148,7 @@ namespace Spritely
 
 			if (m_tabCurrent.Id == TabMgr.TabId.Sprites)
 				return m_doc.Spritesets.Current;
-			else if (m_tabCurrent.Id == TabMgr.TabId.Backgrounds)
+			else if (m_tabCurrent.Id == TabMgr.TabId.BackgroundMaps)
 				return m_doc.BackgroundSpritesets.Current;
 			return null;
 		}
@@ -158,7 +161,7 @@ namespace Spritely
 			Spritesets ss;
 			if (m_tabCurrent.Id == TabMgr.TabId.Sprites)
 				ss = m_doc.Spritesets;
-			else if (m_tabCurrent.Id == TabMgr.TabId.Backgrounds)
+			else if (m_tabCurrent.Id == TabMgr.TabId.BackgroundMaps)
 				ss = m_doc.BackgroundSpritesets;
 			else
 				return null;
@@ -175,7 +178,7 @@ namespace Spritely
 
 			if (m_tabCurrent.Id == TabMgr.TabId.Sprites)
 				return null;
-			else if (m_tabCurrent.Id == TabMgr.TabId.Backgrounds)
+			else if (m_tabCurrent.Id == TabMgr.TabId.BackgroundMaps)
 				return m_doc.BackgroundMaps.CurrentMap;
 			return null;
 		}
@@ -192,6 +195,11 @@ namespace Spritely
 		public TabMgr GetTab(TabMgr.TabId id)
 		{
 			return m_tabs[(int)id];
+		}
+
+		public TabMgr GetTab(int id)
+		{
+			return m_tabs[id];
 		}
 
 		public void ShowTabs()
@@ -300,12 +308,17 @@ namespace Spritely
 			tabSprites.AddPaletteWindow(m_doc.Palettes.CurrentPalette.PaletteWindow);
 			tabSprites.ArrangeWindows();
 
-			TabMgr tabBackgrounds = GetTab(TabMgr.TabId.Backgrounds);
-			tabBackgrounds.AddSpritesetWindow(m_doc.BackgroundSpritesets.Current.SpritesetWindow);
-			tabBackgrounds.AddSpriteWindow(m_doc.BackgroundSpritesets.Current.SpriteWindow);
-			tabBackgrounds.AddPaletteWindow(m_doc.BackgroundPalettes.CurrentPalette.PaletteWindow);
-			tabBackgrounds.AddMapWindow(m_doc.BackgroundMaps.CurrentMap.MapWindow);
-			tabBackgrounds.ArrangeWindows();
+			TabMgr tabBackgroundMaps = GetTab(TabMgr.TabId.BackgroundMaps);
+			tabBackgroundMaps.AddSpritesetWindow(m_doc.BackgroundSpritesets.Current.SpritesetWindow);
+			tabBackgroundMaps.AddSpriteWindow(m_doc.BackgroundSpritesets.Current.SpriteWindow);
+			tabBackgroundMaps.AddPaletteWindow(m_doc.BackgroundPalettes.CurrentPalette.PaletteWindow);
+			tabBackgroundMaps.AddMapWindow(m_doc.BackgroundMaps.CurrentMap.MapWindow);
+			tabBackgroundMaps.ArrangeWindows();
+
+			TabMgr tabBackgroundImages = GetTab(TabMgr.TabId.BackgroundImages);
+			tabBackgroundImages.AddBgImageListWindow(m_doc.BackgroundImages.BgImageListWindow);
+			tabBackgroundImages.AddBgImageWindow(m_doc.BackgroundImages.BgImageWindow);
+			tabBackgroundImages.ArrangeWindows();
 		}
 
 		/// <summary>
@@ -313,8 +326,8 @@ namespace Spritely
 		/// </summary>
 		public void DeleteAllSubwindows()
 		{
-			GetTab(TabMgr.TabId.Sprites).RemoveAllWindows();
-			GetTab(TabMgr.TabId.Backgrounds).RemoveAllWindows();
+			for (int i=0; i<(int)TabMgr.TabId.MAX; i++)
+				GetTab(i).RemoveAllWindows();
 			GC.Collect();
 		}
 
@@ -324,14 +337,18 @@ namespace Spritely
 		/// </summary>
 		public void HandleEverythingChanged()
 		{
+			m_doc.Spritesets.Current.FlushBitmaps();
 			HandleSpriteDataChanged(m_doc.Spritesets.Current);
 			HandleSpriteTypeChanged(m_doc.Spritesets.Current);
 			HandleColorDataChange(m_doc.Palettes.CurrentPalette);
 
+			m_doc.BackgroundSpritesets.Current.FlushBitmaps();
 			HandleSpriteDataChanged(m_doc.BackgroundSpritesets.Current);
 			HandleSpriteTypeChanged(m_doc.BackgroundSpritesets.Current);
 			HandleColorDataChange(m_doc.BackgroundPalettes.CurrentPalette);
 			HandleMapDataChange(m_doc.BackgroundMaps.CurrentMap);
+
+			HandleBackgroundImageListChanged(m_doc.BackgroundImages);
 		}
 
 		/// <summary>
@@ -339,7 +356,7 @@ namespace Spritely
 		/// </summary>
 		public void HandleSpriteSelectionChanged(Spriteset ss)
 		{
-			m_doc.HasUnsavedChanges = true;
+			//m_doc.HasUnsavedChanges = true;
 			ss.Palette.PaletteWindow.SpriteSelectionChanged();
 			ss.SpritesetWindow.SpriteSelectionChanged();
 			ss.SpriteWindow.SpriteSelectionChanged();
@@ -412,7 +429,7 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// A color value has changed in the current palette. Notify other windows.
+		/// A color value has changed in the current palette.
 		/// </summary>
 		public void HandleColorDataChange(Palette p)
 		{
@@ -428,9 +445,45 @@ namespace Spritely
 			m.MapWindow.MapDataChanged();
 		}
 
+		/// <summary>
+		/// The background image list has changed.
+		/// E.g., by having an image added or deleted.
+		/// </summary>
+		public void HandleBackgroundImageListChanged(BgImages bgis)
+		{
+			m_doc.HasUnsavedChanges = true;
+			BgImageListForm win = bgis.BgImageListWindow;
+			if (win != null)
+			{
+				win.RecalcScrollHeights();
+				win.AdjustScrollbar();
+			}
+		}
+
+		/// <summary>
+		/// The current background image seletion has changed.
+		/// </summary>
+		public void HandleBackgroundImageSelectionChanged(BgImages bgis)
+		{
+			bgis.BgImageListWindow.BgImageSelectionChanged();
+			bgis.BgImageWindow.BgImageSelectionChanged();
+		}
+
 		#endregion
 			
 		#region User Messaging
+
+		/// <summary>
+		/// A dummy function on which we can set a debug breakpoint.
+		/// This routine is called in some circumstances where the code is not
+		/// functioning correctly/efficiently, but we don't want to show an
+		/// error/warning to the user.
+		/// By setting a breakpoint here, we can catch these conditions in
+		/// the debugger.
+		/// </summary>
+		private void BreakpointCheck()
+		{
+		}
 
 		public void Info(string str)
 		{
@@ -445,11 +498,29 @@ namespace Spritely
 
 		public void Warning(string str)
 		{
+			if (!m_doc.ShowMessageCheck)
+			{
+				// Oops! ProjectMainForm.Warning was called directly.
+				// Call Document.WarningString/WarningId instead.
+				BreakpointCheck();
+			}
 			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
+		/// <summary>
+		/// Display an error message to the user.
+		/// This is called by Document.ErrorString/ErrorId and should not be called directly.
+		/// </summary>
+		/// <param name="str"></param>
 		public void Error(string str)
 		{
+			if (!m_doc.ShowMessageCheck)
+			{
+				// Oops! ProjectMainForm.Error was called directly.
+				// Call Document.ErrorString/ErrorId instead.
+				// Set a breakpoint on the following line to detect this situation.
+				BreakpointCheck();
+			}
 			MessageBox.Show(str, AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
@@ -460,6 +531,13 @@ namespace Spritely
 		/// <returns>True if yes, false if no</returns>
 		public bool AskYesNo(string str)
 		{
+			if (!m_doc.ShowMessageCheck)
+			{
+				// Oops! ProjectMainForm.Error was called directly.
+				// Call Document.ErrorString/ErrorId instead.
+				// Set a breakpoint on the following line to detect this situation.
+				BreakpointCheck();
+			}
 			DialogResult result = MessageBox.Show(str, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (result == DialogResult.Yes)
 				return true;
@@ -474,6 +552,13 @@ namespace Spritely
 		/// <returns>True if yes, false if no</returns>
 		public bool AskYesNoCancel(string str, out bool fCancel)
 		{
+			if (!m_doc.ShowMessageCheck)
+			{
+				// Oops! ProjectMainForm.Error was called directly.
+				// Call Document.ErrorString/ErrorId instead.
+				// Set a breakpoint on the following line to detect this situation.
+				BreakpointCheck();
+			}
 			fCancel = false;
 			DialogResult result = MessageBox.Show(this, str, AppName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 			if (result == DialogResult.Cancel)
