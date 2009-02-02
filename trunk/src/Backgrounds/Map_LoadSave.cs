@@ -79,7 +79,6 @@ namespace Spritely
 
 			if (nColumn != 32)
 			{
-				// TODO: error message
 				m_doc.ErrorString("Incorrect number of tiles in maprow {0} of map '{1}'", nRow, Name);
 				return false;
 			}
@@ -110,7 +109,7 @@ namespace Spritely
 				tw.WriteLine(String.Format("\t\t\t\t<map16row row=\"{0}\">", iy));
 
 				StringBuilder sb = null;
-				int nPerLine = 4;
+				int nPerLine = 8;
 				for (int ix = 0; ix < kMaxMapTilesX; ix++)
 				{
 					if (ix % nPerLine == 0)
@@ -120,16 +119,9 @@ namespace Spritely
 						sb = new StringBuilder("\t\t\t\t\t");
 					}
 
-					// Internal tile id.
-					int nTileId = m_BackgroundMap[ix, iy].nTileIndex;
-					// Find sprite that owns this tile.
-					Sprite s = m_ss.FindSprite(nTileId);
-					// Tile index into sprite.
-					int nTileIndex = nTileId - s.FirstTileId;
-					// Export Id for this tile.
-					int nExportId = s.ExportFirstTileId + nTileIndex;
+					int nTileExportId = m_ss.GetTileExportId(m_BackgroundMap[ix, iy].nTileIndex);
 
-					sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nExportId));
+					sb.Append(String.Format("<map16tile tile_id=\"{0}\"", nTileExportId));
 					if (m_BackgroundMap[ix, iy].nSubpalette != nDefaultSubpalette)
 						sb.Append(String.Format(" subpalette_id=\"{1}\"", m_BackgroundMap[ix, iy].nSubpalette));
 					// TODO: add flip h,v values
@@ -168,10 +160,10 @@ namespace Spritely
 				StringBuilder sb = new StringBuilder();
 				for (int ix = 0; ix < kMaxMapTilesX; ix++)
 				{
-					int nTile = m_BackgroundMap[ix, iy].nTileIndex;
+					int nTileId = m_ss.GetTileExportId(m_BackgroundMap[ix, iy].nTileIndex);
 					int nSubpaletteId = m_BackgroundMap[ix, iy].nSubpalette;
 					//TODO: add support for h/v flipped tiles
-					int nMap = (nSubpaletteId << 12) | nTile;
+					int nMap = (nSubpaletteId << 12) | nTileId;
 					sb.Append(String.Format("0x{0:x4},", nMap));
 				}
 				tw.WriteLine("\t{0}", sb.ToString());

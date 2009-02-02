@@ -28,6 +28,11 @@ namespace Spritely
 			}
 		}
 
+		public Dictionary<int, Map>.ValueCollection AllMaps
+		{
+			get { return m_maps.Values; }
+		}
+
 		public int NumMaps
 		{
 			get { return m_maps.Count; }
@@ -73,14 +78,14 @@ namespace Spritely
 						int id = XMLUtils.GetXMLIntegerAttribute(xn, "id");
 						string strDesc = XMLUtils.GetXMLAttribute(xn, "desc");
 						string strSize = XMLUtils.GetXMLAttribute(xn, "size");
-						int nPaletteId = XMLUtils.GetXMLIntegerAttribute(xn, "palette_id");
+						int nSpritesetId = XMLUtils.GetXMLIntegerAttribute(xn, "bgspriteset_id");
 						int nDefaultSubpaletteId = XMLUtils.GetXMLIntegerAttribute(xn, "default_subpalette_id");
 
 						string[] aSize = strSize.Split('x');
 						int nWidth = XMLUtils.ParseInteger(aSize[0]);
 						int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
-						Spriteset ts = m_doc.BackgroundSpritesets.GetSpriteset(id);
+						Spriteset ts = m_doc.BackgroundSpritesets.GetSpriteset(nSpritesetId);
 						Map m = AddMap(strName, id, strDesc, ts);
 						if (!m.LoadXML_map16(xn, nDefaultSubpaletteId))
 							return false;
@@ -108,7 +113,7 @@ namespace Spritely
 		{
 			int nMapExportId = 0;
 			foreach (Map m in m_maps.Values)
-				m.Export_AssignIDs(nMapExportId);
+				m.Export_AssignIDs(nMapExportId++);
 		}
 
 		public void Export_MapInfo(System.IO.TextWriter tw)
