@@ -12,8 +12,9 @@ typedef struct {
 	// Width/height for this image.
 	short int width, height;
 	
-	const unsigned short int *palette;
-	const unsigned char *data;
+%%GBA:%%	const unsigned short int *palette;
+%%GBA:%%	const unsigned char *data;
+%%NDS:%%	const unsigned short int *data;
 } BgImageInfoStruct;
 
 // These palette/image data arrays are defined in background_images.cpp

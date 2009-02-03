@@ -190,12 +190,20 @@ namespace Spritely
 				bgi.Export_AssignIDs(nBgImageExportId++);
 		}
 
-		public void Export_BgImageInfo(System.IO.TextWriter tw)
+		public void Export_BgImageInfo(System.IO.TextWriter tw, bool fNDS)
 		{
 			foreach (BgImage bgi in m_bgimages.Values)
 			{
-				tw.WriteLine(String.Format("\t{{{0,4},{1,4}, BgImgPal_{2}, BgImgData_{3}}}, // BgImage_{4}",
-					bgi.Bitmap.Width, bgi.Bitmap.Height, bgi.Name, bgi.Name, bgi.Name));
+				if (fNDS)
+				{
+					tw.WriteLine(String.Format("\t{{{0,4}, {1,4}, BgImgData_{2}}}, // BgImage_{3}",
+						bgi.Bitmap.Width, bgi.Bitmap.Height, bgi.Name, bgi.Name));
+				}
+				else
+				{
+					tw.WriteLine(String.Format("\t{{{0,4}, {1,4}, BgImgPal_{2}, BgImgData_{3}}}, // BgImage_{4}",
+						bgi.Bitmap.Width, bgi.Bitmap.Height, bgi.Name, bgi.Name, bgi.Name));
+				}
 			}
 		}
 
@@ -207,18 +215,27 @@ namespace Spritely
 			}
 		}
 
-		public void Export_BgImageHeaders(System.IO.TextWriter tw)
+		public void Export_BgImageHeaders(System.IO.TextWriter tw, bool fNDS)
 		{
 			foreach (BgImage bgi in m_bgimages.Values)
 			{
 				//tw.WriteLine(String.Format("#include \"{0}\"", bgi.HeaderFileName));
-				tw.WriteLine("const unsigned short int BgImgPal_{0}[] = {{", bgi.Name);
-				bgi.Export_BgImagePaletteData(tw);
-				tw.WriteLine("};");
+				if (fNDS)
+				{
+					tw.WriteLine("const unsigned short int BgImgData_{0}[] = {{", bgi.Name);
+					bgi.Export_BgImageData_Direct(tw);
+					tw.WriteLine("};");
+				}
+				else
+				{
+					tw.WriteLine("const unsigned short int BgImgPal_{0}[] = {{", bgi.Name);
+					bgi.Export_BgImagePaletteData(tw);
+					tw.WriteLine("};");
 
-				tw.WriteLine("const unsigned char BgImgData_{0}[] = {{", bgi.Name);
-				bgi.Export_BgImageData(tw);
-				tw.WriteLine("};");
+					tw.WriteLine("const unsigned char BgImgData_{0}[] = {{", bgi.Name);
+					bgi.Export_BgImageData_Paletted(tw);
+					tw.WriteLine("};");
+				}
 			}
 		}
 
@@ -230,11 +247,19 @@ namespace Spritely
 			}
 		}
 
-		public void Export_BgImageData(System.IO.TextWriter tw)
+		public void Export_BgImageData_Paletted(System.IO.TextWriter tw)
 		{
 			foreach (BgImage bgi in m_bgimages.Values)
 			{
-				bgi.Export_BgImageData(tw);
+				bgi.Export_BgImageData_Paletted(tw);
+			}
+		}
+
+		public void Export_BgImageData_Direct(System.IO.TextWriter tw)
+		{
+			foreach (BgImage bgi in m_bgimages.Values)
+			{
+				bgi.Export_BgImageData_Direct(tw);
 			}
 		}
 

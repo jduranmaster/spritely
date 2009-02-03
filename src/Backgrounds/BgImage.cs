@@ -335,6 +335,10 @@ namespace Spritely
 			m_nExportId = nExportId;
 		}
 
+		/// <summary>
+		/// Export the 256-color palette for this image.
+		/// </summary>
+		/// <param name="tw"></param>
 		public void Export_BgImagePaletteData(System.IO.TextWriter tw)
 		{
 			StringBuilder sb = null;
@@ -354,7 +358,11 @@ namespace Spritely
 				tw.WriteLine(sb.ToString());
 		}
 
-		public void Export_BgImageData(System.IO.TextWriter tw)
+		/// <summary>
+		/// Export the image as an array of 8-bit palette indices.
+		/// </summary>
+		/// <param name="tw"></param>
+		public void Export_BgImageData_Paletted(System.IO.TextWriter tw)
 		{
 			StringBuilder sb = null;
 			int nPerLine = 32;
@@ -371,6 +379,37 @@ namespace Spritely
 						sb = new StringBuilder("\t");
 					}
 					sb.Append(String.Format("0x{0:x2},", m_ImageData[ix, iy]));
+				}
+				if (sb != null)
+					tw.WriteLine(sb.ToString());
+				sb = null;
+			}
+		}
+
+		/// <summary>
+		/// Export the image as an array of direct 16-bit color values.
+		/// </summary>
+		/// <param name="tw"></param>
+		public void Export_BgImageData_Direct(System.IO.TextWriter tw)
+		{
+			StringBuilder sb = null;
+			int nPerLine = 32;
+
+			for (int iy = 0; iy < m_height; iy++)
+			{
+				tw.WriteLine("\t// Row {0}", iy);
+				for (int ix = 0; ix < m_width; ix++)
+				{
+					if ((ix % nPerLine) == 0)
+					{
+						if (sb != null)
+							tw.WriteLine(sb.ToString());
+						sb = new StringBuilder("\t");
+					}
+					short palette_index = m_ImageData[ix, iy];
+					Color c = m_mapId2Color[palette_index];
+					int encoded = Color555.Encode(c);
+					sb.Append(String.Format("0x{0:x4},", encoded));
 				}
 				if (sb != null)
 					tw.WriteLine(sb.ToString());
