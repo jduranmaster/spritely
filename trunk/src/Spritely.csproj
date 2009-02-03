@@ -55,8 +55,8 @@
     <Compile Include="Forms\MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Maps\BgImages.cs" />
-    <Compile Include="Maps\BgImage.cs" />
+    <Compile Include="Backgrounds\BgImages.cs" />
+    <Compile Include="Backgrounds\BgImage.cs" />
     <Compile Include="Palettes\Color555.cs" />
     <Compile Include="Files\FileHandler_Export.cs" />
     <Compile Include="Files\FileHandler_Load.cs" />
@@ -93,16 +93,16 @@
     <Compile Include="Forms\TempForm.Designer.cs">
       <DependentUpon>TempForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Maps\Map.cs" />
+    <Compile Include="Backgrounds\Map.cs" />
     <Compile Include="Forms\CollisionTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CollisionTest.Designer.cs">
       <DependentUpon>CollisionTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Maps\MapBlock.cs" />
-    <Compile Include="Maps\Maps.cs" />
-    <Compile Include="Maps\Map_LoadSave.cs" />
+    <Compile Include="Backgrounds\MapBlock.cs" />
+    <Compile Include="Backgrounds\Maps.cs" />
+    <Compile Include="Backgrounds\Map_LoadSave.cs" />
     <Compile Include="Forms\Palette16Form.cs">
       <SubType>Form</SubType>
     </Compile>

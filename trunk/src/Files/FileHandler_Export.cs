@@ -52,8 +52,8 @@ namespace Spritely
 			new ExportFile("animation.h",		"animation_h.txt",		true,	false,	"source"),
 			new ExportFile("game_state.h",		"game_state_h.txt",		true,	true,	"source"),
 			new ExportFile("game_state.cpp",	"game_state_cpp.txt",	true,	true,	"source"),
-			new ExportFile("game_utils.h",		"game_utils_h.txt",		true,	true,	"source"),
-			new ExportFile("game_utils.cpp",	"game_utils_cpp.txt",	true,	true,	"source"),
+			new ExportFile("game_utils.h",		"game_utils_h.txt",		true,	false,	"source"),
+			new ExportFile("game_utils.cpp",	"game_utils_cpp.txt",	true,	false,	"source"),
 			new ExportFile("collision.cpp",		"collision_cpp.txt",	true,	false,	"source"),
 			new ExportFile("collision.h",		"collision_h.txt",		true,	false,	"source"),
 			new ExportFile("main.cpp",			"main_cpp.txt",			true,	false,	"source"),
@@ -383,7 +383,7 @@ namespace Spritely
 
 				if (strLine == "%%_BACKGROUND_IMAGE_INFO_%%")
 				{
-					bgimages.Export_BgImageInfo(tw);
+					bgimages.Export_BgImageInfo(tw, fNDS);
 					continue;
 				}
 				if (strLine == "%%_BACKGROUND_IMAGE_IDS_%%")
@@ -393,7 +393,7 @@ namespace Spritely
 				}
 				if (strLine == "%%_BACKGROUND_IMAGE_HEADERS_%%")
 				{
-					bgimages.Export_BgImageHeaders(tw);
+					bgimages.Export_BgImageHeaders(tw, fNDS);
 					continue;
 				}
 				if (strLine == "%%_BACKGROUND_IMAGE_PALETTEDATA_%%")
@@ -401,9 +401,14 @@ namespace Spritely
 					bgimages.Export_BgImagePaletteData(tw);
 					continue;
 				}
-				if (strLine == "%%_BACKGROUND_IMAGE_DATA_%%")
+				if (strLine == "%%_BACKGROUND_IMAGE_DATA_PALETTED_%%")
 				{
-					bgimages.Export_BgImageData(tw);
+					bgimages.Export_BgImageData_Paletted(tw);
+					continue;
+				}
+				if (strLine == "%%_BACKGROUND_IMAGE_DATA_DIRECT_%%")
+				{
+					bgimages.Export_BgImageData_Direct(tw);
 					continue;
 				}
 

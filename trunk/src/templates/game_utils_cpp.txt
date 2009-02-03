@@ -113,11 +113,30 @@ void LoadBgMap(int id) {
 }
 
 void LoadBgImage(int id) {
-	dmaCopy((void*)BgImageInfo[id].palette, (void*)BG_PALETTE, kPalette_Size);
-
-	int num_bytes = BgImageInfo[id].width * BgImageInfo[id].height;
-	dmaCopy((void*)BgImageInfo[id].data,
-%%NDS:%%						(void*)VRAM_A,
-%%GBA:%%						(void*)VRAM,
-						num_bytes);
+%%GBA:%%	dmaCopy((void*)BgImageInfo[id].palette, (void*)BG_PALETTE, kPalette_Size);
+%%GBA:%%
+	int w = BgImageInfo[id].width;
+	int h = BgImageInfo[id].height;
+	if (w == SCREEN_WIDTH && h == SCREEN_WIDTH) {
+		dmaCopy((void*)BgImageInfo[id].data,
+%%NDS:%%							(void*)VRAM_A,
+%%GBA:%%							(void*)VRAM,
+							w*h);
+	} else {
+%%NDS:%%		const u16 *fb = (const u16*)VRAM_A;
+%%NDS:%%		const u16 *bm = (const u16*)BgImageInfo[id].data;
+%%GBA:%%		const u8 *fb = (const u8*)VRAM;
+%%GBA:%%		const u8 *bm = (const u8*)BgImageInfo[id].data;
+		int num_bytes = SCREEN_WIDTH;
+		if (num_bytes > w)
+			num_bytes = w;
+%%NDS:%%		num_bytes *= 2;	// Each color requires 2 bytes
+		// Bitmap doesn't match screen/framebuffer.
+		// Copy each row separately.
+		for (int y=0; y<h; y++) {
+			dmaCopy((void*)bm, (void*)fb, num_bytes);
+			fb += SCREEN_WIDTH;
+			bm += w;
+		}
+	}
 }

@@ -1,4 +1,8 @@
-0.14.1
+0.14.2 *** CHECKPOINT ***
+Update background image code to work on NDS.
+  (NDS doesn't support paletted background images)
+
+0.14.1 *** CHECKPOINT ***
 Force window updates when display options change.
 Force window updates after applying undo/redo actions.
 Re-enable color encoding window.
