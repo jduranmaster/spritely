@@ -28,6 +28,7 @@ namespace Spritely
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UndoHistory));
 			this.bOK = new System.Windows.Forms.Button();
 			this.lbUndo = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
@@ -58,6 +59,7 @@ namespace Spritely
 			this.ClientSize = new System.Drawing.Size(289, 243);
 			this.Controls.Add(this.lbUndo);
 			this.Controls.Add(this.bOK);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "UndoHistory";
 			this.Text = "UndoHistory";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UndoHistory_FormClosing);

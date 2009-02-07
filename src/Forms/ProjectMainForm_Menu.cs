@@ -165,29 +165,25 @@ namespace Spritely
 			menuTest_CollisionTest.Visible = true;
 		}
 
+		private void AddSubmenuItem(ToolStripMenuItem tsmiParent, string str)
+		{
+			ToolStripMenuItem tsmi = new ToolStripMenuItem(str);
+			tsmi.Checked = true;
+			
+			// Remove any existing items (except the last 2: separator + "Add new")
+			while (tsmiParent.DropDownItems.Count > 2)
+				tsmiParent.DropDownItems.RemoveAt(0);
+
+			tsmiParent.DropDownItems.Insert(0, tsmi);
+		}
+
 		private void AddProjectMenuItems()
 		{
-			ToolStripMenuItem tsmi;
-
-			tsmi = new ToolStripMenuItem(m_doc.Palettes.GetPalette(0).Name);
-			tsmi.Checked = true;
-			menuProject_Palettes.DropDownItems.Insert(0, tsmi);
-
-			tsmi = new ToolStripMenuItem(m_doc.Spritesets.GetSpriteset(0).Name);
-			tsmi.Checked = true;
-			menuProject_Spritesets.DropDownItems.Insert(0, tsmi);
-
-			tsmi = new ToolStripMenuItem(m_doc.BackgroundPalettes.GetPalette(0).Name);
-			tsmi.Checked = true;
-			menuProject_BackgroundPalettes.DropDownItems.Insert(0, tsmi);
-
-			tsmi = new ToolStripMenuItem(m_doc.BackgroundSpritesets.GetSpriteset(0).Name);
-			tsmi.Checked = true;
-			menuProject_BackgroundTilesets.DropDownItems.Insert(0, tsmi);
-
-			tsmi = new ToolStripMenuItem(m_doc.BackgroundMaps.GetMap(0).Name);
-			tsmi.Checked = true;
-			menuProject_BackgroundMaps.DropDownItems.Insert(0, tsmi);
+			AddSubmenuItem(menuProject_Palettes, m_doc.Palettes.GetPalette(0).Name);
+			AddSubmenuItem(menuProject_Spritesets, m_doc.Spritesets.GetSpriteset(0).Name);
+			AddSubmenuItem(menuProject_BackgroundPalettes, m_doc.BackgroundPalettes.GetPalette(0).Name);
+			AddSubmenuItem(menuProject_BackgroundTilesets, m_doc.BackgroundSpritesets.GetSpriteset(0).Name);
+			AddSubmenuItem(menuProject_BackgroundMaps, m_doc.BackgroundMaps.GetMap(0).Name);
 		}
 
 		#region File Menu
@@ -363,7 +359,7 @@ namespace Spritely
 			int nWidth = Int32.Parse(aSize[0]);
 			int nHeight = Int32.Parse(aSize[1]);
 
-			ss.AddSprite(nWidth, nHeight, "", -1, "", 0, true);
+			ss.AddSprite(nWidth, nHeight, "", -1, "", 0, m_doc.Undo());
 			HandleSpriteDataChanged(ss);
 		}
 
@@ -577,7 +573,7 @@ namespace Spritely
 			if (p == null)
 				return;
 
-			ColorEncodingView cedit = new ColorEncodingView(p);
+			ColorEncodingView cedit = new ColorEncodingView(this, p);
 			DialogResult result = cedit.ShowDialog();
 
 			//UpdatePaletteColor(tab);

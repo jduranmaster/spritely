@@ -18,53 +18,60 @@ GameState::GameState() {
 
 // SetupStage
 // This sets up the stage for each level.
-// When you add new stages to your game, you need to add support here.
 void GameState::SetupStage(int stage) {
 	// Record which stage we're in.
 	_stage = stage;
 	
 	if (_stage == kStage_Title) {
-		// ToDo: Show the splash/title screen.
-		return;
+		SetupStage_Title();
 	}
 	
 	if (_stage == kStage_Level1) {
-		// Set the default sprite video mode.
-		SetSpriteVideoMode();
-		
-		// Setup the foreground sprites.
-		// The sprite data is not active until we copy it from our data tables
-		// (in sprites.cpp) into the real Palette and Graphics memory.
-		// So, let's copy the default spriteset there now.
-		ClearSprites();
-		LoadSpriteset(0);
-
-		// Setup the background tiles and map.
-		// Just like sprites, the data is not active until we copy it from our
-		// data tables (in background_maps.cpp) into real memory.
-		ClearBackgrounds();
-		LoadBgTileset(0);
-		LoadBgMap(0);
-
-		// Initialize the objects for the first stage.
-		InitObject(kObj_Player, 0);
-
-		// Set the initial location of each object.
-		_xPlayer = 0;
-		_yPlayer = 0;
-		MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
-		
-		// ToDo: Add more initialization for level 1 here.
-		
-		return;
+		SetupStage_Level1();
 	}
 
 	// ToDo: Add support for other game levels here.
 
 	if (_stage == kStage_GameOver) {
-		// ToDo: Show the game over screen.
-		return;
+		SetupStage_GameOver();
 	}	
+}
+
+void GameState::SetupStage_Title() {
+	// ToDo: Show the splash/title screen.
+}
+
+void GameState::SetupStage_Level1() {
+	// Set the default sprite video mode.
+	SetSpriteVideoMode();
+		
+	// Setup the foreground sprites.
+	// The sprite data is not active until we copy it from our data tables
+	// (in sprites.cpp) into the real Palette and Graphics memory.
+	// So, let's copy the default spriteset there now.
+	ClearSprites();
+	LoadSpriteset(0);
+
+	// Setup the background tiles and map.
+	// Just like sprites, the data is not active until we copy it from our
+	// data tables (in background_maps.cpp) into real memory.
+	ClearBackgrounds();
+	LoadBgTileset(0);
+	LoadBgMap(0);
+
+	// Initialize the objects for the first stage.
+	InitObject(kObj_Player, 0);
+
+	// Set the initial location of each object.
+	_xPlayer = 0;
+	_yPlayer = 0;
+	MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
+		
+	// ToDo: Add more initialization for level 1 here.
+}
+
+void GameState::SetupStage_GameOver() {
+	// ToDo: Show the gameover screen.
 }
 
 // Update
@@ -84,54 +91,62 @@ void GameState::Update() {
 
 	// Handle input for title screen.
 	if (_stage == kStage_Title) {
-		// ToDo: Handle buttons for title screen.
-		return;
+		Update_Title(keyPress, keyHeld);
 	}
 	
 	// Handle input for level 1.
 	if (_stage == kStage_Level1) {
-		// The arrow keys are used to move the current object.
-		// We use keyHeld because we want the action to repeat as long as the player is
-		// holding down the button.
-		int dx = 0;
-		int dy = 0;
-		if (keyHeld & KEY_LEFT)
-			dx = -1;
-		if (keyHeld & KEY_RIGHT)
-			dx = 1;
-		if (keyHeld & KEY_UP)
-			dy = -1;
-		if (keyHeld & KEY_DOWN)
-			dy = 1;
-
-		// Handle the player pressing the 'A' button.
-		// We use keyPress because we *don't* want the action to repeat unless the player
-		// presses the 'A' button multiple times.
-		if (keyPress & KEY_A) {
-			// ToDo: Add code to respond to 'A' button press here.
-		}
-	
-		// If we need to move the player.
-		if (dx != 0 || dy != 0) {
-			// Record the player's new location.
-			_xPlayer += dx;
-			_yPlayer += dy;
-
-			// Move the player to the new location.
-			MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
-		}
-	
-		// ToDo: Add additional game state updates for level 1 here.
-		
-		return;
+		Update_Level1(keyPress, keyHeld);
 	}
 
 	// ToDo: Add support for other game levels here.
 
 	// Handle input for game over screen.
 	if (_stage == kStage_GameOver) {
-		// ToDo: Handle buttons for game over screen (if needed).
-		return;
+		Update_GameOver(keyPress, keyHeld);
+	}
+}
+
+void GameState::Update_Title(u16 keyPress, u16 keyHeld) {
+	// ToDo: Handle buttons for title screen.
+}
+
+void GameState::Update_Level1(u16 keyPress, u16 keyHeld) {
+	// The arrow keys are used to move the current object.
+	// We use keyHeld because we want the action to repeat as long as the player is
+	// holding down the button.
+	int dx = 0;
+	int dy = 0;
+	if (keyHeld & KEY_LEFT)
+		dx = -1;
+	if (keyHeld & KEY_RIGHT)
+		dx = 1;
+	if (keyHeld & KEY_UP)
+		dy = -1;
+	if (keyHeld & KEY_DOWN)
+		dy = 1;
+
+	// Handle the player pressing the 'A' button.
+	// We use keyPress because we *don't* want the action to repeat unless the player
+	// presses the 'A' button multiple times.
+	if (keyPress & KEY_A) {
+		// ToDo: Add code to respond to 'A' button press here.
 	}
 	
+	// If we need to move the player.
+	if (dx != 0 || dy != 0) {
+		// Record the player's new location.
+		_xPlayer += dx;
+		_yPlayer += dy;
+
+		// Move the player to the new location.
+		MoveObjectTo(kObj_Player, _xPlayer, _yPlayer);
+	}
+	
+	// ToDo: Add additional game state updates for level 1 here.
 }
+
+void GameState::Update_GameOver(u16 keyPress, u16 keyHeld) {
+	// ToDo: Handle buttons for gameover screen.
+}
+

@@ -59,17 +59,17 @@ namespace Spritely
 			}
 		}
 
-		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, bool fAddUndo)
+		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, UndoMgr undo)
 		{
-			return AddSprite_(nWidth, nHeight, strName, id, strDesc, nSubpalette, fAddUndo);
+			return AddSprite_(nWidth, nHeight, strName, id, strDesc, nSubpalette, undo);
 		}
 
-		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, bool fAddUndo)
+		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, UndoMgr undo)
 		{
-			return AddSprite_(nWidth, nHeight, strName, id, strDesc, 0, fAddUndo);
+			return AddSprite_(nWidth, nHeight, strName, id, strDesc, 0, undo);
 		}
 
-		private Sprite AddSprite_(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, bool fAddUndo)
+		private Sprite AddSprite_(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, UndoMgr undo)
 		{
 			List<Sprite> slist = null;
 
@@ -85,10 +85,10 @@ namespace Spritely
 				return null;
 
 			Sprite s = new Sprite(m_doc, m_ss, nWidth, nHeight, strName, id, strDesc, nSubpalette);
-			return AddSprite(s, slist, fAddUndo);
+			return AddSprite(s, slist, undo);
 		}
 
-		public Sprite AddSprite(Sprite s, bool fAddUndo)
+		public Sprite AddSprite(Sprite s, UndoMgr undo)
 		{
 			List<Sprite> slist = null;
 
@@ -104,22 +104,18 @@ namespace Spritely
 			if (slist == null)
 				return null;
 
-			return AddSprite(s, slist, fAddUndo);
+			return AddSprite(s, slist, undo);
 		}
 
-		private Sprite AddSprite(Sprite s, List<Sprite> slist, bool fAddUndo)
+		private Sprite AddSprite(Sprite s, List<Sprite> slist, UndoMgr undo)
 		{
 			slist.Add(s);
 
 			m_nSprites++;
 			m_nTiles += (s.TileWidth * s.TileHeight);
 
-			if (fAddUndo)
-			{
-				UndoMgr undo = m_doc.Undo();
-				if (undo != null)
-					undo.Push(new UndoAction_AddSprite(undo, m_ss, s, true));
-			}
+			if (undo != null)
+				undo.Push(new UndoAction_AddSprite(undo, m_ss, s, true));
 
 			if (m_doc.Owner != null)
 				m_doc.Owner.HandleSpriteTypeChanged(m_ss);
@@ -153,7 +149,7 @@ namespace Spritely
 			while (HasNamedSprite(strNewName))
 				strNewName = String.Format("{0}{1}", strNewBaseName, ++nCopy);
 
-			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, m_ss.NextTileId++, sToCopy.Description, true);
+			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, m_ss.NextTileId++, sToCopy.Description, m_doc.Undo());
 			sNew.Duplicate(sToCopy);
 			return sNew;
 		}

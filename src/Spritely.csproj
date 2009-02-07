@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spritely</RootNamespace>
     <AssemblyName>Spritely</AssemblyName>
+    <ApplicationIcon>Resources\Spritely2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +49,12 @@
     </Compile>
     <Compile Include="Forms\BgImageForm.Designer.cs">
       <DependentUpon>BgImageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColorEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorEditor.Designer.cs">
+      <DependentUpon>ColorEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MapForm.cs">
       <SubType>Form</SubType>
@@ -173,6 +180,10 @@
     <EmbeddedResource Include="Forms\CollisionTest.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CollisionTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColorEditor.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ColorEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ColorEncodingView.resx">
       <SubType>Designer</SubType>
@@ -305,6 +316,8 @@
     <None Include="Resources\images\tool_nds.png" />
     <None Include="Resources\images\tool_gba.png" />
     <None Include="Resources\images\tool_hilite2.png" />
+    <Content Include="Resources\Spritely.ico" />
+    <Content Include="Resources\Spritely2.ico" />
     <Content Include="templates\animation_cpp.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

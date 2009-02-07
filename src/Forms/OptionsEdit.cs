@@ -17,9 +17,7 @@ namespace Spritely
 			// Set the checkboxes as appropriate.
 			cbSprite_PixelGrid.Checked = Options.Sprite_ShowPixelGrid;
 			cbSprite_TileGrid.Checked = Options.Sprite_ShowTileGrid;
-			cbSprite_ShowRedXForTransparent.Checked = Options.Sprite_ShowRedXForTransparent;
 			cbSprite_ShowPaletteIndex.Checked = Options.Sprite_ShowPaletteIndex;
-			cbPalette_ShowRedXForTransparent.Checked = Options.Palette_ShowRedXForTransparent;
 			cbPalette_ShowPaletteIndex.Checked = Options.Palette_ShowPaletteIndex;
 			cbMap_ShowScreen.Checked = Options.BackgroundMap_ShowScreen;
 			cbMap_ShowGrid.Checked = Options.BackgroundMap_ShowGrid;
@@ -45,22 +43,12 @@ namespace Spritely
 				Options.Sprite_ShowTileGrid = cbSprite_TileGrid.Checked;
 				fHasChange = true;
 			}
-			if (cbSprite_ShowRedXForTransparent.Checked != Options.Sprite_ShowRedXForTransparent)
-			{
-				Options.Sprite_ShowRedXForTransparent = cbSprite_ShowRedXForTransparent.Checked;
-				fHasChange = true;
-			}
 			if (cbSprite_ShowPaletteIndex.Checked != Options.Sprite_ShowPaletteIndex)
 			{
 				Options.Sprite_ShowPaletteIndex = cbSprite_ShowPaletteIndex.Checked;
 				fHasChange = true;
 			}
 
-			if (cbPalette_ShowRedXForTransparent.Checked != Options.Palette_ShowRedXForTransparent)
-			{
-				Options.Palette_ShowRedXForTransparent = cbPalette_ShowRedXForTransparent.Checked;
-				fHasChange = true;
-			}
 			if (cbPalette_ShowPaletteIndex.Checked != Options.Palette_ShowPaletteIndex)
 			{
 				Options.Palette_ShowPaletteIndex = cbPalette_ShowPaletteIndex.Checked;

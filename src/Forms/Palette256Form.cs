@@ -72,8 +72,6 @@ namespace Spritely
 			int nColumns = 16;
 			int pxSize = 10;
 
-			int pxInset = 2;
-
 			for (int iRow = 0; iRow < nRows; iRow++)
 			{
 				for (int iColumn = 0; iColumn < nColumns; iColumn++)
@@ -85,16 +83,9 @@ namespace Spritely
 
 					//g.FillRectangle(CurrentSubpalette.Brush(nIndex%16), pxX0, pxY0, pxSize, pxSize);
 
-					// Draw a red X over the transparent color (index 0).
-					if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-					{
-						int pxX0i = pxX0 + pxInset;
-						int pxY0i = pxY0 + pxInset;
-						int pxX1i = pxX0 + pxSize - pxInset;
-						int pxY1i = pxY0 + pxSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
+					// Draw the transparent color (index 0) using a pattern.
+					//if (nPaletteIndex == 0 && BigBitmapPixelSize >= 8)
+					//	g.FillRectangle(m_brushTransparent, pxX0, pxY0, pxSize, pxSize);
 
 					// Draw the palette index in each swatch.
 					if (Options.Palette_ShowPaletteIndex)

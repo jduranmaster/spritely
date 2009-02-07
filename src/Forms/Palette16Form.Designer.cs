@@ -57,6 +57,7 @@ namespace Spritely
 			this.pbPalette.Size = new System.Drawing.Size(99, 99);
 			this.pbPalette.TabIndex = 25;
 			this.pbPalette.TabStop = false;
+			this.pbPalette.DoubleClick += new System.EventHandler(this.pbPalette_DoubleClick);
 			this.pbPalette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbPalette_MouseMove);
 			this.pbPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbPalette_MouseDown);
 			this.pbPalette.Paint += new System.Windows.Forms.PaintEventHandler(this.pbPalette_Paint);

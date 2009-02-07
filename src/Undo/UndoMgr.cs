@@ -49,15 +49,15 @@ namespace Spritely
 		/// </summary>
 		int m_nCurrent;
 
-		int m_nID;
-		static int s_nNextID = 1;
+		//int m_nID;
+		//static int s_nNextID = 1;
 
 		public UndoMgr()
 		{
 			m_history = new List<UndoAction>();
 			m_nCurrent = -1;
 
-			m_nID = s_nNextID++;
+			//m_nID = s_nNextID++;
 		}
 
 		public void Reset()
@@ -82,6 +82,16 @@ namespace Spritely
 			foreach (UndoAction action in undo.m_history)
 				s_formView.Add(action);
 			s_formView.SetCurrent(undo.m_nCurrent);
+		}
+
+		public int Count
+		{
+			get { return m_history.Count; }
+		}
+
+		public int Current
+		{
+			get { return m_nCurrent; }
 		}
 
 		public bool CanUndo()

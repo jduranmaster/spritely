@@ -64,7 +64,7 @@ namespace Spritely
 			Spriteset ss = m_data.Spritesets.AddSpriteset(Options.DefaultSpritesetName, Options.DefaultPaletteId, "", pal);
 
 			// Add a single 2x2 sprite.
-			ss.AddSprite(2, 2, "", -1, "", 0, false);
+			ss.AddSprite(2, 2, "", -1, "", 0, null);
 			ss.SelectFirstSprite();
 
 			// Background palettes
@@ -75,7 +75,7 @@ namespace Spritely
 			Spriteset bss = m_data.BackgroundSpritesets.AddSpriteset(Options.DefaultBgTilesetName, Options.DefaultBgPaletteId, "", bgpal);
 
 			// Add a single blank background tile.
-			bss.AddSprite(1, 1, "", -1, "", 0, false);
+			bss.AddSprite(1, 1, "", -1, "", 0, null);
 			bss.SelectFirstSprite();
 
 			// Background tile map
@@ -306,6 +306,16 @@ namespace Spritely
 		public UndoMgr Undo()
 		{
 			return m_Undo[(int)m_form.CurrentTab.Id];
+		}
+
+		/// <summary>
+		/// Return the Undo manager for the specified tab.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public UndoMgr Undo(TabMgr.TabId id)
+		{
+			return m_Undo[(int)id];
 		}
 
 		/// <summary>

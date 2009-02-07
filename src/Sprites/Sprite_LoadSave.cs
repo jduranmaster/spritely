@@ -262,7 +262,7 @@ namespace Spritely
 			Assert.IsNotNull(p);
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -287,7 +287,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(2, 4, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(2, 4, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -315,7 +315,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -333,7 +333,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(2, 2, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(2, 2, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -351,7 +351,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -368,7 +368,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -385,7 +385,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");
@@ -402,7 +402,7 @@ namespace Spritely
 			Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 			Assert.IsNotNull(ss);
 			
-			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+			Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 			Assert.IsNotNull(s);
 
 			XmlElement xnSprite = m_xd.CreateElement("sprite16");

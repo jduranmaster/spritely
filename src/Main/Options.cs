@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Xml;
 
@@ -14,6 +15,11 @@ namespace Spritely
 		public static string DefaultBgPaletteName = "BgPal16";
 		public static int DefaultBgPaletteId = 0;
 		public static string DefaultMapName = "Map";
+
+		/// <summary>
+		/// The pattern to use when drawing transparent pixels.
+		/// </summary>
+		public static HatchStyle TransparentPattern = HatchStyle.DiagonalCross;//.DarkUpwardDiagonal;
 
 		public enum PlatformType
 		{
@@ -38,10 +44,8 @@ namespace Spritely
 		enum BoolOptionName {
 			Sprite_ShowPixelGrid,
 			Sprite_ShowTileGrid,
-			Sprite_ShowRedXForTransparent,
 			Sprite_ShowPaletteIndex,
 
-			Palette_ShowRedXForTransparent,
 			Palette_ShowPaletteIndex,
 
 			BackgroundMap_ShowGrid,
@@ -52,14 +56,18 @@ namespace Spritely
 		{
 			new BoolOptionInfo("sprite_show_pixelgrid", true),
 			new BoolOptionInfo("sprite_show_tilegrid", true),
-			new BoolOptionInfo("sprite_show_transparent", true),
 			new BoolOptionInfo("sprite_show_palette_index", false),
 
-			new BoolOptionInfo("palette_show_transparent", true),
 			new BoolOptionInfo("palette_show_palette_index", false),
 
 			new BoolOptionInfo("bgmap_show_tilegrid", true),
 			new BoolOptionInfo("bgmap_show_screen_boundary", true),
+		};
+
+		static string[] ObsoleteOptions = new string[]
+		{
+			"sprite_show_transparent",
+			"palette_show_transparent",
 		};
 
 		public static bool Sprite_ShowPixelGrid
@@ -72,22 +80,12 @@ namespace Spritely
 			get { return BoolOptions[(int)BoolOptionName.Sprite_ShowTileGrid].Value; }
 			set { BoolOptions[(int)BoolOptionName.Sprite_ShowTileGrid].Value = value; }
 		}
-		public static bool Sprite_ShowRedXForTransparent
-		{
-			get { return BoolOptions[(int)BoolOptionName.Sprite_ShowRedXForTransparent].Value; }
-			set { BoolOptions[(int)BoolOptionName.Sprite_ShowRedXForTransparent].Value = value; }
-		}
 		public static bool Sprite_ShowPaletteIndex
 		{
 			get { return BoolOptions[(int)BoolOptionName.Sprite_ShowPaletteIndex].Value; }
 			set { BoolOptions[(int)BoolOptionName.Sprite_ShowPaletteIndex].Value = value; }
 		}
 
-		public static bool Palette_ShowRedXForTransparent
-		{
-			get { return BoolOptions[(int)BoolOptionName.Palette_ShowRedXForTransparent].Value; }
-			set { BoolOptions[(int)BoolOptionName.Palette_ShowRedXForTransparent].Value = value; }
-		}
 		public static bool Palette_ShowPaletteIndex
 		{
 			get { return BoolOptions[(int)BoolOptionName.Palette_ShowPaletteIndex].Value; }
@@ -131,6 +129,14 @@ namespace Spritely
 				return true;
 			}
 
+			// Ignore obsolete options.
+			foreach (string badoption in ObsoleteOptions)
+			{
+				if (strName == badoption)
+					return true;
+			}
+
+			// Handle any boolean options.
 			foreach (BoolOptionInfo option in BoolOptions)
 			{
 				if (strName == option.Name)

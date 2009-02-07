@@ -84,6 +84,13 @@ namespace Spritely
 			pbSprites.Invalidate();
 		}
 
+		/// <summary>
+		/// One of the colors in the palette has changed.
+		/// </summary>
+		public void ColorDataChanged()
+		{
+			pbSprites.Invalidate();
+		}
 		#endregion
 
 		#region Scrollbar

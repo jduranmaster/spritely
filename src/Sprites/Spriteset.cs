@@ -143,7 +143,11 @@ namespace Spritely
 
 		public void RemoveSelectedSprite()
 		{
-			Sprite sToRemove = CurrentSprite;
+			RemoveSprite(CurrentSprite);
+		}
+
+		public void RemoveSprite(Sprite sToRemove)
+		{
 			m_sl.RemoveSprite(sToRemove, true);
 
 			foreach (Map m in m_Maps)
@@ -152,11 +156,11 @@ namespace Spritely
 			}
 		}
 
-		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, bool fAddUndo)
+		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, UndoMgr undo)
 		{
 			if (id == -1)
 				id = NextTileId++;
-			Sprite s = m_sl.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpalette, fAddUndo);
+			Sprite s = m_sl.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpalette, undo);
 
 			// Make this the currently selected sprite.
 			CurrentSprite = s;
@@ -249,7 +253,7 @@ namespace Spritely
 					int nWidth = XMLUtils.ParseInteger(aSize[0]);
 					int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
-					Sprite s = AddSprite(nWidth, nHeight, strName, NextSpriteId++, strDesc, nSubpaletteId, true);
+					Sprite s = AddSprite(nWidth, nHeight, strName, NextSpriteId++, strDesc, nSubpaletteId, m_doc.Undo());
 					if (!s.LoadXML_sprite16(xn, nTileId))
 						return false;
 
