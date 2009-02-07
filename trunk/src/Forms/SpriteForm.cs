@@ -39,6 +39,8 @@ namespace Spritely
 			Zoom_32x,
 		};
 
+		static System.Drawing.Drawing2D.HatchBrush m_brushTransparent = null;
+
 		public SpriteForm(ProjectMainForm parent, Spriteset ss, Sprite s)
 		{
 			m_parent = parent;
@@ -58,6 +60,13 @@ namespace Spritely
 
 			// Set to 16x.
 			cbZoom.SelectedIndex = (int)ZoomLevel.Zoom_16x;
+
+			if (m_brushTransparent == null)
+			{
+				m_brushTransparent = new System.Drawing.Drawing2D.HatchBrush(
+						Options.TransparentPattern,
+						Color.LightGray, Color.Transparent);
+			}
 		}
 
 		public Sprite Sprite
@@ -112,6 +121,14 @@ namespace Spritely
 		/// The currently subpalette selection has changed.
 		/// </summary>
 		public void SubpaletteSelectChanged()
+		{
+			pbSprite.Invalidate();
+		}
+
+		/// <summary>
+		/// One of the colors in the palette has changed.
+		/// </summary>
+		public void ColorDataChanged()
 		{
 			pbSprite.Invalidate();
 		}
@@ -386,10 +403,10 @@ namespace Spritely
 		{
 			// create a new bitmap
 			int pxSize = BigBitmapPixelSize;
-			int pxInset = pxSize / 4;
+			//int pxInset = pxSize / 4;
 			Subpalette sp = m_sprite.Subpalette;
 
-			Font f;
+			Font f; 
 			int[] nXOffset;
 			int nYOffset;
 			if (pxSize == 16)
@@ -416,16 +433,9 @@ namespace Spritely
 					int pxY0 = pxOriginY + (iRow * pxSize);
 					g.FillRectangle(sp.Brush(nPaletteIndex), pxX0, pxY0, pxSize, pxSize);
 
-					// Draw a red X over the transparent color (index 0).
-					if (Options.Sprite_ShowRedXForTransparent && nPaletteIndex == 0 && BigBitmapPixelSize >= 8)
-					{
-						int pxX0i = pxX0 + pxInset;
-						int pxY0i = pxY0 + pxInset;
-						int pxX1i = pxX0 + pxSize - pxInset;
-						int pxY1i = pxY0 + pxSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
+					// Draw the transparent color (index 0) using a pattern.
+					if (nPaletteIndex == 0 && BigBitmapPixelSize >= 8)
+						g.FillRectangle(m_brushTransparent, pxX0, pxY0, pxSize, pxSize);
 
 					if (Options.Sprite_ShowPaletteIndex && pxSize >= 16)
 					{

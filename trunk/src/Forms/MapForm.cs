@@ -136,6 +136,14 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// One of the colors in the palette has changed.
+		/// </summary>
+		public void ColorDataChanged()
+		{
+			pbMap.Invalidate();
+		}
+
+		/// <summary>
 		/// The data for the map has changed.
 		/// </summary>
 		public void MapDataChanged()

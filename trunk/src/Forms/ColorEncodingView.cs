@@ -10,13 +10,15 @@ namespace Spritely
 {
 	public partial class ColorEncodingView : Form
 	{
-		Subpalette m_Palette;
+		ProjectMainForm m_parent;
+		Subpalette m_subpalette;
 		bool m_fHasChanges = false;
 
 		/// <summary>
 		/// Pen used to hilight the current color in the palette.
 		/// </summary>
 		private static Pen m_penHilight = new Pen(Color.FromArgb(128, Color.Red), 3);
+		private static System.Drawing.Drawing2D.HatchBrush m_brushTransparent = null;
 
 		const int k_pxSwatchSize = 24;
 		const int k_nSwatches = 16;
@@ -29,14 +31,23 @@ namespace Spritely
 
 		int[] m_nRGBWordBits = new int[k_nRGBBits];
 
-		public ColorEncodingView(Subpalette p)
+		public ColorEncodingView(ProjectMainForm parent, Subpalette p)
 		{
+			m_parent = parent;
+
 			InitializeComponent();
 			this.DialogResult = DialogResult.No;
 
-			m_Palette = p;
+			m_subpalette = p;
 
 			AdjustColorScrollbars();
+
+			if (m_brushTransparent == null)
+			{
+				m_brushTransparent = new System.Drawing.Drawing2D.HatchBrush(
+						Options.TransparentPattern,
+						Color.LightGray, Color.Transparent);
+			}
 		}
 
 		private bool m_fUpdatePalette = true;
@@ -45,7 +56,7 @@ namespace Spritely
 		{
 			if (m_fUpdatePalette)
 			{
-				m_Palette.UpdateColor(sbRed.Value, sbGreen.Value, sbBlue.Value);
+				m_subpalette.UpdateColor(sbRed.Value, sbGreen.Value, sbBlue.Value);
 				AdjustColorScrollbars();
 				m_fHasChanges = true;
 			}
@@ -94,9 +105,9 @@ namespace Spritely
 			int nSelectedColor = nX;
 
 			// Update the selection if a new color has been selected.
-			if (m_Palette.CurrentColor != nSelectedColor)
+			if (m_subpalette.CurrentColor != nSelectedColor)
 			{
-				m_Palette.CurrentColor = nSelectedColor;
+				m_subpalette.CurrentColor = nSelectedColor;
 				return true;
 			}
 
@@ -108,21 +119,21 @@ namespace Spritely
 			int nIndex = 0;
 			m_nRGBWordBits[nIndex++] = 0;
 
-			int cBlue = m_Palette.Blue();
+			int cBlue = m_subpalette.Blue();
 			m_nRGBWordBits[nIndex++] = (cBlue & 0x10) == 0x10 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cBlue & 0x08) == 0x08 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cBlue & 0x04) == 0x04 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cBlue & 0x02) == 0x02 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cBlue & 0x01) == 0x01 ? 1 : 0;
 
-			int cGreen = m_Palette.Green();
+			int cGreen = m_subpalette.Green();
 			m_nRGBWordBits[nIndex++] = (cGreen & 0x10) == 0x10 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cGreen & 0x08) == 0x08 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cGreen & 0x04) == 0x04 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cGreen & 0x02) == 0x02 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cGreen & 0x01) == 0x01 ? 1 : 0;
 
-			int cRed = m_Palette.Red();
+			int cRed = m_subpalette.Red();
 			m_nRGBWordBits[nIndex++] = (cRed & 0x10) == 0x10 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cRed & 0x08) == 0x08 ? 1 : 0;
 			m_nRGBWordBits[nIndex++] = (cRed & 0x04) == 0x04 ? 1 : 0;
@@ -135,14 +146,16 @@ namespace Spritely
 			CalcRGBWord();
 
 			m_fUpdatePalette = false;
-			sbRed.Value = m_Palette.Red();
-			sbGreen.Value = m_Palette.Green();
-			sbBlue.Value = m_Palette.Blue();
+			sbRed.Value = m_subpalette.Red();
+			sbGreen.Value = m_subpalette.Green();
+			sbBlue.Value = m_subpalette.Blue();
 			m_fUpdatePalette = true;
 
 			lRed.Text = String.Format("{0:X2}", sbRed.Value);
 			lGreen.Text = String.Format("{0:X2}", sbGreen.Value);
 			lBlue.Text = String.Format("{0:X2}", sbBlue.Value);
+
+			m_parent.HandleColorDataChange(m_subpalette.Palette);
 
 			pbPalette.Invalidate();
 			pbPaletteLine.Invalidate();
@@ -170,8 +183,6 @@ namespace Spritely
 			Font f = new Font("Arial Black", 10);
 			int[] nXOffset = new int[16] { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 6 };
 
-			int pxInset = k_pxSwatchSize / 4;
-
 			for (int iColumn = 0; iColumn < k_nSwatches; iColumn++)
 			{
 				int nIndex = iColumn;
@@ -179,25 +190,18 @@ namespace Spritely
 				int pxX0 = 1 + iColumn * k_pxSwatchSize;
 				int pxY0 = 1;
 
-				g.FillRectangle(m_Palette.Brush(nIndex), pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
+				g.FillRectangle(m_subpalette.Brush(nIndex), pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
-				// Draw a red X over the transparent color (index 0).
-				if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-				{
-					int pxX0i = pxX0 + pxInset;
-					int pxY0i = pxY0 + pxInset;
-					int pxX1i = pxX0 + k_pxSwatchSize - pxInset;
-					int pxY1i = pxY0 + k_pxSwatchSize - pxInset;
-					g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-					g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-				}
+				// Draw the transparent color (index 0) using a pattern.
+				if (nIndex == 0)
+					g.FillRectangle(m_brushTransparent, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
 				// Draw the palette index in each swatch.
 				if (Options.Palette_ShowPaletteIndex)
 				{
 					int pxLabelOffsetX = nXOffset[nIndex];
 					int pxLabelOffsetY = 2;
-					g.DrawString(m_Palette.Label(nIndex), f, m_Palette.LabelBrush(nIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
+					g.DrawString(m_subpalette.Label(nIndex), f, m_subpalette.LabelBrush(nIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
 				}
 
 				// Draw a border around each color swatch.
@@ -207,14 +211,14 @@ namespace Spritely
 			g.DrawRectangle(Pens.Black, 0, 0, 2 + k_nSwatches * k_pxSwatchSize, 2 + k_pxSwatchSize);
 
 			// Hilight the currently selected color.
-			g.DrawRectangle(m_penHilight, (m_Palette.CurrentColor * k_pxSwatchSize) + 1, 1, k_pxSwatchSize, k_pxSwatchSize);
+			g.DrawRectangle(m_penHilight, (m_subpalette.CurrentColor * k_pxSwatchSize) + 1, 1, k_pxSwatchSize, k_pxSwatchSize);
 		}
 
 		private void pbPaletteLine_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
 			Pen p = new Pen(Color.LightGray, 3.0f);
-			g.DrawLine(p, (m_Palette.CurrentColor * k_pxSwatchSize) + k_pxSwatchSize/2, 0, 194, 32);
+			g.DrawLine(p, (m_subpalette.CurrentColor * k_pxSwatchSize) + k_pxSwatchSize/2, 0, 194, 32);
 		}
 
 		private void pbCurrent_Paint(object sender, PaintEventArgs e)
@@ -223,12 +227,12 @@ namespace Spritely
 
 			g.FillRectangle(Brushes.Black, 0, 0, 1000, 1000);
 
-			g.FillRectangle(m_Palette.Brush(), 1, 1, k_pxSwatchSize, k_pxSwatchSize);
+			g.FillRectangle(m_subpalette.Brush(), 1, 1, k_pxSwatchSize, k_pxSwatchSize);
 
 			// Draw a border around each color swatch.
 			g.DrawRectangle(Pens.White, 1, 1, k_pxSwatchSize, k_pxSwatchSize);
 
-			g.DrawRectangle(Pens.Black, 0, 0, 2 + k_nSwatches * k_pxSwatchSize, 2 + k_pxSwatchSize);
+			//g.DrawRectangle(Pens.Black, 0, 0, 2 + k_nSwatches * k_pxSwatchSize, 2 + k_pxSwatchSize);
 		}
 
 		private void pbRGBLine_Paint(object sender, PaintEventArgs e)
@@ -244,7 +248,7 @@ namespace Spritely
 		{
 			Graphics g = e.Graphics;
 
-			int cRed = m_Palette.Red();
+			int cRed = m_subpalette.Red();
 			int cOther = (31 - cRed) * 8;
 			Brush bRed = new SolidBrush(Color.FromArgb(0xff, cOther, cOther));
 			g.FillRectangle(bRed, 1, 1, k_pxRGBBitSize, k_pxRGBBitSize);
@@ -256,7 +260,7 @@ namespace Spritely
 		{
 			Graphics g = e.Graphics;
 
-			int cGreen = m_Palette.Green();
+			int cGreen = m_subpalette.Green();
 			int cOther = (31 - cGreen) * 8;
 			Brush bGreen = new SolidBrush(Color.FromArgb(cOther, 0xff, cOther));
 			g.FillRectangle(bGreen, 1, 1, k_pxRGBBitSize, k_pxRGBBitSize);
@@ -268,7 +272,7 @@ namespace Spritely
 		{
 			Graphics g = e.Graphics;
 
-			int cBlue = m_Palette.Blue();
+			int cBlue = m_subpalette.Blue();
 			int cOther = (31 - cBlue) * 8;
 			Brush bBlue = new SolidBrush(Color.FromArgb(cOther, cOther, 0xff));
 			g.FillRectangle(bBlue, 1, 1, k_pxRGBBitSize, k_pxRGBBitSize);
@@ -430,9 +434,9 @@ namespace Spritely
 			nY += nLineHeight;
 			for (int i = 0; i < 8; i++)
 			{
-				if (m_Palette.CurrentColor == i)
+				if (m_subpalette.CurrentColor == i)
 					g.DrawRectangle(Pens.Red, nX + 1 + nWidth0, nY + 1, nWidth1, nLineHeight);
-				g.DrawString(String.Format("0x{0:x4},", m_Palette.Encoding(i)), f, Brushes.Black, nX, nY);
+				g.DrawString(String.Format("0x{0:x4},", m_subpalette.Encoding(i)), f, Brushes.Black, nX, nY);
 				nX += nWidthTotal;
 			}
 
@@ -440,9 +444,9 @@ namespace Spritely
 			nX = nTabIndent;
 			for (int i = 0; i < 8; i++)
 			{
-				if (m_Palette.CurrentColor == i+8)
+				if (m_subpalette.CurrentColor == i+8)
 					g.DrawRectangle(Pens.Red, nX + 1 + nWidth0, nY + 1, nWidth1, nLineHeight);
-				g.DrawString(String.Format("0x{0:x4},", m_Palette.Encoding(8+i)), f, Brushes.Black, nX, nY);
+				g.DrawString(String.Format("0x{0:x4},", m_subpalette.Encoding(8+i)), f, Brushes.Black, nX, nY);
 				nX += nWidthTotal;
 			}
 			

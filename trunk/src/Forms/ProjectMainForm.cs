@@ -65,6 +65,8 @@ namespace Spritely
 
 		private void ProjectMainForm_Load(object sender, EventArgs e)
 		{
+			TabMgr.ResizeMainForm(this);
+
 			m_tabs = new TabMgr[(int)TabMgr.TabId.MAX];
 
 			TabMgr tabSprites = new TabMgr(this, TabMgr.TabId.Sprites);
@@ -433,7 +435,24 @@ namespace Spritely
 		/// </summary>
 		public void HandleColorDataChange(Palette p)
 		{
+			m_doc.FlushBitmaps();
+
 			p.PaletteWindow.ColorDataChanged();
+			Spriteset ss;
+			if (p.IsBackground)
+			{
+				ss = m_doc.BackgroundSpritesets.Current;
+				Map m = ActiveMap();
+				if (m != null)
+					m.MapWindow.ColorDataChanged();
+			}
+			else
+			{
+				ss = m_doc.Spritesets.Current;
+			}
+
+			ss.SpritesetWindow.ColorDataChanged();
+			ss.SpriteWindow.ColorDataChanged();
 		}
 
 		/// <summary>

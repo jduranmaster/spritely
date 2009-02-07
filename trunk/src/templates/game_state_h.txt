@@ -25,12 +25,18 @@ public:
 	GameState();
 	
 	// SetupStage
-	// Set up the stage (backgrounds, sprites) for the next level.
+	// Set up the stage (backgrounds, sprites) for the each level.
 	void SetupStage(int stage);
+	void SetupStage_Title();
+	void SetupStage_Level1();
+	void SetupStage_GameOver();
 	
 	// Update
 	// This is called continuously to update the game to the next state.
 	void Update();
+	void Update_Title(u16 keyPress, u16 keyHeld);
+	void Update_Level1(u16 keyPress, u16 keyHeld);
+	void Update_GameOver(u16 keyPress, u16 keyHeld);
 	
 private:
 	// The current stage of the game.

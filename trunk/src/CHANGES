@@ -1,3 +1,15 @@
+0.14.*
+Add icon
+Change transparent color display to use gray pattern instead of red 'x'.
+Remove option to display transparent color (always drawn as patten now).
+Adjust window size when app launches
+Cleanup Project menu on file close/load
+Add ColorEditor dialog
+Add basic Undo/Redo unittests
+Fix ParseHexString unittest
+Update generated code:
+  Broke SetupStage and Update into separate routines for each stage.
+
 0.14.2 *** CHECKPOINT ***
 Update background image code to work on NDS.
   (NDS doesn't support paletted background images)

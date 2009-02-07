@@ -28,6 +28,7 @@ namespace Spritely
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnitTestForm));
 			this.lbResults = new System.Windows.Forms.ListBox();
 			this.bOK = new System.Windows.Forms.Button();
 			this.SuspendLayout();
@@ -63,6 +64,7 @@ namespace Spritely
 			this.ClientSize = new System.Drawing.Size(439, 286);
 			this.Controls.Add(this.bOK);
 			this.Controls.Add(this.lbResults);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "UnitTestForm";
 			this.Text = "UnitTests";
 			this.Load += new System.EventHandler(this.UnitTestForm_Load);

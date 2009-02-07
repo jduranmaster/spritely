@@ -150,11 +150,47 @@ namespace Spritely
 		/// editing tab to size the sprite window and to calculate the x-offset
 		/// for the map window.
 		/// </summary>
+		/// 167,306
+		const int k_pxSpritesetWidth = 167;
+		const int k_pxSpritesetHeight = 306;
 		const int k_pxSprite1IdealWidth = 206;
 		const int k_pxSprite2IdealWidth = 330;
 		const int k_pxSprite4IdealWidth = 591;
 		const int k_pxBackgroundMapIdealWidth = 591;
+		const int k_pxBackgroundMapIdealHeight = 638;
 		const int k_pxBackgroundImageIdealWidth = 591;
+
+		public static void ResizeMainForm(ProjectMainForm form)
+		{
+			int pxScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+			int pxScreenHeight = Screen.PrimaryScreen.WorkingArea.Height;
+
+			// The size of the window - default to entire screen.
+			int pxWidth = pxScreenWidth;
+			int pxHeight = pxScreenHeight;
+
+			// Calc width of window frame (left + right side).
+			int pxFrameWidth = form.Width - form.ClientSize.Width + 6;
+
+			// The background map screen is the widest, so we use the form widths
+			// to determine the best window size.
+			int pxBgWidth = k_pxSpritesetWidth + k_pxSprite1IdealWidth
+					+ k_pxBackgroundMapIdealWidth + pxFrameWidth;
+			if (pxScreenWidth >= pxBgWidth)
+				pxWidth = pxBgWidth;
+
+			if (pxScreenHeight >= k_pxBackgroundMapIdealHeight)
+				pxHeight = k_pxBackgroundMapIdealHeight;
+
+			// Make sure the entire window is visible on the screen.
+			System.Drawing.Point ptLocation = form.Location;
+			if (ptLocation.X + pxWidth > pxScreenWidth)
+				ptLocation.X = pxScreenWidth - pxWidth;
+			if (ptLocation.Y + pxHeight > pxScreenHeight)
+				ptLocation.Y = pxScreenHeight - pxHeight;
+			form.Location = ptLocation;
+			form.Size = new System.Drawing.Size(pxWidth, pxHeight);
+		}
 
 		public void ArrangeWindows()
 		{
@@ -181,7 +217,11 @@ namespace Spritely
 				s.Height = m_owner.ContentHeight;
 
 				// Expand window to fill all remaining space.
-				s.Width = m_owner.ContentWidth - s.Left;
+				int pxSpace = m_owner.ContentWidth - s.Left;
+				if (pxSpace >= k_pxSprite4IdealWidth)
+					s.Width = k_pxSprite4IdealWidth;
+				else
+					s.Width = pxSpace;
 			}
 
 			if (m_eId == TabId.BackgroundMaps)
@@ -252,11 +292,10 @@ namespace Spritely
 				bgi.Height = m_owner.ContentHeight;
 
 				int pxSpace = m_owner.ContentWidth - bgi.Left;
-
 				if (pxSpace >= k_pxBackgroundImageIdealWidth)
 					bgi.Width = k_pxBackgroundMapIdealWidth;
 				else
-					bgi.Width = m_owner.ContentWidth - bgi.Left;
+					bgi.Width = pxSpace;
 			}
 		}
 

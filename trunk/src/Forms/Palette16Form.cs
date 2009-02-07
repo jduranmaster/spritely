@@ -13,6 +13,8 @@ namespace Spritely
 		private ProjectMainForm m_parent;
 		private Palette m_palette;
 
+		static System.Drawing.Drawing2D.HatchBrush m_brushTransparent = null;
+
 		public Palette16Form(ProjectMainForm parent, Palette p)
 		{
 			m_parent = parent;
@@ -31,6 +33,12 @@ namespace Spritely
 			else
 				Text = "Palette '" + p.Name + "'";
 
+			if (m_brushTransparent == null)
+			{
+				m_brushTransparent = new System.Drawing.Drawing2D.HatchBrush(
+						Options.TransparentPattern,
+						Color.LightGray, Color.Transparent);
+			}
 		}
 
 		#region Window events
@@ -253,7 +261,7 @@ namespace Spritely
 
 		private void pbPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			m_fPalette_OriginalColor = m_palette.CurrentSubpaletteId;
+			m_fPalette_OriginalColor = m_palette.GetCurrentSubpalette().CurrentColor;
 			m_fPalette_Selecting = true;
 
 			pbPalette_MouseMove(sender, e);
@@ -275,14 +283,14 @@ namespace Spritely
 			m_fPalette_Selecting = false;
 
 			// Record an undo action if the current color selection has changed
-			if (m_fPalette_OriginalColor != m_palette.CurrentSubpaletteId)
+			if (m_fPalette_OriginalColor != m_palette.GetCurrentSubpalette().CurrentColor)
 			{
 				Subpalette sp = m_palette.GetCurrentSubpalette();
 				sp.RecordUndoAction("select color");
 			}
 		}
 
-		private bool HandleMouse_Palette(int pxX, int pxY)
+		public bool HandleMouse_Palette(int pxX, int pxY)
 		{
 			if (pxX < 0 || pxY < 0)
 				return false;
@@ -308,11 +316,23 @@ namespace Spritely
 			return false;
 		}
 
+		private void pbPalette_DoubleClick(object sender, EventArgs e)
+		{
+			ColorEditor ce = new ColorEditor(m_parent, this, m_palette.GetCurrentSubpalette());
+			ce.ShowDialog();
+			pbPalette.Invalidate();
+			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
+		}
+
 		private void pbPalette_Paint(object sender, PaintEventArgs e)
 		{
-			Graphics g = e.Graphics;
+			DrawPalette(e.Graphics, m_palette.GetCurrentSubpalette());
+		}
+
+		public static void DrawPalette(Graphics g, Subpalette sp)
+		{
 			Font f = new Font("Arial Black", 10);
-			Subpalette sp = m_palette.GetCurrentSubpalette();
 
 			// TODO: query fontmetrics and center text in box
 			int[] nLabelXOffset = new int[16] { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 6 };
@@ -320,8 +340,6 @@ namespace Spritely
 			int nRows = k_nPaletteRows;
 			int nColumns = k_nPaletteColumns;
 			int pxSize = k_pxColorSize;
-
-			int pxInset = pxSize / 4;
 
 			for (int iRow = 0; iRow < nRows; iRow++)
 			{
@@ -334,16 +352,9 @@ namespace Spritely
 
 					g.FillRectangle(sp.Brush(nIndex), pxX0, pxY0, pxSize, pxSize);
 
-					// Draw a red X over the transparent color (index 0).
-					if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-					{
-						int pxX0i = pxX0 + pxInset;
-						int pxY0i = pxY0 + pxInset;
-						int pxX1i = pxX0 + pxSize - pxInset;
-						int pxY1i = pxY0 + pxSize - pxInset;
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-						g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-					}
+					// Draw the transparent color (index 0) using a pattern.
+					if (nIndex == 0)
+						g.FillRectangle(m_brushTransparent, pxX0, pxY0, pxSize, pxSize);
 
 					// Draw the palette index in each swatch.
 					if (Options.Palette_ShowPaletteIndex)
@@ -394,23 +405,14 @@ namespace Spritely
 			// TODO: query fontmetrics and center text in box
 			int[] nLabelXOffset = new int[16] { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 6 };
 
-			int pxInset = k_pxSwatchSize / 4;
-
 			int pxX0 = 1;
 			int pxY0 = 1;
 
 			g.FillRectangle(sp.Brush(nIndex), pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
-			// Draw a red X over the transparent color (index 0).
-			if (Options.Palette_ShowRedXForTransparent && nIndex == 0)
-			{
-				int pxX0i = pxX0 + pxInset;
-				int pxY0i = pxY0 + pxInset;
-				int pxX1i = pxX0 + k_pxSwatchSize - pxInset;
-				int pxY1i = pxY0 + k_pxSwatchSize - pxInset;
-				g.DrawLine(Pens.Firebrick, pxX0i, pxY0i, pxX1i, pxY1i);
-				g.DrawLine(Pens.Firebrick, pxX0i, pxY1i, pxX1i, pxY0i);
-			}
+			// Draw the transparent color (index 0) using a pattern.
+			if (nIndex == 0)
+				g.FillRectangle(m_brushTransparent, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
 			// Draw the palette index in each swatch.
 			if (Options.Palette_ShowPaletteIndex)

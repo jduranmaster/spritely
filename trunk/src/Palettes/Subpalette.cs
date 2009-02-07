@@ -229,6 +229,11 @@ namespace Spritely
 			m_snapshot = GetUndoData();
 		}
 
+		public Palette Palette
+		{
+			get { return m_mgr; }
+		}
+
 		public int SubpaletteID
 		{
 			get { return m_nSubpaletteID; }

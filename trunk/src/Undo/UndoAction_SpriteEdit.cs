@@ -8,7 +8,6 @@ namespace Spritely
 	{
 		UndoMgr m_mgr;
 		Spriteset m_ss;
-		//SpriteList m_spritelist;
 		Sprite m_sprite;
 		Sprite.UndoData m_before;
 		Sprite.UndoData m_after;

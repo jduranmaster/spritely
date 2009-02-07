@@ -82,7 +82,7 @@ namespace Spritely
 			{
 				Palette bgpal = m_doc.BackgroundPalettes.GetPalette(0);
 				m_doc.BackgroundSpritesets.AddSpriteset(Options.DefaultBgPaletteName, Options.DefaultBgPaletteId, "", bgpal);
-				m_doc.BackgroundSpritesets.Current.AddSprite(1, 1, "", -1, "", 0, false);
+				m_doc.BackgroundSpritesets.Current.AddSprite(1, 1, "", -1, "", 0, null);
 			}
 			if (!m_fFoundBackgroundMap)
 			{
@@ -288,7 +288,7 @@ namespace Spritely
 					int nWidth = XMLUtils.ParseInteger(aSize[0]);
 					int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
-					Sprite s = ts.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpaletteId, true);
+					Sprite s = ts.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpaletteId, m_doc.Undo());
 					if (s == null)
 					{
 						// "Invalid sprite size ({0}) for sprite named '{1}'."
@@ -531,11 +531,11 @@ namespace Spritely
 			{
 				Palette p = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 				Assert.IsNotNull(p);
-				
+
 				Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 				Assert.IsNotNull(ss);
-				
-				Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+
+				Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 				Assert.IsNotNull(s);
 
 				XmlElement xnSprite = m_xd.CreateElement("sprite");
@@ -555,15 +555,15 @@ namespace Spritely
 			{
 				Palette p = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 				Assert.IsNotNull(p);
-				
+
 				Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 				Assert.IsNotNull(ss);
-				
-				Sprite s = ss.AddSprite(2, 4, "sample", 0, "", 0, false);
+
+				Sprite s = ss.AddSprite(2, 4, "sample", 0, "", 0, null);
 				Assert.IsNotNull(s);
 
 				XmlElement xnSprite = m_xd.CreateElement("sprite");
-				for (int i=0; i < 8; i++)
+				for (int i = 0; i < 8; i++)
 					Test_LoadXML_OLD_sprite_AddTile(xnSprite, i);
 				Assert.IsTrue(m_filer.LoadXML_OLD_sprite(s, xnSprite.ChildNodes));
 
@@ -583,11 +583,11 @@ namespace Spritely
 			{
 				Palette p = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 				Assert.IsNotNull(p);
-				
+
 				Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 				Assert.IsNotNull(ss);
-				
-				Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, false);
+
+				Sprite s = ss.AddSprite(1, 1, "sample", 0, "", 0, null);
 				Assert.IsNotNull(s);
 
 				XmlElement xnSprite = m_xd.CreateElement("sprite");
@@ -601,11 +601,11 @@ namespace Spritely
 			{
 				Palette p = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 				Assert.IsNotNull(p);
-				
+
 				Spriteset ss = m_doc.Spritesets.AddSpriteset(Options.DefaultSpritesetName, 0, "", p);
 				Assert.IsNotNull(ss);
-				
-				Sprite s = ss.AddSprite(2, 2, "sample", 0, "", 0, false);
+
+				Sprite s = ss.AddSprite(2, 2, "sample", 0, "", 0, null);
 				Assert.IsNotNull(s);
 
 				XmlElement xnSprite = m_xd.CreateElement("sprite");
@@ -622,12 +622,12 @@ namespace Spritely
 				for (int y = 0; y < 8; y++)
 					for (int x = 0; x < 8; x++)
 					{
-						int b1 = x+y;
+						int b1 = x + y;
 						if (x == 0 && y == 0)
 							b1 = nTileId;
 						x++;
-						int b2 = x+y;
-						xnTile.InnerText += String.Format("0x{0:x2},", b2*16 + b1);
+						int b2 = x + y;
+						xnTile.InnerText += String.Format("0x{0:x2},", b2 * 16 + b1);
 					}
 				xnSprite.AppendChild(xnTile);
 			}
@@ -732,7 +732,7 @@ namespace Spritely
 				{
 					XmlElement xnTile = m_xd.CreateElement("bgtile");
 					xnTile.SetAttribute("x", i.ToString());
-					xnTile.SetAttribute("tileid", (id+i).ToString());
+					xnTile.SetAttribute("tileid", (id + i).ToString());
 					xnRow.AppendChild(xnTile);
 				}
 				xnMap.AppendChild(xnRow);

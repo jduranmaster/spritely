@@ -35,9 +35,7 @@ namespace Spritely
 			this.cbSprite_TileGrid = new System.Windows.Forms.CheckBox();
 			this.cbSprite_PixelGrid = new System.Windows.Forms.CheckBox();
 			this.cbSprite_ShowPaletteIndex = new System.Windows.Forms.CheckBox();
-			this.cbSprite_ShowRedXForTransparent = new System.Windows.Forms.CheckBox();
 			this.tabPalette = new System.Windows.Forms.TabPage();
-			this.cbPalette_ShowRedXForTransparent = new System.Windows.Forms.CheckBox();
 			this.cbPalette_ShowPaletteIndex = new System.Windows.Forms.CheckBox();
 			this.tabMap = new System.Windows.Forms.TabPage();
 			this.cbMap_ShowGrid = new System.Windows.Forms.CheckBox();
@@ -86,7 +84,6 @@ namespace Spritely
 			this.tabSprite.Controls.Add(this.cbSprite_TileGrid);
 			this.tabSprite.Controls.Add(this.cbSprite_PixelGrid);
 			this.tabSprite.Controls.Add(this.cbSprite_ShowPaletteIndex);
-			this.tabSprite.Controls.Add(this.cbSprite_ShowRedXForTransparent);
 			this.tabSprite.Location = new System.Drawing.Point(4, 22);
 			this.tabSprite.Name = "tabSprite";
 			this.tabSprite.Padding = new System.Windows.Forms.Padding(3);
@@ -118,28 +115,17 @@ namespace Spritely
 			// cbSprite_ShowPaletteIndex
 			// 
 			this.cbSprite_ShowPaletteIndex.AutoSize = true;
-			this.cbSprite_ShowPaletteIndex.Location = new System.Drawing.Point(20, 89);
+			this.cbSprite_ShowPaletteIndex.Location = new System.Drawing.Point(20, 66);
 			this.cbSprite_ShowPaletteIndex.Name = "cbSprite_ShowPaletteIndex";
 			this.cbSprite_ShowPaletteIndex.Size = new System.Drawing.Size(271, 17);
 			this.cbSprite_ShowPaletteIndex.TabIndex = 1;
 			this.cbSprite_ShowPaletteIndex.Text = "Show the palette index on each pixel (16x, 32x only)";
 			this.cbSprite_ShowPaletteIndex.UseVisualStyleBackColor = true;
 			// 
-			// cbSprite_ShowRedXForTransparent
-			// 
-			this.cbSprite_ShowRedXForTransparent.AutoSize = true;
-			this.cbSprite_ShowRedXForTransparent.Location = new System.Drawing.Point(20, 66);
-			this.cbSprite_ShowRedXForTransparent.Name = "cbSprite_ShowRedXForTransparent";
-			this.cbSprite_ShowRedXForTransparent.Size = new System.Drawing.Size(295, 17);
-			this.cbSprite_ShowRedXForTransparent.TabIndex = 0;
-			this.cbSprite_ShowRedXForTransparent.Text = "Show a red \'x\' for the transparent color (8x, 16x, 32x only)";
-			this.cbSprite_ShowRedXForTransparent.UseVisualStyleBackColor = true;
-			// 
 			// tabPalette
 			// 
 			this.tabPalette.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.tabPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tabPalette.Controls.Add(this.cbPalette_ShowRedXForTransparent);
 			this.tabPalette.Controls.Add(this.cbPalette_ShowPaletteIndex);
 			this.tabPalette.Location = new System.Drawing.Point(4, 22);
 			this.tabPalette.Name = "tabPalette";
@@ -148,20 +134,10 @@ namespace Spritely
 			this.tabPalette.Text = "Palette Edit";
 			this.tabPalette.UseVisualStyleBackColor = true;
 			// 
-			// cbPalette_ShowRedXForTransparent
-			// 
-			this.cbPalette_ShowRedXForTransparent.AutoSize = true;
-			this.cbPalette_ShowRedXForTransparent.Location = new System.Drawing.Point(20, 20);
-			this.cbPalette_ShowRedXForTransparent.Name = "cbPalette_ShowRedXForTransparent";
-			this.cbPalette_ShowRedXForTransparent.Size = new System.Drawing.Size(207, 17);
-			this.cbPalette_ShowRedXForTransparent.TabIndex = 0;
-			this.cbPalette_ShowRedXForTransparent.Text = "Show a red \'x\' for the transparent color";
-			this.cbPalette_ShowRedXForTransparent.UseVisualStyleBackColor = true;
-			// 
 			// cbPalette_ShowPaletteIndex
 			// 
 			this.cbPalette_ShowPaletteIndex.AutoSize = true;
-			this.cbPalette_ShowPaletteIndex.Location = new System.Drawing.Point(20, 43);
+			this.cbPalette_ShowPaletteIndex.Location = new System.Drawing.Point(20, 20);
 			this.cbPalette_ShowPaletteIndex.Name = "cbPalette_ShowPaletteIndex";
 			this.cbPalette_ShowPaletteIndex.Size = new System.Drawing.Size(239, 17);
 			this.cbPalette_ShowPaletteIndex.TabIndex = 1;
@@ -229,10 +205,8 @@ namespace Spritely
 		private System.Windows.Forms.Button bCancel;
 		private System.Windows.Forms.TabControl tcOptions;
 		private System.Windows.Forms.TabPage tabSprite;
-		private System.Windows.Forms.CheckBox cbSprite_ShowRedXForTransparent;
 		private System.Windows.Forms.CheckBox cbSprite_ShowPaletteIndex;
 		private System.Windows.Forms.TabPage tabPalette;
-		private System.Windows.Forms.CheckBox cbPalette_ShowRedXForTransparent;
 		private System.Windows.Forms.CheckBox cbPalette_ShowPaletteIndex;
 		private System.Windows.Forms.TabPage tabMap;
 		private System.Windows.Forms.CheckBox cbMap_ShowGrid;

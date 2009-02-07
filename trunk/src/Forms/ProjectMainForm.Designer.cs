@@ -28,6 +28,7 @@ namespace Spritely
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectMainForm));
 			this.tabSet = new System.Windows.Forms.TabControl();
 			this.tabSprites = new System.Windows.Forms.TabPage();
 			this.tabBackgroundMaps = new System.Windows.Forms.TabPage();
@@ -964,6 +965,7 @@ namespace Spritely
 			this.ClientSize = new System.Drawing.Size(742, 546);
 			this.Controls.Add(this.tabSet);
 			this.Controls.Add(this.menuBar);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.IsMdiContainer = true;
 			this.MainMenuStrip = this.menuBar;
 			this.Name = "ProjectMainForm";
