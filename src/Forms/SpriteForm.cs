@@ -51,6 +51,7 @@ namespace Spritely
 
 			SetSprite(s);
 			m_toolbox = new Toolbox_Sprite();
+			m_toolbox.CurrentTool = Toolbox.ToolType.Pencil;
 
 			MdiParent = parent;
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -147,7 +148,7 @@ namespace Spritely
 				pbTools.Invalidate();
 
 				m_sprite.ShiftPixels(m_toolbox.HilightedShiftArrow());
-				m_sprite.RecordUndoAction("shift");
+				m_sprite.RecordUndoAction("shift", m_parent.ActiveUndo());
 				m_parent.HandleSpriteDataChanged(m_ss);
 				return;
 			}
@@ -269,7 +270,7 @@ namespace Spritely
 				{
 					Sprite s = m_ss.CurrentSprite;
 					if (s != null)
-						s.RecordUndoAction(strTool);
+						s.RecordUndoAction(strTool, m_parent.ActiveUndo());
 				}
 			}
 
@@ -312,7 +313,7 @@ namespace Spritely
 			}
 
 			Tile t = m_sprite.GetTile(nTileIndex);
-			int nColor = tool == Toolbox.ToolType.Eraser ? 0 : sp.CurrentColor;
+			int nColor = (tool == Toolbox.ToolType.Eraser ? 0 : sp.CurrentColor);
 
 			// Same color - no need to update.
 			if (t.GetPixel(pxTileX, pxTileY) == nColor)

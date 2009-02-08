@@ -24,7 +24,7 @@ namespace Spritely
 		/// <summary>
 		/// Undo managers for each tab.
 		/// </summary>
-		public UndoMgr[] m_Undo;
+		//public UndoMgr[] m_Undo;
 
 		/// <summary>
 		/// Initialize a Spritely document.
@@ -43,10 +43,10 @@ namespace Spritely
 
 			m_data.Filer = new FileHandler(this);
 
-			int numTabs = (int)TabMgr.TabId.MAX;
-			m_Undo = new UndoMgr[numTabs];
-			for (int iTab = 0; iTab < numTabs; iTab++)
-				m_Undo[iTab] = new UndoMgr();
+			//int numTabs = (int)TabMgr.TabId.MAX;
+			//m_Undo = new UndoMgr[numTabs];
+			//for (int iTab = 0; iTab < numTabs; iTab++)
+			//	m_Undo[iTab] = new UndoMgr();
 		}
 
 		/// <summary>
@@ -300,34 +300,6 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// Return the current Undo manager.
-		/// </summary>
-		/// <returns></returns>
-		public UndoMgr Undo()
-		{
-			return m_Undo[(int)m_form.CurrentTab.Id];
-		}
-
-		/// <summary>
-		/// Return the Undo manager for the specified tab.
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public UndoMgr Undo(TabMgr.TabId id)
-		{
-			return m_Undo[(int)id];
-		}
-
-		/// <summary>
-		/// Clear out all the info from all of the Undo buffers.
-		/// </summary>
-		public void ResetUndo()
-		{
-			for (int i=0; i<(int)TabMgr.TabId.MAX; ++i)
-				m_Undo[i].Reset();
-		}
-
-		/// <summary>
 		/// Flush all the bitmaps for all of the spritesets so that they can be
 		/// regenerated.
 		/// </summary>
@@ -397,7 +369,7 @@ namespace Spritely
 			BgImages bgis = m_data.BackgroundImages;
 			if (bgis != null)
 				bgis.SelectFirstImage();
-			ResetUndo();
+			Owner.ClearUndo();
 		}
 
 		public bool Close()

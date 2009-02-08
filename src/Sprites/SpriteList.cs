@@ -122,7 +122,7 @@ namespace Spritely
 			return s;
 		}
 
-		public Sprite DuplicateSprite(Sprite sToCopy)
+		public Sprite DuplicateSprite(Sprite sToCopy, UndoMgr undo)
 		{
 			if (sToCopy == null)
 				return null;
@@ -149,12 +149,12 @@ namespace Spritely
 			while (HasNamedSprite(strNewName))
 				strNewName = String.Format("{0}{1}", strNewBaseName, ++nCopy);
 
-			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, m_ss.NextTileId++, sToCopy.Description, m_doc.Undo());
+			Sprite sNew = AddSprite(sToCopy.TileWidth, sToCopy.TileHeight, strNewName, m_ss.NextTileId++, sToCopy.Description, undo);
 			sNew.Duplicate(sToCopy);
 			return sNew;
 		}
 
-		public void RemoveSprite(Sprite sToRemove, bool fAddUndo)
+		public void RemoveSprite(Sprite sToRemove, UndoMgr undo)
 		{
 			SpriteType stToRemove = null;
 			Sprite sPrev = null, sCurr = null,  sNext = null;
@@ -193,7 +193,6 @@ namespace Spritely
 
 			if (stToRemove.Sprites.Remove(sToRemove))
 			{
-				UndoMgr undo = m_doc.Undo();
 				m_ss.CurrentSprite = null;
 				if (undo != null)
 					m_ss.CurrentSprite = undo.FindMostRecentSprite();
@@ -203,10 +202,11 @@ namespace Spritely
 				m_nSprites--;
 				m_nTiles -= nTiles;
 
-				if (fAddUndo && undo != null)
+				if (undo != null)
 					undo.Push(new UndoAction_AddSprite(undo, m_ss, sToRemove, false));
 
-				m_doc.Owner.HandleSpriteTypeChanged(m_ss);
+				if (m_doc.Owner != null)
+					m_doc.Owner.HandleSpriteTypeChanged(m_ss);
 			}
 		}
 

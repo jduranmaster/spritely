@@ -40,6 +40,7 @@ namespace Spritely
 		public enum ToolType
 		{
 			Blank=0,
+			// Sprite editing tools
 			Select,
 			Pencil,
 			Eyedropper,
@@ -50,11 +51,14 @@ namespace Spritely
 			RectFilled,
 			Ellipse,
 			EllipseFilled,
+			// Map tools
 			GBA,
 			NDS,
+			//FloodFill,
+			RubberStamp,
 		};
 
-		private ToolType m_eSelectedTool = ToolType.Pencil;
+		private ToolType m_eSelectedTool = ToolType.Blank;
 
 		public ToolType CurrentTool
 		{

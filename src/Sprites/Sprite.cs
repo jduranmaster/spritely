@@ -12,7 +12,6 @@ namespace Spritely
 		private Spriteset m_ss;
 		private SpriteList m_sl;
 
-		private int m_nSubpaletteID;
 		private Tile[] m_Tiles;
 		private string m_strName;
 		private string m_strDesc;
@@ -33,7 +32,7 @@ namespace Spritely
 		/// </summary>
 		public class UndoData
 		{
-			public int palette;
+			public int subpalette;
 			public Tile.UndoData[] tiles;
 			public string name;
 			public string desc;
@@ -43,7 +42,7 @@ namespace Spritely
 
 			public UndoData(int nWidth, int nHeight)
 			{
-				palette = 0;
+				subpalette = 0;
 				name = "";
 				desc = "";
 				width = nWidth;
@@ -55,7 +54,7 @@ namespace Spritely
 
 			public UndoData(UndoData data)
 			{
-				palette = data.palette;
+				subpalette = data.subpalette;
 				name = data.name;
 				desc = data.desc;
 				width = data.width;
@@ -69,7 +68,7 @@ namespace Spritely
 
 			public bool Equals(UndoData data)
 			{
-				if (palette != data.palette
+				if (subpalette != data.subpalette
 					|| name != data.name
 					|| desc != data.desc
 					|| width != data.width
@@ -159,7 +158,7 @@ namespace Spritely
 			m_strName = strName;
 
 			m_strDesc = strDesc;
-			m_nSubpaletteID = nSubpalette;
+			SubpaletteID = nSubpalette;
 			m_tileWidth = nWidth;
 			m_tileHeight = nHeight;
 
@@ -180,7 +179,7 @@ namespace Spritely
 		public void Duplicate(Sprite sToCopy)
 		{
 			CopyData(sToCopy);
-			m_nSubpaletteID = sToCopy.m_nSubpaletteID;
+			SubpaletteID = sToCopy.SubpaletteID;
 		}
 
 		/// <summary>
@@ -285,10 +284,15 @@ namespace Spritely
 			set { m_strDesc = value; }
 		}
 
+		private int m_nSubpaletteID;
 		public int SubpaletteID
 		{
 			get { return m_nSubpaletteID; }
-			set { m_nSubpaletteID = value; }
+			set {
+				m_nSubpaletteID = value;
+				if (m_ss.CurrentSprite == this)
+					m_ss.Palette.CurrentSubpaletteId = m_nSubpaletteID;
+			}
 		}
 
 		//public Palette Palette
@@ -298,7 +302,7 @@ namespace Spritely
 
 		public Subpalette Subpalette
 		{
-			get { return m_ss.Palette.GetSubpalette(m_nSubpaletteID); }
+			get { return m_ss.Palette.GetSubpalette(SubpaletteID); }
 		}
 
 		public Tile GetTile(int nTileIndex)
@@ -761,9 +765,8 @@ namespace Spritely
 
 		#region Undo
 
-		public void RecordUndoAction(string strDesc)
+		public void RecordUndoAction(string strDesc, UndoMgr undo)
 		{
-			UndoMgr undo = m_doc.Undo();
 			if (undo == null)
 				return;
 
@@ -800,7 +803,7 @@ namespace Spritely
 
 			undo.name = m_strName;
 			undo.desc = m_strDesc;
-			undo.palette = m_nSubpaletteID;
+			undo.subpalette = SubpaletteID;
 			undo.width = m_tileWidth;
 			undo.height = m_tileHeight;
 
@@ -822,7 +825,7 @@ namespace Spritely
 
 			m_strName = undo.name;
 			m_strDesc = undo.desc;
-			m_nSubpaletteID = undo.palette;
+			SubpaletteID = undo.subpalette;
 			m_tileWidth = undo.width;
 			m_tileHeight = undo.height;
 

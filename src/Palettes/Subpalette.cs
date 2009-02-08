@@ -113,12 +113,11 @@ namespace Spritely
 			m_data = new UndoData(k_nColors);
 			m_Brush = new SolidBrush[k_nColors];
 
-			SetDefaultSubpaletteColors(eDefaultColorSet);
-
 			// Default color = black (index 1)
 			m_data.currentColor = 1;
 
-			m_snapshot = GetUndoData();
+			m_snapshot = new UndoData(k_nColors);
+			SetDefaultSubpaletteColors(eDefaultColorSet);
 		}
 
 		/// <summary>
@@ -146,6 +145,7 @@ namespace Spritely
 					break;
 			}
 
+			RecordSnapshot();
 		}
 
 		private void DefaultPalette_BlackAndWhite()
@@ -226,7 +226,7 @@ namespace Spritely
 		{
 			for (int i = 0; i < k_nColors; i++)
 				UpdateColor(i, pal.Red(i), pal.Green(i), pal.Blue(i));
-			m_snapshot = GetUndoData();
+			RecordSnapshot();
 		}
 
 		public Palette Palette
@@ -255,11 +255,6 @@ namespace Spritely
 		public int Encoding(int nIndex)
 		{
 			return Color555.Encode(m_data.cRed[nIndex], m_data.cGreen[nIndex], m_data.cBlue[nIndex]);
-		}
-
-		public int Encoding(int cRed, int cGreen, int cBlue)
-		{
-			return Color555.Encode(cRed, cGreen, cBlue);
 		}
 
 		/// <summary>
@@ -352,9 +347,8 @@ namespace Spritely
 			UpdateColor(nIndex, cRed, cGreen, cBlue);
 		}
 
-		public void RecordUndoAction(string strDesc)
+		public void RecordUndoAction(string strDesc, UndoMgr undo)
 		{
-			UndoMgr undo = m_doc.Undo();
 			if (undo == null)
 				return;
 

@@ -110,7 +110,7 @@ namespace Spritely
 			tw.Write(String.Format(" id=\"{0}\"", nExportSpriteID));
 			tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
 			tw.Write(String.Format(" size=\"{0}x{1}\"", m_tileWidth, m_tileHeight));
-			tw.Write(String.Format(" subpalette_id=\"{0}\"", m_nSubpaletteID));
+			tw.Write(String.Format(" subpalette_id=\"{0}\"", SubpaletteID));
 			tw.WriteLine(">");
 
 			int nTileID = ExportFirstTileId;
@@ -176,7 +176,7 @@ namespace Spritely
 
 			tw.WriteLine(String.Format("\t{{{0,4},{1,4},{2,4},{3,4},{4,4},{5,4},{6,16},{7,16} }}, // Sprite_{8}",
 				m_nExportFirstTileID, NumTiles,
-				PixelWidth, PixelHeight, m_nSubpaletteID,
+				PixelWidth, PixelHeight, SubpaletteID,
 				m_nMaskIndex,
 				strShape, strSize, m_strName));
 		}

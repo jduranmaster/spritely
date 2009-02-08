@@ -211,16 +211,16 @@ namespace Spritely
 			int nTileId, nSubpaletteId;
 			bool fHorizontal, fVertical;
 
-			m.GetBackgroundTile(2, 4, out nTileId, out nSubpaletteId);
+			m.GetTile(2, 4, out nTileId, out nSubpaletteId);
 			m.GetFlip(2, 4, out fHorizontal, out fVertical);
 			Assert.AreEqual(6, nTileId);
 			Assert.AreEqual(0, nSubpaletteId);
 			
-			m.GetBackgroundTile(7, 9, out nTileId, out nSubpaletteId);
+			m.GetTile(7, 9, out nTileId, out nSubpaletteId);
 			Assert.AreEqual(16, nTileId);
 			Assert.AreEqual(0, nSubpaletteId);
 			
-			m.GetBackgroundTile(31, 31, out nTileId, out nSubpaletteId);
+			m.GetTile(31, 31, out nTileId, out nSubpaletteId);
 			Assert.AreEqual(62, nTileId);
 			Assert.AreEqual(1, nSubpaletteId);	// x==y, so subpalette=1
 

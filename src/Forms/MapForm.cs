@@ -71,6 +71,7 @@ namespace Spritely
 
 			SetMap(m);
 			m_toolbox = new Toolbox_Map();
+			m_toolbox.CurrentTool = Toolbox.ToolType.RubberStamp;
 
 			MdiParent = parent;
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -215,14 +216,15 @@ namespace Spritely
 		{
 			if (m_fEditBackgroundMap_Selecting)
 			{
-				if (HandleMouse_EditMap(e.X, e.Y))
+				Toolbox.ToolType tool = m_toolbox.CurrentTool;
+				if (HandleMouse(e.X, e.Y, tool))
 				{
 					m_parent.HandleMapDataChange(m_map);
 				}
 			}
 
 			// Update boundary rect for currently selected sprite.
-			if (HandleMouseMove_EditMap(e.X, e.Y))
+			if (HandleMouseMove(e.X, e.Y))
 			{
 				pbMap.Invalidate();
 			}
@@ -230,14 +232,21 @@ namespace Spritely
 
 		private void pbMap_MouseUp(object sender, MouseEventArgs e)
 		{
-			if (HandleMouseMove_EditMap(-10, -10))
+			if (HandleMouseMove(-100, -100))
 			{
 				pbMap.Invalidate();
 			}
 			m_fEditBackgroundMap_Selecting = false;
 		}
 
-		public bool HandleMouse_EditMap(int pxX, int pxY)
+		/// <summary>
+		/// Handle a mouse move while the mouse button is held down.
+		/// </summary>
+		/// <param name="pxX"></param>
+		/// <param name="pxY"></param>
+		/// <param name="tool"></param>
+		/// <returns>True if we need to update the map display.</returns>
+		public bool HandleMouse(int pxX, int pxY, Toolbox.ToolType tool)
 		{
 			Sprite spriteSelected = m_ss.CurrentSprite;
 			if (spriteSelected == null)
@@ -253,34 +262,47 @@ namespace Spritely
 			if (x >= k_nMaxMapTilesX || y >= k_nMaxMapTilesY)
 				return false;
 
-			bool fUpdate = false;
-			int nIndex = 0;
-			for (int iy = 0; iy < spriteSelected.TileHeight; iy++)
+			if (tool == Toolbox.ToolType.FloodFill)
+				return FloodFillClick(x, y);
+
+			if (tool == Toolbox.ToolType.RubberStamp)
 			{
-				if (y + iy >= k_nMaxMapTilesY)
+				bool fUpdate = false;
+				int nIndex = 0;
+				for (int iy = 0; iy < spriteSelected.TileHeight; iy++)
 				{
-					nIndex++;
-					continue;
-				}
-				for (int ix = 0; ix < spriteSelected.TileWidth; ix++)
-				{
-					if (x + ix >= k_nMaxMapTilesX)
+					if (y + iy >= k_nMaxMapTilesY)
 					{
 						nIndex++;
 						continue;
 					}
-					m_map.SetBackgroundTile(x + ix, y + iy,
-							spriteSelected.FirstTileId + nIndex,
-							spriteSelected.SubpaletteID);
-					nIndex++;
-					fUpdate = true;
+					for (int ix = 0; ix < spriteSelected.TileWidth; ix++)
+					{
+						if (x + ix >= k_nMaxMapTilesX)
+						{
+							nIndex++;
+							continue;
+						}
+						m_map.SetTile(x + ix, y + iy,
+								spriteSelected.FirstTileId + nIndex,
+								spriteSelected.SubpaletteID);
+						nIndex++;
+						fUpdate = true;
+					}
 				}
+				return fUpdate;
 			}
 
-			return fUpdate;
+			return false;
 		}
 
-		public bool HandleMouseMove_EditMap(int pxX, int pxY)
+		/// <summary>
+		/// Highlight a mouse move over the map when the mouse button is not being held.
+		/// </summary>
+		/// <param name="pxX"></param>
+		/// <param name="pxY"></param>
+		/// <returns>True if we need to update the map display</returns>
+		public bool HandleMouseMove(int pxX, int pxY)
 		{
 			Sprite spriteSelected = m_ss.CurrentSprite;
 			if (spriteSelected == null)
@@ -327,7 +349,7 @@ namespace Spritely
 				{
 					bool fDrawn = false;
 					int nTileId, nSubpalette;
-					m_map.GetBackgroundTile(ix, iy, out nTileId, out nSubpalette);
+					m_map.GetTile(ix, iy, out nTileId, out nSubpalette);
 					Sprite s = m_map.Spriteset.FindSprite(nTileId);
 					if (s != null)
 					{
@@ -401,6 +423,134 @@ namespace Spritely
 				pxHeight = spriteSelected.TileHeight * pxTileSize;
 				g.DrawRectangle(m_penHilight, pxX, pxY, pxWidth, pxHeight);
 				g.DrawRectangle(m_penHilight2, pxX, pxY, pxWidth, pxHeight);
+			}
+		}
+
+		#endregion
+
+		#region FloodFill tool
+
+		public struct TileCoord
+		{
+			public int X, Y;
+
+			public TileCoord(int x, int y)
+			{
+				X = x;
+				Y = y;
+			}
+		}
+
+		/// <summary>
+		/// Perform a floodfill click at the specified (x,y) tile coords
+		/// </summary>
+		/// <param name="nMapX">Map click x-position (in tiles)</param>
+		/// <param name="nMapY">Map click y-position (in tiles)</param>
+		/// <returns>True if the map changes as a result of this click, false otherwise.</returns>
+		public bool FloodFillClick(int nMapX, int nMapY)
+		{
+			int tileOld, subpaletteOld;
+			m_map.GetTile(nMapX, nMapY, out tileOld, out subpaletteOld);
+			Sprite spriteOld = m_ss.FindSprite(tileOld);
+
+			Sprite spriteNew = m_ss.CurrentSprite;
+			int tileNew = spriteNew.FirstTileId;
+			int subpaletteNew = spriteNew.SubpaletteID;
+
+			// Sprite & tile & subpalette match - nothing to do.
+			if (tileOld == tileNew && subpaletteOld == subpaletteNew)
+				return false;
+
+			// If the old/new sprite matches, then we're filling over the same sprite,
+			// but with the tiles offset. We need to first floodfill with another tile
+			// so that we can detect the sprite boundaries correctly.
+			if (spriteNew == spriteOld)
+			{
+				FloodFill_Sprite(nMapX, nMapY, spriteOld, subpaletteOld, null, -1, subpaletteOld);
+				FloodFill_Sprite(nMapX, nMapY, null, subpaletteOld, spriteNew, tileNew, subpaletteOld);
+				return true;
+			}
+
+			return FloodFill_Sprite(nMapX, nMapY, spriteOld, subpaletteOld, spriteNew, tileNew, subpaletteNew);
+		}
+
+		private Stack<TileCoord> m_stackTiles;
+		private Dictionary<TileCoord, bool> m_tilesDone;
+
+		private bool FloodFill_Sprite(int nMapX, int nMapY,
+				Sprite spriteOld, int subpaletteOld,
+				Sprite spriteNew, int tileNew, int subpaletteNew)
+		{
+			int spriteWidth = spriteNew == null ? 1 : spriteNew.TileWidth;
+			int spriteHeight = spriteNew == null ? 1 : spriteNew.TileHeight;
+
+			// Stack of tiles to process.
+			m_stackTiles = new Stack<TileCoord>();
+			m_tilesDone = new Dictionary<TileCoord, bool>();
+
+			TileCoord t = new TileCoord(nMapX, nMapY);
+			m_stackTiles.Push(t);
+			m_tilesDone.Add(t, true);
+
+			// Adjust the mapclick origin off the map (negative) so that all of our
+			// offset calculations are guaranteed to be positive.
+			while (nMapX > 0)
+				nMapX -= spriteWidth;
+			while (nMapY > 0)
+				nMapY -= spriteHeight;
+
+			while (m_stackTiles.Count != 0)
+			{
+				t = m_stackTiles.Pop();
+
+				// Calc tile within sprite that we're painting:
+				//
+				//  Current sprite:   abcd
+				//                    efgh
+				//
+				//  Original:    Click:       After:
+				//  ___...___    ___...___    ___efg___
+				//  __.....__    __.x...__    __dabcd__
+				//  __...____    __...____    __hef____
+				//  ____.____    ____.____    ____b____
+				//
+				//  '.' marks the map coords that belong to the same sprite
+				//    (regardless of the particular tile within the sprite).
+				int dx = (t.X - nMapX) % spriteWidth;
+				int dy = (t.Y - nMapY) % spriteHeight;
+				int tile = tileNew + dx + dy * spriteWidth;
+
+				m_map.SetTile(t.X, t.Y, tile, subpaletteNew);
+
+				FloodFill_CheckTile(t.X - 1, t.Y, spriteOld, subpaletteOld);
+				FloodFill_CheckTile(t.X + 1, t.Y, spriteOld, subpaletteOld);
+				FloodFill_CheckTile(t.X, t.Y - 1, spriteOld, subpaletteOld);
+				FloodFill_CheckTile(t.X, t.Y + 1, spriteOld, subpaletteOld);
+			}
+
+			m_stackTiles = null;
+			m_tilesDone = null;
+			return true;
+		}
+
+		private void FloodFill_CheckTile(int x, int y, Sprite spriteOld, int subpaletteOld)
+		{
+			if (x >= 0 && x < m_map.Width
+				&& y >= 0 && y < m_map.Height)
+			{
+				int tile, subpalette;
+				m_map.GetTile(x, y, out tile, out subpalette);
+				Sprite sprite = m_ss.FindSprite(tile);
+
+				if (sprite == spriteOld && subpalette == subpaletteOld)
+				{
+					TileCoord t = new TileCoord(x, y);
+					if (!m_tilesDone.ContainsKey(t))
+					{
+						m_stackTiles.Push(t);
+						m_tilesDone.Add(t, true);
+					}
+				}
 			}
 		}
 

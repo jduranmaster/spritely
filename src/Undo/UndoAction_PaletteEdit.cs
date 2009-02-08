@@ -64,8 +64,8 @@ namespace Spritely
 					)
 				{
 					nColorIndex = i;
-					nColorValue1 = m_subpalette.Encoding(m_before.cRed[i], m_before.cGreen[i], m_before.cBlue[i]);
-					nColorValue2 = m_subpalette.Encoding(m_after.cRed[i], m_after.cGreen[i], m_after.cBlue[i]);
+					nColorValue1 = Color555.Encode(m_before.cRed[i], m_before.cGreen[i], m_before.cBlue[i]);
+					nColorValue2 = Color555.Encode(m_after.cRed[i], m_after.cGreen[i], m_after.cBlue[i]);
 				}
 			}
 			return nColorIndex != -1;

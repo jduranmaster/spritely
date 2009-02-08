@@ -1,4 +1,12 @@
-0.14.*
+0.14.8
+Add floodfill (paintbucket) tool to background maps
+Fix redo bug (can't redo the very first undo action)
+Update (debug) UndoHistory window to show history for all 3 tabs
+Fix bug where undo/redo of sprite subpalette change did not update palette window
+Activate menu items during App.Idle so that key shortcuts work consistently
+Unittests: Undo/Redo for AddSprite/Editsprite
+
+0.14.6 *** CHECKPOINT ***
 Add icon
 Change transparent color display to use gray pattern instead of red 'x'.
 Remove option to display transparent color (always drawn as patten now).

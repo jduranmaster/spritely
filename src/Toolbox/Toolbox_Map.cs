@@ -20,6 +20,11 @@ namespace Spritely
 							ResourceMgr.GetBitmap("tool_gba")));
 			PlatformTools.Add(new Tool("NDS", ToolType.NDS, 1, 0, true, true,
 							ResourceMgr.GetBitmap("tool_nds")));
+
+			Tools.Add(new Tool("RubberStamp", ToolType.RubberStamp, 0, 0, true, true,
+						ResourceMgr.GetBitmap("tool_rubberstamp")));
+			Tools.Add(new Tool("FloodFill", ToolType.FloodFill, 1, 0, true, true,
+						ResourceMgr.GetBitmap("tool_floodfill")));
 		}
 
 		public override bool HandleMouse(int pxX, int pxY)
@@ -28,11 +33,6 @@ namespace Spritely
 			if (base.HandleMouse(pxX, pxY))
 				return true;
 
-			return HandlePlatformToolsMouse(pxX, pxY);
-		}
-
-		private bool HandlePlatformToolsMouse(int pxX, int pxY)
-		{
 			// Handle the platform tools.
 			if (pxX < k_pxToolboxIndent || pxY < k_pxToolboxIndent)
 				return false;
@@ -70,11 +70,6 @@ namespace Spritely
 		{
 			base.Draw(g);
 
-			DrawPlatformTools(g);
-		}
-
-		private void DrawPlatformTools(Graphics g)
-		{
 			int pxX0, pxY0;
 			foreach (Tool t in PlatformTools)
 			{
