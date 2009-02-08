@@ -9,6 +9,7 @@ namespace Spritely
 	{
 		private ProjectMainForm m_owner;
 		private TabId m_eId;
+		private UndoMgr m_undo;
 
 		public enum TabId
 		{
@@ -36,6 +37,8 @@ namespace Spritely
 			m_owner = owner;
 			m_eId = id;
 
+			m_undo = new UndoMgr(owner, id);
+
 			m_winLists = new List<Form>[(int)FormListType.MAX];
 			for (int i=0; i<(int)FormListType.MAX; i++)
 				m_winLists[(int)i] = new List<Form>();
@@ -44,6 +47,14 @@ namespace Spritely
 		public TabId Id
 		{
 			get { return m_eId; }
+		}
+
+		/// <summary>
+		/// The undo manager for this tab.
+		/// </summary>
+		public UndoMgr Undo
+		{
+			get { return m_undo; }
 		}
 
 		private List<Form> WinList(FormListType eWinType)

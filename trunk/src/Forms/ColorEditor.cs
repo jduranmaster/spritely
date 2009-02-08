@@ -101,7 +101,7 @@ namespace Spritely
 			// Record an undo action if the current color selection has changed
 			if (m_fPalette_OriginalColor != m_subpalette.CurrentColor)
 			{
-				m_subpalette.RecordUndoAction("select color");
+				m_subpalette.RecordUndoAction("select color", m_parent.ActiveUndo());
 			}
 		}
 	}

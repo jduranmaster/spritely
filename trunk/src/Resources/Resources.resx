@@ -260,6 +260,9 @@ Please select a path that does not contain any spaces.</value>
   <data name="tool_rectfilled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_rectfilled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tool_rubberstamp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_rubberstamp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="tool_select" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_select.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -291,10 +294,10 @@ Please select a path that does not contain any spaces.</value>
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.14.6 beta</value>
+    <value>0.14.8 beta</value>
   </data>
   <data name="VersionDate" xml:space="preserve">
-    <value>6 February 2009</value>
+    <value>8 February 2009</value>
   </data>
   <data name="WARNING" xml:space="preserve">
     <value>WARNING: </value>

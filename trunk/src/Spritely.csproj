@@ -156,11 +156,11 @@
     <Compile Include="Forms\SpriteProperties.Designer.cs">
       <DependentUpon>SpriteProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UndoHistory.cs">
+    <Compile Include="Forms\UndoHistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UndoHistory.Designer.cs">
-      <DependentUpon>UndoHistory.cs</DependentUpon>
+    <Compile Include="Forms\UndoHistoryForm.Designer.cs">
+      <DependentUpon>UndoHistoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\Options.cs" />
     <Compile Include="Palettes\Subpalette.cs" />
@@ -233,9 +233,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>TempForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UndoHistory.resx">
+    <EmbeddedResource Include="Forms\UndoHistoryForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>UndoHistory.cs</DependentUpon>
+      <DependentUpon>UndoHistoryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UnitTestForm.resx">
       <SubType>Designer</SubType>
@@ -316,6 +316,7 @@
     <None Include="Resources\images\tool_nds.png" />
     <None Include="Resources\images\tool_gba.png" />
     <None Include="Resources\images\tool_hilite2.png" />
+    <Content Include="Resources\images\tool_rubberstamp.png" />
     <Content Include="Resources\Spritely.ico" />
     <Content Include="Resources\Spritely2.ico" />
     <Content Include="templates\animation_cpp.txt">

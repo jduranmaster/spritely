@@ -90,7 +90,7 @@ namespace Spritely
 			}
 
 			// Remove any UndoActions since we just loaded from a file.
-			m_doc.ResetUndo();
+			m_doc.Owner.ClearUndo();
 			return true;
 		}
 
@@ -288,7 +288,7 @@ namespace Spritely
 					int nWidth = XMLUtils.ParseInteger(aSize[0]);
 					int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
-					Sprite s = ts.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpaletteId, m_doc.Undo());
+					Sprite s = ts.AddSprite(nWidth, nHeight, strName, id, strDesc, nSubpaletteId, null);
 					if (s == null)
 					{
 						// "Invalid sprite size ({0}) for sprite named '{1}'."
@@ -401,7 +401,7 @@ namespace Spritely
 						int nTileID = XMLUtils.GetXMLIntegerAttribute(xn2, "tileid");
 						int nPaletteID = 0; // = Int32.Parse(GetXMLAttribute(xn2, "palette"));
 						if (x < 32 && y < 32)
-							m.SetBackgroundTile(x, y, nTileID, nPaletteID);
+							m.SetTile(x, y, nTileID, nPaletteID);
 						x++;
 					}
 
@@ -652,11 +652,11 @@ namespace Spritely
 				Assert.IsNotNull(m);
 
 				int nTileId, nSubpaletteId;
-				m.GetBackgroundTile(2, 4, out nTileId, out nSubpaletteId);
+				m.GetTile(2, 4, out nTileId, out nSubpaletteId);
 				Assert.AreEqual(6, nTileId);
-				m.GetBackgroundTile(7, 9, out nTileId, out nSubpaletteId);
+				m.GetTile(7, 9, out nTileId, out nSubpaletteId);
 				Assert.AreEqual(16, nTileId);
-				m.GetBackgroundTile(31, 31, out nTileId, out nSubpaletteId);
+				m.GetTile(31, 31, out nTileId, out nSubpaletteId);
 				Assert.AreEqual(62, nTileId);
 			}
 

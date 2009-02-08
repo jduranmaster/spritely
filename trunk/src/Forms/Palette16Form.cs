@@ -157,7 +157,7 @@ namespace Spritely
 			if (m_fSubpaletteSelect_OriginalSubpalette != m_palette.CurrentSubpaletteId)
 			{
 				Sprite s =  m_parent.ActiveSprite();
-				s.RecordUndoAction("palette select");
+				s.RecordUndoAction("palette select", m_parent.ActiveUndo());
 			}
 		}
 
@@ -286,7 +286,7 @@ namespace Spritely
 			if (m_fPalette_OriginalColor != m_palette.GetCurrentSubpalette().CurrentColor)
 			{
 				Subpalette sp = m_palette.GetCurrentSubpalette();
-				sp.RecordUndoAction("select color");
+				//sp.RecordUndoAction("select color", m_parent.ActiveUndo());
 			}
 		}
 

@@ -283,8 +283,6 @@ namespace Spritely
 
 		public void ApplyUndoData(UndoData undo)
 		{
-			// Note: If we ever allowed the TileSize to change, then we'd need 
-			// to handle that here.
 			for (int iRow = 0; iRow < TileSize; iRow++)
 			{
 				for (int iColumn = 0; iColumn < TileSize; iColumn++)

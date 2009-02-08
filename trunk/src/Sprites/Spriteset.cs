@@ -141,14 +141,14 @@ namespace Spritely
 			return String.Format(m_fIsBackground ? "BgS{0}" : "S{0}", NextSpriteId++);
 		}
 
-		public void RemoveSelectedSprite()
+		public void RemoveSelectedSprite(UndoMgr undo)
 		{
-			RemoveSprite(CurrentSprite);
+			RemoveSprite(CurrentSprite, undo);
 		}
 
-		public void RemoveSprite(Sprite sToRemove)
+		public void RemoveSprite(Sprite sToRemove, UndoMgr undo)
 		{
-			m_sl.RemoveSprite(sToRemove, true);
+			m_sl.RemoveSprite(sToRemove, undo);
 
 			foreach (Map m in m_Maps)
 			{
@@ -253,7 +253,7 @@ namespace Spritely
 					int nWidth = XMLUtils.ParseInteger(aSize[0]);
 					int nHeight = XMLUtils.ParseInteger(aSize[1]);
 
-					Sprite s = AddSprite(nWidth, nHeight, strName, NextSpriteId++, strDesc, nSubpaletteId, m_doc.Undo());
+					Sprite s = AddSprite(nWidth, nHeight, strName, NextSpriteId++, strDesc, nSubpaletteId, null);
 					if (!s.LoadXML_sprite16(xn, nTileId))
 						return false;
 

@@ -22,7 +22,7 @@ namespace Spritely
 
 			Description = "SpriteEdit " + sprite.Name + " " + strDesc;
 			if (IsPaletteChange())
-				Description += " " + before.palette + " to " + after.palette;
+				Description += " " + before.subpalette + " to " + after.subpalette;
 		}
 
 		public Sprite GetSprite
@@ -30,9 +30,19 @@ namespace Spritely
 			get { return m_sprite; }
 		}
 
+		public Sprite.UndoData Before
+		{
+			get { return m_before; }
+		}
+
+		public Sprite.UndoData After
+		{
+			get { return m_after; }
+		}
+
 		public bool IsPaletteChange()
 		{
-			return m_before.palette != m_after.palette;
+			return m_before.subpalette != m_after.subpalette;
 		}
 
 		public bool IsPixelChange()

@@ -40,8 +40,9 @@ namespace Spritely
 			menuFile_Exit.Enabled = true;
 
 			menuEdit.Enabled = true;
-			bool fCanUndo = fHasDoc && m_doc.Undo() != null && m_doc.Undo().CanUndo();
-			bool fCanRedo = fHasDoc && m_doc.Undo() != null && m_doc.Undo().CanRedo();
+			UndoMgr undo = ActiveUndo();
+			bool fCanUndo = fHasDoc && undo != null && undo.CanUndo();
+			bool fCanRedo = fHasDoc && undo != null && undo.CanRedo();
 			menuEdit_Undo.Enabled = fCanUndo;
 			menuEdit_Redo.Enabled = fCanRedo;
 			menuEdit_Cut.Enabled = false;
@@ -161,7 +162,7 @@ namespace Spritely
 			//menuTest.Visible = false;
 			menuTest_RunUnittests.Visible = true;
 			menuTest_ShowUndoHistory.Visible = true;
-			menuTest_ShowUndoHistory.Checked = UndoMgr.ShowDebugWindow;
+			menuTest_ShowUndoHistory.Checked = UndoHistoryVisible;
 			menuTest_CollisionTest.Visible = true;
 		}
 
@@ -313,7 +314,7 @@ namespace Spritely
 
 		private void menuEdit_Undo_Click(object sender, EventArgs e)
 		{
-			UndoMgr undo = m_doc.Undo();
+			UndoMgr undo = ActiveUndo();
 			if (undo == null)
 				return;
 			undo.ApplyUndo();
@@ -323,7 +324,7 @@ namespace Spritely
 
 		private void menuEdit_Redo_Click(object sender, EventArgs e)
 		{
-			UndoMgr undo = m_doc.Undo();
+			UndoMgr undo = ActiveUndo();
 			if (undo == null)
 				return;
 			undo.ApplyRedo();
@@ -359,7 +360,7 @@ namespace Spritely
 			int nWidth = Int32.Parse(aSize[0]);
 			int nHeight = Int32.Parse(aSize[1]);
 
-			ss.AddSprite(nWidth, nHeight, "", -1, "", 0, m_doc.Undo());
+			ss.AddSprite(nWidth, nHeight, "", -1, "", 0, ActiveUndo());
 			HandleSpriteDataChanged(ss);
 		}
 
@@ -376,7 +377,7 @@ namespace Spritely
 				if (!AskYesNo(ResourceMgr.GetString("EraseCurrentSprite")))
 					return;
 				s.Clear();
-				s.RecordUndoAction("clear");
+				s.RecordUndoAction("clear", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -389,10 +390,10 @@ namespace Spritely
 				return;
 
 			Sprite sToCopy = s;
-			Sprite sNew = ss.SpriteList.DuplicateSprite(sToCopy);
+			Sprite sNew = ss.SpriteList.DuplicateSprite(sToCopy, ActiveUndo());
 			if (sNew != null)
 			{
-				sNew.RecordUndoAction("duplicate");
+				//sNew.RecordUndoAction("duplicate", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -414,7 +415,7 @@ namespace Spritely
 
 			if (ss.SpriteList.ResizeSelectedSprite(tileWidth, tileHeight))
 			{
-				s.RecordUndoAction("resize");
+				s.RecordUndoAction("resize", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -433,7 +434,7 @@ namespace Spritely
 					return;
 			}
 
-			ss.RemoveSelectedSprite();
+			ss.RemoveSelectedSprite(ActiveUndo());
 			HandleSpriteDataChanged(ss);
 		}
 
@@ -449,7 +450,7 @@ namespace Spritely
 				SpriteList sl = ss.SpriteList;
 				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise90))
 				{
-					s.RecordUndoAction("rotatecw");
+					s.RecordUndoAction("rotatecw", ActiveUndo());
 					HandleSpriteDataChanged(ss);
 				}
 			}
@@ -467,7 +468,7 @@ namespace Spritely
 				SpriteList sl = ss.SpriteList;
 				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Counterclockwise90))
 				{
-					s.RecordUndoAction("rotateccw");
+					s.RecordUndoAction("rotateccw", ActiveUndo());
 					HandleSpriteDataChanged(ss);
 				}
 			}
@@ -485,7 +486,7 @@ namespace Spritely
 				SpriteList sl = ss.SpriteList;
 				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise180))
 				{
-					s.RecordUndoAction("rotate180");
+					s.RecordUndoAction("rotate180", ActiveUndo());
 					HandleSpriteDataChanged(ss);
 				}
 			}
@@ -501,7 +502,7 @@ namespace Spritely
 			if (!s.IsEmpty())
 			{
 				s.Flip(true, false);
-				s.RecordUndoAction("fliph");
+				s.RecordUndoAction("fliph", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -516,7 +517,7 @@ namespace Spritely
 			if (!s.IsEmpty())
 			{
 				s.Flip(false, true);
-				s.RecordUndoAction("flipv");
+				s.RecordUndoAction("flipv", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -531,7 +532,7 @@ namespace Spritely
 			if (!s.IsEmpty())
 			{
 				s.Flip(true, true);
-				s.RecordUndoAction("flipboth");
+				s.RecordUndoAction("flipboth", ActiveUndo());
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -653,8 +654,12 @@ namespace Spritely
 
 		private void menuTest_ShowUndoHistory_Click(object sender, EventArgs e)
 		{
-			UndoMgr.ShowDebugWindow = !UndoMgr.ShowDebugWindow;
-			menuTest_ShowUndoHistory.Checked = UndoMgr.ShowDebugWindow;
+			if (UndoHistoryVisible)
+				m_undoHistory.Hide();
+			else
+				m_undoHistory.Show();
+			UndoHistoryVisible = !UndoHistoryVisible;
+			menuTest_ShowUndoHistory.Checked = UndoHistoryVisible;
 		}
 
 		private void menuTest_CollisionTest_Click(object sender, EventArgs e)

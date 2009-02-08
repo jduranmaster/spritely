@@ -415,6 +415,13 @@ namespace Spritely.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap tool_rubberstamp {
+            get {
+                object obj = ResourceManager.GetObject("tool_rubberstamp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tool_select {
             get {
                 object obj = ResourceManager.GetObject("tool_select", resourceCulture);
@@ -486,7 +493,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0.14.6 beta.
+        ///   Looks up a localized string similar to 0.14.8 beta.
         /// </summary>
         internal static string Version {
             get {
@@ -495,7 +502,7 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 6 February 2009.
+        ///   Looks up a localized string similar to 8 February 2009.
         /// </summary>
         internal static string VersionDate {
             get {

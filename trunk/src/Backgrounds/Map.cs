@@ -97,6 +97,16 @@ namespace Spritely
 			get { return m_ss; }
 		}
 
+		public int Width
+		{
+			get { return kMaxMapTilesX; }
+		}
+
+		public int Height
+		{
+			get { return kMaxMapTilesY; }
+		}
+
 		/// <summary>
 		/// Replace all occurences of this sprite in the background map with the
 		/// default sprite.
@@ -117,7 +127,7 @@ namespace Spritely
 			}
 		}
 
-		public bool SetBackgroundTile(int x, int y, int nTileID, int nSubpaletteID)
+		public bool SetTile(int x, int y, int nTileID, int nSubpaletteID)
 		{
 			if (x < 0 || x >= kMaxMapTilesX || y < 0 || y >= kMaxMapTilesY)
 				return false;
@@ -126,7 +136,7 @@ namespace Spritely
 			return true;
 		}
 
-		public bool GetBackgroundTile(int x, int y, out int nTileID, out int nSubpaletteID)
+		public bool GetTile(int x, int y, out int nTileID, out int nSubpaletteID)
 		{
 			if (x < 0 || x >= kMaxMapTilesX || y < 0 || y >= kMaxMapTilesY)
 			{

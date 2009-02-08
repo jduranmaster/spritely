@@ -18,6 +18,16 @@ namespace Spritely
 		private TabMgr[] m_tabs;
 		private TabMgr m_tabCurrent;
 
+		/// <summary>
+		/// Debug window to display the current contents of the Undo stack.
+		/// </summary>
+		private UndoHistoryForm m_undoHistory;
+
+		/// <summary>
+		/// Is the UndoHistory window visible? (debug only)
+		/// </summary>
+		public bool UndoHistoryVisible = false;
+
 		public ProjectMainForm(string strFilename)
 		{
 			bool fNewDocument = true;
@@ -38,9 +48,6 @@ namespace Spritely
 			// otherwise, create a brand new (empty) document.
 			if (fNewDocument)
 				Handle_NewDocument();
-
-			// Clear out the Undo stack to remove the default sprites.
-			m_doc.ResetUndo();
 
 			// Init the list of recent files.
 			m_recent = new RecentFiles(this, menuFile_RecentFiles);
@@ -85,7 +92,14 @@ namespace Spritely
 			AddSubwindowsToTabs();
 			HandleEverythingChanged();
 
+			m_undoHistory = new UndoHistoryForm(this);
+			UndoHistoryVisible = false;
+			ClearUndo();
+
 			m_doc.HasUnsavedChanges = false;
+
+			// Add an 
+			Application.Idle += new EventHandler(OnIdle);
 		}
 
 		private void ProjectMainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -96,9 +110,9 @@ namespace Spritely
 			//   If we show a dialog (e.g., to ask if we need to save changes), then the
 			//     front child window will disappear when the dialog is shown.
 			//   The main window Close is cancelled.
-			// Show all current windows in the tab to undo this
+			// To fix this, show all current windows in the tab...
 			m_tabCurrent.ShowWindows();
-			// Un-cancel the Close so that the main form can close.
+			// ... and un-cancel the Close so that the main form can close.
 			e.Cancel = false;
 
 			// Make sure the document is closed properly.
@@ -112,6 +126,11 @@ namespace Spritely
 		private void ProjectMainForm_Shown(object sender, EventArgs e)
 		{
 			m_tabCurrent.ShowWindows();
+		}
+
+		private void OnIdle(object sender, EventArgs e)
+		{
+			ActivateMenuItems();
 		}
 
 		#endregion
@@ -129,6 +148,18 @@ namespace Spritely
 			m_doc.InitializeEmptyDocument();
 
 			SetTitleBar("Untitled");
+		}
+
+		/// <summary>
+		/// The undo manager for the currently active tab.
+		/// </summary>
+		/// <returns></returns>
+		public UndoMgr ActiveUndo()
+		{
+			if (m_doc == null || m_tabCurrent == null)
+				return null;
+
+			return m_tabCurrent.Undo;
 		}
 
 		public Palette ActivePalette()
@@ -260,6 +291,48 @@ namespace Spritely
 
 		#endregion
 
+		#region Undo
+
+		/// <summary>
+		/// Clear all the undo history.
+		/// </summary>
+		public void ClearUndo()
+		{
+			m_undoHistory.Clear();
+			for (int i = 0; i < m_tabs.Length; i++)
+			{
+				m_tabs[i].Undo.Reset();
+			}
+		}
+
+		public void AddUndo(TabMgr.TabId id, UndoAction action)
+		{
+			m_undoHistory.Add(id, action);
+		}
+
+		public void RemoveUndo(TabMgr.TabId id, int nIndex)
+		{
+			m_undoHistory.Remove(id, nIndex);
+		}
+
+		/// <summary>
+		/// Remove a range of undo actions.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="nStart">Index of the first undo action to remove</param>
+		/// <param name="nCount">Number of undo actions to remove</param>
+		public void RemoveUndoRange(TabMgr.TabId id, int nStart, int nCount)
+		{
+			m_undoHistory.RemoveRange(id, nStart, nCount);
+		}
+
+		public void SetCurrentUndo(TabMgr.TabId id, int nCurrent)
+		{
+			m_undoHistory.SetCurrent(id, nCurrent);
+		}
+
+		#endregion
+		
 		#region Subwindow Management
 
 		public void ResizeSubwindow(Form f)
@@ -342,11 +415,13 @@ namespace Spritely
 			m_doc.Spritesets.Current.FlushBitmaps();
 			HandleSpriteDataChanged(m_doc.Spritesets.Current);
 			HandleSpriteTypeChanged(m_doc.Spritesets.Current);
+			HandleSubpaletteSelectChange(m_doc.Palettes.CurrentPalette);
 			HandleColorDataChange(m_doc.Palettes.CurrentPalette);
 
 			m_doc.BackgroundSpritesets.Current.FlushBitmaps();
 			HandleSpriteDataChanged(m_doc.BackgroundSpritesets.Current);
 			HandleSpriteTypeChanged(m_doc.BackgroundSpritesets.Current);
+			HandleSubpaletteSelectChange(m_doc.BackgroundPalettes.CurrentPalette);
 			HandleColorDataChange(m_doc.BackgroundPalettes.CurrentPalette);
 			HandleMapDataChange(m_doc.BackgroundMaps.CurrentMap);
 
