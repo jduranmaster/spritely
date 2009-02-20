@@ -35,6 +35,7 @@ namespace Spritely
 			this.label4 = new System.Windows.Forms.Label();
 			this.bOK = new System.Windows.Forms.Button();
 			this.lWebsite = new System.Windows.Forms.Label();
+			this.lDebug = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -97,11 +98,23 @@ namespace Spritely
 			this.lWebsite.TabIndex = 5;
 			this.lWebsite.Text = "http://code.google.com/p/spritely/";
 			// 
+			// lDebug
+			// 
+			this.lDebug.AutoSize = true;
+			this.lDebug.Location = new System.Drawing.Point(273, 63);
+			this.lDebug.Name = "lDebug";
+			this.lDebug.Size = new System.Drawing.Size(71, 13);
+			this.lDebug.TabIndex = 6;
+			this.lDebug.Text = "DEBUG Build";
+			this.lDebug.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.lDebug.Visible = false;
+			// 
 			// About
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(356, 147);
+			this.Controls.Add(this.lDebug);
 			this.Controls.Add(this.lWebsite);
 			this.Controls.Add(this.bOK);
 			this.Controls.Add(this.label4);
@@ -124,5 +137,6 @@ namespace Spritely
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button bOK;
 		private System.Windows.Forms.Label lWebsite;
+		private System.Windows.Forms.Label lDebug;
 	}
 }

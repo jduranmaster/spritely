@@ -1,9 +1,6 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -115,11 +112,6 @@ namespace Spritely
 
 			lbResults.Items.Add(String.Format("{0} tests run. {1} failed", nTests, nFailedTests));
 			lbResults.SelectedIndex = lbResults.Items.Count - 1;
-		}
-
-		private void bRunTests_Click(object sender, EventArgs e)
-		{
-			RunTests();
 		}
 
 	}

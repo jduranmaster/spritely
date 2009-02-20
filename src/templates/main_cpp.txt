@@ -13,7 +13,7 @@
 #include "object_utils.h"
 
 void InitDevice() {
-%%NDS:%%	powerON(POWER_ALL_2D);
+%%NDS:%%	powerOn(POWER_ALL_2D);
 %%NDS:%%	
 	// Enable interrupts.
 	irqInit();

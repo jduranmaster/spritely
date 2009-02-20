@@ -22,11 +22,6 @@ namespace Spritely
 		DocumentData m_data;
 
 		/// <summary>
-		/// Undo managers for each tab.
-		/// </summary>
-		//public UndoMgr[] m_Undo;
-
-		/// <summary>
 		/// Initialize a Spritely document.
 		/// </summary>
 		/// <param name="form">The display form that owns this document</param>
@@ -42,11 +37,6 @@ namespace Spritely
 			m_data.BackgroundImages = new BgImages(this);
 
 			m_data.Filer = new FileHandler(this);
-
-			//int numTabs = (int)TabMgr.TabId.MAX;
-			//m_Undo = new UndoMgr[numTabs];
-			//for (int iTab = 0; iTab < numTabs; iTab++)
-			//	m_Undo[iTab] = new UndoMgr();
 		}
 
 		/// <summary>
@@ -83,6 +73,16 @@ namespace Spritely
 
 			// The sprites we just added above don't count as document changes.
 			HasUnsavedChanges = false;
+		}
+
+		public void RecordSnapshot()
+		{
+			m_data.Palettes.RecordSnapshot();
+			m_data.Spritesets.RecordSnapshot();
+			m_data.BackgroundPalettes.RecordSnapshot();
+			m_data.BackgroundSpritesets.RecordSnapshot();
+			m_data.BackgroundMaps.RecordSnapshot();
+			m_data.BackgroundImages.RecordSnapshot();
 		}
 
 		/// <summary>
@@ -430,12 +430,6 @@ namespace Spritely
 					sb.Append(String.Format(ResourceMgr.GetString("ExportSpritesSuccess"), strTarget, strProjectDir));
 				}
 				m_form.Info(sb.ToString());
-
-				// The platform may have changed, update the map toolbox to reflect the current platform.
-				//if (m_form.OldUI.CurrentTab.TabType == OldTab.Type.BackgroundMap)
-				//{
-				//	m_form.OldUI.CurrentTab.ToolboxWindow.Invalidate();
-				//}
 			}
 			else
 			{

@@ -11,9 +11,9 @@ namespace Spritely
 	{
 		private Document m_doc;
 
-		private string m_strName;
+		public string Name;
 		private int m_id;
-		private string m_strDesc;
+		public string Description;
 
 		public string HeaderFileName;
 
@@ -28,9 +28,9 @@ namespace Spritely
 		{
 			m_doc = doc;
 
-			m_strName = strName;
+			Name = strName;
 			m_id = id;
-			m_strDesc = strDesc;
+			Description = strDesc;
 
 			HeaderFileName = strName + ".h";
 
@@ -42,9 +42,8 @@ namespace Spritely
 			m_doc = doc;
 		}
 
-		public string Name
+		public void RecordSnapshot()
 		{
-			get { return m_strName; }
 		}
 
 		public Bitmap Bitmap
@@ -264,14 +263,14 @@ namespace Spritely
 		public void Save(System.IO.TextWriter tw)
 		{
 			tw.Write("\t\t<bgimage_pal8");
-			tw.Write(String.Format(" name=\"{0}\"", m_strName));
+			tw.Write(String.Format(" name=\"{0}\"", Name));
 			tw.Write(String.Format(" id=\"{0}\"", ExportId));
-			tw.Write(String.Format(" desc=\"{0}\"", m_strDesc));
+			tw.Write(String.Format(" desc=\"{0}\"", Description));
 			tw.Write(" size=\"{0}x{1}\"", m_width, m_height);
 			tw.WriteLine(">");
 
 			tw.Write("\t\t\t<palette256");
-			tw.Write(String.Format(" name=\"{0}\"", m_strName));
+			tw.Write(String.Format(" name=\"{0}\"", Name));
 			tw.Write(String.Format(" id=\"{0}\"", ExportId));
 			tw.WriteLine(">");
 

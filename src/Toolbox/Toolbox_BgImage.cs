@@ -11,12 +11,9 @@ namespace Spritely
 		{
 			Tools.Add(new Tool("Select",		ToolType.Select,		0,0,	true,	false,
 						ResourceMgr.GetBitmap("tool_select")));
-		}
 
-
-		public override void Draw(Graphics g)
-		{
-			base.Draw(g);
+			ToolboxRows = 1;
+			CurrentToolType = ToolType.Blank;
 		}
 
 	}

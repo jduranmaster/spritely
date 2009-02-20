@@ -21,20 +21,12 @@ namespace Spritely
 		// We don't assign the real tile ids until export time, so we need to keep track of each
 		// tile in the background map by recording the sprite and the tile index
 		// into that sprite.
-		struct BackgroundMapTileInfo
+		public struct BackgroundMapTileInfo
 		{
 			public int nTileIndex;
 			public int nSubpalette;
 			public bool fHFlip;
 			public bool fVFlip;
-
-			public BackgroundMapTileInfo(Sprite s, int nIndex, int subpalette)
-			{
-				nTileIndex = nIndex;
-				nSubpalette = subpalette;
-				fHFlip = false;
-				fVFlip = false;
-			}
 		};
 
 		private const int kMaxMapTilesX = 32;
@@ -48,6 +40,41 @@ namespace Spritely
 		/// The map of background tiles.
 		/// </summary>
 		private BackgroundMapTileInfo[,] m_BackgroundMap = null;
+
+		public class UndoData
+		{
+			public string name, desc;
+			public int width, height;
+			public BackgroundMapTileInfo[,] map;
+
+			public UndoData()
+			{
+				name = "";
+				desc = "";
+				width = kMaxMapTilesX;
+				height = kMaxMapTilesY;
+				map = new BackgroundMapTileInfo[width, height];
+			}
+
+			public UndoData(UndoData data)
+			{
+				name = data.name;
+				desc = data.desc;
+				width = data.width;
+				height = data.height;
+
+				map = new BackgroundMapTileInfo[width, height];
+				for (int y=0; y < height; y++)
+					for (int x = 0; x < width; x++)
+						map[x,y] = data.map[x,y];
+			}
+
+		}
+
+		/// <summary>
+		/// A snapshot of the map data from the last undo checkpoint.
+		/// </summary>
+		private UndoData m_snapshot;
 
 		public Map(Document doc, string strName, int id, string strDesc, Spriteset bgtiles)
 		{
@@ -70,6 +97,9 @@ namespace Spritely
 					m_BackgroundMap[ix, iy].nTileIndex = nDefaultTile;
 					m_BackgroundMap[ix, iy].nSubpalette = 0;
 				}
+
+			// Make an initial snapshot of the (empty) map.
+			m_snapshot = GetUndoData();
 
 			if (m_doc.Owner != null)
 			{
@@ -162,6 +192,79 @@ namespace Spritely
 			return true;
 		}
 
+		#region Undo
+
+		public void RecordUndoAction(string strDesc, UndoMgr undo)
+		{
+			if (undo == null)
+				return;
+
+			UndoData data = GetUndoData();
+
+			// Don't record anything if there aren't any changes
+			if (!data.Equals(m_snapshot))
+			{
+				UndoAction_MapEdit action = new UndoAction_MapEdit(undo, this, m_snapshot, data, strDesc);
+				undo.Push(action);
+
+				// Update the snapshot for the next UndoAction
+				RecordSnapshot();
+			}
+		}
+
+		public UndoData GetUndoData()
+		{
+			UndoData undo = new UndoData();
+			RecordUndoData(ref undo);
+			return undo;
+		}
+
+		public void RecordSnapshot()
+		{
+			RecordUndoData(ref m_snapshot);
+		}
+
+		private void RecordUndoData(ref UndoData undo)
+		{
+			undo.name = m_strName;
+			undo.desc = m_strDesc;
+			undo.width = kMaxMapTilesX;
+			undo.height = kMaxMapTilesY;
+
+			for (int y = 0; y < kMaxMapTilesY; y++)
+			{
+				for (int x = 0; x < kMaxMapTilesX; x++)
+				{
+					undo.map[x, y].nTileIndex = m_BackgroundMap[x, y].nTileIndex;
+					undo.map[x, y].nSubpalette = m_BackgroundMap[x, y].nSubpalette;
+					undo.map[x, y].fHFlip = m_BackgroundMap[x, y].fHFlip;
+					undo.map[x, y].fVFlip = m_BackgroundMap[x, y].fVFlip;
+				}
+			}
+		}
+
+		public void ApplyUndoData(UndoData undo)
+		{
+			m_strName = undo.name;
+			m_strDesc = undo.desc;
+			//width = undo.width;
+			//height = undo.height;
+
+			for (int y = 0; y < kMaxMapTilesY; y++)
+			{
+				for (int x = 0; x < kMaxMapTilesX; x++)
+				{
+					m_BackgroundMap[x, y].nTileIndex = undo.map[x, y].nTileIndex;
+					m_BackgroundMap[x, y].nSubpalette = undo.map[x, y].nSubpalette;
+					m_BackgroundMap[x, y].fHFlip = undo.map[x, y].fHFlip;
+					m_BackgroundMap[x, y].fVFlip = undo.map[x, y].fVFlip;
+				}
+			}
+
+			RecordSnapshot();
+		}
+
+		#endregion
 
 	}
 }

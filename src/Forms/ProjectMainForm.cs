@@ -24,9 +24,26 @@ namespace Spritely
 		private UndoHistoryForm m_undoHistory;
 
 		/// <summary>
+		/// Internal flag for UndoHistory visible state.
+		/// Use UndoHistoryVisible instead.
+		/// </summary>
+		private bool m_fUndoHistoryVisible = false;
+
+		/// <summary>
 		/// Is the UndoHistory window visible? (debug only)
 		/// </summary>
-		public bool UndoHistoryVisible = false;
+		public bool UndoHistoryVisible
+		{
+			get { return m_fUndoHistoryVisible; }
+			set
+			{
+				m_fUndoHistoryVisible = value;
+				if (!m_fUndoHistoryVisible)
+					m_undoHistory.Hide();
+				else
+					m_undoHistory.Show();
+			}
+		}
 
 		public ProjectMainForm(string strFilename)
 		{
@@ -142,7 +159,7 @@ namespace Spritely
 			get { return m_doc; }
 		}
 
-		private void Handle_NewDocument()
+		public void Handle_NewDocument()
 		{
 			m_doc = new Document(this);
 			m_doc.InitializeEmptyDocument();
@@ -269,14 +286,14 @@ namespace Spritely
 					new Point(0, 0), new Point(0, 30), Color.White, c);
 				g.FillRectangle(b, r);
 				g.DrawString(strTabName, e.Font, Brushes.Black, x, y);
-				g.DrawLine(Pens.Black, r.Left, r.Bottom, r.Right, r.Bottom);
+				//g.DrawLine(Pens.Black, r.Left, r.Bottom, r.Right, r.Bottom);
 			}
 
 			// Draw a line out past the last tab.
-			if (e.Index == tabSet.TabPages.Count - 1)
-			{
-				g.DrawLine(Pens.Black, r.Right, r.Bottom, r.Right+tabSet.Width, r.Bottom);
-			}
+			//if (e.Index == tabSet.TabPages.Count - 1)
+			//{
+			//	g.DrawLine(Pens.Black, r.Right, r.Bottom, r.Right+tabSet.Width, r.Bottom);
+			//}
 		}
 
 		private void tabSet_SelectedIndexChanged(object sender, EventArgs e)
@@ -454,6 +471,15 @@ namespace Spritely
 				if (m != null)
 					m.MapWindow.SpriteDataChanged();
 			}
+		}
+
+		/// <summary>
+		/// The sprite display options have changed..
+		/// </summary>
+		public void HandleSpriteDisplayOptionsChanged(Spriteset ss)
+		{
+			ss.Palette.PaletteWindow.SpriteDisplayOptionChanged();
+			ss.SpriteWindow.SpriteDisplayOptionChanged();
 		}
 
 		/// <summary>

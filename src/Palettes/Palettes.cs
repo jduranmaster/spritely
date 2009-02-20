@@ -42,6 +42,14 @@ namespace Spritely
 			}
 		}
 
+		public void RecordSnapshot()
+		{
+			foreach (Palette p in m_palettes.Values)
+			{
+				p.RecordSnapshot();
+			}
+		}
+
 		public int NumPalettes
 		{
 			get { return m_palettes.Count; }

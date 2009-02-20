@@ -31,6 +31,14 @@ namespace Spritely
 			}
 		}
 
+		public void RecordSnapshot()
+		{
+			foreach (Spriteset ss in m_spritesets.Values)
+			{
+				ss.RecordSnapshot();
+			}
+		}
+
 		public int NumSpritesets
 		{
 			get { return m_spritesets.Count; }

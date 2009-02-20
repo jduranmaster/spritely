@@ -147,11 +147,6 @@ namespace Spritely
 				menuPalette_Color_Clear.Enabled = false;
 			}
 
-			menuOptions.Enabled = true;
-			menuOptions_Sprite.Enabled = fHasDoc;
-			menuOptions_Palette.Enabled = fHasDoc;
-			menuOptions_Map.Enabled = fHasDoc;
-
 			menuWindow.Enabled = true;
 			menuWindow_Arrange.Enabled = fHasDoc;
 
@@ -159,7 +154,7 @@ namespace Spritely
 			menuHelp_About.Enabled = true;
 
 			// Used for debugging only - set to false for release builds.
-			//menuTest.Visible = false;
+			menuTest.Visible = Options.DEBUG;
 			menuTest_RunUnittests.Visible = true;
 			menuTest_ShowUndoHistory.Visible = true;
 			menuTest_ShowUndoHistory.Checked = UndoHistoryVisible;
@@ -393,7 +388,8 @@ namespace Spritely
 			Sprite sNew = ss.SpriteList.DuplicateSprite(sToCopy, ActiveUndo());
 			if (sNew != null)
 			{
-				//sNew.RecordUndoAction("duplicate", ActiveUndo());
+				sNew.RecordSnapshot();
+				ss.CurrentSprite = sNew;
 				HandleSpriteDataChanged(ss);
 			}
 		}
@@ -546,6 +542,9 @@ namespace Spritely
 
 			SpriteProperties properties = new SpriteProperties(m_doc, ss);
 			properties.ShowDialog();
+
+			// The name of the sprite may have changed, so update the form title.
+			ss.SpriteWindow.SetTitle();
 		}
 
 		private void menuSprite_Arrange_MoveUp_Click(object sender, EventArgs e)
@@ -587,44 +586,6 @@ namespace Spritely
 
 		#endregion
 
-		#region Options Menu
-
-		private void menuOptions_Sprite_Click(object sender, EventArgs e)
-		{
-			menuOptions_XXX_Click(0);
-		}
-
-		private void menuOptions_Palette_Click(object sender, EventArgs e)
-		{
-			menuOptions_XXX_Click(1);
-		}
-
-		private void menuOptions_Map_Click(object sender, EventArgs e)
-		{
-			menuOptions_XXX_Click(2);
-		}
-
-		private void menuOptions_XXX_Click(int nOptionPageIndex)
-		{
-			OptionsEdit opt = new OptionsEdit(nOptionPageIndex);
-			DialogResult result = opt.ShowDialog();
-
-			// If any of the options have changed...
-			if (result == DialogResult.Yes)
-			{
-				// ...force a refresh of all windows.
-				m_doc.Palettes.CurrentPalette.PaletteWindow.Refresh();
-				m_doc.Spritesets.Current.SpritesetWindow.Refresh();
-				m_doc.Spritesets.Current.SpriteWindow.Refresh();
-				m_doc.BackgroundPalettes.CurrentPalette.PaletteWindow.Refresh();
-				m_doc.BackgroundSpritesets.Current.SpritesetWindow.Refresh();
-				m_doc.BackgroundSpritesets.Current.SpriteWindow.Refresh();
-				m_doc.BackgroundMaps.CurrentMap.MapWindow.Refresh();
-			}
-		}
-
-		#endregion
-
 		#region Window menu
 
 		private void menuWindow_Arrange_Click(object sender, EventArgs e)
@@ -652,12 +613,14 @@ namespace Spritely
 			ut.ShowDialog();
 		}
 
+		private void menuTest_RunTutorialTests_Click(object sender, EventArgs e)
+		{
+			TutorialTestForm tt = new TutorialTestForm(this);
+			tt.ShowDialog();
+		}
+
 		private void menuTest_ShowUndoHistory_Click(object sender, EventArgs e)
 		{
-			if (UndoHistoryVisible)
-				m_undoHistory.Hide();
-			else
-				m_undoHistory.Show();
 			UndoHistoryVisible = !UndoHistoryVisible;
 			menuTest_ShowUndoHistory.Checked = UndoHistoryVisible;
 		}

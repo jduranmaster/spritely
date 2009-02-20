@@ -1,20 +1,20 @@
 // ToDo.txt
 
-General: Set GBA/NDS "mode" and have UI change appropriately: screen border, export, ...
+*General: Set GBA/NDS "mode" and have UI change appropriately: screen border, export, ...
 General: Improve when running under Mono (Mac/Linux)
-General: Validate object names to ensure they don't collide with generated names.
+*General: Validate object names to ensure they don't collide with generated names.
 
 Undo: Record changing sprite size
 Undo: Record undo info for each tab instead of per document
 Undo: Record background map edits
 Undo: Redo deleted sprite doesn't place sprite in same location in list
 Undo: Deleting the default map sprite isn't restored
-Undo: bug: duplicate sprite, edit, undo results in blank sprite
 
 Sprite List: disable sprite
 Sprite List: reorder sprites (up/down within size group)
 Sprite List: scroll to currently selected sprite when selection changes
 Sprite List: auto scroll when selecting and mouse moved above/below visible region
+*Sprite List: when changing sprite zoom, other sprite forms are affected
 
 Sprite Edit: marquee select
 Sprite Edit: tools for line, rect, filled rect, oval filled oval
@@ -27,6 +27,7 @@ Background Map: subpalette override
 Background Map: collision editor to mark places on map
 
 Background Image: allow transparency color select for 256 color images (all images?)
+*Background Image: Add background image import dialog
 
 Background Image List: scroll to currently selected image when selection changes
 Background Image List: auto scroll when selecting and mouse moved above/below visible region
@@ -48,4 +49,4 @@ Export: generate project files automatically from manifest
 Export: background image: currently only 240x160 images work on GBA. broken on NDS
 Export: support export to PA lib
 
-Generated Code: move screen boundary code into tutorial
+Tutorials: Write links to complete project files

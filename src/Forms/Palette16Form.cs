@@ -67,6 +67,7 @@ namespace Spritely
 			pbPaletteSelect.Invalidate();
 			pbPalette.Invalidate();
 			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
 		}
 
 		/// <summary>
@@ -78,6 +79,16 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// The display options for the sprite has changed.
+		/// </summary>
+		public void SpriteDisplayOptionChanged()
+		{
+			pbPalette.Invalidate();
+			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
+		}
+
+		/// <summary>
 		/// The currently subpalette selection has changed.
 		/// </summary>
 		public void SubpaletteSelectChanged()
@@ -85,6 +96,7 @@ namespace Spritely
 			pbPaletteSelect.Invalidate();
 			pbPalette.Invalidate();
 			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
 		}
 
 		/// <summary>
@@ -94,6 +106,7 @@ namespace Spritely
 		{
 			pbPalette.Invalidate();
 			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
 		}
 
 		/// <summary>
@@ -103,6 +116,7 @@ namespace Spritely
 		{
 			pbPalette.Invalidate();
 			pbFgSwatch.Invalidate();
+			pbBgSwatch.Invalidate();
 		}
 
 		#endregion
@@ -357,7 +371,7 @@ namespace Spritely
 						g.FillRectangle(m_brushTransparent, pxX0, pxY0, pxSize, pxSize);
 
 					// Draw the palette index in each swatch.
-					if (Options.Palette_ShowPaletteIndex)
+					if (Options.Sprite_ShowPaletteIndex)
 					{
 						int pxLabelOffsetX = nLabelXOffset[nIndex];
 						int pxLabelOffsetY = 2;
@@ -415,7 +429,7 @@ namespace Spritely
 				g.FillRectangle(m_brushTransparent, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
 			// Draw the palette index in each swatch.
-			if (Options.Palette_ShowPaletteIndex)
+			if (Options.Sprite_ShowPaletteIndex)
 			{
 				int pxLabelOffsetX = nLabelXOffset[nIndex];
 				int pxLabelOffsetY = 2;

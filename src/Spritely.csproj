@@ -56,6 +56,18 @@
     <Compile Include="Forms\ColorEditor.Designer.cs">
       <DependentUpon>ColorEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BgImageProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BgImageProperties.Designer.cs">
+      <DependentUpon>BgImageProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TutorialTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TutorialTestForm.Designer.cs">
+      <DependentUpon>TutorialTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +76,11 @@
     </Compile>
     <Compile Include="Backgrounds\BgImages.cs" />
     <Compile Include="Backgrounds\BgImage.cs" />
+    <Compile Include="Toolbox\Arrowbox.cs" />
+    <Compile Include="Toolbox\Arrowbox_Sprite.cs" />
+    <Compile Include="Toolbox\Optionbox_Sprite.cs" />
+    <Compile Include="Toolbox\Optionbox_Map.cs" />
+    <Compile Include="Toolbox\Optionbox.cs" />
     <Compile Include="Palettes\Color555.cs" />
     <Compile Include="Files\FileHandler_Export.cs" />
     <Compile Include="Files\FileHandler_Load.cs" />
@@ -142,12 +159,6 @@
     <Compile Include="Forms\Export.Designer.cs">
       <DependentUpon>Export.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\OptionsEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\OptionsEdit.Designer.cs">
-      <DependentUpon>OptionsEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main\Document.cs" />
     <Compile Include="Files\FileHandler.cs" />
     <Compile Include="Forms\SpriteProperties.cs">
@@ -197,6 +208,14 @@
       <DependentUpon>BgImageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BgImageProperties.resx">
+      <DependentUpon>BgImageProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TutorialTestForm.resx">
+      <DependentUpon>TutorialTestForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapForm.resx">
       <DependentUpon>MapForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -208,10 +227,6 @@
     <EmbeddedResource Include="Forms\Export.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Export.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\OptionsEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OptionsEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProjectMainForm.resx">
       <SubType>Designer</SubType>
@@ -275,6 +290,7 @@
     <Compile Include="Sprites\Tile.cs" />
     <Compile Include="Toolbox\Toolbox.cs" />
     <Compile Include="Toolbox\Toolbox_Sprite.cs" />
+    <Compile Include="Undo\UndoAction_MapEdit.cs" />
     <Compile Include="Undo\UndoAction.cs" />
     <Compile Include="Undo\UndoAction_AddSprite.cs" />
     <Compile Include="Undo\UndoAction_PaletteEdit.cs" />
@@ -316,7 +332,11 @@
     <None Include="Resources\images\tool_nds.png" />
     <None Include="Resources\images\tool_gba.png" />
     <None Include="Resources\images\tool_hilite2.png" />
+    <None Include="Resources\images\tool_largegrid.png" />
+    <None Include="Resources\images\tool_number.png" />
     <Content Include="Resources\images\tool_rubberstamp.png" />
+    <None Include="Resources\images\tool_screen.png" />
+    <None Include="Resources\images\tool_smallgrid.png" />
     <Content Include="Resources\Spritely.ico" />
     <Content Include="Resources\Spritely2.ico" />
     <Content Include="templates\animation_cpp.txt">

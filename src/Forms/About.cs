@@ -14,9 +14,9 @@ namespace Spritely
 		{
 			InitializeComponent();
 			string strFormat = lVersion.Text;
-			lVersion.Text = String.Format(strFormat,
-				ResourceMgr.GetString("Version"),
-				ResourceMgr.GetString("VersionDate"));
+			lVersion.Text = String.Format(strFormat, Options.VersionString, Options.VersionDate);
+
+			lDebug.Visible = Options.DEBUG;
 		}
 
 		private void bOK_Click(object sender, EventArgs e)

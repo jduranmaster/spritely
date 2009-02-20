@@ -56,6 +56,14 @@ namespace Spritely
 			}
 		}
 
+		public void RecordSnapshot()
+		{
+			for (int i = 0; i < m_nMaxSubpalettes; i++)
+			{
+				m_subpalettes[i].RecordSnapshot();
+			}
+		}
+
 		public Palette16Form PaletteWindow
 		{
 			get { return m_winPalette; }

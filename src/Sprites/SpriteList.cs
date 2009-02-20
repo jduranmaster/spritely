@@ -59,6 +59,17 @@ namespace Spritely
 			}
 		}
 
+		public void RecordSnapshot()
+		{
+			foreach (SpriteType st in SpriteTypes)
+			{
+				foreach (Sprite s in st.Sprites)
+				{
+					s.RecordSnapshot();
+				}
+			}
+		}
+
 		public Sprite AddSprite(int nWidth, int nHeight, string strName, int id, string strDesc, int nSubpalette, UndoMgr undo)
 		{
 			return AddSprite_(nWidth, nHeight, strName, id, strDesc, nSubpalette, undo);
@@ -409,7 +420,7 @@ namespace Spritely
 					s.FlushBitmaps();
 		}
 
-		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
+		public void ShiftPixels(Arrowbox.ShiftArrow shift)
 		{
 			if (m_ss.CurrentSprite == null)
 				return;

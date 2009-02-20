@@ -91,6 +91,7 @@ namespace Spritely
 
 			// Remove any UndoActions since we just loaded from a file.
 			m_doc.Owner.ClearUndo();
+			m_doc.RecordSnapshot();
 			return true;
 		}
 

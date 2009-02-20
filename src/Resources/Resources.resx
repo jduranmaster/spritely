@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BgImageSizeFormat" xml:space="preserve">
+    <value>{0}x{1} pixels</value>
+    <comment>Used in "BgImage Properties" dialog to display the image size.</comment>
+  </data>
   <data name="CopySuffix" xml:space="preserve">
     <value>_copy</value>
     <comment>Added to the end of a sprite name when duplicating sprites to give the new sprite a different name from the original</comment>
@@ -245,11 +249,17 @@ Please select a path that does not contain any spaces.</value>
   <data name="tool_hilite2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_hilite2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tool_largegrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_largegrid.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="tool_line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_line.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tool_nds" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_nds.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tool_number" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_number.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tool_pencil" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_pencil.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -262,6 +272,9 @@ Please select a path that does not contain any spaces.</value>
   </data>
   <data name="tool_rubberstamp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_rubberstamp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tool_screen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_screen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tool_select" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_select.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -293,11 +306,8 @@ Please select a path that does not contain any spaces.</value>
   <data name="tool_shift_up_hilite" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\tool_shift_up_hilite.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Version" xml:space="preserve">
-    <value>0.14.8 beta</value>
-  </data>
-  <data name="VersionDate" xml:space="preserve">
-    <value>8 February 2009</value>
+  <data name="tool_smallgrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\tool_smallgrid.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WARNING" xml:space="preserve">
     <value>WARNING: </value>

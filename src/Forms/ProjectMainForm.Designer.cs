@@ -118,10 +118,6 @@ namespace Spritely
 			this.menuPalette_Color_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuPalette_Color_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuPalette_ViewEncoding = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuOptions_Sprite = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuOptions_Palette = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuOptions_Map = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuWindow_Arrange = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -131,6 +127,7 @@ namespace Spritely
 			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_RunTutorialTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabSet.SuspendLayout();
 			this.menuBar.SuspendLayout();
 			this.SuspendLayout();
@@ -188,7 +185,6 @@ namespace Spritely
             this.menuProject,
             this.menuSprite,
             this.menuPalette,
-            this.menuOptions,
             this.menuWindow,
             this.menuHelp,
             this.menuTest});
@@ -306,7 +302,7 @@ namespace Spritely
 			// 
 			this.menuEdit_Undo.Name = "menuEdit_Undo";
 			this.menuEdit_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.menuEdit_Undo.Size = new System.Drawing.Size(139, 22);
+			this.menuEdit_Undo.Size = new System.Drawing.Size(152, 22);
 			this.menuEdit_Undo.Text = "Undo";
 			this.menuEdit_Undo.Click += new System.EventHandler(this.menuEdit_Undo_Click);
 			// 
@@ -314,20 +310,20 @@ namespace Spritely
 			// 
 			this.menuEdit_Redo.Name = "menuEdit_Redo";
 			this.menuEdit_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.menuEdit_Redo.Size = new System.Drawing.Size(139, 22);
+			this.menuEdit_Redo.Size = new System.Drawing.Size(152, 22);
 			this.menuEdit_Redo.Text = "Redo";
 			this.menuEdit_Redo.Click += new System.EventHandler(this.menuEdit_Redo_Click);
 			// 
 			// menuEdit_Separator
 			// 
 			this.menuEdit_Separator.Name = "menuEdit_Separator";
-			this.menuEdit_Separator.Size = new System.Drawing.Size(136, 6);
+			this.menuEdit_Separator.Size = new System.Drawing.Size(149, 6);
 			// 
 			// menuEdit_Cut
 			// 
 			this.menuEdit_Cut.Name = "menuEdit_Cut";
 			this.menuEdit_Cut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.menuEdit_Cut.Size = new System.Drawing.Size(139, 22);
+			this.menuEdit_Cut.Size = new System.Drawing.Size(152, 22);
 			this.menuEdit_Cut.Text = "Cut";
 			this.menuEdit_Cut.Click += new System.EventHandler(this.menuEdit_Cut_Click);
 			// 
@@ -335,7 +331,7 @@ namespace Spritely
 			// 
 			this.menuEdit_Copy.Name = "menuEdit_Copy";
 			this.menuEdit_Copy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.menuEdit_Copy.Size = new System.Drawing.Size(139, 22);
+			this.menuEdit_Copy.Size = new System.Drawing.Size(152, 22);
 			this.menuEdit_Copy.Text = "Copy";
 			this.menuEdit_Copy.Click += new System.EventHandler(this.menuEdit_Copy_Click);
 			// 
@@ -343,7 +339,7 @@ namespace Spritely
 			// 
 			this.menuEdit_Paste.Name = "menuEdit_Paste";
 			this.menuEdit_Paste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.menuEdit_Paste.Size = new System.Drawing.Size(139, 22);
+			this.menuEdit_Paste.Size = new System.Drawing.Size(152, 22);
 			this.menuEdit_Paste.Text = "Paste";
 			this.menuEdit_Paste.Click += new System.EventHandler(this.menuEdit_Paste_Click);
 			// 
@@ -861,37 +857,6 @@ namespace Spritely
 			this.menuPalette_ViewEncoding.Text = "&View Color Encoding...";
 			this.menuPalette_ViewEncoding.Click += new System.EventHandler(this.menuPalette_EditColors_Click);
 			// 
-			// menuOptions
-			// 
-			this.menuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuOptions_Sprite,
-            this.menuOptions_Palette,
-            this.menuOptions_Map});
-			this.menuOptions.Name = "menuOptions";
-			this.menuOptions.Size = new System.Drawing.Size(56, 20);
-			this.menuOptions.Text = "&Options";
-			// 
-			// menuOptions_Sprite
-			// 
-			this.menuOptions_Sprite.Name = "menuOptions_Sprite";
-			this.menuOptions_Sprite.Size = new System.Drawing.Size(158, 22);
-			this.menuOptions_Sprite.Text = "&Sprite options...";
-			this.menuOptions_Sprite.Click += new System.EventHandler(this.menuOptions_Sprite_Click);
-			// 
-			// menuOptions_Palette
-			// 
-			this.menuOptions_Palette.Name = "menuOptions_Palette";
-			this.menuOptions_Palette.Size = new System.Drawing.Size(158, 22);
-			this.menuOptions_Palette.Text = "&Palette options...";
-			this.menuOptions_Palette.Click += new System.EventHandler(this.menuOptions_Palette_Click);
-			// 
-			// menuOptions_Map
-			// 
-			this.menuOptions_Map.Name = "menuOptions_Map";
-			this.menuOptions_Map.Size = new System.Drawing.Size(158, 22);
-			this.menuOptions_Map.Text = "&Map options...";
-			this.menuOptions_Map.Click += new System.EventHandler(this.menuOptions_Map_Click);
-			// 
 			// menuWindow
 			// 
 			this.menuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -926,6 +891,7 @@ namespace Spritely
 			// 
 			this.menuTest.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuTest_RunUnittests,
+            this.menuTest_RunTutorialTests,
             this.menuTest_Separator1,
             this.menuTest_ShowUndoHistory,
             this.menuTest_CollisionTest});
@@ -936,28 +902,35 @@ namespace Spritely
 			// menuTest_RunUnittests
 			// 
 			this.menuTest_RunUnittests.Name = "menuTest_RunUnittests";
-			this.menuTest_RunUnittests.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_RunUnittests.Size = new System.Drawing.Size(173, 22);
 			this.menuTest_RunUnittests.Text = "Run &Unittests...";
 			this.menuTest_RunUnittests.Click += new System.EventHandler(this.menuTest_RunUnittests_Click);
 			// 
 			// menuTest_Separator1
 			// 
 			this.menuTest_Separator1.Name = "menuTest_Separator1";
-			this.menuTest_Separator1.Size = new System.Drawing.Size(162, 6);
+			this.menuTest_Separator1.Size = new System.Drawing.Size(170, 6);
 			// 
 			// menuTest_ShowUndoHistory
 			// 
 			this.menuTest_ShowUndoHistory.Name = "menuTest_ShowUndoHistory";
-			this.menuTest_ShowUndoHistory.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_ShowUndoHistory.Size = new System.Drawing.Size(173, 22);
 			this.menuTest_ShowUndoHistory.Text = "Show Undo History";
 			this.menuTest_ShowUndoHistory.Click += new System.EventHandler(this.menuTest_ShowUndoHistory_Click);
 			// 
 			// menuTest_CollisionTest
 			// 
 			this.menuTest_CollisionTest.Name = "menuTest_CollisionTest";
-			this.menuTest_CollisionTest.Size = new System.Drawing.Size(165, 22);
+			this.menuTest_CollisionTest.Size = new System.Drawing.Size(173, 22);
 			this.menuTest_CollisionTest.Text = "Collision Test";
 			this.menuTest_CollisionTest.Click += new System.EventHandler(this.menuTest_CollisionTest_Click);
+			// 
+			// menuTest_RunTutorialTests
+			// 
+			this.menuTest_RunTutorialTests.Name = "menuTest_RunTutorialTests";
+			this.menuTest_RunTutorialTests.Size = new System.Drawing.Size(173, 22);
+			this.menuTest_RunTutorialTests.Text = "Run Tutorial Tests...";
+			this.menuTest_RunTutorialTests.Click += new System.EventHandler(this.menuTest_RunTutorialTests_Click);
 			// 
 			// ProjectMainForm
 			// 
@@ -1077,11 +1050,6 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuPalette_Clear;
 		private System.Windows.Forms.ToolStripMenuItem menuPalette_ViewEncoding;
 
-		private System.Windows.Forms.ToolStripMenuItem menuOptions;
-		private System.Windows.Forms.ToolStripMenuItem menuOptions_Sprite;
-		private System.Windows.Forms.ToolStripMenuItem menuOptions_Palette;
-		private System.Windows.Forms.ToolStripMenuItem menuOptions_Map;
-
 		private System.Windows.Forms.ToolStripMenuItem menuWindow;
 		private System.Windows.Forms.ToolStripMenuItem menuWindow_Arrange;
 
@@ -1094,6 +1062,7 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuTest_ShowUndoHistory;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
 		private System.Windows.Forms.TabPage tabBackgroundImages;
+		private System.Windows.Forms.ToolStripMenuItem menuTest_RunTutorialTests;
 
 	}
 }
