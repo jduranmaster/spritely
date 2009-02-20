@@ -61,6 +61,15 @@ namespace Spritely.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}x{1} pixels.
+        /// </summary>
+        internal static string BgImageSizeFormat {
+            get {
+                return ResourceManager.GetString("BgImageSizeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _copy.
         /// </summary>
         internal static string CopySuffix {
@@ -380,6 +389,13 @@ namespace Spritely.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap tool_largegrid {
+            get {
+                object obj = ResourceManager.GetObject("tool_largegrid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tool_line {
             get {
                 object obj = ResourceManager.GetObject("tool_line", resourceCulture);
@@ -390,6 +406,13 @@ namespace Spritely.Resources {
         internal static System.Drawing.Bitmap tool_nds {
             get {
                 object obj = ResourceManager.GetObject("tool_nds", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tool_number {
+            get {
+                object obj = ResourceManager.GetObject("tool_number", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -418,6 +441,13 @@ namespace Spritely.Resources {
         internal static System.Drawing.Bitmap tool_rubberstamp {
             get {
                 object obj = ResourceManager.GetObject("tool_rubberstamp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tool_screen {
+            get {
+                object obj = ResourceManager.GetObject("tool_screen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -492,21 +522,10 @@ namespace Spritely.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to 0.14.8 beta.
-        /// </summary>
-        internal static string Version {
+        internal static System.Drawing.Bitmap tool_smallgrid {
             get {
-                return ResourceManager.GetString("Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 8 February 2009.
-        /// </summary>
-        internal static string VersionDate {
-            get {
-                return ResourceManager.GetString("VersionDate", resourceCulture);
+                object obj = ResourceManager.GetObject("tool_smallgrid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -47,6 +47,11 @@ namespace Spritely
 			m_sl.UpdateDocument(doc);
 		}
 
+		public void RecordSnapshot()
+		{
+			m_sl.RecordSnapshot();
+		}
+
 		public SpritesetForm SpritesetWindow
 		{
 			get { return m_winSpriteset; }

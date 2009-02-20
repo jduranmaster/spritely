@@ -38,6 +38,7 @@ namespace Spritely
 			public string desc;
 			public int width, height;
 
+			// Private to avoid accidental use.
 			private UndoData() { }
 
 			public UndoData(int nWidth, int nHeight)
@@ -243,19 +244,9 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// The sprite ID assigned to this sprite.
-		/// This value is valid only after the sprites have been loaded, exported or saved.
-		/// Editing operations (adding/removing sprites) will cause this to become invalid.
-		/// </summary>
-		//public int ExportId
-		//{
-		//	get { return m_nExportSpriteID; }
-		//}
-
-		/// <summary>
 		/// The tile ID for the first tile in this sprite.
-		/// This value is valid only after the sprites have been loaded, exported or saved.
-		/// Editing operations (adding/removing sprites) will cause this to become invalid.
+		/// This is the internal tile id and should not be exported. Instead, use 
+		/// ExportFirstTileId for this purpose.
 		/// </summary>
 		public int FirstTileId
 		{
@@ -263,7 +254,7 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// The tile ID for the first tile in this sprite.
+		/// The exportable tile ID for the first tile in this sprite.
 		/// This value is valid only after the sprites have been loaded, exported or saved.
 		/// Editing operations (adding/removing sprites) will cause this to become invalid.
 		/// </summary>
@@ -629,15 +620,15 @@ namespace Spritely
 			}
 		}
 
-		public void ShiftPixels(Toolbox_Sprite.ShiftArrow shift)
+		public void ShiftPixels(Arrowbox.ShiftArrow shift)
 		{
-			if (shift == Toolbox_Sprite.ShiftArrow.Left)
+			if (shift == Arrowbox.ShiftArrow.Left)
 				ShiftPixels_Left();
-			if (shift == Toolbox_Sprite.ShiftArrow.Right)
+			if (shift == Arrowbox.ShiftArrow.Right)
 				ShiftPixels_Right();
-			if (shift == Toolbox_Sprite.ShiftArrow.Up)
+			if (shift == Arrowbox.ShiftArrow.Up)
 				ShiftPixels_Up();
-			if (shift == Toolbox_Sprite.ShiftArrow.Down)
+			if (shift == Arrowbox.ShiftArrow.Down)
 				ShiftPixels_Down();
 			FlushBitmaps();
 		}
@@ -689,6 +680,65 @@ namespace Spritely
 			for (int pxX = 0; pxX < pxWidth; pxX++)
 				SetPixel(pxX, 0, 0);
 		}
+
+		#region FloodFill tool
+
+		public class PixelCoord
+		{
+			public int X, Y;
+
+			public PixelCoord(int x, int y)
+			{
+				X = x;
+				Y = y;
+			}
+		}
+
+		/// <summary>
+		/// Perform a floodfill click at the specified (x,y) pixel coords
+		/// </summary>
+		/// <param name="pxSpriteX">Click x-position (in pixels)</param>
+		/// <param name="pxSpriteY">Click y-position (in pixels)</param>
+		/// <returns>True if the sprite changes as a result of this click, false otherwise.</returns>
+		public bool FloodFillClick(int pxSpriteX, int pxSpriteY)
+		{
+			int colorOld = GetPixel(pxSpriteX, pxSpriteY);
+			int colorNew = Subpalette.CurrentColor;
+			if (colorOld == colorNew)
+				return false;
+
+			// Stack of pixels to process.
+			Stack<PixelCoord> stackPixels = new Stack<PixelCoord>();
+
+			PixelCoord p = new PixelCoord(pxSpriteX, pxSpriteY);
+			stackPixels.Push(p);
+
+			while (stackPixels.Count != 0)
+			{
+				p = stackPixels.Pop();
+				SetPixel(p.X, p.Y, colorNew);
+
+				FloodFill_CheckPixel(p.X - 1, p.Y, colorOld, ref stackPixels);
+				FloodFill_CheckPixel(p.X + 1, p.Y, colorOld, ref stackPixels);
+				FloodFill_CheckPixel(p.X, p.Y - 1, colorOld, ref stackPixels);
+				FloodFill_CheckPixel(p.X, p.Y + 1, colorOld, ref stackPixels);
+			}
+
+			FlushBitmaps();
+			return true;
+		}
+
+		private void FloodFill_CheckPixel(int x, int y, int color, ref Stack<PixelCoord> stack)
+		{
+			if (x >= 0 && x < PixelWidth
+				&& y >= 0 && y < PixelHeight
+				&& GetPixel(x, y) == color)
+			{
+				stack.Push(new PixelCoord(x, y));
+			}
+		}
+
+		#endregion
 
 		public void Clear()
 		{

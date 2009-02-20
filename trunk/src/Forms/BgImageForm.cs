@@ -53,16 +53,25 @@ namespace Spritely
 
 			// Set to 16x.
 			cbZoom.SelectedIndex = (int)ZoomLevel.Zoom_16x;
+			cbZoom.Enabled = false;
+
+			lNoImage.Visible = false;
 		}
 
 		public void SetBgImage(BgImage bgi)
 		{
 			m_bgimage = bgi;
 			pbBgImage.Invalidate();
+			SetTitle();
+		}
 
-			// Update title with map name.
-			if (bgi != null)
-				Text = "Background Image '" + bgi.Name + "'";
+		/// <summary>
+		/// Update the form title with the bgimage name.
+		/// </summary>
+		public void SetTitle()
+		{
+			if (m_bgimage != null)
+				Text = "Background Image '" + m_bgimage.Name + "'";
 		}
 
 		#region Window events
@@ -92,13 +101,25 @@ namespace Spritely
 
 		#endregion
 
+		private void bInfo_Click(object sender, EventArgs e)
+		{
+			if (m_bgimage == null)
+				return;
+
+			BgImageProperties properties = new BgImageProperties(m_parent.Document, m_bgimage);
+			properties.ShowDialog();
+
+			// The name of the background image may have changed, so update the form title.
+			SetTitle();
+		}
+
 		#region Toolbox
 
 		private bool m_fToolbox_Selecting = false;
 
 		private void pbTools_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (m_toolbox.HandleMouse(e.X, e.Y))
+			if (m_toolbox.HandleMouseDown(e.X, e.Y))
 			{
 				pbTools.Invalidate();
 			}
@@ -121,6 +142,7 @@ namespace Spritely
 
 		private void pbTools_MouseUp(object sender, MouseEventArgs e)
 		{
+			m_toolbox.HandleMouseUp();
 			m_fToolbox_Selecting = false;
 			pbTools.Invalidate();
 		}
@@ -135,7 +157,7 @@ namespace Spritely
 
 		private void pbTools_Paint(object sender, PaintEventArgs e)
 		{
-			m_toolbox.Draw(e.Graphics);
+			m_toolbox.Draw(e.Graphics, pbTools.Size);
 		}
 
 		#endregion
@@ -187,12 +209,17 @@ namespace Spritely
 
 			if (m_bgimage != null)
 			{
+				lNoImage.Visible = false;
 				Bitmap bm = m_bgimage.Bitmap;
 				if (bm != null)
 				{
-					g.DrawImage(bm, 0, 0, bm.Width*2, bm.Height*2);
-					g.DrawRectangle(Pens.Black, 0, 0, bm.Width*2, bm.Height*2);
+					g.DrawImage(bm, 0, 0, bm.Width * 2, bm.Height * 2);
+					g.DrawRectangle(Pens.Black, 0, 0, bm.Width * 2, bm.Height * 2);
 				}
+			}
+			else
+			{
+				lNoImage.Visible = true;
 			}
 		}
 

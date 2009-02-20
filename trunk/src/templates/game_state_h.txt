@@ -8,10 +8,8 @@
 #include "sprites.h"
 #include "background_maps.h"
 
-// The stages in our game.
-const int kStage_Title = 0;		// Show the title/splash screen
-const int kStage_Level1 = 1;
-const int kStage_GameOver = 2;
+// The levels in our game.
+const int kLevel_1 = 1;
 
 // The objects in our game.
 // Only 128 objects (0-127) can be defined at any time.
@@ -26,21 +24,17 @@ public:
 	
 	// SetupStage
 	// Set up the stage (backgrounds, sprites) for the each level.
-	void SetupStage(int stage);
-	void SetupStage_Title();
+	void SetupStage(int level);
 	void SetupStage_Level1();
-	void SetupStage_GameOver();
 	
 	// Update
 	// This is called continuously to update the game to the next state.
 	void Update();
-	void Update_Title(u16 keyPress, u16 keyHeld);
 	void Update_Level1(u16 keyPress, u16 keyHeld);
-	void Update_GameOver(u16 keyPress, u16 keyHeld);
 	
 private:
-	// The current stage of the game.
-	int _stage;
+	// The current level of the game.
+	int _level;
 	
 	// The (x,y) location of the object representing the player.
 	int _xPlayer, _yPlayer;

@@ -1,12 +1,35 @@
+Change History for Spritely: code.google.com/p/spritely
+Official binary releases are noted with "*** BINARY RELEASE ***" after
+  the version number
+
+0.14.19
+Add undo support for background map editing
+Fix undo bug after file load where original image after load wasn't recorded
+  in a snapshot
+Add toolbox buttons to enable/disable tilegrid and screen boundary display
+  in background map editor
+Reorganize toolbox code/display to eliminate blank space
+Breakout arrowbox and optionbox tools into separate toolbox classes 
+Move display options into option toolbox
+Remove Options menu and dialog
+Fix duplicate sprite bugs:
+  New sprite wasn't selected.
+  Undoing edits in duplicated sprite resulted in empty sprite:
+Add properties info window for BgImages (to allow rename) 
+Update generated code to work with devkitARM release 24
+Update tutorials
+(Debug) Add automatic tutorial verification tests
+
 0.14.8
 Add floodfill (paintbucket) tool to background maps
 Fix redo bug (can't redo the very first undo action)
 Update (debug) UndoHistory window to show history for all 3 tabs
-Fix bug where undo/redo of sprite subpalette change did not update palette window
+Fix bug where undo/redo of sprite subpalette change did not update palette
+  window
 Activate menu items during App.Idle so that key shortcuts work consistently
 Unittests: Undo/Redo for AddSprite/Editsprite
 
-0.14.6 *** CHECKPOINT ***
+0.14.6
 Add icon
 Change transparent color display to use gray pattern instead of red 'x'.
 Remove option to display transparent color (always drawn as patten now).
@@ -18,11 +41,11 @@ Fix ParseHexString unittest
 Update generated code:
   Broke SetupStage and Update into separate routines for each stage.
 
-0.14.2 *** CHECKPOINT ***
+0.14.2
 Update background image code to work on NDS.
   (NDS doesn't support paletted background images)
 
-0.14.1 *** CHECKPOINT ***
+0.14.1
 Force window updates when display options change.
 Force window updates after applying undo/redo actions.
 Re-enable color encoding window.
@@ -37,7 +60,7 @@ Update generated code:
   Added game_utils.cpp
   Added code to manage game stages
 
-0.13.29 *** CHECKPOINT ***
+0.13.29
 Fix bug with map tile ids. Previously the internal tile id would be
   written out instead of the tile export id, which would lead to 
   invalid tile ids being written into the map when bgsprites had
@@ -52,7 +75,7 @@ Fix sprite toolbox: tool select, bucket, eyedropper
 Fix background map editing
 Remove old UI forms, classes
 
-0.13.28 *** CHECKPOINT ***
+0.13.28
 Switch to new UI:
   Subwindows for each UI component: spriteset, sprite, palette, map.
   Background tile editing and map editing now on same tab.
@@ -101,7 +124,7 @@ Create new classes to manage multiple palettes, spritesets and maps
 Add new project interface prototype (devel version only)
 Add unit tests for file load (old/new version)
 
-0.8.7
+0.8.7 *** BINARY RELEASE ***
 Auto-generate collision bitmasks for each sprite.
 Add pixel-perfect collision routines to collision.cpp
 Add (debug only) CollisionTest dialog.
@@ -114,7 +137,7 @@ Fix bug where deleting multiple sprites in a row would result in no sprite
 Fix bug where collision.(cpp|h) were not included in the auto-generated
   Programmer's Notepad project.
 
-0.7.6
+0.7.6 *** BINARY RELEASE ***
 Fix bug where DC_FlushRange wasn't being called for NDS projects
   NDS projects worked in emulation, but not on real hardware.
 Fix compilation problem with NDS projects referring to GBA headers
@@ -129,7 +152,7 @@ Inherit platform from current state of GBA/NDS tools on BackgroundMap tab.
 Add option to enable/disable screen boundary and grid in Map edit.
 Add option to enable/disable sprite pixel and sprite tile grid
 
-0.7.1
+0.7.1 *** BINARY RELEASE ***
 Merge VerticalFlipObject and HorizontalFlipObject into FlipObject
 Merge ShowObject and HideObject into ShowObject
 Automatically generate Programmer's Notepad project (pnproj) file when
@@ -142,7 +165,7 @@ Fix bug where sprites didn't get moved into correct spritelist group when
 Fix bug where undoing a sprite resize (or rotate) would render the sprite in
   the old group in the spritelist.
 
-0.6.8
+0.6.8 *** BINARY RELEASE ***
 Change InitObject() to no longer require starting x,y coords
   Add MoveObjectTo() after InitObject() in generated code.
   This allows us to call GetObjectWidth(), et al, when calculating the initial

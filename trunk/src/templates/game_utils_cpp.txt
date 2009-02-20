@@ -60,14 +60,14 @@ void LoadSpriteset(int id) {
 
 void ClearBackgrounds() {
 	// Set the attributes in the background 0 control reg
-%%NDS:%%	BG0_CR = 0;
+%%NDS:%%	REG_BG0CNT = 0;
 %%GBA:%%	REG_BG0CNT = 0;
 }
 
 // Load background tileset into VRAM.
 void LoadBgTileset(int id) {
 	// Set background 0 control register for 16-color tile stored in Tile Data Block 0.
-%%NDS:%%	BG0_CR |= BG_16_COLOR | BG_TILE_BASE(0);
+%%NDS:%%	REG_BG0CNT |= BG_COLOR_16 | BG_TILE_BASE(0);
 %%GBA:%%	REG_BG0CNT |= BG_16_COLOR | BG_TILE_BASE(0);
 
 	// Load palette for this background tileset into VRAM.
@@ -96,7 +96,7 @@ void LoadBgTileset(int id) {
 void LoadBgMap(int id) {
 	// Set background 0 control register for 32x32 tile background stored in
 	// Tile Map Block 31.
-%%NDS:%%	BG0_CR |= BG_32x32 | BG_MAP_BASE(31);
+%%NDS:%%	REG_BG0CNT |= BG_32x32 | BG_MAP_BASE(31);
 %%GBA:%%	REG_BG0CNT |= TEXTBG_SIZE_256x256 | BG_MAP_BASE(31);
 
 	// Load background map into VRAM

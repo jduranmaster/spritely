@@ -8,6 +8,31 @@ namespace Spritely
 {
 	public static class Options
 	{
+		/// <summary>
+		/// Is this the debug/testing build?
+		/// </summary>
+		public static bool DEBUG = false;//true;
+
+		/// <summary>
+		/// Path to the raw tutorial files so that they can be processed by the
+		/// tutorial test.
+		/// Debug version only.
+		/// </summary>
+		public static string Debug_TutorialPath = @"C:\gamedev\Spritely\tutorials";
+		public static string Debug_TutorialRawPath = @"C:\gamedev\Spritely\tutorials\raw";
+		public static string Debug_TutorialRawDataPath = @"C:\gamedev\Spritely\tutorials\raw_data";
+
+		/// <summary>
+		/// Version of devkitARM that we have tested with.
+		/// </summary>
+		public static int Debug_DevkitArmVersion = 24;
+
+		/// <summary>
+		/// Current Spritely version string.
+		/// </summary>
+		public static string VersionString = "0.14.19 beta";
+		public static string VersionDate = "19 February 2009";
+
 		public static string DefaultSpritesetName = "Sprites";
 		public static string DefaultPaletteName = "Pal16";
 		public static int DefaultPaletteId = 0;
@@ -41,12 +66,10 @@ namespace Spritely
 			}
 		}
 
-		enum BoolOptionName {
+		public enum BoolOptionName {
 			Sprite_ShowPixelGrid,
 			Sprite_ShowTileGrid,
 			Sprite_ShowPaletteIndex,
-
-			Palette_ShowPaletteIndex,
 
 			BackgroundMap_ShowGrid,
 			BackgroundMap_ShowScreen,
@@ -58,8 +81,6 @@ namespace Spritely
 			new BoolOptionInfo("sprite_show_tilegrid", true),
 			new BoolOptionInfo("sprite_show_palette_index", false),
 
-			new BoolOptionInfo("palette_show_palette_index", false),
-
 			new BoolOptionInfo("bgmap_show_tilegrid", true),
 			new BoolOptionInfo("bgmap_show_screen_boundary", true),
 		};
@@ -68,7 +89,18 @@ namespace Spritely
 		{
 			"sprite_show_transparent",
 			"palette_show_transparent",
+			"palette_show_palette_index",
 		};
+
+		public static bool Get(BoolOptionName name)
+		{
+			return BoolOptions[(int)name].Value;
+		}
+
+		public static void Set(BoolOptionName name, bool value)
+		{
+			BoolOptions[(int)name].Value = value;
+		}
 
 		public static bool Sprite_ShowPixelGrid
 		{
@@ -84,12 +116,6 @@ namespace Spritely
 		{
 			get { return BoolOptions[(int)BoolOptionName.Sprite_ShowPaletteIndex].Value; }
 			set { BoolOptions[(int)BoolOptionName.Sprite_ShowPaletteIndex].Value = value; }
-		}
-
-		public static bool Palette_ShowPaletteIndex
-		{
-			get { return BoolOptions[(int)BoolOptionName.Palette_ShowPaletteIndex].Value; }
-			set { BoolOptions[(int)BoolOptionName.Palette_ShowPaletteIndex].Value = value; }
 		}
 
 		public static bool BackgroundMap_ShowGrid

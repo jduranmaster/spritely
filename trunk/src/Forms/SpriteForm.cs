@@ -16,6 +16,8 @@ namespace Spritely
 		private Sprite m_sprite;
 
 		private Toolbox_Sprite m_toolbox;
+		private Optionbox_Sprite m_optionbox;
+		private Arrowbox m_arrowbox;
 
 		public static int m_pxBigBitmapSize = 4;
 		public static int BigBitmapPixelSize
@@ -51,7 +53,8 @@ namespace Spritely
 
 			SetSprite(s);
 			m_toolbox = new Toolbox_Sprite();
-			m_toolbox.CurrentTool = Toolbox.ToolType.Pencil;
+			m_optionbox = new Optionbox_Sprite();
+			m_arrowbox = new Arrowbox_Sprite();
 
 			MdiParent = parent;
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -78,10 +81,16 @@ namespace Spritely
 		public void SetSprite(Sprite s)
 		{
 			m_sprite = s;
+			SetTitle();
+		}
 
-			// Update title with sprite name.
-			if (s != null)
-				Text = "Sprite '" + s.Name + "'";
+		/// <summary>
+		/// Update the form title with the sprite name.
+		/// </summary>
+		public void SetTitle()
+		{
+			if (m_sprite != null)
+				Text = "Sprite '" + m_sprite.Name + "'";
 		}
 
 		#region Window events
@@ -119,6 +128,14 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// The display options for the sprite has changed.
+		/// </summary>
+		public void SpriteDisplayOptionChanged()
+		{
+			pbSprite.Invalidate();
+		}
+
+		/// <summary>
 		/// The currently subpalette selection has changed.
 		/// </summary>
 		public void SubpaletteSelectChanged()
@@ -136,24 +153,22 @@ namespace Spritely
 
 		#endregion
 
+		private void bInfo_Click(object sender, EventArgs e)
+		{
+			SpriteProperties properties = new SpriteProperties(m_parent.Document, m_ss);
+			properties.ShowDialog();
+
+			// The name of the sprite may have changed, so update the form title.
+			SetTitle();
+		}
+
 		#region Toolbox
 
 		private bool m_fToolbox_Selecting = false;
 
 		private void pbTools_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (m_toolbox.HilightedShiftArrow() != Toolbox_Sprite.ShiftArrow.None)
-			{
-				m_toolbox.SetMouseDownShiftArrow(true);
-				pbTools.Invalidate();
-
-				m_sprite.ShiftPixels(m_toolbox.HilightedShiftArrow());
-				m_sprite.RecordUndoAction("shift", m_parent.ActiveUndo());
-				m_parent.HandleSpriteDataChanged(m_ss);
-				return;
-			}
-
-			if (m_toolbox.HandleMouse(e.X, e.Y))
+			if (m_toolbox.HandleMouseDown(e.X, e.Y))
 				pbTools.Invalidate();
 
 			m_fToolbox_Selecting = true;
@@ -166,32 +181,111 @@ namespace Spritely
 				if (m_toolbox.HandleMouse(e.X, e.Y))
 					pbTools.Invalidate();
 			}
-			else
-			{
-				if (m_toolbox.HandleMouseMove(e.X, e.Y))
-					pbTools.Invalidate();
-			}
 		}
 
 		private void pbTools_MouseUp(object sender, MouseEventArgs e)
 		{
-			m_toolbox.SetMouseDownShiftArrow(false);
+			m_toolbox.HandleMouseUp();
 
 			m_fToolbox_Selecting = false;
 			pbTools.Invalidate();
 		}
 
-		private void pbTools_MouseLeave(object sender, EventArgs e)
-		{
-			m_toolbox.SetMouseDownShiftArrow(false);
-
-			if (m_toolbox.HandleMouseMove(-10, -10))
-				pbTools.Invalidate();
-		}
-
 		private void pbTools_Paint(object sender, PaintEventArgs e)
 		{
-			m_toolbox.Draw(e.Graphics);
+			m_toolbox.Draw(e.Graphics, pbTools.Size);
+		}
+
+		#endregion
+
+		#region Optionbox
+
+		private void pbOptions_MouseDown(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseDown(e.X, e.Y, pbOptions);
+		}
+
+		private void pbOptions_MouseMove(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseMove(e.X, e.Y, pbOptions);
+		}
+
+		private void pbOptions_MouseUp(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseUp(e.X, e.Y, pbOptions);
+			m_parent.HandleSpriteDisplayOptionsChanged(m_ss);
+			pbSprite.Invalidate();
+		}
+
+		private void pbOptions_MouseLeave(object sender, EventArgs e)
+		{
+			m_optionbox.HandleMouseLeave(pbOptions);
+		}
+
+		private void pbOptions_Paint(object sender, PaintEventArgs e)
+		{
+			m_optionbox.Draw(e.Graphics, pbOptions.Size);
+		}
+
+		#endregion
+
+		#region Arrowbox
+
+		private bool m_fArrowbox_Selecting = false;
+
+		private void pbArrowbox_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (m_arrowbox.HilightedShiftArrow() != Arrowbox.ShiftArrow.None)
+			{
+				m_arrowbox.SetMouseDownShiftArrow(true);
+				pbArrowbox.Invalidate();
+
+				m_sprite.ShiftPixels(m_arrowbox.HilightedShiftArrow());
+				m_sprite.RecordUndoAction("shift", m_parent.ActiveUndo());
+				m_parent.HandleSpriteDataChanged(m_ss);
+				return;
+			}
+
+			if (m_arrowbox.HandleMouseDown(e.X, e.Y))
+				pbArrowbox.Invalidate();
+
+			m_fArrowbox_Selecting = true;
+		}
+
+		private void pbArrowbox_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (m_fArrowbox_Selecting)
+			{
+				if (m_arrowbox.HandleMouse(e.X, e.Y))
+					pbArrowbox.Invalidate();
+			}
+			else
+			{
+				if (m_arrowbox.HandleMouseMove(e.X, e.Y))
+					pbArrowbox.Invalidate();
+			}
+		}
+
+		private void pbArrowbox_MouseUp(object sender, MouseEventArgs e)
+		{
+			m_arrowbox.HandleMouseUp();
+			m_arrowbox.SetMouseDownShiftArrow(false);
+
+			m_fArrowbox_Selecting = false;
+			pbArrowbox.Invalidate();
+		}
+
+		private void pbArrowbox_MouseLeave(object sender, EventArgs e)
+		{
+			m_arrowbox.SetMouseDownShiftArrow(false);
+
+			if (m_arrowbox.HandleMouseMove(-100, -100))
+				pbArrowbox.Invalidate();
+		}
+
+		private void pbArrowbox_Paint(object sender, PaintEventArgs e)
+		{
+			m_arrowbox.Draw(e.Graphics, pbArrowbox.Size);
 		}
 
 		#endregion
@@ -218,7 +312,7 @@ namespace Spritely
 		{
 			if (m_fEditSprite_Selecting)
 			{
-				Toolbox.ToolType tool = m_toolbox.CurrentTool;
+				Toolbox.ToolType tool = m_toolbox.CurrentToolType;
 				if (m_fEditSprite_Erase)
 					tool = Toolbox.ToolType.Eraser;
 
@@ -241,7 +335,7 @@ namespace Spritely
 		{
 			if (m_fEditSprite_Selecting)
 			{
-				Toolbox.ToolType tool = m_toolbox.CurrentTool;
+				Toolbox.ToolType tool = m_toolbox.CurrentToolType;
 
 				// Close out the edit action.
 				FinishEdit(tool);
@@ -291,7 +385,7 @@ namespace Spritely
 				return false;
 
 			if (tool == Toolbox.ToolType.FloodFill)
-				return FloodFillClick(pxSpriteX, pxSpriteY);
+				return m_sprite.FloodFillClick(pxSpriteX, pxSpriteY);
 
 			// Convert sprite pixel coords (x,y) into tile index (x,y) and tile pixel coords (x,y).
 			int tileX = pxSpriteX / Tile.TileSize;
@@ -446,65 +540,6 @@ namespace Spritely
 						g.DrawString(sp.Label(nPaletteIndex), f, sp.LabelBrush(nPaletteIndex), pxX0 + pxLabelOffsetX, pxY0 + pxLabelOffsetY);
 					}
 				}
-			}
-		}
-
-		#endregion
-
-		#region FloodFill tool
-
-		public class PixelCoord
-		{
-			public int X, Y;
-
-			public PixelCoord(int x, int y)
-			{
-				X = x;
-				Y = y;
-			}
-		}
-
-		/// <summary>
-		/// Perform a floodfill click at the specified (x,y) pixel coords
-		/// </summary>
-		/// <param name="pxSpriteX">Click x-position (in pixels)</param>
-		/// <param name="pxSpriteY">Click y-position (in pixels)</param>
-		/// <returns>True if the sprite changes as a result of this click, false otherwise.</returns>
-		public bool FloodFillClick(int pxSpriteX, int pxSpriteY)
-		{
-			int colorOld = m_sprite.GetPixel(pxSpriteX, pxSpriteY);
-			int colorNew = m_sprite.Subpalette.CurrentColor;
-			if (colorOld == colorNew)
-				return false;
-
-			// Stack of pixels to process.
-			Stack<PixelCoord> stackPixels = new Stack<PixelCoord>();
-
-			PixelCoord p = new PixelCoord(pxSpriteX, pxSpriteY);
-			stackPixels.Push(p);
-
-			while (stackPixels.Count != 0)
-			{
-				p = stackPixels.Pop();
-				m_sprite.SetPixel(p.X, p.Y, colorNew);
-
-				FloodFill_CheckPixel(p.X - 1, p.Y, colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X + 1, p.Y, colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X, p.Y - 1, colorOld, ref stackPixels);
-				FloodFill_CheckPixel(p.X, p.Y + 1, colorOld, ref stackPixels);
-			}
-
-			m_sprite.FlushBitmaps();
-			return true;
-		}
-
-		private void FloodFill_CheckPixel(int x, int y, int color, ref Stack<PixelCoord> stack)
-		{
-			if (x >= 0 && x < m_sprite.PixelWidth
-				&& y >= 0 && y < m_sprite.PixelHeight
-				&& m_sprite.GetPixel(x, y) == color)
-			{
-				stack.Push(new PixelCoord(x, y));
 			}
 		}
 

@@ -161,15 +161,14 @@ namespace Spritely
 		/// editing tab to size the sprite window and to calculate the x-offset
 		/// for the map window.
 		/// </summary>
-		/// 167,306
 		const int k_pxSpritesetWidth = 167;
 		const int k_pxSpritesetHeight = 306;
 		const int k_pxSprite1IdealWidth = 206;
-		const int k_pxSprite2IdealWidth = 330;
-		const int k_pxSprite4IdealWidth = 591;
-		const int k_pxBackgroundMapIdealWidth = 591;
+		const int k_pxSprite2IdealWidth = 334;
+		const int k_pxSprite4IdealWidth = 590;
+		const int k_pxBackgroundMapIdealWidth = 590;
 		const int k_pxBackgroundMapIdealHeight = 638;
-		const int k_pxBackgroundImageIdealWidth = 591;
+		const int k_pxBackgroundImageIdealWidth = 590;
 
 		public static void ResizeMainForm(ProjectMainForm form)
 		{
@@ -227,7 +226,6 @@ namespace Spritely
 				s.Left = ss.Right;
 				s.Height = m_owner.ContentHeight;
 
-				// Expand window to fill all remaining space.
 				int pxSpace = m_owner.ContentWidth - s.Left;
 				if (pxSpace >= k_pxSprite4IdealWidth)
 					s.Width = k_pxSprite4IdealWidth;

@@ -11,11 +11,6 @@ namespace Spritely
 		private Document m_doc;
 		private Dictionary<int, BgImage> m_bgimages;
 
-		/// <summary>
-		/// The next BgImage id available to assign.
-		/// </summary>
-		private int m_nNextId = 0;
-
 		private BgImage m_bgiCurrent;
 
 		private BgImageListForm m_winBgImageList;
@@ -41,6 +36,50 @@ namespace Spritely
 			foreach (BgImage bgi in m_bgimages.Values)
 			{
 				bgi.UpdateDocument(doc);
+			}
+		}
+
+		/// <summary>
+		/// The next BgImage id available to assign.
+		/// </summary>
+		private int m_nNextId = 0;
+
+		public int NextBgImageId
+		{
+			get { return m_nNextId; }
+			set { m_nNextId = value; }
+		}
+
+		public string GenerateUniqueBgImageName()
+		{
+			// When we're auto-generating bgimage names, make sure the new name doesn't collide with
+			// the names of any already-existing bgimages.
+			string strName = AutoGenerateBgImageName();
+			while (HasNamedImage(strName))
+				strName = AutoGenerateBgImageName();
+			return strName;
+		}
+
+		public string AutoGenerateBgImageName()
+		{
+			return String.Format("BgImage{0}", NextBgImageId++);
+		}
+
+		public bool HasNamedImage(string strName)
+		{
+			foreach (BgImage bgi in m_bgimages.Values)
+			{
+				if (bgi.Name == strName)
+					return true;
+			}
+			return false;
+		}
+
+		public void RecordSnapshot()
+		{
+			foreach (BgImage bgi in m_bgimages.Values)
+			{
+				bgi.RecordSnapshot();
 			}
 		}
 
@@ -70,7 +109,8 @@ namespace Spritely
 			set
 			{
 				m_bgiCurrent = value;
-				m_winBgImage.SetBgImage(m_bgiCurrent);
+				if (m_winBgImage != null)
+					m_winBgImage.SetBgImage(m_bgiCurrent);
 			}
 		}
 
@@ -119,7 +159,8 @@ namespace Spritely
 			{
 				m_bgimages.Add(id, bgi);
 				CurrentImage = bgi;
-				m_doc.Owner.HandleBackgroundImageListChanged(this);
+				if (m_doc.Owner != null)
+					m_doc.Owner.HandleBackgroundImageListChanged(this);
 			}
 			else
 				bgi = null;

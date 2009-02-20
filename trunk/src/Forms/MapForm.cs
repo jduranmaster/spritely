@@ -16,6 +16,7 @@ namespace Spritely
 		private Spriteset m_ss;
 
 		private Toolbox_Map m_toolbox;
+		private Optionbox_Map m_optionbox;
 
 		private const int k_nMaxMapTilesX = 32;
 		private const int k_nMaxMapTilesY = 32;
@@ -61,6 +62,13 @@ namespace Spritely
 			Zoom_32x,
 		};
 
+		public enum ScreenBoundary
+		{
+			None = 0,
+			GBA,
+			NDS,
+		};
+
 		public MapForm(ProjectMainForm parent, Map m, Spriteset ss, Sprite s)
 		{
 			m_parent = parent;
@@ -71,7 +79,7 @@ namespace Spritely
 
 			SetMap(m);
 			m_toolbox = new Toolbox_Map();
-			m_toolbox.CurrentTool = Toolbox.ToolType.RubberStamp;
+			m_optionbox = new Optionbox_Map();
 
 			MdiParent = parent;
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -81,6 +89,7 @@ namespace Spritely
 
 			// Set to 16x.
 			cbZoom.SelectedIndex = (int)ZoomLevel.Zoom_16x;
+			cbZoom.Enabled = false;
 
 			m_tileSpriteX = -1;
 			m_tileSpriteY = -1;
@@ -160,7 +169,7 @@ namespace Spritely
 
 		private void pbTools_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (m_toolbox.HandleMouse(e.X, e.Y))
+			if (m_toolbox.HandleMouseDown(e.X, e.Y))
 			{
 				pbTools.Invalidate();
 			}
@@ -183,21 +192,52 @@ namespace Spritely
 
 		private void pbTools_MouseUp(object sender, MouseEventArgs e)
 		{
+			m_toolbox.HandleMouseUp();
 			m_fToolbox_Selecting = false;
 			pbTools.Invalidate();
+			// Some tools may affect the map display.
+			pbMap.Invalidate();
 		}
 
 		private void pbTools_MouseLeave(object sender, EventArgs e)
 		{
 			if (m_toolbox.HandleMouseMove(-10, -10))
-			{
 				pbTools.Invalidate();
-			}
 		}
 
 		private void pbTools_Paint(object sender, PaintEventArgs e)
 		{
-			m_toolbox.Draw(e.Graphics);
+			m_toolbox.Draw(e.Graphics, pbTools.Size);
+		}
+
+		#endregion
+
+		#region Optionbox
+
+		private void pbOptions_MouseDown(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseDown(e.X, e.Y, pbOptions);
+		}
+
+		private void pbOptions_MouseMove(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseMove(e.X, e.Y, pbOptions);
+		}
+
+		private void pbOptions_MouseUp(object sender, MouseEventArgs e)
+		{
+			m_optionbox.HandleMouseUp(e.X, e.Y, pbOptions);
+			pbMap.Invalidate();
+		}
+
+		private void pbOptions_MouseLeave(object sender, EventArgs e)
+		{
+			m_optionbox.HandleMouseLeave(pbOptions);
+		}
+
+		private void pbOptions_Paint(object sender, PaintEventArgs e)
+		{
+			m_optionbox.Draw(e.Graphics, pbOptions.Size);
 		}
 
 		#endregion
@@ -216,7 +256,7 @@ namespace Spritely
 		{
 			if (m_fEditBackgroundMap_Selecting)
 			{
-				Toolbox.ToolType tool = m_toolbox.CurrentTool;
+				Toolbox.ToolType tool = m_toolbox.CurrentToolType;
 				if (HandleMouse(e.X, e.Y, tool))
 				{
 					m_parent.HandleMapDataChange(m_map);
@@ -232,11 +272,25 @@ namespace Spritely
 
 		private void pbMap_MouseUp(object sender, MouseEventArgs e)
 		{
+			if (m_fEditBackgroundMap_Selecting)
+			{
+				Toolbox.Tool t = m_toolbox.CurrentTool;
+				m_map.RecordUndoAction(t.Name, m_parent.ActiveUndo());
+			}
+
 			if (HandleMouseMove(-100, -100))
 			{
 				pbMap.Invalidate();
 			}
 			m_fEditBackgroundMap_Selecting = false;
+		}
+
+		private void pbMap_MouseLeave(object sender, EventArgs e)
+		{
+			if (HandleMouseMove(-100, -100))
+			{
+				pbMap.Invalidate();
+			}
 		}
 
 		/// <summary>
@@ -314,7 +368,7 @@ namespace Spritely
 
 			if (pxX < 0 || pxY < 0 || x >= k_nMaxMapTilesX || y >= k_nMaxMapTilesY)
 			{
-				// Turn off the hilight if we currently have one.
+				// Turn off any hilighting.
 				if (m_tileSpriteX != -1 || m_tileSpriteY != -1)
 				{
 					m_tileSpriteX = -1;
@@ -468,10 +522,13 @@ namespace Spritely
 			{
 				FloodFill_Sprite(nMapX, nMapY, spriteOld, subpaletteOld, null, -1, subpaletteOld);
 				FloodFill_Sprite(nMapX, nMapY, null, subpaletteOld, spriteNew, tileNew, subpaletteOld);
-				return true;
+			}
+			else
+			{
+				FloodFill_Sprite(nMapX, nMapY, spriteOld, subpaletteOld, spriteNew, tileNew, subpaletteNew);
 			}
 
-			return FloodFill_Sprite(nMapX, nMapY, spriteOld, subpaletteOld, spriteNew, tileNew, subpaletteNew);
+			return true;
 		}
 
 		private Stack<TileCoord> m_stackTiles;
@@ -558,8 +615,8 @@ namespace Spritely
 
 		private void cbZoom_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			BigBitmapPixelSize = 1 << cbZoom.SelectedIndex;
-			pbMap.Invalidate();
+			//BigBitmapPixelSize = 1 << cbZoom.SelectedIndex;
+			//pbMap.Invalidate();
 		}
 
 	}

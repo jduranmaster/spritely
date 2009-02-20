@@ -31,16 +31,17 @@ namespace Spritely
 			this.pbTools = new System.Windows.Forms.PictureBox();
 			this.pbBgImage = new System.Windows.Forms.PictureBox();
 			this.cbZoom = new System.Windows.Forms.ComboBox();
+			this.lNoImage = new System.Windows.Forms.Label();
+			this.bInfo = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBgImage)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pbTools
 			// 
-			this.pbTools.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pbTools.Location = new System.Drawing.Point(5, 5);
 			this.pbTools.Name = "pbTools";
-			this.pbTools.Size = new System.Drawing.Size(55, 231);
+			this.pbTools.Size = new System.Drawing.Size(55, 29);
 			this.pbTools.TabIndex = 0;
 			this.pbTools.TabStop = false;
 			this.pbTools.MouseLeave += new System.EventHandler(this.pbTools_MouseLeave);
@@ -75,18 +76,40 @@ namespace Spritely
             "8x",
             "16x",
             "32x"});
-			this.cbZoom.Location = new System.Drawing.Point(5, 243);
+			this.cbZoom.Location = new System.Drawing.Point(5, 40);
 			this.cbZoom.Name = "cbZoom";
 			this.cbZoom.Size = new System.Drawing.Size(55, 21);
 			this.cbZoom.TabIndex = 2;
 			this.cbZoom.TabStop = false;
 			this.cbZoom.SelectedIndexChanged += new System.EventHandler(this.cbZoom_SelectedIndexChanged);
 			// 
+			// lNoImage
+			// 
+			this.lNoImage.AutoSize = true;
+			this.lNoImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lNoImage.Location = new System.Drawing.Point(70, 11);
+			this.lNoImage.Name = "lNoImage";
+			this.lNoImage.Size = new System.Drawing.Size(55, 13);
+			this.lNoImage.TabIndex = 3;
+			this.lNoImage.Text = "No image.";
+			// 
+			// bInfo
+			// 
+			this.bInfo.Location = new System.Drawing.Point(5, 67);
+			this.bInfo.Name = "bInfo";
+			this.bInfo.Size = new System.Drawing.Size(55, 20);
+			this.bInfo.TabIndex = 6;
+			this.bInfo.Text = "Info";
+			this.bInfo.UseVisualStyleBackColor = true;
+			this.bInfo.Click += new System.EventHandler(this.bInfo_Click);
+			// 
 			// BgImageForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(395, 301);
+			this.Controls.Add(this.bInfo);
+			this.Controls.Add(this.lNoImage);
 			this.Controls.Add(this.cbZoom);
 			this.Controls.Add(this.pbBgImage);
 			this.Controls.Add(this.pbTools);
@@ -99,6 +122,7 @@ namespace Spritely
 			((System.ComponentModel.ISupportInitialize)(this.pbTools)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbBgImage)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -107,5 +131,7 @@ namespace Spritely
 		private System.Windows.Forms.PictureBox pbTools;
 		private System.Windows.Forms.PictureBox pbBgImage;
 		private System.Windows.Forms.ComboBox cbZoom;
+		private System.Windows.Forms.Label lNoImage;
+		private System.Windows.Forms.Button bInfo;
 	}
 }

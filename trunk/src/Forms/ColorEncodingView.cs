@@ -197,7 +197,7 @@ namespace Spritely
 					g.FillRectangle(m_brushTransparent, pxX0, pxY0, k_pxSwatchSize, k_pxSwatchSize);
 
 				// Draw the palette index in each swatch.
-				if (Options.Palette_ShowPaletteIndex)
+				if (Options.Sprite_ShowPaletteIndex)
 				{
 					int pxLabelOffsetX = nXOffset[nIndex];
 					int pxLabelOffsetY = 2;

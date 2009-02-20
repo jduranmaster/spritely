@@ -28,6 +28,14 @@ namespace Spritely
 			}
 		}
 
+		public void RecordSnapshot()
+		{
+			foreach (Map m in m_maps.Values)
+			{
+				m.RecordSnapshot();
+			}
+		}
+
 		public Dictionary<int, Map>.ValueCollection AllMaps
 		{
 			get { return m_maps.Values; }
