@@ -406,15 +406,15 @@ namespace Spritely
 		public void Export()
 		{
 			string strProjectDir;
-			bool fNDS, fProject;
-			FileHandler.ExportResult result = m_data.Filer.Export(Name, out strProjectDir, out fNDS, out fProject);
+			bool fProject;
+			FileHandler.ExportResult result = m_data.Filer.ExportDialog(Name, out strProjectDir, out fProject);
 
 			if (result == FileHandler.ExportResult.Cancel)
 				return;
 
 			if (result == FileHandler.ExportResult.OK)
 			{
-				string strTarget = fNDS ? "NDS" : "GBA";
+				string strTarget = (Options.Platform == Options.PlatformType.NDS ? "NDS" : "GBA");
 				StringBuilder sb = new StringBuilder("");
 				if (fProject)
 				{

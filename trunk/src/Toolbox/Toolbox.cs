@@ -129,6 +129,11 @@ namespace Spritely
 				Hilight = Options.Get(option);
 				OptionName = option;
 			}
+
+			public void ChangeToolBitmap(Bitmap bmNew)
+			{
+				ButtonBitmap = bmNew;
+			}
 		};
 		protected List<Tool> Tools;
 

@@ -21,7 +21,7 @@ public:
 	// Constructor
 	// This method initializes the game state.
 	GameState();
-	
+
 	// SetupStage
 	// Set up the stage (backgrounds, sprites) for the each level.
 	void SetupStage(int level);
@@ -30,7 +30,7 @@ public:
 	// Update
 	// This is called continuously to update the game to the next state.
 	void Update();
-	void Update_Level1(u16 keyPress, u16 keyHeld);
+	void Update_Level1();
 	
 private:
 	// The current level of the game.

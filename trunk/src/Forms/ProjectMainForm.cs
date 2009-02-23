@@ -446,6 +446,14 @@ namespace Spritely
 		}
 
 		/// <summary>
+		/// The target platform (GBA/NDS) has changed.
+		/// </summary>
+		public void HandlePlatformChanged()
+		{
+			m_doc.BackgroundMaps.CurrentMap.MapWindow.PlatformChanged();
+		}
+
+		/// <summary>
 		/// The current sprite seletion has changed.
 		/// </summary>
 		public void HandleSpriteSelectionChanged(Spriteset ss)
@@ -653,9 +661,8 @@ namespace Spritely
 		{
 			if (!m_doc.ShowMessageCheck)
 			{
-				// Oops! ProjectMainForm.Error was called directly.
-				// Call Document.ErrorString/ErrorId instead.
-				// Set a breakpoint on the following line to detect this situation.
+				// Oops! ProjectMainForm.AskYesNo was called directly.
+				// Call Document.AskYesNo instead.
 				BreakpointCheck();
 			}
 			DialogResult result = MessageBox.Show(str, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -674,9 +681,8 @@ namespace Spritely
 		{
 			if (!m_doc.ShowMessageCheck)
 			{
-				// Oops! ProjectMainForm.Error was called directly.
-				// Call Document.ErrorString/ErrorId instead.
-				// Set a breakpoint on the following line to detect this situation.
+				// Oops! ProjectMainForm.AskYesNoCancel was called directly.
+				// Call Document.AskYesNoCancel instead.
 				BreakpointCheck();
 			}
 			fCancel = false;

@@ -50,6 +50,11 @@ namespace Spritely
 			menuEdit_Paste.Enabled = false;
 
 			menuProject.Enabled = true;
+			menuProject_Platform.Enabled = true;
+			menuProject_Platform_GBA.Enabled = true;
+			menuProject_Platform_GBA.Checked = Options.Platform == Options.PlatformType.GBA;
+			menuProject_Platform_NDS.Enabled = true;
+			menuProject_Platform_NDS.Checked = Options.Platform == Options.PlatformType.NDS;
 			menuProject_Palettes.Enabled = true;
 			menuProject_Palettes_New.Enabled = false;
 			menuProject_Spritesets.Enabled = true;
@@ -341,6 +346,22 @@ namespace Spritely
 
 		#endregion
 
+		#region Project menu
+
+		private void menuProject_Platform_GBA_Click(object sender, EventArgs e)
+		{
+			Options.Platform = Options.PlatformType.GBA;
+			HandlePlatformChanged();
+		}
+
+		private void menuProject_Platform_NDS_Click(object sender, EventArgs e)
+		{
+			Options.Platform = Options.PlatformType.NDS;
+			HandlePlatformChanged();
+		}
+
+		#endregion
+
 		#region Sprite menu
 
 		private void menuSprite_New_Click(object sender, EventArgs e)
@@ -426,7 +447,7 @@ namespace Spritely
 			if (!s.IsEmpty())
 			{
 				// "Are you sure you want to delete the currently selected sprite?"
-				if (!AskYesNo(ResourceMgr.GetString("DeleteCurrentSprite")))
+				if (!m_doc.AskYesNo(ResourceMgr.GetString("DeleteCurrentSprite")))
 					return;
 			}
 

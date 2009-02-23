@@ -19,6 +19,24 @@ namespace Spritely
 
 		private void UnitTestForm_Load(object sender, EventArgs e)
 		{
+			foreach (string filepath in Directory.GetFiles(Options.Debug_TutorialRawPath))
+			{
+				string filename = Path.GetFileName(filepath);
+				if (!filename.StartsWith("_"))
+					clbTests.Items.Add(filename);
+			}
+			cbGBA.Checked = true;
+			cbNDS.Checked = true;
+		}
+
+		private void bSelectAll_Click(object sender, EventArgs e)
+		{
+			for (int i = 0; i < clbTests.Items.Count; i++)
+				clbTests.SetItemChecked(i, true);
+		}
+
+		private void bRun_Click(object sender, EventArgs e)
+		{
 			RunTests();
 		}
 
@@ -62,6 +80,11 @@ namespace Spritely
 				Directory.CreateDirectory(strDir);
 		}
 
+		/// <summary>
+		/// Recursively copy a directory.
+		/// </summary>
+		/// <param name="strSourceDir"></param>
+		/// <param name="strTargetDir"></param>
 		void CopyDir(string strSourceDir, string strTargetDir)
 		{
 			ClearDir(strTargetDir);
@@ -75,6 +98,11 @@ namespace Spritely
 				CopyDir(dir, CalcPath(strTargetDir, path[path.Length-1]));
 			}
 		}
+
+		private string m_strTutorialName = "unknown";
+		private string m_strProjectName = "game";
+		private string m_strAuthor = "";
+		private bool m_fIncludeFileLinks = false;
 
 		void RunTests()
 		{
@@ -91,313 +119,464 @@ namespace Spritely
 			}
 
 			int nTuts = 0;
+			int nGbaTests = 0;
 			int nBadGbaTests = 0;
+			int nNdsTests = 0;
 			int nBadNdsTests = 0;
 			lbResults.Items.Clear();
 
-			foreach (string filename in Directory.GetFiles(Options.Debug_TutorialRawPath))
+			foreach (string filename in clbTests.CheckedItems)
 			{
-				// Uncomment out all but one of the next lines to make it easier to debug a single tutorial.
-				// Setup tutorials:
-				//if (!filename.EndsWith("setup_windows.txt"))
-				//if (!filename.EndsWith("using_pn.txt"))
-				//if (!filename.EndsWith("build_gba_rom.txt"))
-				//if (!filename.EndsWith("run_gba_rom.txt"))
-				// Programming tutorials:
-				if (!filename.EndsWith("add_title.txt"))
-				//if (!filename.EndsWith("create_sprite.txt"))
-				//if (!filename.EndsWith("creating_pong.txt"))
-				//if (!filename.EndsWith("screen_bounds.txt"))
-				//if (!filename.EndsWith("second_object.txt"))
-					continue;
-
 				nTuts++;
-				Print("Processing {0}", filename);
-
-				if (!RunTutorial(filename, false))
-					nBadGbaTests++;
-				if (!RunTutorial(filename, true))
-					nBadNdsTests++;
+				RunTutorial(filename, ref nGbaTests, ref nBadGbaTests, ref nNdsTests, ref nBadNdsTests);
 			}
 
-			Print("{0} tutorials processed. {1} GBA failed. {2} NDS failed.", nTuts, nBadGbaTests, nBadNdsTests);
+			Print("{0} tutorials processed:", nTuts);
+			if (nGbaTests == 0)
+				Print("  {0} GBA tests run", nGbaTests);
+			else
+				Print("  {0} GBA tests run -- {1} failed", nGbaTests, nBadGbaTests);
+			if (nNdsTests == 0)
+				Print("  {0} NDS tests run", nNdsTests);
+			else
+				Print("  {0} NDS tests run -- {1} failed", nNdsTests, nBadNdsTests);
 		}
 
-		bool RunTutorial(string strFilename, bool fNDS)
+		void RunTutorial(string filename, ref int nGbaTests, ref int nBadGbaTests, ref int nNdsTests, ref int nBadNdsTests)
 		{
-			// Make a new document and initialize it.
-			m_doc = new Document(null);
-			m_doc.InitializeEmptyDocument();
+			Print("Processing {0}", filename);
 
-			string strTutorialName = "unknown";
-			string strWorkDir = "test_" + (fNDS ? "nds" : "gba");
-			string strSourceFile = "";
-			string strTitle = "";
+			string strFilename = CalcPath(Options.Debug_TutorialRawPath, filename);
 			string strTempHtmlOutput = CalcPath(Options.Debug_TutorialPath, "tut.html");
-
-			bool fGatherLines = false;
-			List<string> Lines = new List<string>();
-
-			Regex rxName = new Regex(@"^NAME\s+(.+)$");
-			Regex rxTitle = new Regex(@"^TITLE\s+(.+)$");
-			Regex rxTutorialLink = new Regex(@"^TUTORIAL_LINK\s+(\w+)\s+(.+)$");
-			Regex rxLinkSourceFile = new Regex(@"^LINK_SOURCE_FILE\s+(.+)$");
-			Regex rxLinkTargetFile = new Regex(@"^LINK_TARGET_FILE$");
-			Regex rxCategory = new Regex(@"^CATEGORY\s+(.+)$");
-			Regex rxImage = new Regex(@"^IMAGE\s+(.+)$");
-			Regex rxFind = new Regex(@"^FIND\s+(.+)$");
-			Regex rxUpdate = new Regex(@"^UPDATE\s+(.+)$");
-			Regex rxAction = new Regex(@"^SPRITELY_ACTION\s+(.+)$");
-			Match m;
-
-			int nFind = 0;
-			int nUpdate = 0;
+			m_strTutorialName = "unknown";
+			m_strProjectName = "game";
+			m_strAuthor = "";
+			m_fIncludeFileLinks = false;
 
 			try
 			{
 				using (TextWriter tw = new StreamWriter(strTempHtmlOutput))
 				{
-					using (TextReader tr = new StreamReader(strFilename, Encoding.UTF8))
+					if (cbGBA.Checked)
 					{
-						string strLine;
-						while ((strLine = tr.ReadLine()) != null)
+						using (TextReader tr = new StreamReader(strFilename, Encoding.UTF8))
 						{
-							if (strLine.StartsWith("#"))
-								continue;
-
-							// NAME
-							m = rxName.Match(strLine);
-							if (m.Success)
-							{
-								strTutorialName = m.Groups[1].Value;
-								continue;
-							}
-
-							// TITLE
-							m = rxTitle.Match(strLine);
-							if (m.Success)
-							{
-								strTitle = m.Groups[1].Value;
-								WriteTutorialHeader(tw, strTitle);
-								continue;
-							}
-
-							// VERIFIED
-							if (strLine == "VERIFIED")
-							{
-								WriteCompatibility(tw);
-								continue;
-							}
-
-							// CATEGORY
-							m = rxCategory.Match(strLine);
-							if (m.Success)
-							{
-								continue;
-							}
-
-							// IMAGE
-							m = rxImage.Match(strLine);
-							if (m.Success)
-							{
-								WriteImage(tw, strTutorialName, m.Groups[1].Value);
-								continue;
-							}
-
-							// TUTORIAL_LINK
-							m = rxTutorialLink.Match(strLine);
-							if (m.Success)
-							{
-								WriteTutorialLink(tw, m.Groups[1].Value, m.Groups[2].Value);
-								continue;
-							}
-
-							// LINK_SOURCE_FILE
-							m = rxLinkSourceFile.Match(strLine);
-							if (m.Success)
-							{
-								WriteSourceFileLink(tw, strTutorialName, strWorkDir, m.Groups[1].Value, fNDS);
-								continue;
-							}
-
-							// LINK_TARGET_FILE
-							m = rxLinkTargetFile.Match(strLine);
-							if (m.Success)
-							{
-								WriteTargetFileLink(tw, strTutorialName, strWorkDir, fNDS);
-								continue;
-							}
-
-							// FIND
-							m = rxFind.Match(strLine);
-							if (m.Success)
-							{
-								strSourceFile = m.Groups[1].Value;
-								fGatherLines = true;
-								Lines.Clear();
-								nFind++;
-								continue;
-							}
-
-							// END_FIND
-							if (strLine == "END_FIND")
-							{
-								int nStartLine, nLines;
-								if (!FindLines(strWorkDir, strSourceFile, Lines, out nStartLine, out nLines))
-								{
-									Print("Failed to match FIND #{0} in {1} at line {2}", nFind, strSourceFile, nLines);
-									return false;
-								}
-								WriteSourceLines(tw, strSourceFile, nStartLine, nStartLine+nLines-1, Lines, false);
-								fGatherLines = false;
-								continue;
-							}
-
-							// UPDATE
-							m = rxUpdate.Match(strLine);
-							if (m.Success)
-							{
-								strSourceFile = m.Groups[1].Value;
-								fGatherLines = true;
-								Lines.Clear();
-								nUpdate++;
-								continue;
-							}
-
-							// END_UPDATE
-							if (strLine == "END_UPDATE")
-							{
-								int nStartLine, nLines;
-								if (!UpdateLines(strWorkDir, strSourceFile, Lines, out nStartLine, out nLines))
-								{
-									Print("Failed to match UPDATE #{0} in {1}", nUpdate, strSourceFile);
-									return false;
-								}
-								WriteSourceLines(tw, strSourceFile, nStartLine, nStartLine+nLines-1, Lines, true);
-								fGatherLines = false;
-								continue;
-							}
-
-							// SPRITELY_ACTION
-							m = rxAction.Match(strLine);
-							if (m.Success)
-							{
-								string strCommand = m.Groups[1].Value;
-								if (!HandleSpritelyAction(strWorkDir, strCommand, fNDS))
-								{
-									Print("Failed to process {0} ({1})", strCommand, fNDS ? "nds" : "gba");
-									return false;
-								}
-								continue;
-							}
-
-							// VERIFY_BUILD
-							if (strLine == "VERIFY_BUILD")
-							{
-								if (!VerifyBuild(strWorkDir))
-								{
-									Print("Build verify failed!");
-									return false;
-								}
-								continue;
-							}
-
-							if (fGatherLines)
-								Lines.Add(strLine);
-							else
-								tw.WriteLine(strLine);
+							nGbaTests++;
+							if (!RunTutorial2(tr, tw, false))
+								nBadGbaTests++;
+						}
+					}
+					if (cbNDS.Checked)
+					{
+						using (TextReader tr = new StreamReader(strFilename, Encoding.UTF8))
+						{
+							nNdsTests++;
+							if (!RunTutorial2(tr, !cbGBA.Checked ? tw : null, true))
+								nBadNdsTests++;
 						}
 					}
 
-					//TODO: Write out links to completed project files.
-					//string strPlatform = fNDS ? "nds" : "gba";
-					//string strTarget = strProjectName + "." + strPlatform;
-					//string strTargetPath = CalcPath(new string[] { Options.Debug_TutorialPath, strName, strPlatform });
-					//if (!Directory.Exists(strTargetPath))
-					//	Directory.CreateDirectory(strTargetPath);
+					if (m_fIncludeFileLinks)
+						WriteFileLinks(tw);
 
-					//File.Copy(CalcPath(new string[] { Options.Debug_TutorialPath, strProjectName, strTarget }),
-					//		CalcPath(strTargetPath, strTarget), true);
-
-					tw.WriteLine("</body>");
-					tw.WriteLine("");
-					tw.WriteLine("</html>");
+					WriteTutorialFooter(tw);
 				}
 			}
 			catch (Exception ex)
 			{
 				Print("Unable to process tutorial file {0}", ex.Message);
-				return false;
 			}
 
 			// Copy temp file over original and delete temp.
-			string strHtmlOutput = CalcPath(Options.Debug_TutorialPath, strTutorialName + ".html");
+			string strHtmlOutput = CalcPath(Options.Debug_TutorialPath, m_strTutorialName + ".html");
 			File.Copy(strTempHtmlOutput, strHtmlOutput, true);
 			File.Delete(strTempHtmlOutput);
+		}
+
+		/// <summary>
+		/// Really run the tutorial for either GBA or NDS.
+		/// </summary>
+		/// <param name="tr"></param>
+		/// <param name="tw">The output TextWriter. Null if we shouldn't write output.</param>
+		/// <param name="fNDS"></param>
+		/// <returns></returns>
+		private bool RunTutorial2(TextReader tr, TextWriter tw, bool fNDS)
+		{
+			// Make a new document and initialize it.
+			m_doc = new Document(null);
+			m_doc.InitializeEmptyDocument();
+
+			string strWorkDir = "test_" + (fNDS ? "nds" : "gba");
+			string strSourceFile = "";
+			string strTitle = "";
+
+			ClearDir(CalcPath(Options.Debug_TutorialPath, strWorkDir));
+
+			bool fGatherLines = false;
+			List<string> Lines = new List<string>();
+
+			Match m;
+			int nStep = 1;
+			int nFind = 0;
+			int nUpdate = 0;
+			int nTutorial = 1;	// Used when processing the index.
+
+			string strLine;
+			while ((strLine = tr.ReadLine()) != null)
+			{
+				if (strLine.StartsWith("#"))
+					continue;
+
+				// This is used when debugging the tutorial to stop the tutorial at
+				// a certain point.
+				if (strLine == "STOP")
+					return false;
+
+				m = Regex.Match(strLine, @"^NAME\s+(.+)$");
+				if (m.Success)
+				{
+					m_strTutorialName = m.Groups[1].Value;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^TITLE\s+(.+)$");
+				if (m.Success)
+				{
+					strTitle = m.Groups[1].Value;
+					WriteTutorialHeader(tw, strTitle);
+					continue;
+				}
+
+				if (strLine == "VERIFIED")
+				{
+					WriteCompatibility(tw);
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^CATEGORY\s+(.+)$");
+				if (m.Success)
+				{
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^AUTHOR\s+(.+)$");
+				if (m.Success)
+				{
+					m_strAuthor = m.Groups[1].Value;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^PROJECT_NAME\s+(.+)$");
+				if (m.Success)
+				{
+					m_strProjectName = m.Groups[1].Value;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^IMAGE\s+(.+)$");
+				if (m.Success)
+				{
+					WriteImage(tw, m.Groups[1].Value);
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^STEP\s+(.+)$");
+				if (m.Success)
+				{
+					WriteStep(tw, nStep, m.Groups[1].Value);
+					nStep++;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^FINISH$");
+				if (m.Success)
+				{
+					WriteFinish(tw);
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^FILE_LINKS$");
+				if (m.Success)
+				{
+					m_fIncludeFileLinks = true;
+					continue;
+				}
+
+				// Tutorial link from within a tutorial page.
+				m = Regex.Match(strLine, @"^TUTORIAL_LINK\s+(\w+)\s+(.+)$");
+				if (m.Success)
+				{
+					WriteTutorialLink(tw, m.Groups[1].Value, m.Groups[2].Value);
+					continue;
+				}
+
+				// Tutorial entry on index page.
+				m = Regex.Match(strLine, "^TUTORIAL_INDEX_ENTRY\\s+\"(.+)\"\\s+\"(.+)\"\\s+\"(.+)\"$");
+				if (m.Success)
+				{
+					WriteTutorialIndexEntry(tw, nTutorial, m.Groups[1].Value, m.Groups[2].Value, m.Groups[3].Value);
+					nTutorial++;
+					continue;
+				}
+
+				m = Regex.Match(strLine, "^TUTORIAL_INDEX_SETUP_ENTRY\\s+\"(.+)\"\\s+\"(.+)\"\\s+\"(.+)\"$");
+				if (m.Success)
+				{
+					WriteTutorialIndexSetupEntry(tw, m.Groups[1].Value, m.Groups[2].Value, m.Groups[3].Value);
+					continue;
+				}
+
+				m = Regex.Match(strLine, "^TUTORIAL_INDEX_SPACE$");
+				if (m.Success)
+				{
+					WriteTutorialIndexSpace(tw);
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^FIND\s+(.+)$");
+				if (m.Success)
+				{
+					strSourceFile = m.Groups[1].Value;
+					fGatherLines = true;
+					Lines.Clear();
+					nFind++;
+					continue;
+				}
+
+				if (strLine == "END_FIND")
+				{
+					int nStartLine, nLines;
+					if (!FindLines(strWorkDir, strSourceFile, Lines, out nStartLine, out nLines))
+					{
+						Print("Failed to match FIND #{0} in {1} at line {2}", nFind, strSourceFile, nLines);
+						return false;
+					}
+					WriteSourceLines(tw, strSourceFile, nStartLine, nStartLine + nLines - 1, Lines, false);
+					fGatherLines = false;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^UPDATE\s+(.+)$");
+				if (m.Success)
+				{
+					strSourceFile = m.Groups[1].Value;
+					fGatherLines = true;
+					Lines.Clear();
+					nUpdate++;
+					continue;
+				}
+
+				if (strLine == "END_UPDATE")
+				{
+					int nStartLine, nLines;
+					if (!UpdateLines(strWorkDir, strSourceFile, Lines, out nStartLine, out nLines))
+					{
+						Print("Failed to match UPDATE #{0} in {1}", nUpdate, strSourceFile);
+						return false;
+					}
+					WriteSourceLines(tw, strSourceFile, nStartLine, nStartLine + nLines - 1, Lines, true);
+					fGatherLines = false;
+					continue;
+				}
+
+				m = Regex.Match(strLine, @"^SPRITELY_ACTION\s+(.+)$");
+				if (m.Success)
+				{
+					string strCommand = m.Groups[1].Value;
+					if (!HandleSpritelyAction(strWorkDir, strCommand, fNDS))
+					{
+						Print("Failed to process {0} ({1})", strCommand, fNDS ? "nds" : "gba");
+						return false;
+					}
+					continue;
+				}
+
+				if (strLine == "VERIFY_BUILD")
+				{
+					if (!VerifyBuild(strWorkDir))
+					{
+						Print("Build verify failed!");
+						return false;
+					}
+					continue;
+				}
+
+				if (fGatherLines)
+					Lines.Add(strLine);
+				else if (tw != null)
+					tw.WriteLine(strLine);
+			}
 
 			return true;
 		}
 
 		void WriteTutorialHeader(TextWriter tw, string strTitle)
 		{
+			if (tw == null)
+				return;
 			tw.WriteLine("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"");
 			tw.WriteLine("\"http://www.w3.org/TR/html4/loose.dtd\">");
-			tw.WriteLine("");
 			tw.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
 			tw.WriteLine("");
 			tw.WriteLine("<head>");
 			tw.WriteLine(String.Format("<title>{0}</title>", strTitle));
-			tw.WriteLine("");
 			tw.WriteLine("<link href=\"css/tutorial.css\" type=\"text/css\" rel=\"stylesheet\" />");
 			tw.WriteLine("<script type=\"text/javascript\" src=\"css/precodeformat.js\"></script>");
-			tw.WriteLine("");
 			tw.WriteLine("</head>");
 			tw.WriteLine("");
 			tw.WriteLine("<body onload=\"PreCodeFormat()\">");
+			tw.WriteLine("<div id=\"content\">");
 			tw.WriteLine(String.Format("<h1>{0}</h1>", strTitle));
+		}
+
+		void WriteTutorialFooter(TextWriter tw)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("");
+			tw.WriteLine("<div id=\"footer_bkgd\"><div id=\"footer\">");
+			tw.WriteLine("<p>{0}</p>", m_strAuthor);
+			tw.WriteLine("</div></div>");
+			tw.WriteLine("");
+			tw.WriteLine("</div>");
+			tw.WriteLine("</body>");
+			tw.WriteLine("</html>");
 		}
 
 		void WriteCompatibility(TextWriter tw)
 		{
+			if (tw == null)
+				return;
 			tw.WriteLine("<p class=\"alert\">");
 			tw.WriteLine("This tutorial has been tested with");
-			tw.WriteLine(String.Format(" <a href=\"http://www.devkitpro.org\">devkitARM release {0}</a>",
+			tw.WriteLine(String.Format("<a href=\"http://www.devkitpro.org\">devkitARM release {0}</a>",
 					Options.Debug_DevkitArmVersion));
-			tw.WriteLine(String.Format(" and <a href=\"http://code.google.com/p/spritely\">Spritely version {0}</a>",
+			tw.WriteLine(String.Format("and <a href=\"http://code.google.com/p/spritely\">Spritely version {0}</a>",
 					Options.VersionString));
-			tw.WriteLine(" and verified to work for both GBA and NDS projects.");
+			tw.WriteLine("and verified to work for both GBA and NDS projects.");
 			tw.WriteLine("</p>");
 		}
 
-		void WriteImage(TextWriter tw, string strTutorialName, string strImageName)
+		void WriteImage(TextWriter tw, string strImageName)
 		{
-			string strImagePath = CalcPath(strTutorialName, strImageName);
+			if (tw == null)
+				return;
+			string strImagePath = CalcPath(m_strTutorialName, strImageName);
 			if (!File.Exists(CalcPath(Options.Debug_TutorialPath, strImagePath)))
 				Print("WARNING - Image {0} not found!", strImagePath);
 			tw.WriteLine(String.Format("<p><img src=\"{0}\" /></p>", strImagePath));
 		}
 
+		void WriteStep(TextWriter tw, int nStep, string strStepName)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("<h2>Step {0} : {1}</h2>", nStep, strStepName);
+		}
+
+		void WriteFinish(TextWriter tw)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("<h2>Finished!</h2>");
+		}
+
+		void WriteTutorialIndexSetupEntry(TextWriter tw, string strCategory, string strFile, string strTitle)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("<tr>");
+			tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> </td>");
+			tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> {0} </td>", strCategory);
+			tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> <strong><a href=\"{0}.html\">{1}</a></strong> </td>", strFile, strTitle);
+			tw.WriteLine("</tr>");
+		}
+
+		void WriteTutorialIndexEntry(TextWriter tw, int nTutorial, string strCategory, string strFile, string strTitle)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("<tr>");
+			tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> Tutorial {0} </td>", nTutorial);
+			tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> {0} </td>", strCategory);
+			if (strFile == "???")
+				tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> {0} </td>", strTitle);
+			else
+				tw.WriteLine("<td style=\"border: 1px solid #aaa; padding: 5px;\"> <strong><a href=\"{0}.html\">{1}</a></strong> </td>", strFile, strTitle);
+			tw.WriteLine("</tr>");
+		}
+
+		void WriteTutorialIndexSpace(TextWriter tw)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("<tr>");
+			tw.WriteLine("<td style=\"padding: 5px;\"> </td>");
+			tw.WriteLine("<td style=\"padding: 5px;\"> </td>");
+			tw.WriteLine("<td style=\"padding: 5px;\"> </td>");
+			tw.WriteLine("</tr>");
+		}
+
 		void WriteTutorialLink(TextWriter tw, string strTutorial, string strTitle)
 		{
+			if (tw == null)
+				return;
 			tw.WriteLine(String.Format("<a href=\"{0}.html\">{1}</a>", strTutorial, strTitle));
 		}
 
-		void WriteSourceFileLink(TextWriter tw, string strName, string strProjectName, string strFileName, bool fNDS)
+		void WriteFileLinks(TextWriter tw)
 		{
-			string strPlatform = fNDS ? "nds" : "gba";
-			tw.WriteLine(String.Format("<li><a href=\"{0}/{1}/{2}\">{3}</a></li>", strName, strPlatform, strFileName, strFileName));
+			if (tw == null)
+				return;
+			tw.WriteLine("<div id=\"filelink_bkgd\"><div id=\"filelink\">");
+			tw.WriteLine("<h1>Links to completed project</h1>");
+			WriteFileLinks2(tw, "GBA", "gba");
+			WriteFileLinks2(tw, "NDS", "nds");
+			tw.WriteLine("</div></div>");
 		}
 
-		void WriteTargetFileLink(TextWriter tw, string strName, string strProjectName, bool fNDS)
+		void WriteFileLinks2(TextWriter tw, string strTitle, string strPlatform)
 		{
-			string strPlatform = fNDS ? "nds" : "gba";
-			string strTarget = strProjectName + "." + strPlatform;			
-			tw.WriteLine(String.Format("<li><a href=\"{0}/{1}/{2}\">{3}</a></li>", strName, strPlatform, strTarget, strTarget));
+			if (tw == null)
+				return;
+			string strSourcePath = CalcPath(new string[] { Options.Debug_TutorialPath, "test_" + strPlatform });
+			string strTargetPath = CalcPath(new string[] { Options.Debug_TutorialPath, m_strTutorialName, strPlatform });
+			if (!Directory.Exists(strTargetPath))
+				Directory.CreateDirectory(strTargetPath);
+
+			tw.WriteLine("<p>{0}:</p>", strTitle);
+			tw.WriteLine("<ul>");
+			WriteSourceFileLink(tw, "game_state.h", strPlatform, strSourcePath, strTargetPath);
+			WriteSourceFileLink(tw, "game_state.cpp", strPlatform, strSourcePath, strTargetPath);
+			WriteTargetFileLink(tw, strPlatform, strSourcePath, strTargetPath);
+			tw.WriteLine("</ul>");
+		}
+
+		void WriteSourceFileLink(TextWriter tw, string strFileName, string strPlatform, string strSourcePath, string strTargetPath)
+		{
+			if (tw == null)
+				return;
+			File.Copy(CalcPath(new string[] { strSourcePath, "source", strFileName }),
+				CalcPath(strTargetPath, strFileName), true);
+			tw.WriteLine(String.Format("<li><a href=\"{0}/{1}/{2}\">{3}</a></li>", m_strTutorialName, strPlatform, strFileName, strFileName));
+		}
+
+		void WriteTargetFileLink(TextWriter tw, string strPlatform, string strSourcePath, string strTargetPath)
+		{
+			if (tw == null)
+				return;
+			string strTarget = m_strProjectName + "." + strPlatform;
+			File.Copy(CalcPath(strSourcePath, "test_"+strPlatform+"."+strPlatform),
+				CalcPath(strTargetPath, strTarget), true);
+			tw.WriteLine(String.Format("<li><a href=\"{0}/{1}/{2}\">{3}</a></li>", m_strTutorialName, strPlatform, strTarget, strTarget));
 		}
 
 		void WriteSourceLines(TextWriter tw, string strFilename, int nStartLine, int nEndLine,
 			List<string> Lines, bool fUpdate)
 		{
+			if (tw == null)
+				return;
+
 			tw.Write(String.Format("<p class=\"filename\"><code><b>{0}</b></code>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;",
 				strFilename));
 			if (nStartLine == nEndLine)
@@ -551,6 +730,15 @@ namespace Spritely
 			int nInsertedLines = 0;
 			int nDeletedLines = 0;
 
+			// Lines (if any) that we need to insert before the match.
+			List<string> PreInsertLines = new List<string>();
+			// Gather lines that need to be inserted before the match
+			while (Lines[nLineNum].Substring(0,1) == "+")
+			{
+				PreInsertLines.Add(Lines[nLineNum].Substring(1));
+				nLineNum++;
+			}
+
 			string strTempfile = "temp.out";
 			string strSourcePath = CalcPath(new string[] { Options.Debug_TutorialPath, strProjectName, "source", strFilename });
 			string strTempPath = CalcPath(new string[] { Options.Debug_TutorialPath, strProjectName, strTempfile });
@@ -589,6 +777,14 @@ namespace Spritely
 								nLineNum++;
 								if (strPrefix == "-" || strPrefix == "x")
 									continue;
+
+								// Insert any lines before the match.
+								foreach (string s in PreInsertLines)
+								{
+									tw.WriteLine(s);
+									nInsertedLines++;
+								}
+								PreInsertLines.Clear();
 							}
 							else if (fForceMatch)
 							{
@@ -602,7 +798,8 @@ namespace Spritely
 									}
 									else
 									{
-										Print("Error - ({0}) '{1}' != ({2}) '{3}'", nSourceLine, strLine, nLineNum, strMatchLine);
+										Print("Error in UPDATE starting with '{0}'", Lines[0]);
+										Print("   (#{0}) '{1}' != (#{2}) '{3}'", nSourceLine, strLine, nLineNum, strMatchLine);
 										return false;
 									}
 								}
@@ -646,7 +843,8 @@ namespace Spritely
 									// Match line.
 									if (strLine != strMatchLine)
 									{
-										Print("Error - ({0}) '{1}' != ({2}) '{3}'", nSourceLine, strLine, nLineNum, strMatchLine);
+										Print("Error in UPDATE starting with '{0}'", Lines[0]);
+										Print("   (#{0}) '{1}' != (#{2}) '{3}'", nSourceLine, strLine, nLineNum, strMatchLine);
 										return false;
 									}
 									else
@@ -680,6 +878,11 @@ namespace Spritely
 				File.Copy(strTempPath, strSourcePath, true);
 				File.Delete(strTempPath);
 			}
+			else
+			{
+				Print("Failed to match UPDATE starting with {0}", Lines[0]);
+			}
+
 			return fSuccess;
 		}
 
@@ -716,38 +919,151 @@ namespace Spritely
 			return false;
 		}
 
+		#region Sample sprites
+
+		/// <summary>
+		/// 2x2 Blobber facing right.
+		/// </summary>
+		private int[,] m_Blobber0 = new int[,] {
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 3,3,3,3, 3,3,3,3, 0,0,0,0,},
+			{0,0,0,3, 3,7,7,7, 7,7,7,3, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,3, 7,7,3,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,3, 3,3,3,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,3, 3,3,3,7, 3,0,0,0,},
+			{0,0,0,3, 3,3,3,3, 0,0,3,3, 3,0,0,0,},
+		};
+
+		/// <summary>
+		/// 2x2 Blobber facing forward.
+		/// </summary>
+		private int[,] m_Blobber1 = new int[,] {
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 3,3,3,3, 3,3,3,3, 0,0,0,0,},
+			{0,0,0,3, 3,7,7,7, 7,7,7,3, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,3,7, 7,3,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,3,3, 3,3,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,3,3, 3,3,7,7, 3,0,0,0,},
+			{0,0,0,3, 3,3,3,7, 7,3,3,3, 3,0,0,0,},
+		};
+
+		/// <summary>
+		/// 2x2 Blobber facing left.
+		/// </summary>
+		private int[,] m_Blobber2 = new int[,] {
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,},
+			{0,0,0,0, 3,3,3,3, 3,3,3,3, 0,0,0,0,},
+			{0,0,0,3, 3,7,7,7, 7,7,7,3, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,3,7,7, 3,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,3,3,3, 3,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,7,7,7, 7,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 7,3,3,3, 3,7,7,7, 3,0,0,0,},
+			{0,0,0,3, 3,3,7,7, 3,3,3,3, 3,0,0,0,},
+		};
+
 		/// <summary>
 		/// Draw a sample sprite for use in the tutorials.
 		/// </summary>
 		/// <param name="s"></param>
-		private void DrawSampleSprite(Sprite s)
+		private void DrawSample2x2Sprite(Sprite s, int id)
 		{
-			int color = s.Subpalette.CurrentColor;
-			for (int i = 4; i < 12; i++)
-			{
-				for (int j = 4; j < 6; j++)
-				{
-					s.SetPixel(i, j, color);
-					s.SetPixel(j, i, color);
-				}
-				for (int j = 10; j < 12; j++)
-				{
-					s.SetPixel(i, j, color);
-					s.SetPixel(j, i, color);
-				}
-			}
-			for (int i = 6; i < 10; i++)
-			{
-				s.SetPixel(3, i, color);
-				s.SetPixel(12, i, color);
-				s.SetPixel(i, 3, color);
-				s.SetPixel(i, 12, color);
-			}
-			s.SetPixel(6, 6, color);
-			s.SetPixel(6, 9, color);
-			s.SetPixel(9, 6, color);
-			s.SetPixel(9, 9, color);
+			if (id == 2)
+				DrawSample2x2Sprite(s, m_Blobber2);
+			else if (id == 1)
+				DrawSample2x2Sprite(s, m_Blobber1);
+			else
+				DrawSample2x2Sprite(s, m_Blobber0);
 		}
+
+		private void DrawSample2x2Sprite(Sprite s, int[,] data)
+		{
+			for (int y = 0; y < 16; y++)
+			{
+				for (int x = 0; x < 16; x++)
+				{
+					s.SetPixel(x, y, data[y, x]);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 4x1 Bat0
+		/// </summary>
+		private int[,] m_Bat0 = new int[,] {
+			{0,0,0,0,0,0,0,1, 1,1,0,0,0,0,0,0, 0,0,0,0,0,0,1,1, 1,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,1,4, 4,4,1,1,0,0,1,1, 1,1,0,0,1,1,4,4, 4,1,0,0,0,0,0,0,},
+			{0,0,0,0,0,1,4,4, 4,4,4,4,1,1,4,4, 4,4,1,1,4,4,4,4, 4,4,1,0,0,0,0,0,},
+			{0,0,0,0,1,4,4,1, 1,1,4,4,1,4,1,4, 4,1,4,1,4,4,1,1, 1,4,4,1,0,0,0,0,},
+			{0,0,0,0,1,1,1,0, 0,0,1,1,1,4,4,4, 4,4,4,1,1,1,0,0, 0,1,1,1,0,0,0,0,},
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,1,4,4, 4,4,1,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,0,1,1, 1,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+		};
+
+		/// <summary>
+		/// 4x1 Bat1
+		/// </summary>
+		private int[,] m_Bat1 = new int[,] {
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,0,1,1, 1,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,1, 1,1,1,1,1,1,0,0, 0,0,1,1,1,1,1,1, 1,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,1,1,4, 4,4,4,4,1,4,1,4, 4,1,4,1,4,4,4,4, 4,1,1,0,0,0,0,0,},
+			{0,0,0,0,1,4,4,4, 4,1,1,1,1,4,4,4, 4,4,4,1,1,1,1,4, 4,4,4,1,0,0,0,0,},
+			{0,0,0,0,1,4,1,1, 1,0,0,0,0,1,4,4, 4,4,1,0,0,0,0,1, 1,1,4,1,0,0,0,0,},
+			{0,0,0,0,1,1,0,0, 0,0,0,0,0,0,1,1, 1,1,0,0,0,0,0,0, 0,0,1,1,0,0,0,0,},
+			{0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,},
+		};
+
+		/// <summary>
+		/// Draw a sample sprite for use in the tutorials.
+		/// </summary>
+		/// <param name="s"></param>
+		private void DrawSample4x1Sprite(Sprite s, int id)
+		{
+			if (id == 1)
+				DrawSample4x1Sprite(s, m_Bat1);
+			else
+				DrawSample4x1Sprite(s, m_Bat0);
+		}
+
+		private void DrawSample4x1Sprite(Sprite s, int[,] data)
+		{
+			for (int y = 0; y < 8; y++)
+			{
+				for (int x = 0; x < 32; x++)
+				{
+					s.SetPixel(x, y, data[y, x]);
+				}
+			}
+		}
+
+		#endregion
 
 		private bool HandleSpritelyAction(string strProjectName, string strCommand, bool fNDS)
 		{
@@ -759,7 +1075,7 @@ namespace Spritely
 				ss.RemoveSelectedSprite(null);
 				return true;
 			}
-			m = Regex.Match(strCommand, "create_sprite\\s+(\\d)x(\\d)\\s+\"(.+)\"");
+			m = Regex.Match(strCommand, "^add_sprite\\s+(\\d)x(\\d)\\s+(.+)$");
 			if (m.Success)
 			{
 				int width = Int32.Parse(m.Groups[1].Value);
@@ -769,14 +1085,14 @@ namespace Spritely
 				ss.AddSprite(width, height, name, -1, "", 0, null);
 				return true;
 			}
-			m = Regex.Match(strCommand, "rename_sprite\\s+(.+)");
+			m = Regex.Match(strCommand, "^rename_sprite\\s+(.+)$");
 			if (m.Success)
 			{
 				Sprite s = m_doc.Spritesets.Current.CurrentSprite;
 				s.Name = m.Groups[1].Value;
 				return true;
 			}
-			m = Regex.Match(strCommand, "select_color\\s+(\\d)");
+			m = Regex.Match(strCommand, "^select_color\\s+(\\d+)$");
 			if (m.Success)
 			{
 				int color = Int32.Parse(m.Groups[1].Value);
@@ -784,7 +1100,7 @@ namespace Spritely
 				ss.Palette.GetCurrentSubpalette().CurrentColor = color;
 				return true;
 			}
-			m = Regex.Match(strCommand, "fill_sprite\\s+(\\d),(\\d)");
+			m = Regex.Match(strCommand, "^fill_sprite\\s+(\\d),(\\d)$");
 			if (m.Success)
 			{
 				int x = Int32.Parse(m.Groups[1].Value);
@@ -793,14 +1109,23 @@ namespace Spritely
 				s.FloodFillClick(x,y);
 				return true;
 			}
-			m = Regex.Match(strCommand, "draw_sample_2x2_sprite");
+			m = Regex.Match(strCommand, "^draw_sample_2x2_sprite\\s+(\\d)$");
 			if (m.Success)
 			{
+				int id = Int32.Parse(m.Groups[1].Value);
 				Sprite s = m_doc.Spritesets.Current.CurrentSprite;
-				DrawSampleSprite(s);
+				DrawSample2x2Sprite(s, id);
 				return true;
 			}
-			m = Regex.Match(strCommand, "import_bgimage\\s+(.+)");
+			m = Regex.Match(strCommand, "^draw_sample_4x1_sprite\\s+(\\d)$");
+			if (m.Success)
+			{
+				int id = Int32.Parse(m.Groups[1].Value);
+				Sprite s = m_doc.Spritesets.Current.CurrentSprite;
+				DrawSample4x1Sprite(s, id);
+				return true;
+			}
+			m = Regex.Match(strCommand, "^import_bgimage\\s+(.+)$");
 			if (m.Success)
 			{
 				string strImageFile = CalcPath(Options.Debug_TutorialRawDataPath, m.Groups[1].Value);
@@ -808,7 +1133,25 @@ namespace Spritely
 				m_doc.BackgroundImages.AddBgImage("Welcome", -1, "", b);
 				return true;
 			}
-			m = Regex.Match(strCommand, "fill_bgsprite\\s+(\\d),(\\d)");
+			m = Regex.Match(strCommand, "^add_bgsprite\\s+(\\d)x(\\d)\\s+(.+)$");
+			if (m.Success)
+			{
+				int width = Int32.Parse(m.Groups[1].Value);
+				int height = Int32.Parse(m.Groups[2].Value);
+				string name = m.Groups[3].Value;
+				Spriteset ss = m_doc.BackgroundSpritesets.Current;
+				ss.AddSprite(width, height, name, -1, "", 0, null);
+				return true;
+			}
+			m = Regex.Match(strCommand, "^select_bgcolor\\s+(\\d+)$");
+			if (m.Success)
+			{
+				int color = Int32.Parse(m.Groups[1].Value);
+				Spriteset ss = m_doc.BackgroundSpritesets.Current;
+				ss.Palette.GetCurrentSubpalette().CurrentColor = color;
+				return true;
+			}
+			m = Regex.Match(strCommand, "^fill_bgsprite\\s+(\\d),(\\d)$");
 			if (m.Success)
 			{
 				int x = Int32.Parse(m.Groups[1].Value);
@@ -817,13 +1160,31 @@ namespace Spritely
 				s.FloodFillClick(x, y);
 				return true;
 			}
-			m = Regex.Match(strCommand, "export full");
+			m = Regex.Match(strCommand, "^fill_background\\s+(\\d+),(\\d+)\\s+(\\d+),(\\d+)$");
+			if (m.Success)
+			{
+				int x0 = Int32.Parse(m.Groups[1].Value);
+				int y0 = Int32.Parse(m.Groups[2].Value);
+				int x1 = Int32.Parse(m.Groups[3].Value);
+				int y1 = Int32.Parse(m.Groups[4].Value);
+				Sprite s = m_doc.BackgroundSpritesets.Current.CurrentSprite;
+				Map map = m_doc.BackgroundMaps.CurrentMap;
+				for (int x = x0; x <= x1; x++)
+					for (int y=y0; y<= y1; y++)
+						map.SetTile(x, y, s.FirstTileId, 0);
+				return true;
+			}
+			m = Regex.Match(strCommand, "^export (.+)$");
 			if (m.Success)
 			{
 				string strDir = CalcPath(Options.Debug_TutorialPath, strProjectName);
 				if (!Directory.Exists(strDir))
 					Directory.CreateDirectory(strDir);
-				return m_doc.Filer.Export(strDir, fNDS, true, false);
+				string strParam = m.Groups[1].Value;
+				if (strParam == "full")
+					return m_doc.Filer.Export(strDir, true, fNDS, false);
+				if (strParam == "sprites")
+					return m_doc.Filer.Export(strDir, false, fNDS, false);
 			}
 
 			Print("Unknown command: {0}", strCommand);
