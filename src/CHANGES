@@ -2,6 +2,14 @@ Change History for Spritely: code.google.com/p/spritely
 Official binary releases are noted with "*** BINARY RELEASE ***" after
   the version number
 
+0.14.22 *** BINARY RELEASE ***
+Added Project::Platform menu to select GBA/NDS.
+  UI elements (bgmaps, export) adjust based on this setting.
+Tutorial generation:
+  Write links to completed files.
+Generated code:
+  Added CheckKeyPress, CheckKeyHeld.
+
 0.14.19
 Add undo support for background map editing
 Fix undo bug after file load where original image after load wasn't recorded

@@ -1,6 +1,5 @@
 // ToDo.txt
 
-*General: Set GBA/NDS "mode" and have UI change appropriately: screen border, export, ...
 General: Improve when running under Mono (Mac/Linux)
 *General: Validate object names to ensure they don't collide with generated names.
 
@@ -28,12 +27,14 @@ Background Map: collision editor to mark places on map
 
 Background Image: allow transparency color select for 256 color images (all images?)
 *Background Image: Add background image import dialog
+Background Image: convert bgimage into a tileset
 
 Background Image List: scroll to currently selected image when selection changes
 Background Image List: auto scroll when selecting and mouse moved above/below visible region
 
-Palettes: Add better color editing options: RGB, HSV, large palette
+Palettes: Add better color picker: RGB, HSV, large palette
 Palettes: Add support for a single 256-color palette
+Palettes: Right-click to select erase color
 
 Preferences: Record last save directory
 Preferences: Set default GBA/NDS project
@@ -48,5 +49,4 @@ Export: add manifest file for projects
 Export: generate project files automatically from manifest
 Export: background image: currently only 240x160 images work on GBA. broken on NDS
 Export: support export to PA lib
-
-Tutorials: Write links to complete project files
+Export: bug: GBA ROM results in black screen. exported kTotalTiles == -1. conditions: 2x2 resized to 1x1 and duplicated (but can't repro)

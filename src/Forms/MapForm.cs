@@ -122,6 +122,13 @@ namespace Spritely
 
 		#region Subwindow updates
 
+		public void PlatformChanged()
+		{
+			m_optionbox.UpdateScreenButton();
+			pbOptions.Invalidate();
+			pbMap.Invalidate();
+		}
+
 		/// <summary>
 		/// The selected sprite has changed.
 		/// </summary>

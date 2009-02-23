@@ -14,6 +14,9 @@
 #include "background_maps.h"
 #include "background_images.h"
 
+// Current key/button state.
+u16 g_keyPress, g_keyHeld;
+
 void SetSpriteVideoMode() {
 %%NDS:%%	// Initialize the video mode and VRAM banks.
 %%NDS:%%	videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE | DISPLAY_SPR_ACTIVE | DISPLAY_SPR_1D);

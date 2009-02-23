@@ -77,10 +77,9 @@ namespace Spritely
 			Cancel,
 		}
 
-		public ExportResult Export(string strDocName, out string strProjectDir, out bool fNDS, out bool fExportProject)
+		public ExportResult ExportDialog(string strDocName, out string strProjectDir, out bool fExportProject)
 		{
 			strProjectDir = "";
-			fNDS = false;
 			fExportProject = false;
 
 			Export ex = new Export(strDocName);
@@ -91,17 +90,17 @@ namespace Spritely
 				return ExportResult.Failed;
 
 			strProjectDir = ex.ExportLocation;
-			fNDS = ex.NDS;
 			fExportProject = ex.Project || ex.UpdateProject;
 			bool fSkipGameState = ex.UpdateProject;
 
-			if (Export(strProjectDir, fNDS, fExportProject, fSkipGameState))
+			bool fNDS = Options.Platform == Options.PlatformType.NDS;
+			if (Export(strProjectDir, fExportProject, fNDS, fSkipGameState))
 				return ExportResult.OK;
 
 			return ExportResult.Failed;
 		}
 
-		public bool Export(string strProjectDir, bool fNDS, bool fExportProject, bool fSkipGameState)
+		public bool Export(string strProjectDir, bool fExportProject, bool fNDS, bool fSkipGameState)
 		{
 			// Since the strProjectDir doesn't end with a directory separator, this
 			// returns the directory name.
@@ -245,10 +244,7 @@ namespace Spritely
 
 		private bool ExportFromTemplate(string strProjName, string strTemplateFilename, string strOutputFilename, bool fNDS)
 		{
-			TextReader tr = null;
-			TextWriter tw = null;
-
-			try
+			try 
 			{
 				string strExeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
@@ -256,206 +252,192 @@ namespace Spritely
 														Path.DirectorySeparatorChar,
 														"templates",
 														Path.DirectorySeparatorChar);
-				try
+
+				using (TextReader tr = new StreamReader(strTemplateDir + strTemplateFilename, Encoding.UTF8))
 				{
-					tr = new StreamReader(strTemplateDir + strTemplateFilename, Encoding.UTF8);
-				}
-				catch (Exception ex)
-				{
-					// "An exception was thrown while load the project template files: {0}"
-					m_doc.ErrorId("ExceptionLoadTemplate", ex.Message);
-					return false;
-				}
+					using (TextWriter tw = new StreamWriter(strOutputFilename))
+					{
+						Spritesets sprites = m_doc.Spritesets;
+						Spritesets bgsprites = m_doc.BackgroundSpritesets;
+						Palettes palettes = m_doc.Palettes;
+						Palettes bgpalettes = m_doc.BackgroundPalettes;
+						Maps maps = m_doc.BackgroundMaps;
+						BgImages bgimages = m_doc.BackgroundImages;
 
-				try
-				{
-					tw = new StreamWriter(strOutputFilename);
-				}
-				catch (Exception ex)
-				{
-					// "An exception was thrown while opening the project file for writing: {0}"
-					m_doc.ErrorId("ExceptionOpenProjectWrite", ex.Message);
-					return false;
-				}
+						sprites.Export_AssignIDs();
+						bgsprites.Export_AssignIDs();
+						palettes.Export_AssignIDs();
+						bgpalettes.Export_AssignIDs();
+						maps.Export_AssignIDs();
+						bgimages.Export_AssignIDs();
 
-				Spritesets sprites = m_doc.Spritesets;
-				Spritesets bgsprites = m_doc.BackgroundSpritesets;
-				Palettes palettes = m_doc.Palettes;
-				Palettes bgpalettes = m_doc.BackgroundPalettes;
-				Maps maps = m_doc.BackgroundMaps;
-				BgImages bgimages = m_doc.BackgroundImages;
+						string strLine;
+						while ((strLine = tr.ReadLine()) != null)
+						{
+							if (strLine.StartsWith("%%NDS:%%"))
+							{
+								if (fNDS)
+									tw.WriteLine(strLine.Substring(8));
+								continue;
+							}
+							if (strLine.StartsWith("%%GBA:%%"))
+							{
+								if (!fNDS)
+									tw.WriteLine(strLine.Substring(8));
+								continue;
+							}
 
-				sprites.Export_AssignIDs();
-				bgsprites.Export_AssignIDs();
-				palettes.Export_AssignIDs();
-				bgpalettes.Export_AssignIDs();
-				maps.Export_AssignIDs();
-				bgimages.Export_AssignIDs();
+							if (strLine == "%%_SPRITE_PALETTE_INFO_%%")
+							{
+								palettes.Export_PaletteInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_SPRITE_PALETTES_%%")
+							{
+								palettes.Export_Palettes(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_PALETTE_INFO_%%")
+							{
+								bgpalettes.Export_PaletteInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_PALETTES_%%")
+							{
+								bgpalettes.Export_Palettes(tw);
+								continue;
+							}
 
-				string strLine;
-				while ((strLine = tr.ReadLine()) != null)
-				{
-					if (strLine.StartsWith("%%NDS:%%"))
-					{
-						if (fNDS)
-							tw.WriteLine(strLine.Substring(8));
-						continue;
-					}
-					if (strLine.StartsWith("%%GBA:%%"))
-					{
-						if (!fNDS)
-							tw.WriteLine(strLine.Substring(8));
-						continue;
-					}
+							if (strLine == "%%_SPRITESET_INFO_%%")
+							{
+								sprites.Export_SpritesetInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_SPRITESET_IDS_%%")
+							{
+								sprites.Export_SpritesetIDs(tw);
+								continue;
+							}
 
-					if (strLine == "%%_SPRITE_PALETTE_INFO_%%")
-					{
-						palettes.Export_PaletteInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_SPRITE_PALETTES_%%")
-					{
-						palettes.Export_Palettes(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_PALETTE_INFO_%%")
-					{
-						bgpalettes.Export_PaletteInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_PALETTES_%%")
-					{
-						bgpalettes.Export_Palettes(tw);
-						continue;
-					}
+							if (strLine == "%%_SPRITE_INFO_%%")
+							{
+								sprites.Export_SpriteInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_SPRITE_TILES_%%")
+							{
+								sprites.Export_TileData(tw);
+								continue;
+							}
+							if (strLine == "%%_SPRITE_MASKS_%%")
+							{
+								sprites.Export_SpriteMaskData(tw);
+								continue;
+							}
+							if (strLine == "%%_SPRITE_IDS_%%")
+							{
+								sprites.Export_SpriteIDs(tw);
+								continue;
+							}
 
-					if (strLine == "%%_SPRITESET_INFO_%%")
-					{
-						sprites.Export_SpritesetInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_SPRITESET_IDS_%%")
-					{
-						sprites.Export_SpritesetIDs(tw);
-						continue;
-					}
+							if (strLine == "%%_BACKGROUND_TILESET_INFO_%%")
+							{
+								bgsprites.Export_BgTilesetInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_TILESET_IDS_%%")
+							{
+								bgsprites.Export_BgTilesetIDs(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_TILES_%%")
+							{
+								bgsprites.Export_TileData(tw);
+								continue;
+							}
 
-					if (strLine == "%%_SPRITE_INFO_%%")
-					{
-						sprites.Export_SpriteInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_SPRITE_TILES_%%")
-					{
-						sprites.Export_TileData(tw);
-						continue;
-					}
-					if (strLine == "%%_SPRITE_MASKS_%%")
-					{
-						sprites.Export_SpriteMaskData(tw);
-						continue;
-					}
-					if (strLine == "%%_SPRITE_IDS_%%")
-					{
-						sprites.Export_SpriteIDs(tw);
-						continue;
-					}
+							if (strLine == "%%_BACKGROUND_TILE_IDS_%%")
+							{
+								bgsprites.Export_TileIDs(tw);
+								continue;
+							}
 
-					if (strLine == "%%_BACKGROUND_TILESET_INFO_%%")
-					{
-						bgsprites.Export_BgTilesetInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_TILESET_IDS_%%")
-					{
-						bgsprites.Export_BgTilesetIDs(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_TILES_%%")
-					{
-						bgsprites.Export_TileData(tw);
-						continue;
-					}
+							if (strLine == "%%_BACKGROUND_MAP_INFO_%%")
+							{
+								maps.Export_MapInfo(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_MAP_IDS_%%")
+							{
+								maps.Export_MapIDs(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_MAP_DATA_%%")
+							{
+								maps.Export_MapData(tw);
+								continue;
+							}
 
-					if (strLine == "%%_BACKGROUND_TILE_IDS_%%")
-					{
-						bgsprites.Export_TileIDs(tw);
-						continue;
-					}
+							if (strLine == "%%_BACKGROUND_IMAGE_INFO_%%")
+							{
+								bgimages.Export_BgImageInfo(tw, fNDS);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_IMAGE_IDS_%%")
+							{
+								bgimages.Export_BgImageIDs(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_IMAGE_HEADERS_%%")
+							{
+								bgimages.Export_BgImageHeaders(tw, fNDS);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_IMAGE_PALETTEDATA_%%")
+							{
+								bgimages.Export_BgImagePaletteData(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_IMAGE_DATA_PALETTED_%%")
+							{
+								bgimages.Export_BgImageData_Paletted(tw);
+								continue;
+							}
+							if (strLine == "%%_BACKGROUND_IMAGE_DATA_DIRECT_%%")
+							{
+								bgimages.Export_BgImageData_Direct(tw);
+								continue;
+							}
 
-					if (strLine == "%%_BACKGROUND_MAP_INFO_%%")
-					{
-						maps.Export_MapInfo(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_MAP_IDS_%%")
-					{
-						maps.Export_MapIDs(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_MAP_DATA_%%")
-					{
-						maps.Export_MapData(tw);
-						continue;
-					}
+							strLine = strLine.Replace("%%_NAME_%%", strProjName);
+							strLine = strLine.Replace("%%_VERSION_%%", ResourceMgr.GetString("Version"));
+							strLine = strLine.Replace("%%_PLATFORM_%%", fNDS ? "NDS" : "GBA");
 
-					if (strLine == "%%_BACKGROUND_IMAGE_INFO_%%")
-					{
-						bgimages.Export_BgImageInfo(tw, fNDS);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_IMAGE_IDS_%%")
-					{
-						bgimages.Export_BgImageIDs(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_IMAGE_HEADERS_%%")
-					{
-						bgimages.Export_BgImageHeaders(tw, fNDS);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_IMAGE_PALETTEDATA_%%")
-					{
-						bgimages.Export_BgImagePaletteData(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_IMAGE_DATA_PALETTED_%%")
-					{
-						bgimages.Export_BgImageData_Paletted(tw);
-						continue;
-					}
-					if (strLine == "%%_BACKGROUND_IMAGE_DATA_DIRECT_%%")
-					{
-						bgimages.Export_BgImageData_Direct(tw);
-						continue;
-					}
+							strLine = strLine.Replace("%%_NUM_PALETTES_%%", palettes.NumPalettes.ToString());
+							strLine = strLine.Replace("%%_NUM_SPRITESETS_%%", sprites.NumSpritesets.ToString());
+							strLine = strLine.Replace("%%_NUM_SPRITES_%%", sprites.NumSprites.ToString());
+							strLine = strLine.Replace("%%_NUM_TILES_%%", sprites.NumTiles.ToString());
 
-					strLine = strLine.Replace("%%_NAME_%%", strProjName);
-					strLine = strLine.Replace("%%_VERSION_%%", ResourceMgr.GetString("Version"));
-					strLine = strLine.Replace("%%_PLATFORM_%%", fNDS ? "NDS" : "GBA");
+							strLine = strLine.Replace("%%_NUM_BACKGROUND_PALETTES_%%", bgpalettes.NumPalettes.ToString());
+							strLine = strLine.Replace("%%_NUM_BACKGROUND_TILESETS_%%", bgsprites.NumSpritesets.ToString());
+							strLine = strLine.Replace("%%_NUM_BACKGROUND_TILES_%%", bgsprites.NumTiles.ToString());
 
-					strLine = strLine.Replace("%%_NUM_PALETTES_%%", palettes.NumPalettes.ToString());
-					strLine = strLine.Replace("%%_NUM_SPRITESETS_%%", sprites.NumSpritesets.ToString());
-					strLine = strLine.Replace("%%_NUM_SPRITES_%%", sprites.NumSprites.ToString());
-					strLine = strLine.Replace("%%_NUM_TILES_%%", sprites.NumTiles.ToString());
+							strLine = strLine.Replace("%%_NUM_BACKGROUND_MAPS_%%", maps.NumMaps.ToString());
 
-					strLine = strLine.Replace("%%_NUM_BACKGROUND_PALETTES_%%", bgpalettes.NumPalettes.ToString());
-					strLine = strLine.Replace("%%_NUM_BACKGROUND_TILESETS_%%", bgsprites.NumSpritesets.ToString());
-					strLine = strLine.Replace("%%_NUM_BACKGROUND_TILES_%%", bgsprites.NumTiles.ToString());
+							strLine = strLine.Replace("%%_NUM_BACKGROUND_IMAGES_%%", bgimages.NumImages.ToString());
 
-					strLine = strLine.Replace("%%_NUM_BACKGROUND_MAPS_%%", maps.NumMaps.ToString());
-
-					strLine = strLine.Replace("%%_NUM_BACKGROUND_IMAGES_%%", bgimages.NumImages.ToString());
-
-					tw.WriteLine(strLine);
+							tw.WriteLine(strLine);
+						}
+					}
 				}
 			}
-			finally
+			catch (Exception ex)
 			{
-				if (tw != null)
-					tw.Dispose();
-				if (tr != null)
-					tr.Dispose();
+				// "An exception was thrown while load the project template files: {0}"
+				m_doc.ErrorId("ExceptionLoadTemplate", ex.Message);
+				// "An exception was thrown while opening the project file for writing: {0}"
+				//m_doc.ErrorId("ExceptionOpenProjectWrite", ex.Message);
+				return false;
 			}
 
 			return true;

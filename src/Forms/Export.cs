@@ -49,8 +49,6 @@ namespace Spritely
 				m_strLastExportDirectory = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 
 			tbLocation.Text = m_strLastExportDirectory;
-			rbGBA.Checked = (Options.Platform == Options.PlatformType.GBA);
-			rbNDS.Checked = (Options.Platform == Options.PlatformType.NDS);
 			rbSprites.Checked = true;
 		}
 
@@ -76,8 +74,6 @@ namespace Spritely
 		private void bExport_Click(object sender, EventArgs e)
 		{
 			m_strLastExportDirectory = tbLocation.Text;
-			Options.Platform = rbGBA.Checked ? Options.PlatformType.GBA
-											 : Options.PlatformType.NDS;
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();
@@ -86,11 +82,6 @@ namespace Spritely
 		public string ExportLocation
 		{
 			get { return tbLocation.Text; }
-		}
-
-		public bool NDS
-		{
-			get { return rbNDS.Checked; }
 		}
 
 		public bool Project

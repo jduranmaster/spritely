@@ -54,13 +54,17 @@ namespace Spritely
 			this.menuEdit_Copy = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEdit_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProject = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuProject_Platform = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuProject_Platform_GBA = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuProject_Platform_NDS = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuProject_Seperator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuProject_Palettes = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProject_Palettes_Separator = new System.Windows.Forms.ToolStripSeparator();
 			this.menuProject_Palettes_New = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProject_Spritesets = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProject_Spritesets_Separator = new System.Windows.Forms.ToolStripSeparator();
 			this.menuProject_Spritesets_New = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuProject_Separator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuProject_Separator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuProject_BackgroundPalettes = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProject_BackgroundPalettes_Separator = new System.Windows.Forms.ToolStripSeparator();
 			this.menuProject_BackgroundPalettes_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -124,10 +128,10 @@ namespace Spritely
 			this.menuHelp_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_RunUnittests = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTest_RunTutorialTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuTest_ShowUndoHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTest_CollisionTest = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuTest_RunTutorialTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabSet.SuspendLayout();
 			this.menuBar.SuspendLayout();
 			this.SuspendLayout();
@@ -302,7 +306,7 @@ namespace Spritely
 			// 
 			this.menuEdit_Undo.Name = "menuEdit_Undo";
 			this.menuEdit_Undo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.menuEdit_Undo.Size = new System.Drawing.Size(152, 22);
+			this.menuEdit_Undo.Size = new System.Drawing.Size(139, 22);
 			this.menuEdit_Undo.Text = "Undo";
 			this.menuEdit_Undo.Click += new System.EventHandler(this.menuEdit_Undo_Click);
 			// 
@@ -310,20 +314,20 @@ namespace Spritely
 			// 
 			this.menuEdit_Redo.Name = "menuEdit_Redo";
 			this.menuEdit_Redo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.menuEdit_Redo.Size = new System.Drawing.Size(152, 22);
+			this.menuEdit_Redo.Size = new System.Drawing.Size(139, 22);
 			this.menuEdit_Redo.Text = "Redo";
 			this.menuEdit_Redo.Click += new System.EventHandler(this.menuEdit_Redo_Click);
 			// 
 			// menuEdit_Separator
 			// 
 			this.menuEdit_Separator.Name = "menuEdit_Separator";
-			this.menuEdit_Separator.Size = new System.Drawing.Size(149, 6);
+			this.menuEdit_Separator.Size = new System.Drawing.Size(136, 6);
 			// 
 			// menuEdit_Cut
 			// 
 			this.menuEdit_Cut.Name = "menuEdit_Cut";
 			this.menuEdit_Cut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.menuEdit_Cut.Size = new System.Drawing.Size(152, 22);
+			this.menuEdit_Cut.Size = new System.Drawing.Size(139, 22);
 			this.menuEdit_Cut.Text = "Cut";
 			this.menuEdit_Cut.Click += new System.EventHandler(this.menuEdit_Cut_Click);
 			// 
@@ -331,7 +335,7 @@ namespace Spritely
 			// 
 			this.menuEdit_Copy.Name = "menuEdit_Copy";
 			this.menuEdit_Copy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.menuEdit_Copy.Size = new System.Drawing.Size(152, 22);
+			this.menuEdit_Copy.Size = new System.Drawing.Size(139, 22);
 			this.menuEdit_Copy.Text = "Copy";
 			this.menuEdit_Copy.Click += new System.EventHandler(this.menuEdit_Copy_Click);
 			// 
@@ -339,22 +343,52 @@ namespace Spritely
 			// 
 			this.menuEdit_Paste.Name = "menuEdit_Paste";
 			this.menuEdit_Paste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.menuEdit_Paste.Size = new System.Drawing.Size(152, 22);
+			this.menuEdit_Paste.Size = new System.Drawing.Size(139, 22);
 			this.menuEdit_Paste.Text = "Paste";
 			this.menuEdit_Paste.Click += new System.EventHandler(this.menuEdit_Paste_Click);
 			// 
 			// menuProject
 			// 
 			this.menuProject.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuProject_Platform,
+            this.menuProject_Seperator1,
             this.menuProject_Palettes,
             this.menuProject_Spritesets,
-            this.menuProject_Separator1,
+            this.menuProject_Separator2,
             this.menuProject_BackgroundPalettes,
             this.menuProject_BackgroundTilesets,
             this.menuProject_BackgroundMaps});
 			this.menuProject.Name = "menuProject";
 			this.menuProject.Size = new System.Drawing.Size(53, 20);
 			this.menuProject.Text = "P&roject";
+			// 
+			// menuProject_Platform
+			// 
+			this.menuProject_Platform.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuProject_Platform_GBA,
+            this.menuProject_Platform_NDS});
+			this.menuProject_Platform.Name = "menuProject_Platform";
+			this.menuProject_Platform.Size = new System.Drawing.Size(172, 22);
+			this.menuProject_Platform.Text = "Platform";
+			// 
+			// menuProject_Platform_GBA
+			// 
+			this.menuProject_Platform_GBA.Name = "menuProject_Platform_GBA";
+			this.menuProject_Platform_GBA.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_Platform_GBA.Text = "GBA";
+			this.menuProject_Platform_GBA.Click += new System.EventHandler(this.menuProject_Platform_GBA_Click);
+			// 
+			// menuProject_Platform_NDS
+			// 
+			this.menuProject_Platform_NDS.Name = "menuProject_Platform_NDS";
+			this.menuProject_Platform_NDS.Size = new System.Drawing.Size(152, 22);
+			this.menuProject_Platform_NDS.Text = "NDS";
+			this.menuProject_Platform_NDS.Click += new System.EventHandler(this.menuProject_Platform_NDS_Click);
+			// 
+			// menuProject_Seperator1
+			// 
+			this.menuProject_Seperator1.Name = "menuProject_Seperator1";
+			this.menuProject_Seperator1.Size = new System.Drawing.Size(169, 6);
 			// 
 			// menuProject_Palettes
 			// 
@@ -396,10 +430,10 @@ namespace Spritely
 			this.menuProject_Spritesets_New.Size = new System.Drawing.Size(107, 22);
 			this.menuProject_Spritesets_New.Text = "New...";
 			// 
-			// menuProject_Separator1
+			// menuProject_Separator2
 			// 
-			this.menuProject_Separator1.Name = "menuProject_Separator1";
-			this.menuProject_Separator1.Size = new System.Drawing.Size(169, 6);
+			this.menuProject_Separator2.Name = "menuProject_Separator2";
+			this.menuProject_Separator2.Size = new System.Drawing.Size(169, 6);
 			// 
 			// menuProject_BackgroundPalettes
 			// 
@@ -703,21 +737,21 @@ namespace Spritely
 			// menuSprite_Rotate_Clockwise
 			// 
 			this.menuSprite_Rotate_Clockwise.Name = "menuSprite_Rotate_Clockwise";
-			this.menuSprite_Rotate_Clockwise.Size = new System.Drawing.Size(246, 22);
-			this.menuSprite_Rotate_Clockwise.Text = "90° Clockwise (&Sunwise)";
+			this.menuSprite_Rotate_Clockwise.Size = new System.Drawing.Size(177, 22);
+			this.menuSprite_Rotate_Clockwise.Text = "90° &Clockwise";
 			this.menuSprite_Rotate_Clockwise.Click += new System.EventHandler(this.menuSprite_Rotate_Clockwise_Click);
 			// 
 			// menuSprite_Rotate_Counterclockwise
 			// 
 			this.menuSprite_Rotate_Counterclockwise.Name = "menuSprite_Rotate_Counterclockwise";
-			this.menuSprite_Rotate_Counterclockwise.Size = new System.Drawing.Size(246, 22);
-			this.menuSprite_Rotate_Counterclockwise.Text = "90° Counterclockwise (&Widdershins)";
+			this.menuSprite_Rotate_Counterclockwise.Size = new System.Drawing.Size(177, 22);
+			this.menuSprite_Rotate_Counterclockwise.Text = "90° Counterclock&wise";
 			this.menuSprite_Rotate_Counterclockwise.Click += new System.EventHandler(this.menuSprite_Rotate_Counterclockwise_Click);
 			// 
 			// menuSprite_Rotate_180
 			// 
 			this.menuSprite_Rotate_180.Name = "menuSprite_Rotate_180";
-			this.menuSprite_Rotate_180.Size = new System.Drawing.Size(246, 22);
+			this.menuSprite_Rotate_180.Size = new System.Drawing.Size(177, 22);
 			this.menuSprite_Rotate_180.Text = "180°";
 			this.menuSprite_Rotate_180.Click += new System.EventHandler(this.menuSprite_Rotate_180_Click);
 			// 
@@ -906,6 +940,13 @@ namespace Spritely
 			this.menuTest_RunUnittests.Text = "Run &Unittests...";
 			this.menuTest_RunUnittests.Click += new System.EventHandler(this.menuTest_RunUnittests_Click);
 			// 
+			// menuTest_RunTutorialTests
+			// 
+			this.menuTest_RunTutorialTests.Name = "menuTest_RunTutorialTests";
+			this.menuTest_RunTutorialTests.Size = new System.Drawing.Size(173, 22);
+			this.menuTest_RunTutorialTests.Text = "Run Tutorial Tests...";
+			this.menuTest_RunTutorialTests.Click += new System.EventHandler(this.menuTest_RunTutorialTests_Click);
+			// 
 			// menuTest_Separator1
 			// 
 			this.menuTest_Separator1.Name = "menuTest_Separator1";
@@ -924,13 +965,6 @@ namespace Spritely
 			this.menuTest_CollisionTest.Size = new System.Drawing.Size(173, 22);
 			this.menuTest_CollisionTest.Text = "Collision Test";
 			this.menuTest_CollisionTest.Click += new System.EventHandler(this.menuTest_CollisionTest_Click);
-			// 
-			// menuTest_RunTutorialTests
-			// 
-			this.menuTest_RunTutorialTests.Name = "menuTest_RunTutorialTests";
-			this.menuTest_RunTutorialTests.Size = new System.Drawing.Size(173, 22);
-			this.menuTest_RunTutorialTests.Text = "Run Tutorial Tests...";
-			this.menuTest_RunTutorialTests.Click += new System.EventHandler(this.menuTest_RunTutorialTests_Click);
 			// 
 			// ProjectMainForm
 			// 
@@ -989,7 +1023,7 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuProject_Spritesets;
 		private System.Windows.Forms.ToolStripSeparator menuProject_Spritesets_Separator;
 		private System.Windows.Forms.ToolStripMenuItem menuProject_Spritesets_New;
-		private System.Windows.Forms.ToolStripSeparator menuProject_Separator1;
+		private System.Windows.Forms.ToolStripSeparator menuProject_Separator2;
 		private System.Windows.Forms.ToolStripMenuItem menuProject_BackgroundPalettes;
 		private System.Windows.Forms.ToolStripSeparator menuProject_BackgroundPalettes_Separator;
 		private System.Windows.Forms.ToolStripMenuItem menuProject_BackgroundPalettes_New;
@@ -1063,6 +1097,10 @@ namespace Spritely
 		private System.Windows.Forms.ToolStripMenuItem menuTest_CollisionTest;
 		private System.Windows.Forms.TabPage tabBackgroundImages;
 		private System.Windows.Forms.ToolStripMenuItem menuTest_RunTutorialTests;
+		private System.Windows.Forms.ToolStripMenuItem menuProject_Platform;
+		private System.Windows.Forms.ToolStripMenuItem menuProject_Platform_GBA;
+		private System.Windows.Forms.ToolStripMenuItem menuProject_Platform_NDS;
+		private System.Windows.Forms.ToolStripSeparator menuProject_Seperator1;
 
 	}
 }

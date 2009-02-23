@@ -30,8 +30,8 @@ namespace Spritely
 		/// <summary>
 		/// Current Spritely version string.
 		/// </summary>
-		public static string VersionString = "0.14.19 beta";
-		public static string VersionDate = "19 February 2009";
+		public static string VersionString = "0.14.22 beta";
+		public static string VersionDate = "22 February 2009";
 
 		public static string DefaultSpritesetName = "Sprites";
 		public static string DefaultPaletteName = "Pal16";
@@ -44,7 +44,8 @@ namespace Spritely
 		/// <summary>
 		/// The pattern to use when drawing transparent pixels.
 		/// </summary>
-		public static HatchStyle TransparentPattern = HatchStyle.DiagonalCross;//.DarkUpwardDiagonal;
+		//public static HatchStyle TransparentPattern = HatchStyle.DiagonalCross;
+		public static HatchStyle TransparentPattern = HatchStyle.DarkUpwardDiagonal;
 
 		public enum PlatformType
 		{
