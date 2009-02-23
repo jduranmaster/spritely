@@ -129,7 +129,7 @@ IMAGE menu_run.png
 
 <p>
 If you've already made the file association (as shown in
-<a href="/p/spritely/wiki/RunningYourROM">RunningYourROM</a>
+TUTORIAL_LINK run_gba_rom Running your GBA ROM
 tutorial), then this will automatically launch VisualBoy Advance with your ROM.
 </p>
 
