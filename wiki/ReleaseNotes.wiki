@@ -5,6 +5,34 @@
 
 For a complete list of release notes, see http://spritely.googlecode.com/svn/trunk/src/CHANGES
 
+== 0.14.22 ==
+
+Updated UI and tutorials plus changes to work with devkitARM release 24. Various consistency checks to ensure that tutorials work
+properly with each release. Support for background images. Undo for map editing.
+
+  * UI changes:
+    * MDI tabbed interface
+    * Background tiles and maps are in same window now
+    * Display options moved into toolbox (from Options menu)
+    * Floodfill tool for maps
+    * Application icon
+    * Transparent pixels now displayed with pattern (instead of red 'x')
+  * Generated code:
+    * Added CheckKeyPress, CheckKeyHeld.
+    * Broke SetupStage and Update into separate routines for each stage.
+    * backgrounds.cpp|h renamed to background_maps.cpp|h
+    * Added background_images.cpp|h
+    * Added game_utils.cpp
+    * Added code to manage game stages
+  * Tutorials
+    * Automated tutorial verification
+  * Improved undo support
+    * Added for background map editing
+    * Basic unittests
+  * Various bug fixes
+    * Undo bugs (when duplicating sprites, or when loading from file, can't redo the first undo, restore palette)
+    * Map tile id bug (wrote internal id instead of export id)
+
 == 0.13.17 ==
 
 Primarily a backend update - very little change to the UI, but significant changes to the way things are stored internally. Also, this introduces a new file format which is needed to support upcoming features.
