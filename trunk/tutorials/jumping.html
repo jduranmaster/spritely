@@ -42,7 +42,7 @@ bottom of the sprite so that we can easily align the player on
 the ground that we're going to create.
 </p>
 
-<p><img src="jumping\sprite.png" /></p>
+<p><img src="jumping/sprite.png" /></p>
 
 <h2>Step 3 : Create a background with a level ground</h2>
 
@@ -59,7 +59,7 @@ Draw this tile onto the bottom part of the background map to form a
 solid horizontal ground.
 </p>
 
-<p><img src="jumping\background_small.png" /></p>
+<p><img src="jumping/background_small.png" /></p>
 
 <h2>Step 4 : Save/Export/Build project</h2>
 
@@ -72,7 +72,7 @@ ground level.
 </p>
 
 
-<p><img src="jumping\ss_01.png" /></p>
+<p><img src="jumping/ss_01.png" /></p>
 
 <h2>Step 5 : Move the player so that it starts at ground level</h2>
 
@@ -158,7 +158,7 @@ If you drew your ground at a different level, you may have to change
 </p>
 
 
-<p><img src="jumping\ss_02.png" /></p>
+<p><img src="jumping/ss_02.png" /></p>
 
 <h2>Step 6 : Disable the up/down arrow buttons</h2>
 
@@ -246,7 +246,7 @@ the current velocity value.
 
 <p>
 We define this storage space in <tt>game_state.h</tt>.
-Add 2 new values to the <code>GameState</code> class:
+Add 2 new values to the <tt>GameState</tt> class:
 </p>
 
 <p class="filename"><code><b>game_state.h</b></code>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;Lines 39 - 53:</p>
@@ -326,7 +326,7 @@ and change it to:
 </pre>
 
 <p>
-This code sets the player's upward velocity to 10 and sets the <code>_isjumping</code>
+This code sets the player's upward velocity to 10 and sets the <tt>_isjumping</tt>
 boolean to record that the player is in the middle of a jump.
 </p>
 
@@ -377,7 +377,7 @@ after the code to move the player:
 
 <p>
 This code checks to see if the player is above the ground level and, if so, it applies
-gravity using <code>_yVelocity--;</code>. This code reduces the upward velocity by 1
+gravity using <tt>_yVelocity--;</tt>. This code reduces the upward velocity by 1
 until the player comes back to the ground.
 </p>
 
@@ -389,7 +389,7 @@ and have them try to go below ground level.
 </p>
 
 
-<p><img src="jumping\ss_03.png" /></p>
+<p><img src="jumping/ss_03.png" /></p>
 
 <p>
 This "time-lapse" screenshot shows the path that the player takes when moving to 
