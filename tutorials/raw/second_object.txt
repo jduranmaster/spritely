@@ -282,7 +282,7 @@ UPDATE game_state.cpp
 END_UPDATE
 
 <p>
-Note that the <code>0</code> in each line has been changed to use
+Note that the <tt>0</tt> in each line has been changed to use
 one of the sprite names that we specified earlier: 
 <tt>kSprites_Player</tt> and <tt>kSprite_New</tt>.
 </p>

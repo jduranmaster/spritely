@@ -243,7 +243,7 @@ the current velocity value.
 
 <p>
 We define this storage space in <tt>game_state.h</tt>.
-Add 2 new values to the <code>GameState</code> class:
+Add 2 new values to the <tt>GameState</tt> class:
 </p>
 
 UPDATE game_state.h
@@ -320,7 +320,7 @@ UPDATE game_state.cpp
 END_UPDATE
 
 <p>
-This code sets the player's upward velocity to 10 and sets the <code>_isjumping</code>
+This code sets the player's upward velocity to 10 and sets the <tt>_isjumping</tt>
 boolean to record that the player is in the middle of a jump.
 </p>
 
@@ -371,7 +371,7 @@ END_UPDATE
 
 <p>
 This code checks to see if the player is above the ground level and, if so, it applies
-gravity using <code>_yVelocity--;</code>. This code reduces the upward velocity by 1
+gravity using <tt>_yVelocity--;</tt>. This code reduces the upward velocity by 1
 until the player comes back to the ground.
 </p>
 
