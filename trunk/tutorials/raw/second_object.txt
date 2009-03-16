@@ -40,7 +40,7 @@ STEP Export
 SPRITELY_ACTION export full
 
 <p>
-Export your project (into <tt>c:\gamedev\projects\mygame</tt> and then
+Export your project (into <tt>c:\gamedev\projects\mygame</tt>) and then
 open up the newly-created <tt>.pnproj</tt> file to launch
 Programmer's Notepad.
 </p>
