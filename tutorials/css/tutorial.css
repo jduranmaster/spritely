@@ -65,8 +65,8 @@ h1 {
 	padding: 0.5em;
 	text-align: center;
 	font-size: 9pt;
-	background-color: #ffe0e0;
-	border: double #808080;
+	background-color: #fff0f0;
+	border: double #ff0000;
 }
 
 /* Filename displayed at top of <pre code> sections */
