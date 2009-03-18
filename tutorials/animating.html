@@ -36,10 +36,12 @@ When creating your sprites, you may want to make use of the
 "Sprite::Duplicate" menu item.
 </p>
 
+<p><img src="animating/menu_duplicate.png" /></p>
+
 <p>
 Make sure that your sprites are arranged in Spritely
-<b>in order</b>. If they are not in order, then move them around
-in the list until they are in the correct order.
+<b>in order</b>. If they are not in order, then they will not
+animate correctly.
 </p>
 
 
@@ -119,7 +121,7 @@ private:
 </pre>
 
 <p>
-This code declares the variables in the <tt>>GameState</tt> class that
+This code declares the variables in the <tt>GameState</tt> class that
 are used to keep track of what's going on in the game.
 </p>
 
@@ -156,9 +158,30 @@ Modify <tt>GameState</tt> to look like the following:
 </pre>
 
 <p>
-We just added a declation for an <tt>AnimationInfo</tt> structure that
+This adds a declation for an <tt>AnimationInfo</tt> structure that
 will hold all of the animation information for the player.
 </p>
+
+<p>
+If you try to compile now, you'll get the following error:
+</p>
+
+<pre class="code">
+game_state.h:43: error: 'AnimationInfo' does not name a type
+</pre>
+
+<p>
+This is because the <tt>AnimationInfo</tt> structure is defined in
+<tt>animation.h</tt>. To fix this problem, we need to 
+include a reference to this file at the top of <tt>game_state.h</tt>. 
+</p>
+
+<p class="filename"><code><b>game_state.h</b></code>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;Lines 8 - 10:</p>
+<pre class="code">
+<mark type="plus"/>#include "animation.h"
+<disabled/>#include "sprites.h"
+<disabled/>#include "background_maps.h"
+</pre>
 
 <h2>Step 5 : Initialize animation</h2>
 
@@ -207,24 +230,19 @@ And add/change the following lines:
 
 <p>
 This adds sets up the animation for the <tt>kObj_Player</tt> object.
-<tt>kSprite_Player_first</tt> and <tt>kSprite_Player_last</tt> should be
+<tt>kSprites_Bat0</tt> and <tt>kSprites_Bat1</tt> should be
 replaced by the name that you chose for your first and last sprite.
 </p>
 
 <p>
 The last value, <tt>10</tt>, controls how fast your object will
 animate &mdash; that is, how long it should wait before advancing
-to the next frame of your animation.  Since each frame is 1/60th of
+to the next frame of your animation.  Making this number larger will
+slow down the animation; making it smaller will speed up the animation.
+Since each frame is 1/60th of
 a second, setting this to 10 means that the animation frame will change
 6 times per second.
 </p>
-
-<p class="filename"><code><b>game_state.h</b></code>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;Lines 8 - 10:</p>
-<pre class="code">
-<mark type="plus"/>#include "animation.h"
-<disabled/>#include "sprites.h"
-<disabled/>#include "background_maps.h"
-</pre>
 
 <h2>Step 6 : Build</h2>
 
