@@ -174,10 +174,19 @@ STEP Draw another sprite
 
 <p>
 To do this, we need to return to Spritely and draw a new sprite.
+You can create a new sprite by selecting "New" under the "Sprite"
+menu and selecting the desired size.
 </p>
+
+IMAGE menu_new_sprite.png
 
 SPRITELY_ACTION add_sprite 4x1 New
 SPRITELY_ACTION draw_sample_4x1_sprite 0
+
+<p>
+For this example, we created a new "4x1 (32x8 pixels) Wide" sprite and drew
+a simple bat. For your sprite, you can use whatever size you want.
+</p>
 
 IMAGE new.png
 
@@ -261,7 +270,7 @@ END_FIND
 The second parameter of the InitObject() call is the sprite id that
 is used to create the object. Currently, this is set to 0 for both
 objects, which means that both objects are using the same sprite
-(sprite #0, which happens to be the player sprite).
+(sprite #0, which happens to be the player sprite in our example).
 </p>
 
 <p>

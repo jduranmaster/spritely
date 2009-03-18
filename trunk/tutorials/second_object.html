@@ -46,7 +46,7 @@ To begin, let's create a simple sprite for the player
 
 
 <p>
-Export your project (into <tt>c:\gamedev\projects\mygame</tt> and then
+Export your project (into <tt>c:\gamedev\projects\mygame</tt>) and then
 open up the newly-created <tt>.pnproj</tt> file to launch
 Programmer's Notepad.
 </p>
@@ -173,8 +173,17 @@ the new object to use a different sprite right now.
 
 <p>
 To do this, we need to return to Spritely and draw a new sprite.
+You can create a new sprite by selecting "New" under the "Sprite"
+menu and selecting the desired size.
 </p>
 
+<p><img src="second_object/menu_new_sprite.png" /></p>
+
+
+<p>
+For this example, we created a new "4x1 (32x8 pixels) Wide" sprite and drew
+a simple bat. For your sprite, you can use whatever size you want.
+</p>
 
 <p><img src="second_object/new.png" /></p>
 
@@ -253,7 +262,7 @@ Go back to <tt>game_state.cpp</tt> and look at initialization code:
 The second parameter of the InitObject() call is the sprite id that
 is used to create the object. Currently, this is set to 0 for both
 objects, which means that both objects are using the same sprite
-(sprite #0, which happens to be the player sprite).
+(sprite #0, which happens to be the player sprite in our example).
 </p>
 
 <p>

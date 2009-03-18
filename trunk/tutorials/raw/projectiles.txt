@@ -702,7 +702,7 @@ FIND game_state.cpp
 END_FIND
 
 <p>
-And adding code to check if the projectile has left the screen:
+...and add code to check if the projectile has left the screen:
 </p>
 
 UPDATE game_state.cpp

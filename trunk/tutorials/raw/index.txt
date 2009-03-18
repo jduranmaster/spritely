@@ -11,7 +11,7 @@ The following tutorials are available for using Spritely.
 Except for the Setup/Installation instructions, the target audience
 for these tutorials is middle-school (grade 6-8) students working with
 an instructor. Familiarity with basic computer tasks (saving files,
-navigating folders, ...) is also assumed.
+navigating folders, ...) is assumed.
 </p>
 
 <p>
@@ -32,6 +32,7 @@ TUTORIAL_INDEX_SPACE
 TUTORIAL_INDEX_ENTRY "Getting Started" "create_sprite" "How to create a simple sprite using Spritely"
 TUTORIAL_INDEX_ENTRY "Getting Started" "build_gba_rom" "How to build a ROM file from your Spritely project"
 TUTORIAL_INDEX_ENTRY "Getting Started" "run_gba_rom" "Running your GBA ROM in VisualBoy Advance"
+TUTORIAL_INDEX_ENTRY "Getting Started" "???" "Creating NDS ROMs"
 
 TUTORIAL_INDEX_SPACE
 
