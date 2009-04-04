@@ -40,9 +40,6 @@ IMAGE minisd.png
 </p>
 <p>
 Also known as the GBAMP (GBA Movie Player).
-There are also versions that accept SD and CF cards instead of miniSD,
-but these are larger than normal GBA cartridges and stick out of the GBA
-or DS.
 </p>
 </td></tr>
 
