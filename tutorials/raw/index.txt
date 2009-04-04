@@ -32,20 +32,20 @@ TUTORIAL_INDEX_SPACE
 TUTORIAL_INDEX_ENTRY "Getting Started" "create_sprite" "How to create a simple sprite using Spritely"
 TUTORIAL_INDEX_ENTRY "Getting Started" "build_gba_rom" "How to build a GBA ROM file from your Spritely project"
 TUTORIAL_INDEX_ENTRY "Getting Started" "run_gba_rom" "Running your GBA ROM in VisualBoy Advance"
-TUTORIAL_INDEX_ENTRY "Getting Started" "build_nds_rom" "Creating NDS ROMs"
 
 TUTORIAL_INDEX_SPACE
 
-TUTORIAL_INDEX_ENTRY "Optional Tools" "using_pn" "Using Programmer's Notepad"
-TUTORIAL_INDEX_ENTRY "Optional Tools" "carts" "GBA and NDS cartridges"
+TUTORIAL_INDEX_ENTRY "Optional Tasks" "using_pn" "Using Programmer's Notepad"
+TUTORIAL_INDEX_ENTRY "Optional Tasks" "build_nds_rom" "Creating NDS ROMs"
+TUTORIAL_INDEX_ENTRY "Optional Tasks" "carts" "GBA and NDS cartridges"
 
 TUTORIAL_INDEX_SPACE
 
 TUTORIAL_INDEX_ENTRY "Beginning Programming" "???" "How the project is organized"
-TUTORIAL_INDEX_ENTRY "Beginning Programming" "???" "Variables"
 TUTORIAL_INDEX_ENTRY "GBA Programming" "???" "Tiles, Sprites and Objects"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "second_object" "Adding a second object"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "screen_bounds" "Keeping the player within the screen bounds"
+TUTORIAL_INDEX_ENTRY "Beginning Programming" "???" "Variables"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "???" "Making objects move"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "animating" "Animating objects"
 TUTORIAL_INDEX_ENTRY "GBA Programming" "???" "Background Tiles and Maps"
@@ -56,6 +56,7 @@ TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "jumping" "Basic jumping"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "projectiles" "Adding a projectile"
 TUTORIAL_INDEX_ENTRY "Beginning Programming" "???" "Arrays"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "???" "Multiple projectiles"
+TUTORIAL_INDEX_ENTRY "Beginning Programming" "???" "Finite state machines"
 TUTORIAL_INDEX_ENTRY "Basic Game Tasks" "add_title" "Adding a title screen"
 
 TUTORIAL_INDEX_SPACE
