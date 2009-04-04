@@ -30,13 +30,14 @@ TUTORIAL_INDEX_SETUP_ENTRY "Setup/Installation" "setup_windows" "Getting set up"
 TUTORIAL_INDEX_SPACE
 
 TUTORIAL_INDEX_ENTRY "Getting Started" "create_sprite" "How to create a simple sprite using Spritely"
-TUTORIAL_INDEX_ENTRY "Getting Started" "build_gba_rom" "How to build a ROM file from your Spritely project"
+TUTORIAL_INDEX_ENTRY "Getting Started" "build_gba_rom" "How to build a GBA ROM file from your Spritely project"
 TUTORIAL_INDEX_ENTRY "Getting Started" "run_gba_rom" "Running your GBA ROM in VisualBoy Advance"
-TUTORIAL_INDEX_ENTRY "Getting Started" "???" "Creating NDS ROMs"
+TUTORIAL_INDEX_ENTRY "Getting Started" "build_nds_rom" "Creating NDS ROMs"
 
 TUTORIAL_INDEX_SPACE
 
 TUTORIAL_INDEX_ENTRY "Optional Tools" "using_pn" "Using Programmer's Notepad"
+TUTORIAL_INDEX_ENTRY "Optional Tools" "carts" "GBA and NDS cartridges"
 
 TUTORIAL_INDEX_SPACE
 
