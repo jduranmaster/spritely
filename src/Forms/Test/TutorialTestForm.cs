@@ -439,8 +439,30 @@ namespace Spritely
 			tw.WriteLine("</div></div>");
 			tw.WriteLine("");
 			tw.WriteLine("</div>");
+			WriteTrackingCode(tw);
 			tw.WriteLine("</body>");
 			tw.WriteLine("</html>");
+		}
+
+		/// <summary>
+		/// Write Analytics Tracking code on tutorials so that we can track usage.
+		/// </summary>
+		/// <param name="tw"></param>
+		void WriteTrackingCode(TextWriter tw)
+		{
+			if (tw == null)
+				return;
+			tw.WriteLine("");
+			tw.WriteLine("<script type=\"text/javascript\">");
+			tw.WriteLine("var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");");
+			tw.WriteLine("document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));");
+			tw.WriteLine("</script>");
+			tw.WriteLine("<script type=\"text/javascript\">");
+			tw.WriteLine("try {");
+			tw.WriteLine("var pageTracker = _gat._getTracker(\"UA-1163903-2\");");
+			tw.WriteLine("pageTracker._trackPageview();");
+			tw.WriteLine("} catch(err) {}</script>");
+			tw.WriteLine("");
 		}
 
 		void WriteCompatibility(TextWriter tw)
@@ -464,7 +486,7 @@ namespace Spritely
 			string strImagePath = CalcPath(m_strTutorialName, strImageName);
 			if (!File.Exists(CalcPath(Options.Debug_TutorialPath, strImagePath)))
 				Print("WARNING - Image {0} not found!", strImagePath);
-			tw.WriteLine(String.Format("<p><img src=\"{0}\" /></p>", strImagePath));
+			tw.WriteLine(String.Format("<p><img src=\"{0}/{1}\" /></p>", m_strTutorialName, strImageName));
 		}
 
 		void WriteStep(TextWriter tw, int nStep, string strStepName)
@@ -921,6 +943,37 @@ namespace Spritely
 
 		#region Sample sprites
 
+		private void DrawSampleSprite(Sprite s, int width, int height, int[,] data)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					s.SetPixel(x, y, data[y, x]);
+				}
+			}
+		}
+
+		private int[,] m_Ball = new int[,] {
+			{0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,},
+			{0,0,0,1,1,0,0,0,},
+			{0,0,1,1,1,1,0,0,},
+			{0,0,1,1,1,1,0,0,},
+			{0,0,0,1,1,0,0,0,},
+			{0,0,0,0,0,0,0,0,},
+			{0,0,0,0,0,0,0,0,},
+		};
+
+		/// <summary>
+		/// Draw a sample sprite for use in the tutorials.
+		/// </summary>
+		/// <param name="s"></param>
+		private void DrawSample1x1Sprite(Sprite s, int id)
+		{
+			DrawSampleSprite(s, 8, 8, m_Ball);
+		}
+
 		/// <summary>
 		/// 2x2 Blobber facing right.
 		/// </summary>
@@ -994,22 +1047,11 @@ namespace Spritely
 		private void DrawSample2x2Sprite(Sprite s, int id)
 		{
 			if (id == 2)
-				DrawSample2x2Sprite(s, m_Blobber2);
+				DrawSampleSprite(s, 16, 16, m_Blobber2);
 			else if (id == 1)
-				DrawSample2x2Sprite(s, m_Blobber1);
+				DrawSampleSprite(s, 16, 16, m_Blobber1);
 			else
-				DrawSample2x2Sprite(s, m_Blobber0);
-		}
-
-		private void DrawSample2x2Sprite(Sprite s, int[,] data)
-		{
-			for (int y = 0; y < 16; y++)
-			{
-				for (int x = 0; x < 16; x++)
-				{
-					s.SetPixel(x, y, data[y, x]);
-				}
-			}
+				DrawSampleSprite(s, 16, 16, m_Blobber0);
 		}
 
 		/// <summary>
@@ -1047,20 +1089,9 @@ namespace Spritely
 		private void DrawSample4x1Sprite(Sprite s, int id)
 		{
 			if (id == 1)
-				DrawSample4x1Sprite(s, m_Bat1);
+				DrawSampleSprite(s, 32, 8, m_Bat1);
 			else
-				DrawSample4x1Sprite(s, m_Bat0);
-		}
-
-		private void DrawSample4x1Sprite(Sprite s, int[,] data)
-		{
-			for (int y = 0; y < 8; y++)
-			{
-				for (int x = 0; x < 32; x++)
-				{
-					s.SetPixel(x, y, data[y, x]);
-				}
-			}
+				DrawSampleSprite(s, 32, 8, m_Bat0);
 		}
 
 		#endregion
@@ -1097,7 +1128,9 @@ namespace Spritely
 			{
 				int color = Int32.Parse(m.Groups[1].Value);
 				Spriteset ss = m_doc.Spritesets.Current;
-				ss.Palette.GetCurrentSubpalette().CurrentColor = color;
+				// TODO: don't assume palette16
+				Palette16 p16 = ss.Palette as Palette16;
+				p16.GetCurrentSubpalette().CurrentColor = color;
 				return true;
 			}
 			m = Regex.Match(strCommand, "^fill_sprite\\s+(\\d),(\\d)$");
@@ -1107,6 +1140,14 @@ namespace Spritely
 				int y = Int32.Parse(m.Groups[2].Value);
 				Sprite s = m_doc.Spritesets.Current.CurrentSprite;
 				s.FloodFillClick(x,y);
+				return true;
+			}
+			m = Regex.Match(strCommand, "^draw_sample_1x1_sprite\\s+(\\d)$");
+			if (m.Success)
+			{
+				int id = Int32.Parse(m.Groups[1].Value);
+				Sprite s = m_doc.Spritesets.Current.CurrentSprite;
+				DrawSample1x1Sprite(s, id);
 				return true;
 			}
 			m = Regex.Match(strCommand, "^draw_sample_2x2_sprite\\s+(\\d)$");

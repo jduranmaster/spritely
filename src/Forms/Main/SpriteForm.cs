@@ -395,19 +395,18 @@ namespace Spritely
 
 			int nTileIndex = (tileY * m_sprite.TileWidth) + tileX;
 			Palette p = m_parent.ActivePalette();
-			Subpalette sp = p.GetCurrentSubpalette();
 
 			if (tool == Toolbox.ToolType.Eyedropper)
 			{
 				int nCurrColor = m_sprite.GetPixel(pxSpriteX, pxSpriteY);
-				if (nCurrColor == sp.CurrentColor)
+				if (nCurrColor == p.CurrentColor())
 					return false;
-				sp.CurrentColor = nCurrColor;
+				p.SetCurrentColor(nCurrColor);
 				return true;
 			}
 
 			Tile t = m_sprite.GetTile(nTileIndex);
-			int nColor = (tool == Toolbox.ToolType.Eraser ? 0 : sp.CurrentColor);
+			int nColor = (tool == Toolbox.ToolType.Eraser ? 0 : p.CurrentColor());
 
 			// Same color - no need to update.
 			if (t.GetPixel(pxTileX, pxTileY) == nColor)

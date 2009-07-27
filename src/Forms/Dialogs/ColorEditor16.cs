@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class ColorEditor : Form
+	public partial class ColorEditor16 : Form
 	{
 		ProjectMainForm m_parent;
 		Palette16Form m_winPalette;
@@ -16,7 +16,7 @@ namespace Spritely
 
 		const int k_pxSwatchSize = 24;
 
-		public ColorEditor(ProjectMainForm parent, Palette16Form p16, Subpalette sp)
+		public ColorEditor16(ProjectMainForm parent, Palette16Form p16, Subpalette sp)
 		{
 			m_parent = parent;
 			m_winPalette = p16;

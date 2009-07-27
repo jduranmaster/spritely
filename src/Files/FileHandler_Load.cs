@@ -65,7 +65,7 @@ namespace Spritely
 
 			if (!m_fFoundSpritePalettes)
 			{
-				Palette pal = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
+				Palette16 pal = m_doc.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 				pal.SetDefaultPalette();
 			}
 			if (!m_fFoundSprites)
@@ -75,7 +75,7 @@ namespace Spritely
 			}
 			if (!m_fFoundBackgroundPalettes)
 			{
-				Palette bgpal = m_doc.BackgroundPalettes.AddPalette16(Options.DefaultBgPaletteName, 0, "");
+				Palette16 bgpal = m_doc.BackgroundPalettes.AddPalette16(Options.DefaultBgPaletteName, 0, "");
 				bgpal.SetDefaultPalette();
 			}
 			if (!m_fFoundBackgroundSprites)
@@ -182,7 +182,7 @@ namespace Spritely
 
 		private bool LoadXML_OLD_palettes(XmlNodeList xnl, Palettes palettes, string strName)
 		{
-			Palette palette = palettes.AddPalette16(strName, 0, "");
+			Palette16 palette = palettes.AddPalette16(strName, 0, "");
 			int nSubpalette = 0;
 
 			foreach (XmlNode xn in xnl)
@@ -454,7 +454,7 @@ namespace Spritely
 				Assert.IsTrue(m_filer.LoadXML_OLD_palettes(xnPalettes.ChildNodes, m_doc.Palettes, Options.DefaultPaletteName));
 
 				Assert.AreEqual(1, m_doc.Palettes.NumPalettes);
-				Palette p = m_doc.Palettes.GetPalette(0);
+				Palette16 p = m_doc.Palettes.GetPalette(0) as Palette16;
 				Assert.IsNotNull(p);
 
 				// Verify the colors are the same ones from the XML:

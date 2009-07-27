@@ -50,6 +50,8 @@ namespace Spritely
 
 			tbLocation.Text = m_strLastExportDirectory;
 			rbSprites.Checked = true;
+
+			this.Text += " - " + (Options.Platform == Options.PlatformType.NDS ? "NDS" : "GBA");
 		}
 
 		private void bBrowse_Click(object sender, EventArgs e)

@@ -2,6 +2,20 @@ Change History for Spritely: code.google.com/p/spritely
 Official binary releases are noted with "*** BINARY RELEASE ***" after
   the version number
 
+0.20.26
+Tutorials:
+  Fix image links to use "/" instead of "\" - works in IE/Chrome/Safari, but breaks in Firefox.
+  Update mime-type of .css files to text/css so they work in Firefox (IE/Chrome/Safari OK).
+Arrange Forms in subdirectories.
+Verify with devkitPro 26
+Fix bug with hilighting of option buttons in sprite editor.
+Merge SpriteList into SpriteSet
+Start adding Palette256 support
+  Add Palette base class
+  Add IPaletteForm + stub Palette256Form
+  Move Palette16.UndoData -> PaletteColorData
+Add debug Trace form
+
 0.14.22 *** BINARY RELEASE ***
 Added Project::Platform menu to select GBA/NDS.
   UI elements (bgmaps, export) adjust based on this setting.

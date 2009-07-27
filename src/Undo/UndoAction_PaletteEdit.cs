@@ -8,15 +8,15 @@ namespace Spritely
 	{
 		UndoMgr m_mgr;
 		Subpalette m_subpalette;
-		Subpalette.UndoData m_before;	// Undo
-		Subpalette.UndoData m_after;	// Redo
+		PaletteColorData m_before;	// Undo
+		PaletteColorData m_after;	// Redo
 
-		public UndoAction_Subpalette16Edit(UndoMgr mgr, Subpalette subpalette, Subpalette.UndoData before, Subpalette.UndoData after, string strDesc)
+		public UndoAction_Subpalette16Edit(UndoMgr mgr, Subpalette subpalette, PaletteColorData before, PaletteColorData after, string strDesc)
 		{
 			m_mgr = mgr;
 			m_subpalette = subpalette;
-			m_before = new Subpalette.UndoData(before);
-			m_after = new Subpalette.UndoData(after);
+			m_before = new PaletteColorData(before);
+			m_after = new PaletteColorData(after);
 
 			int b = before.currentColor;
 			int a = after.currentColor;
@@ -71,7 +71,7 @@ namespace Spritely
 			return nColorIndex != -1;
 		}
 
-		public Subpalette.UndoData GetUndoData()
+		public PaletteColorData GetUndoData()
 		{
 			return m_before;
 		}
@@ -80,9 +80,9 @@ namespace Spritely
 		/// Update the "after" UndoData. This is used when merging two UndoActions together.
 		/// </summary>
 		/// <param name="after"></param>
-		public void UpdateRedoData(Subpalette.UndoData after)
+		public void UpdateRedoData(PaletteColorData after)
 		{
-			m_after = new Subpalette.UndoData(after);
+			m_after = new PaletteColorData(after);
 		}
 
 		public override void ApplyUndo()

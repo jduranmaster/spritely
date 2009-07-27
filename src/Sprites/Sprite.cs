@@ -10,7 +10,6 @@ namespace Spritely
 	{
 		private Document m_doc;
 		private Spriteset m_ss;
-		private SpriteList m_sl;
 
 		private Tile[] m_Tiles;
 		private string m_strName;
@@ -150,7 +149,6 @@ namespace Spritely
 		{
 			m_doc = doc;
 			m_ss = ss;
-			m_sl = m_ss.SpriteList;
 
 			if (strName == ""
 				|| ss.HasNamedSprite(strName)
@@ -281,8 +279,11 @@ namespace Spritely
 			get { return m_nSubpaletteID; }
 			set {
 				m_nSubpaletteID = value;
-				if (m_ss.CurrentSprite == this)
-					m_ss.Palette.CurrentSubpaletteId = m_nSubpaletteID;
+				if (m_ss.CurrentSprite == this && m_ss.Palette.PaletteType == Palette.Type.Color16)
+				{
+					Palette16 p16 = m_ss.Palette as Palette16;
+					p16.CurrentSubpaletteId = m_nSubpaletteID;
+				}
 			}
 		}
 
@@ -293,7 +294,11 @@ namespace Spritely
 
 		public Subpalette Subpalette
 		{
-			get { return m_ss.Palette.GetSubpalette(SubpaletteID); }
+			get {
+				if (m_ss.Palette.PaletteType != Palette.Type.Color16)
+					return null;
+				return (m_ss.Palette as Palette16).GetSubpalette(SubpaletteID);
+			}
 		}
 
 		public Tile GetTile(int nTileIndex)

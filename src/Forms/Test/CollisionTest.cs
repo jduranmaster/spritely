@@ -33,7 +33,7 @@ namespace Spritely
 			ss = d.Owner.ActiveSpriteset();
 
 			s1 = ss.CurrentSprite;
-			s2 = ss.SpriteList.NextSprite(s1);
+			s2 = ss.NextSprite(s1);
 
 			mask1 = CalcMask(s1, out mask1w, out mask1h);
 			mask2 = CalcMask(s2, out mask2w, out mask2h);

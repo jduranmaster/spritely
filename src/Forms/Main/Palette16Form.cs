@@ -8,14 +8,14 @@ using System.Windows.Forms;
 
 namespace Spritely
 {
-	public partial class Palette16Form : Form
+	public partial class Palette16Form : Form, IPaletteForm
 	{
 		private ProjectMainForm m_parent;
-		private Palette m_palette;
+		private Palette16 m_palette;
 
 		static System.Drawing.Drawing2D.HatchBrush m_brushTransparent = null;
 
-		public Palette16Form(ProjectMainForm parent, Palette p)
+		public Palette16Form(ProjectMainForm parent, Palette16 p)
 		{
 			m_parent = parent;
 			m_palette = p;
@@ -332,7 +332,7 @@ namespace Spritely
 
 		private void pbPalette_DoubleClick(object sender, EventArgs e)
 		{
-			ColorEditor ce = new ColorEditor(m_parent, this, m_palette.GetCurrentSubpalette());
+			ColorEditor16 ce = new ColorEditor16(m_parent, this, m_palette.GetCurrentSubpalette());
 			ce.ShowDialog();
 			pbPalette.Invalidate();
 			pbFgSwatch.Invalidate();

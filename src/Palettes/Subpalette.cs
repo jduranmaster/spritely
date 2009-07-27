@@ -11,73 +11,12 @@ namespace Spritely
 		private Palette m_mgr;
 		private int m_nSubpaletteID;
 
-		// This class should contain all of the user-editable data for the Subpalette.
-		// It is used by the Undo class
-		public class UndoData
-		{
-			/// <summary>
-			/// Array of RGB values for each color in the palette.
-			/// </summary>
-			public int[] cRed, cGreen, cBlue;
-
-			public int numColors;
-
-			/// <summary>
-			/// Index of the currently selected color in the palette.
-			/// </summary>
-			public int currentColor;
-
-			private UndoData() {}
-
-			public UndoData(int nColors)
-			{
-				numColors = nColors;
-				cRed = new int[numColors];
-				cGreen = new int[numColors];
-				cBlue = new int[numColors];
-				currentColor = 0;
-			}
-
-			public UndoData(UndoData data)
-			{
-				numColors = data.numColors;
-				currentColor = data.currentColor;
-				cRed = new int[numColors];
-				cGreen = new int[numColors];
-				cBlue = new int[numColors];
-				for (int i = 0; i < numColors; i++)
-				{
-					cRed[i] = data.cRed[i];
-					cGreen[i] = data.cGreen[i];
-					cBlue[i] = data.cBlue[i];
-				}
-			}
-
-			public bool Equals(UndoData data)
-			{
-				if (currentColor != data.currentColor
-					|| numColors != data.numColors
-					)
-					return false;
-
-				for (int i = 0; i < numColors; i++)
-				{
-					if (cRed[i] != data.cRed[i]
-						|| cGreen[i] != data.cGreen[i]
-						|| cBlue[i] != data.cBlue[i]
-						)
-						return false;
-				}
-				return true;
-			}
-
-		}
-		private UndoData m_data;
+		private PaletteColorData m_data;
 
 		/// <summary>
 		/// A snapshot of the palette data from the last undo checkpoint.
 		/// </summary>
-		private UndoData m_snapshot;
+		private PaletteColorData m_snapshot;
 
 		/// <summary>
 		/// Array of brushes for each color in the palette.
@@ -110,13 +49,13 @@ namespace Spritely
 			m_mgr = mgr;
 			m_nSubpaletteID = nSubpaletteID;
 
-			m_data = new UndoData(k_nColors);
+			m_data = new PaletteColorData(k_nColors);
 			m_Brush = new SolidBrush[k_nColors];
 
 			// Default color = black (index 1)
 			m_data.currentColor = 1;
 
-			m_snapshot = new UndoData(k_nColors);
+			m_snapshot = new PaletteColorData(k_nColors);
 			SetDefaultSubpaletteColors(eDefaultColorSet);
 		}
 
@@ -254,7 +193,7 @@ namespace Spritely
 		/// <returns>The encoding for the specified palette entry</returns>
 		public int Encoding(int nIndex)
 		{
-			return Color555.Encode(m_data.cRed[nIndex], m_data.cGreen[nIndex], m_data.cBlue[nIndex]);
+			return m_data.Encoding(nIndex);
 		}
 
 		/// <summary>
@@ -290,7 +229,7 @@ namespace Spritely
 		}
 
 		/// <summary>
-		/// The index of the currently selected color in the palette.
+		/// The index of the currently selected color in the sub-palette.
 		/// </summary>
 		public int CurrentColor
 		{
@@ -352,7 +291,7 @@ namespace Spritely
 			if (undo == null)
 				return;
 
-			UndoData data = GetUndoData();
+			PaletteColorData data = GetUndoData();
 			UndoAction_Subpalette16Edit action = new UndoAction_Subpalette16Edit(undo, this, m_snapshot, data, strDesc);
 			bool fHandled = false;
 
@@ -394,9 +333,9 @@ namespace Spritely
 			RecordSnapshot();
 		}
 
-		private UndoData GetUndoData()
+		private PaletteColorData GetUndoData()
 		{
-			UndoData undo = new UndoData(k_nColors);
+			PaletteColorData undo = new PaletteColorData(k_nColors);
 			RecordUndoData(ref undo);
 			return undo;
 		}
@@ -406,7 +345,7 @@ namespace Spritely
 			RecordUndoData(ref m_snapshot);
 		}
 
-		private void RecordUndoData(ref UndoData undo)
+		private void RecordUndoData(ref PaletteColorData undo)
 		{
 			undo.currentColor = m_data.currentColor;
 
@@ -418,7 +357,7 @@ namespace Spritely
 			}
 		}
 
-		public void ApplyUndoData(UndoData undo)
+		public void ApplyUndoData(PaletteColorData undo)
 		{
 			m_data.currentColor = undo.currentColor;
 

@@ -163,12 +163,12 @@ namespace Spritely
 		/// </summary>
 		const int k_pxSpritesetWidth = 167;
 		const int k_pxSpritesetHeight = 306;
-		const int k_pxSprite1IdealWidth = 206;
-		const int k_pxSprite2IdealWidth = 334;
-		const int k_pxSprite4IdealWidth = 590;
-		const int k_pxBackgroundMapIdealWidth = 590;
+		const int k_pxSprite1IdealWidth = 214;//206;
+		const int k_pxSprite2IdealWidth = 342;//334;
+		const int k_pxSprite4IdealWidth = 598;//590;
+		const int k_pxBackgroundMapIdealWidth = 598;//590;
 		const int k_pxBackgroundMapIdealHeight = 638;
-		const int k_pxBackgroundImageIdealWidth = 590;
+		const int k_pxBackgroundImageIdealWidth = 598;//590;
 
 		public static void ResizeMainForm(ProjectMainForm form)
 		{
