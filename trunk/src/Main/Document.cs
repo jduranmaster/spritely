@@ -47,7 +47,7 @@ namespace Spritely
 		public void InitializeEmptyDocument()
 		{
 			// Palettes
-			Palette pal = m_data.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
+			Palette16 pal = m_data.Palettes.AddPalette16(Options.DefaultPaletteName, 0, "");
 			pal.SetDefaultPalette();
 
 			// Spritesets
@@ -58,7 +58,7 @@ namespace Spritely
 			ss.SelectFirstSprite();
 
 			// Background palettes
-			Palette bgpal = m_data.BackgroundPalettes.AddPalette16(Options.DefaultBgPaletteName, 0, "");
+			Palette16 bgpal = m_data.BackgroundPalettes.AddPalette16(Options.DefaultBgPaletteName, 0, "");
 			bgpal.SetDefaultPalette();
 
 			// Background tiles (bgsprites and bgtilegroups)

@@ -11,27 +11,31 @@ namespace Spritely
 		/// <summary>
 		/// Is this the debug/testing build?
 		/// </summary>
-		public static bool DEBUG = false;//true;
+		public static bool DEBUG = false;
 
 		/// <summary>
 		/// Path to the raw tutorial files so that they can be processed by the
 		/// tutorial test.
-		/// Debug version only.
 		/// </summary>
-		public static string Debug_TutorialPath = @"C:\gamedev\Spritely\tutorials";
-		public static string Debug_TutorialRawPath = @"C:\gamedev\Spritely\tutorials\raw";
-		public static string Debug_TutorialRawDataPath = @"C:\gamedev\Spritely\tutorials\raw_data";
+		/// <remarks>
+		/// These are used only in the DEBUG=true version.
+		/// Yes, they're hard-coded paths. If you want to build/update the tutorials,
+		/// you'll need to change these to match your directory hierarchy.
+		/// </remarks>
+		public static string Debug_TutorialPath = @"C:\dev\spritely\tutorials";
+		public static string Debug_TutorialRawPath = @"C:\dev\spritely\tutorials\raw";
+		public static string Debug_TutorialRawDataPath = @"C:\dev\spritely\tutorials\raw_data";
 
 		/// <summary>
 		/// Version of devkitARM that we have tested with.
 		/// </summary>
-		public static int Debug_DevkitArmVersion = 24;
+		public static int Debug_DevkitArmVersion = 26;
 
 		/// <summary>
 		/// Current Spritely version string.
 		/// </summary>
-		public static string VersionString = "0.14.22 beta";
-		public static string VersionDate = "22 February 2009";
+		public static string VersionString = "0.19.26 beta";
+		public static string VersionDate = "26 July 2009";
 
 		public static string DefaultSpritesetName = "Sprites";
 		public static string DefaultPaletteName = "Pal16";

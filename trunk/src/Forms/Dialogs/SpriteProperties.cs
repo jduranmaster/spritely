@@ -38,12 +38,12 @@ namespace Spritely
 			{
 				case Keys.Alt | Keys.Left:
 				case Keys.Alt | Keys.Up:
-					if (ValidateAllTextFields() && !m_ss.SpriteList.IsFirstSprite(m_sprite))
+					if (ValidateAllTextFields() && !m_ss.IsFirstSprite(m_sprite))
 						bPrev_Click(null, null);
 					return true;
 				case Keys.Alt | Keys.Right:
 				case Keys.Alt | Keys.Down:
-					if (ValidateAllTextFields() && !m_ss.SpriteList.IsLastSprite(m_sprite))
+					if (ValidateAllTextFields() && !m_ss.IsLastSprite(m_sprite))
 						bNext_Click(null, null);
 					return true;
 			}
@@ -79,13 +79,13 @@ namespace Spritely
 			pbSprite.Invalidate();
 
 			// Enable/disable the next/prev buttons.
-			bNext.Enabled = !m_ss.SpriteList.IsLastSprite(m_sprite);
-			bPrev.Enabled = !m_ss.SpriteList.IsFirstSprite(m_sprite);
+			bNext.Enabled = !m_ss.IsLastSprite(m_sprite);
+			bPrev.Enabled = !m_ss.IsFirstSprite(m_sprite);
 		}
 
 		private void bNext_Click(object sender, EventArgs e)
 		{
-			Sprite s = m_ss.SpriteList.NextSprite(m_sprite);
+			Sprite s = m_ss.NextSprite(m_sprite);
 			if (s != null)
 			{
 				m_sprite = s;
@@ -95,7 +95,7 @@ namespace Spritely
 
 		private void bPrev_Click(object sender, EventArgs e)
 		{
-			Sprite s = m_ss.SpriteList.PrevSprite(m_sprite);
+			Sprite s = m_ss.PrevSprite(m_sprite);
 			if (s != null)
 			{
 				m_sprite = s;

@@ -1,8 +1,8 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C83670FE-9461-4421-A1A8-A30BEA11A239}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -10,6 +10,14 @@
     <RootNamespace>Spritely</RootNamespace>
     <AssemblyName>Spritely</AssemblyName>
     <ApplicationIcon>Resources\Spritely2.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.5.1.9189, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -38,44 +46,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\BgImageListForm.cs">
+    <Compile Include="Forms\Main\BgImageListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BgImageListForm.Designer.cs">
+    <Compile Include="Forms\Main\BgImageListForm.Designer.cs">
       <DependentUpon>BgImageListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BgImageForm.cs">
+    <Compile Include="Forms\Main\BgImageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BgImageForm.Designer.cs">
+    <Compile Include="Forms\Main\BgImageForm.Designer.cs">
       <DependentUpon>BgImageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ColorEditor.cs">
+    <Compile Include="Forms\Dialogs\ColorEditor16.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ColorEditor.Designer.cs">
-      <DependentUpon>ColorEditor.cs</DependentUpon>
+    <Compile Include="Forms\Dialogs\ColorEditor16.Designer.cs">
+      <DependentUpon>ColorEditor16.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BgImageProperties.cs">
+    <Compile Include="Forms\Dialogs\BgImageProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BgImageProperties.Designer.cs">
+    <Compile Include="Forms\Dialogs\BgImageProperties.Designer.cs">
       <DependentUpon>BgImageProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TutorialTestForm.cs">
+    <Compile Include="Forms\Main\IPaletteForm.cs">
+    </Compile>
+    <Compile Include="Forms\Test\TraceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TutorialTestForm.Designer.cs">
+    <Compile Include="Forms\Test\TraceForm.Designer.cs">
+      <DependentUpon>TraceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Test\TutorialTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Test\TutorialTestForm.Designer.cs">
       <DependentUpon>TutorialTestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MapForm.cs">
+    <Compile Include="Forms\Main\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MapForm.Designer.cs">
+    <Compile Include="Forms\Main\MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Backgrounds\BgImages.cs" />
     <Compile Include="Backgrounds\BgImage.cs" />
+    <Compile Include="Main\Debug.cs" />
+    <Compile Include="Palettes\Palette16.cs" />
+    <Compile Include="Palettes\Palette256.cs" />
+    <Compile Include="Palettes\PaletteColorData.cs" />
     <Compile Include="Toolbox\Arrowbox.cs" />
     <Compile Include="Toolbox\Arrowbox_Sprite.cs" />
     <Compile Include="Toolbox\Optionbox_Sprite.cs" />
@@ -84,53 +104,53 @@
     <Compile Include="Palettes\Color555.cs" />
     <Compile Include="Files\FileHandler_Export.cs" />
     <Compile Include="Files\FileHandler_Load.cs" />
-    <Compile Include="Forms\Palette256Form.cs">
+    <Compile Include="Forms\Main\Palette256Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Palette256Form.Designer.cs">
+    <Compile Include="Forms\Main\Palette256Form.Designer.cs">
       <DependentUpon>Palette256Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProjectMainForm.cs">
+    <Compile Include="Forms\Main\ProjectMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ProjectMainForm.Designer.cs">
+    <Compile Include="Forms\Main\ProjectMainForm.Designer.cs">
       <DependentUpon>ProjectMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProjectMainForm_Menu.cs">
+    <Compile Include="Forms\Main\ProjectMainForm_Menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SpriteForm.cs">
+    <Compile Include="Forms\Main\SpriteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SpriteForm.Designer.cs">
+    <Compile Include="Forms\Main\SpriteForm.Designer.cs">
       <DependentUpon>SpriteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SpritesetForm.cs">
+    <Compile Include="Forms\Main\SpritesetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SpritesetForm.Designer.cs">
+    <Compile Include="Forms\Main\SpritesetForm.Designer.cs">
       <DependentUpon>SpritesetForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TempForm.cs">
+    <Compile Include="Forms\Test\TempForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TempForm.Designer.cs">
+    <Compile Include="Forms\Test\TempForm.Designer.cs">
       <DependentUpon>TempForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Backgrounds\Map.cs" />
-    <Compile Include="Forms\CollisionTest.cs">
+    <Compile Include="Forms\Test\CollisionTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CollisionTest.Designer.cs">
+    <Compile Include="Forms\Test\CollisionTest.Designer.cs">
       <DependentUpon>CollisionTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Backgrounds\MapBlock.cs" />
     <Compile Include="Backgrounds\Maps.cs" />
     <Compile Include="Backgrounds\Map_LoadSave.cs" />
-    <Compile Include="Forms\Palette16Form.cs">
+    <Compile Include="Forms\Main\Palette16Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Palette16Form.Designer.cs">
+    <Compile Include="Forms\Main\Palette16Form.Designer.cs">
       <DependentUpon>Palette16Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Palettes\Palettes.cs" />
@@ -138,39 +158,39 @@
     <Compile Include="Sprites\Spritesets.cs" />
     <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="Sprites\Sprite_LoadSave.cs" />
-    <Compile Include="Forms\TabMgr.cs" />
+    <Compile Include="Main\TabMgr.cs" />
     <Compile Include="Toolbox\Toolbox_BgImage.cs" />
     <Compile Include="Toolbox\Toolbox_Map.cs" />
-    <Compile Include="Forms\About.cs">
+    <Compile Include="Forms\Dialogs\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\About.Designer.cs">
+    <Compile Include="Forms\Dialogs\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ColorEncodingView.cs">
+    <Compile Include="Forms\Dialogs\ColorEncodingView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ColorEncodingView.Designer.cs">
+    <Compile Include="Forms\Dialogs\ColorEncodingView.Designer.cs">
       <DependentUpon>ColorEncodingView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Export.cs">
+    <Compile Include="Forms\Dialogs\Export.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Export.Designer.cs">
+    <Compile Include="Forms\Dialogs\Export.Designer.cs">
       <DependentUpon>Export.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\Document.cs" />
     <Compile Include="Files\FileHandler.cs" />
-    <Compile Include="Forms\SpriteProperties.cs">
+    <Compile Include="Forms\Dialogs\SpriteProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SpriteProperties.Designer.cs">
+    <Compile Include="Forms\Dialogs\SpriteProperties.Designer.cs">
       <DependentUpon>SpriteProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UndoHistoryForm.cs">
+    <Compile Include="Forms\Test\UndoHistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UndoHistoryForm.Designer.cs">
+    <Compile Include="Forms\Test\UndoHistoryForm.Designer.cs">
       <DependentUpon>UndoHistoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\Options.cs" />
@@ -184,79 +204,82 @@
     </Compile>
     <Compile Include="Main\Spritely.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\About.resx">
+    <EmbeddedResource Include="Forms\Dialogs\About.resx">
       <SubType>Designer</SubType>
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CollisionTest.resx">
+    <EmbeddedResource Include="Forms\Test\CollisionTest.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CollisionTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ColorEditor.resx">
+    <EmbeddedResource Include="Forms\Dialogs\ColorEditor16.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ColorEditor.cs</DependentUpon>
+      <DependentUpon>ColorEditor16.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ColorEncodingView.resx">
+    <EmbeddedResource Include="Forms\Dialogs\ColorEncodingView.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ColorEncodingView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BgImageListForm.resx">
+    <EmbeddedResource Include="Forms\Main\BgImageListForm.resx">
       <DependentUpon>BgImageListForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BgImageForm.resx">
+    <EmbeddedResource Include="Forms\Main\BgImageForm.resx">
       <DependentUpon>BgImageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BgImageProperties.resx">
+    <EmbeddedResource Include="Forms\Dialogs\BgImageProperties.resx">
       <DependentUpon>BgImageProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TutorialTestForm.resx">
+    <EmbeddedResource Include="Forms\Test\TraceForm.resx">
+      <DependentUpon>TraceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Test\TutorialTestForm.resx">
       <DependentUpon>TutorialTestForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MapForm.resx">
+    <EmbeddedResource Include="Forms\Main\MapForm.resx">
       <DependentUpon>MapForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Palette256Form.resx">
+    <EmbeddedResource Include="Forms\Main\Palette256Form.resx">
       <DependentUpon>Palette256Form.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Export.resx">
+    <EmbeddedResource Include="Forms\Dialogs\Export.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Export.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProjectMainForm.resx">
+    <EmbeddedResource Include="Forms\Main\ProjectMainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProjectMainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SpriteForm.resx">
+    <EmbeddedResource Include="Forms\Main\SpriteForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpriteForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SpriteProperties.resx">
+    <EmbeddedResource Include="Forms\Dialogs\SpriteProperties.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpriteProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SpritesetForm.resx">
+    <EmbeddedResource Include="Forms\Main\SpritesetForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpritesetForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TempForm.resx">
+    <EmbeddedResource Include="Forms\Test\TempForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TempForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UndoHistoryForm.resx">
+    <EmbeddedResource Include="Forms\Test\UndoHistoryForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UndoHistoryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UnitTestForm.resx">
+    <EmbeddedResource Include="Forms\Test\UnitTestForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UnitTestForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Palette16Form.resx">
+    <EmbeddedResource Include="Forms\Main\Palette16Form.resx">
       <DependentUpon>Palette16Form.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -285,7 +308,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Sprites\Sprite.cs" />
-    <Compile Include="Sprites\SpriteList.cs" />
     <Compile Include="Resources\ResourceMgr.cs" />
     <Compile Include="Sprites\Tile.cs" />
     <Compile Include="Toolbox\Toolbox.cs" />
@@ -297,14 +319,15 @@
     <Compile Include="Undo\UndoAction_SpriteEdit.cs" />
     <Compile Include="Undo\UndoMgr.cs" />
     <Compile Include="Main\XMLUtils.cs" />
-    <Compile Include="Forms\UnitTestForm.cs">
+    <Compile Include="Forms\Test\UnitTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UnitTestForm.Designer.cs">
+    <Compile Include="Forms\Test\UnitTestForm.Designer.cs">
       <DependentUpon>UnitTestForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="CHANGES" />
     <None Include="LICENSE" />
     <None Include="Resources\images\tool_ellipse.png" />

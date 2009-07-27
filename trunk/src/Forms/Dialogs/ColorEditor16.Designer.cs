@@ -1,6 +1,6 @@
 namespace Spritely
 {
-	partial class ColorEditor
+	partial class ColorEditor16
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@ namespace Spritely
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColorEditor));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColorEditor16));
 			this.pbPalette = new System.Windows.Forms.PictureBox();
 			this.bOK = new System.Windows.Forms.Button();
 			this.tabControl1 = new System.Windows.Forms.TabControl();

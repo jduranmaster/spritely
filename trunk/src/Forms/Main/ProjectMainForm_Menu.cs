@@ -125,11 +125,17 @@ namespace Spritely
 
 			// Enable/disable Palette menu items
 			menuPalette.Enabled = true;
-			Palette pm = ActivePalette();
-			Subpalette p = null;
-			if (pm != null)
-				p = pm.GetCurrentSubpalette();
-			if (p != null)
+			Palette p = ActivePalette();
+			bool fValidPalette = false;
+			if (p.PaletteType == Palette.Type.Color16)
+			{
+				Palette16 p16 = p as Palette16;
+				if (p16.GetCurrentSubpalette() != null)
+					fValidPalette = true;
+			} else {
+				fValidPalette = true;
+			}
+			if (fValidPalette)
 			{
 				menuPalette_Copy.Enabled = false;
 				menuPalette_Paste.Enabled = false;
@@ -406,7 +412,7 @@ namespace Spritely
 				return;
 
 			Sprite sToCopy = s;
-			Sprite sNew = ss.SpriteList.DuplicateSprite(sToCopy, ActiveUndo());
+			Sprite sNew = ss.DuplicateSprite(sToCopy, ActiveUndo());
 			if (sNew != null)
 			{
 				sNew.RecordSnapshot();
@@ -430,7 +436,7 @@ namespace Spritely
 			int tileWidth = Int32.Parse(aSize[0]);
 			int tileHeight = Int32.Parse(aSize[1]);
 
-			if (ss.SpriteList.ResizeSelectedSprite(tileWidth, tileHeight))
+			if (ss.ResizeSelectedSprite(tileWidth, tileHeight))
 			{
 				s.RecordUndoAction("resize", ActiveUndo());
 				HandleSpriteDataChanged(ss);
@@ -464,8 +470,7 @@ namespace Spritely
 
 			if (!s.IsEmpty())
 			{
-				SpriteList sl = ss.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise90))
+				if (ss.RotateSelectedSprite(Sprite.RotateDirection.Clockwise90))
 				{
 					s.RecordUndoAction("rotatecw", ActiveUndo());
 					HandleSpriteDataChanged(ss);
@@ -482,8 +487,7 @@ namespace Spritely
 
 			if (!s.IsEmpty())
 			{
-				SpriteList sl = ss.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Counterclockwise90))
+				if (ss.RotateSelectedSprite(Sprite.RotateDirection.Counterclockwise90))
 				{
 					s.RecordUndoAction("rotateccw", ActiveUndo());
 					HandleSpriteDataChanged(ss);
@@ -500,8 +504,7 @@ namespace Spritely
 
 			if (!s.IsEmpty())
 			{
-				SpriteList sl = ss.SpriteList;
-				if (sl.RotateSelectedSprite(Sprite.RotateDirection.Clockwise180))
+				if (ss.RotateSelectedSprite(Sprite.RotateDirection.Clockwise180))
 				{
 					s.RecordUndoAction("rotate180", ActiveUndo());
 					HandleSpriteDataChanged(ss);
@@ -644,6 +647,12 @@ namespace Spritely
 		{
 			UndoHistoryVisible = !UndoHistoryVisible;
 			menuTest_ShowUndoHistory.Checked = UndoHistoryVisible;
+		}
+
+		private void menuTest_ShowTrace_Click(object sender, EventArgs e)
+		{
+			Debug.TraceFormVisible = true;
+			menuTest_ShowTrace.Checked = Debug.TraceFormVisible;
 		}
 
 		private void menuTest_CollisionTest_Click(object sender, EventArgs e)

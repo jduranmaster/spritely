@@ -111,7 +111,7 @@ namespace Spritely
 		public void RecalcScrollHeights()
 		{
 			m_nTotalScrollHeight = 0;
-			foreach (SpriteType st in m_ss.SpriteList.SpriteTypes)
+			foreach (SpriteType st in m_ss.SpriteTypes)
 			{
 				st.FirstLine = m_nTotalScrollHeight;
 				if (st.Sprites.Count == 0)
@@ -212,7 +212,7 @@ namespace Spritely
 			// Adjust for the current scroll position.
 			nTileY += m_nScrollPosition;
 
-			foreach (SpriteType st in m_ss.SpriteList.SpriteTypes)
+			foreach (SpriteType st in m_ss.SpriteTypes)
 			{
 				if (st.Sprites.Count != 0
 					// Ignore (st.FirstLine == nTileY) because this is a click on the label
@@ -265,7 +265,7 @@ namespace Spritely
 			else
 				brTitleBar = Brushes.Green;
 
-			foreach (SpriteType st in m_ss.SpriteList.SpriteTypes)
+			foreach (SpriteType st in m_ss.SpriteTypes)
 			{
 				if (st.Sprites.Count != 0)
 				{

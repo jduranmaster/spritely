@@ -9,11 +9,11 @@ namespace Spritely
 	{
 		public Optionbox_Sprite() : base()
 		{
-			Tools.Add(new Tool("ShowScreen", ToolType.ShowTileGrid, 0, 0,
+			Tools.Add(new Tool("ShowTileScreen", ToolType.ShowTileGrid, 0, 0,
 					ResourceMgr.GetBitmap("tool_largegrid"),
 					Options.BoolOptionName.Sprite_ShowTileGrid));
 
-			Tools.Add(new Tool("ShowTileGrid", ToolType.ShowTileGrid, 1, 0,
+			Tools.Add(new Tool("ShowPixelGrid", ToolType.ShowPixelGrid, 1, 0,
 					ResourceMgr.GetBitmap("tool_smallgrid"),
 					Options.BoolOptionName.Sprite_ShowPixelGrid));
 

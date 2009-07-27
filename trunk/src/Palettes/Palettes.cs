@@ -60,13 +60,13 @@ namespace Spritely
 			m_palettes.Clear();
 		}
 
-		public Palette AddPalette16(string strName, int id, string strDesc)
+		public Palette16 AddPalette16(string strName, int id, string strDesc)
 		{
 			// Don't allow a second palette with the same name.
 			if (m_palettes.ContainsKey(id))
 				return null;
 
-			Palette pal16 = new Palette(m_doc, this, strName, id, strDesc);
+			Palette16 pal16 = new Palette16(m_doc, this, strName, id, strDesc);
 			m_palettes.Add(id, pal16);
 			m_paletteCurrent = pal16;
 			return pal16;
@@ -95,7 +95,7 @@ namespace Spritely
 						int id = XMLUtils.GetXMLIntegerAttribute(xn, "id");
 						string strDesc = XMLUtils.GetXMLAttribute(xn, "desc");
 
-						Palette p = AddPalette16(strName, id, strDesc);
+						Palette16 p = AddPalette16(strName, id, strDesc);
 						if (!p.LoadXML_palette16(xn))
 							return false;
 						break;

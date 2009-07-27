@@ -46,8 +46,8 @@ namespace Spritely.Forms
 			// splitContainer1.Panel1
 			// 
 			this.splitContainer1.Panel1.Controls.Add(this.treeView1);
-			this.splitContainer1.Size = new System.Drawing.Size(433, 309);
-			this.splitContainer1.SplitterDistance = 152;
+			this.splitContainer1.Size = new System.Drawing.Size(550, 309);
+			this.splitContainer1.SplitterDistance = 123;
 			this.splitContainer1.TabIndex = 0;
 			// 
 			// treeView1
@@ -62,14 +62,14 @@ namespace Spritely.Forms
 			treeNode2.Text = "Project 1";
 			this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode2});
-			this.treeView1.Size = new System.Drawing.Size(152, 309);
+			this.treeView1.Size = new System.Drawing.Size(123, 309);
 			this.treeView1.TabIndex = 0;
 			// 
 			// TempForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(433, 309);
+			this.ClientSize = new System.Drawing.Size(550, 309);
 			this.Controls.Add(this.splitContainer1);
 			this.Name = "TempForm";
 			this.splitContainer1.Panel1.ResumeLayout(false);

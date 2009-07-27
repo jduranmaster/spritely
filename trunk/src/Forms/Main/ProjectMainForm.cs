@@ -397,13 +397,13 @@ namespace Spritely
 			TabMgr tabSprites = GetTab(TabMgr.TabId.Sprites);
 			tabSprites.AddSpritesetWindow(m_doc.Spritesets.Current.SpritesetWindow);
 			tabSprites.AddSpriteWindow(m_doc.Spritesets.Current.SpriteWindow);
-			tabSprites.AddPaletteWindow(m_doc.Palettes.CurrentPalette.PaletteWindow);
+			tabSprites.AddPaletteWindow(m_doc.Palettes.CurrentPalette.PaletteWindowForm());
 			tabSprites.ArrangeWindows();
 
 			TabMgr tabBackgroundMaps = GetTab(TabMgr.TabId.BackgroundMaps);
 			tabBackgroundMaps.AddSpritesetWindow(m_doc.BackgroundSpritesets.Current.SpritesetWindow);
 			tabBackgroundMaps.AddSpriteWindow(m_doc.BackgroundSpritesets.Current.SpriteWindow);
-			tabBackgroundMaps.AddPaletteWindow(m_doc.BackgroundPalettes.CurrentPalette.PaletteWindow);
+			tabBackgroundMaps.AddPaletteWindow(m_doc.BackgroundPalettes.CurrentPalette.PaletteWindowForm());
 			tabBackgroundMaps.AddMapWindow(m_doc.BackgroundMaps.CurrentMap.MapWindow);
 			tabBackgroundMaps.ArrangeWindows();
 
@@ -459,7 +459,7 @@ namespace Spritely
 		public void HandleSpriteSelectionChanged(Spriteset ss)
 		{
 			//m_doc.HasUnsavedChanges = true;
-			ss.Palette.PaletteWindow.SpriteSelectionChanged();
+			ss.Palette.PaletteWindow().SpriteSelectionChanged();
 			ss.SpritesetWindow.SpriteSelectionChanged();
 			ss.SpriteWindow.SpriteSelectionChanged();
 		}
@@ -486,7 +486,7 @@ namespace Spritely
 		/// </summary>
 		public void HandleSpriteDisplayOptionsChanged(Spriteset ss)
 		{
-			ss.Palette.PaletteWindow.SpriteDisplayOptionChanged();
+			ss.Palette.PaletteWindow().SpriteDisplayOptionChanged();
 			ss.SpriteWindow.SpriteDisplayOptionChanged();
 		}
 
@@ -512,7 +512,7 @@ namespace Spritely
 		/// </summary>
 		public void HandleSubpaletteSelectChange(Palette p)
 		{
-			p.PaletteWindow.SubpaletteSelectChanged();
+			p.PaletteWindow().SubpaletteSelectChanged();
 			Spriteset ss;
 			if (p.IsBackground)
 			{
@@ -536,7 +536,7 @@ namespace Spritely
 		/// </summary>
 		public void HandleColorSelectChange(Palette p)
 		{
-			p.PaletteWindow.ColorSelectChanged();
+			p.PaletteWindow().ColorSelectChanged();
 		}
 
 		/// <summary>
@@ -546,7 +546,7 @@ namespace Spritely
 		{
 			m_doc.FlushBitmaps();
 
-			p.PaletteWindow.ColorDataChanged();
+			p.PaletteWindow().ColorDataChanged();
 			Spriteset ss;
 			if (p.IsBackground)
 			{

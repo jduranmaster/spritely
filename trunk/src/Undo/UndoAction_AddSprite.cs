@@ -35,14 +35,14 @@ namespace Spritely
 		{
 			if (m_fAdd)
 			{
-				m_ss.SpriteList.RemoveSprite(m_sprite, null);
+				m_ss.RemoveSprite(m_sprite, null);
 				m_ss.CurrentSprite = m_mgr.FindMostRecentSprite();
 				if (m_ss.CurrentSprite == null)
 					m_ss.SelectFirstSprite();
 			}
 			else
 			{
-				m_ss.SpriteList.AddSprite(m_sprite, null);
+				m_ss.AddSprite(m_sprite, null);
 				m_ss.CurrentSprite = m_sprite;
 			}
 		}
@@ -51,12 +51,12 @@ namespace Spritely
 		{
 			if (m_fAdd)
 			{
-				m_ss.SpriteList.AddSprite(m_sprite, null);
+				m_ss.AddSprite(m_sprite, null);
 				m_ss.CurrentSprite = m_sprite;
 			}
 			else
 			{
-				m_ss.SpriteList.RemoveSprite(m_sprite, null);
+				m_ss.RemoveSprite(m_sprite, null);
 				m_ss.CurrentSprite = m_mgr.FindMostRecentSprite();
 				if (m_ss.CurrentSprite == null)
 					m_ss.SelectFirstSprite();

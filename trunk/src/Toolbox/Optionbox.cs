@@ -21,6 +21,9 @@ namespace Spritely
 
 		public override void HandleMouseDown(int pxX, int pxY, PictureBox pb)
 		{
+			Debug.ClearTrace();
+			Debug.Trace("MouseDown");
+
 			m_eCurrentOptionTool = ToolType.Blank;
 			m_fOptionbox_Selecting = true;
 			HandleMouse(pxX, pxY, pb);
@@ -67,25 +70,22 @@ namespace Spritely
 						return;
 
 					// Revert tool to original state.
-					m_toolOptionCurrent.Hilight = m_fOriginalOptionToolState;
-
-					// Update the option based on the state of the toolbox button.
-					Options.Set(m_toolOptionCurrent.OptionName, m_toolOptionCurrent.Hilight);
-
-					// Update toolbox display
-					pb.Invalidate();
+					SetCurrentToolHilight(pb, m_fOriginalOptionToolState);
 				}
 				return;
 			}
 
 			foreach (Tool t in Tools)
 			{
+				// Find the tool at the mouse position.
 				if (nX != t.X || nY != t.Y)
 					continue;
 
+				// Ignore if not visible or not enabled.
 				if (!t.Show || !t.Enabled)
 					return;
 
+				// Select the tool (if needed).
 				// Only one option can be changed at a time, so record the first
 				// option tool that is selected.
 				if (m_eCurrentOptionTool == ToolType.Blank)
@@ -96,6 +96,8 @@ namespace Spritely
 				}
 
 				// Mousemoves are now processed in the context of the current option tool.
+				// The current option tool was either just selected above, or is left over
+				// from the previous mouse event.
 
 				// If same as the currently selected tool and we've already toggled the
 				// button state - nothing to do.
@@ -107,16 +109,26 @@ namespace Spritely
 
 				// Set the button hilighting based on whether or not we're still in the original tool.
 				if (t.Type == m_eCurrentOptionTool)
-					m_toolOptionCurrent.Hilight = !m_fOriginalOptionToolState;
+					SetCurrentToolHilight(pb, !m_fOriginalOptionToolState);
 				else
-					m_toolOptionCurrent.Hilight = m_fOriginalOptionToolState;
-
-				// Update the option based on the state of the toolbox button.
-				Options.Set(m_toolOptionCurrent.OptionName, m_toolOptionCurrent.Hilight);
-
-				// Update toolbox display
-				pb.Invalidate();
+					SetCurrentToolHilight(pb, m_fOriginalOptionToolState);
+				return;
 			}
+
+			// No matching tool found - revert tool to original state.
+			SetCurrentToolHilight(pb, m_fOriginalOptionToolState);
+		}
+
+		private void SetCurrentToolHilight(PictureBox pb, bool fValue)
+		{
+			// Update toolbox button hilight value.
+			m_toolOptionCurrent.Hilight = fValue;
+
+			// Update the option based on the state of the toolbox button.
+			Options.Set(m_toolOptionCurrent.OptionName, fValue);
+
+			// Update toolbox display
+			pb.Invalidate();
 		}
 
 		public override void Draw(Graphics g, Size size)

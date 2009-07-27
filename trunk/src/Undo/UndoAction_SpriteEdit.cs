@@ -63,14 +63,14 @@ namespace Spritely
 		{
 			m_sprite.ApplyUndoData(m_before);
 			m_ss.CurrentSprite = m_sprite;
-			m_ss.SpriteList.MoveToCorrectSpriteType(m_sprite);
+			m_ss.MoveToCorrectSpriteType(m_sprite);
 		}
 
 		public override void ApplyRedo()
 		{
 			m_sprite.ApplyUndoData(m_after);
 			m_ss.CurrentSprite = m_sprite;
-			m_ss.SpriteList.MoveToCorrectSpriteType(m_sprite);
+			m_ss.MoveToCorrectSpriteType(m_sprite);
 		}
 	}
 }
