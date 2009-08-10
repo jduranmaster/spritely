@@ -1,5 +1,5 @@
 #summary A list of pixel graphic resources.
-#labels Graphics,Featured
+#labels Graphics
 
 = Introduction =
 
